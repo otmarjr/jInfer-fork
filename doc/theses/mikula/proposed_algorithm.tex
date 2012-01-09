@@ -769,3 +769,59 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 \end{algorithmic}
 \end{algorithm}
 
+Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (lieral constant, reference of a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
+
+As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the count of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys.
+
+\begin{algorithm}
+\caption{Rejection of uniqueness - comparison with a constant}
+\label{ALG_rejection_of_uniqueness_comparison_with_a_constant}
+\begin{algorithmic}[1]
+\REQUIRE $node$: A node of the syntax tree.
+
+\STATE $forVars =$ an empty array
+
+\IF{$is(node, FLWORExprNode)$}
+    \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
+        \IF{$is(bindingNode, ForClauseNode)$}
+            \STATE $expr = bindingNode.getChild(BindingSequenceNode).getChild(ExprNode)$
+            \IF{$getType(expr) == PathExpr$ without predicates, using only child and descendant axes}
+                \STATE add $bindingNode.varName$ to $forVars$
+            \ENDIF
+        \ENDIF
+    \ENDFOR
+\ENDIF
+
+\STATE $whereClause = node.getChild(WhereClauseNode)$
+\IF{$whereClause != null$}
+    \STATE $processWhere(forVars, whereClause.getChild(ExprNode))$
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Rejection of uniqueness - function processWhere}
+\label{ALG_rejection_of_uniqueness_function_process_where}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+	$forVars$: Names of variables to look for in the where expression. \\
+	$exprNode$: The where expression node.
+}
+
+\IF{$is(exprNode, OperatorNode$)}
+    \IF{$exprNode.operator == GEN\_EQUALS$}
+        \FORALL{$var \in forVars$}
+            \IF{$exprNode$ is of a form $var/L = C$ where $L$ is a path without predicates using only child and descendant axes, and getType(C) is a constant}
+                \STATE memorize $var/L$ as the negative key statement, weight 0.9
+            \ENDIF
+        \ENDFOR
+    \ELSIF{$exprNode.operator == AND$}
+        \STATE processWhere(forVars, exprNode.leftSide)
+        \STATE processWhere(forVars, exprNode.rightSide)
+    \ENDIF
+\ENDIF
+
+\end{algorithmic}
+\end{algorithm}
+
+\todo[inline]{Doplnit algoritmus comparison with a constant pre predikaty.}

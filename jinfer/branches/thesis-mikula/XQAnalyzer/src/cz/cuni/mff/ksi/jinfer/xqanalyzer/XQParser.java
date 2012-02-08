@@ -6,7 +6,7 @@
 
 package cz.cuni.mff.ksi.jinfer.xqanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.xqanalyzer.nodes.*;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 
 /** CUP v0.11a beta 20060608 generated parser.
   * @version Tue Apr 13 16:55:23 CEST 2010

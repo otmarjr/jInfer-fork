@@ -21,7 +21,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.xqanalyzer.nodes.ModuleNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.ModuleNode;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;

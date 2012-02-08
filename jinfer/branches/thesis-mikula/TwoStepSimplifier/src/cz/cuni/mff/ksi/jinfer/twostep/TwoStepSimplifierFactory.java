@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -137,14 +138,15 @@ public class TwoStepSimplifierFactory implements Simplifier {
   }
 
   @Override
-  public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+  public void start(final InferenceDataHolder idh, final SimplifierCallback callback) throws InterruptedException {
     final TwoStepSimplifier simplifier = new TwoStepSimplifier(
             getClustererFactory(),
             getClusterProcessorFactory(),
             getRegularExpressionCleanerFactory(),
             getContentInferrerFactory());
-    callback.finished(
-            simplifier.simplify(initialGrammar));
+    final List<Element> simplifiedGrammar = simplifier.simplify(idh.getGrammar());
+    idh.setGrammar(simplifiedGrammar);
+    callback.finished(idh);
   }
 
   @Override

@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
@@ -94,17 +95,22 @@ public class IGGeneratorImpl implements IGGenerator {
     // the XQuery processor differs from the other processors by creating syntax trees of supplied queries
     // instead of IG rules, and thus, it has to be handled separately
     xquerySyntaxTrees.addAll(processXQueries(input.getQueries(), getXQueryProcessor()));
+    
+    final InferenceDataHolder idh = new InferenceDataHolder(documentRules, xquerySyntaxTrees);
 
     // if there are no schema/query rules, or the next module can handle simple
     // grammar, just output all of it without expansion
     if (BaseUtils.isEmpty(schemaQueryRules)
             || RunningProject.getNextModuleCaps().getCapabilities().contains("can.handle.complex.regexps")) {
-      documentRules.addAll(schemaQueryRules);
+      //documentRules.addAll(schemaQueryRules);
+      idh.addToGrammar(schemaQueryRules);
 
       // show the rules
-      RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
+      //RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
+      RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(idh.getGrammar()), true);
 
-      callback.finished(documentRules);
+      //callback.finished(documentRules);
+      callback.finished(idh);
       return;
     }
 
@@ -119,15 +125,17 @@ public class IGGeneratorImpl implements IGGenerator {
     final Expander expander = Lookup.getDefault().lookup(Expander.class);
     final List<Element> expanded = expander.expand(schemaQueryRules);
 
-    final List<Element> ret = new ArrayList<Element>();
-    ret.addAll(documentRules);
-    ret.addAll(expanded);
+    //final List<Element> ret = new ArrayList<Element>();
+    //ret.addAll(documentRules);
+    //ret.addAll(expanded);
+    idh.addToGrammar(expanded);
 
     // show the rules after expansion
-    RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
+    //RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
+    RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(idh.getGrammar()), true);
 
     // return expanded
-    callback.finished(ret);
+    callback.finished(idh);
   }
 
   /**

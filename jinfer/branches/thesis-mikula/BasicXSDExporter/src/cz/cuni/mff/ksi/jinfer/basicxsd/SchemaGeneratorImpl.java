@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.Preprocessor;
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
@@ -67,7 +68,9 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final List<Element> grammar, final SchemaGeneratorCallback callback) throws InterruptedException {
+  public void start(final InferenceDataHolder idh, final SchemaGeneratorCallback callback) throws InterruptedException {
+    final List<Element> grammar = idh.getGrammar();
+    
     LOG.info("XSD Exporter: got " + grammar.size()
             + " rules.");
 

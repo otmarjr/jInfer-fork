@@ -22,12 +22,15 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQConverter;
 import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQParseException;
 import java.io.InputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
+ * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
+ * providing logic for parsing XQuery 1.0 queries and providing their syntax trees.
  * 
  * @author rio
  */
@@ -51,24 +54,34 @@ public class XQueryProcessor implements Processor<ModuleNode> {
     return ModuleNode.class;
   }
 
+  /**
+   * Parses the file containing an XQuery query and returns the
+   * query in a form of the syntax tree.
+   * 
+   * The {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor} interface
+   * requires List return type. Since the query is represented by exactly one
+   * syntax tree, the List contains just this one item.
+   *
+   * @param s File containing an XQuery query.
+   * @return List containing a syntax tree of the query at index 0.
+   */
   @Override
   public List<ModuleNode> process(InputStream s) throws InterruptedException {
     final XQConverter converter = new XQConverter(s);
     try {
       converter.convert();
-    } catch (final XQParseException exc) {
-      // TODO rio
+    } catch (final XQParseException e) {
+      LOG.error("Error parsing XQuery file, ignoring and going on.", e);
+      return Collections.EMPTY_LIST;
     }
-    final List<ModuleNode> result = new LinkedList<ModuleNode>();
+    final List<ModuleNode> result = new ArrayList<ModuleNode>();
     result.add(converter.getModuleNode());
     return result;
   }
 
   @Override
   public boolean processUndefined() {
-    // TODO rio
     return false;
   }
-  
   
 }

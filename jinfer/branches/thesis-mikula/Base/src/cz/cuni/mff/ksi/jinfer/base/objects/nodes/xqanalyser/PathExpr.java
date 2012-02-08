@@ -33,8 +33,7 @@ public class PathExpr {
   //private XQDocument xqDocument;
   private InitialStep initialStep;
 
-  public PathExpr(Object xqDocument) { // TODO XQDocument nahradeny Objectom...
-    assert (xqDocument != null);
+  public PathExpr(Object xqDocument) { // TODO rio XQDocument nahradeny Objectom...
     //this.xqDocument = xqDocument;
     steps = new XQNodeList<StepExprNode>();
   }

@@ -20,7 +20,7 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <release-version>5</release-version>
+                        <release-version>6</release-version>
                         <implementation-version/>
                     </run-dependency>
                 </dependency>

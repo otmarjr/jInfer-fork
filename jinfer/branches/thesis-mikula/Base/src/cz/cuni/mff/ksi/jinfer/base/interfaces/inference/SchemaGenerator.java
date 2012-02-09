@@ -46,6 +46,6 @@ public interface SchemaGenerator extends NamedModule, Capabilities {
    *  method on this object.
    * @throws InterruptedException 
    */
-  void start(final InferenceDataHolder odh,
+  void start(final InferenceDataHolder idh,
           final SchemaGeneratorCallback callback) throws InterruptedException;
 }

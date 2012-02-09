@@ -17,12 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.runner;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
@@ -59,6 +54,7 @@ public class Runner {
   private static final Logger LOG = Logger.getLogger(Runner.class);
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
+  private final XQueryAnalyzer xqueryAnalyzer;
   private final SchemaGenerator schemaGenerator;
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
@@ -72,6 +68,13 @@ public class Runner {
     @Override
     public void finished(final InferenceDataHolder idh) {
       Runner.this.finishedSimplifier(idh);
+    }
+  };
+  private final XQueryAnalyzerCallback xqaCallback = new XQueryAnalyzerCallback() {
+
+    @Override
+    public void finished(InferenceDataHolder idh) {
+      Runner.this.finishedXQueryAnalyzer(idh);
     }
   };
   private final SchemaGeneratorCallback sgCallback = new SchemaGeneratorCallback() {
@@ -94,6 +97,8 @@ public class Runner {
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER_PROP));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
+    // TODO rio Selection in properties panel is not implemented yet.
+    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(XQueryAnalyzer.class, "XQueryAnalyzer");
   }
 
   /**
@@ -149,7 +154,7 @@ public class Runner {
       public void run() {
         try {
           RunningProject.setNextModuleCaps(null);
-          schemaGenerator.start(idh, sgCallback);
+          xqueryAnalyzer.start(idh, xqaCallback);
         } catch (final InterruptedException e) {
           interrupted();
         } catch (final Throwable t) {
@@ -157,6 +162,27 @@ public class Runner {
         }
       }
     }, "Generating result schema");
+  }
+  
+  private void finishedXQueryAnalyzer(final InferenceDataHolder idh) {
+    // TODO rio any log print?
+    //LOG.info("Runner: simplified grammar contains " + idh.getGrammar().size()
+    //        + " rules.");
+
+    runAsync(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          RunningProject.setNextModuleCaps(null);
+          schemaGenerator.start(idh, sgCallback);
+        } catch (final InterruptedException e) {
+          interrupted();
+        } catch (final Throwable t) {
+          unexpected(t);
+        }
+      }
+    }, "Analyzing XQuery queries");
   }
 
   private void finishedSchemaGenerator(final String schema, final String extension) {

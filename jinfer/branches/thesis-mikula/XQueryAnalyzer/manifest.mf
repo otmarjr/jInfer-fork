@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.xqueryanalyzer/1
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/xqueryanalyzer/Bundle.properties
+

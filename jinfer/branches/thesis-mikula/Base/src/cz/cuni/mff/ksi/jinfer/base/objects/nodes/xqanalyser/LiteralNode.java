@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a literal.
  *
@@ -46,5 +48,10 @@ public class LiteralNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_LITERAL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

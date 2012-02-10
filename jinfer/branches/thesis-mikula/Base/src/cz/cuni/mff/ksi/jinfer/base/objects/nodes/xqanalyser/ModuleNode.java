@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a module.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class ModuleNode extends XQNode {
 
-  private final XQNodeList<ModuleChildNode> moduleChildren;
+  private final List<ModuleChildNode> moduleChildren;
 
   public ModuleNode(
           final XQNode parentNode, VersionDecl versionDecl, Module module) {
@@ -45,5 +48,13 @@ public class ModuleNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_MODULE;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (moduleChildren != null) {
+      return new ArrayList<XQNode>(moduleChildren);
+    }
+    return null;
   }
 }

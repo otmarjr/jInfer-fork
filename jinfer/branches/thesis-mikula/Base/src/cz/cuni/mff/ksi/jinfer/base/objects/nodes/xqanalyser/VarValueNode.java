@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a variable value.
  *
@@ -44,5 +47,16 @@ public class VarValueNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_VAR_VALUE;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (exprNode != null) {
+      subnodes.add(exprNode);
+    }
+    
+    return subnodes;
   }
 }

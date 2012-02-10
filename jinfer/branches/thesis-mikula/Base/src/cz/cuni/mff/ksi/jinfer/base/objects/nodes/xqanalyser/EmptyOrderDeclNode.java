@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing an empty order declaration.
  *
@@ -37,5 +41,10 @@ public class EmptyOrderDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_EMPTY_ORDER_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

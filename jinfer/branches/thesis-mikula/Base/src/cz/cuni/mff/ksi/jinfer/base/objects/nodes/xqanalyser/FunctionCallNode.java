@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a function call.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class FunctionCallNode extends ExprNode {
 
-  private final XQNodeList<ExprNode> params;
+  private final List<ExprNode> params;
 
   public FunctionCallNode(
           final XQNode parentNode, String fncName, XQNodeList<ExprNode> params) {
@@ -41,5 +44,13 @@ public class FunctionCallNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_FUNCTION_CALL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (params != null) {
+      return new ArrayList<XQNode>(params);
+    }
+    return null;
   }
 }

@@ -21,6 +21,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class CaseClausesNode extends XQNode {
 
-  private final XQNodeList<CaseClauseNode> cases;
+  private final List<CaseClauseNode> cases;
 
   public CaseClausesNode(
           final XQNode parentNode, XQNodeList<CaseClauseNode> cases) {
@@ -42,5 +43,10 @@ public class CaseClausesNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_CASE_CLAUSES;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(cases);
   }
 }

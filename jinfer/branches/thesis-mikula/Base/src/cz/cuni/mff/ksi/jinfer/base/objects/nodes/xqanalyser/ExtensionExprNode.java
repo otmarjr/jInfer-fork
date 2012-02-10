@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing an extension expression.
  *
@@ -43,5 +47,17 @@ public class ExtensionExprNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_EXTENSION_EXPR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    subnodes.add(pragmaListNode);
+    if (defaultValueNode != null) {
+      subnodes.add(defaultValueNode);
+    }
+    
+    return subnodes;
   }
 }

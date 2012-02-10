@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a step in path expressions.
  *
@@ -32,7 +35,6 @@ public class StepExprNode extends XQNode {
   private boolean isAxisStep;
   private ExprNode detailNode = null;
   private PredicateListNode predicateListNode;
-  private ExprNode exprNode;
   private AxisNode axisNode;
 
   private void addPredicates(PredicateListNode predicateListNode) {
@@ -45,7 +47,6 @@ public class StepExprNode extends XQNode {
           PredicateListNode predicateListNode) {
     super(parentNode);
     assert (exprNode != null);
-    this.exprNode = exprNode;
     detailNode = exprNode;
     isAxisStep = false;
     addPredicates(predicateListNode);
@@ -76,5 +77,22 @@ public class StepExprNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_STEP_EXPR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (axisNode != null) {
+      subnodes.add(axisNode);
+    }
+    if (detailNode != null) {
+      subnodes.add(detailNode);
+    }
+    if (predicateListNode != null) {
+      subnodes.add(predicateListNode);
+    }
+    
+    return subnodes;
   }
 }

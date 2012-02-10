@@ -21,8 +21,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
- * The node rerpesenting an axis.
+ * The node representing an axis.
  * 
  * @author Jiri Schejbal
  */
@@ -31,12 +35,12 @@ public class AxisNode extends XQNode {
   private final ItemTypeNode nodeTestNode;
 
   /**
-   * Creates a new node rerpesenting an axis.
+   * Creates a new node representing an axis.
    * 
    * @param xqDocument Reference to associated XQuery document.
    * @param axisKind Axis kind.
    * @param nodeTestNode The node with node test.
-   * @param isAbbreviated Flags showing wether the abbreviated syntax is used.
+   * @param isAbbreviated Flags showing weather the abbreviated syntax is used.
    */
   public AxisNode(
           final XQNode parentNode, AxisKind axisKind,
@@ -53,5 +57,13 @@ public class AxisNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_AXIS;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (nodeTestNode != null) {
+      return new ArrayList<XQNode>(Arrays.asList(nodeTestNode));
+    }
+    return null;
   }
 }

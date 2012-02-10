@@ -21,7 +21,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,11 +47,11 @@ public class AttrListNode extends XQNode {
           final XQNode parentNode, XQNodeList<AttributeNode> attributes) {
     super(parentNode);
     isEmpty = attributes == null || attributes.size() == 0;
-    children = new LinkedList<XQNode>(attributes);
+    children = new ArrayList<XQNode>(attributes);
   }
 
   /**
-   * Gets infromation whether the attribute list is empty.
+   * Gets information whether the attribute list is empty.
    *
    * @return <code>true</code> if the attribute list is empty,
    *      <code>false</code> otherwise.
@@ -63,5 +63,10 @@ public class AttrListNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_ATTR_LIST;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return children;
   }
 }

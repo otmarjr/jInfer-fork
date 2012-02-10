@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing any item type.
  *
@@ -40,5 +42,10 @@ public class AnyItemNode extends ItemTypeNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_ANY_ITEM;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

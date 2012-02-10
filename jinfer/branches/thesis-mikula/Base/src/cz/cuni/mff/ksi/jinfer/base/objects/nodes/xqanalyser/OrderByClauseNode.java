@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing an order by clause.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class OrderByClauseNode extends XQNode {
 
-  private final XQNodeList<OrderSpecNode> orderSpecs;
+  private final List<OrderSpecNode> orderSpecs;
 
   public OrderByClauseNode(
           final XQNode parentNode, Boolean stable,
@@ -43,5 +46,10 @@ public class OrderByClauseNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_ORDER_BY_CLAUSE;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(orderSpecs);
   }
 }

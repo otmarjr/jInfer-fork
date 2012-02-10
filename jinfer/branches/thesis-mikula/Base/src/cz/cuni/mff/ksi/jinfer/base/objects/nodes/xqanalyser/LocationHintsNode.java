@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a list of location hints.
  *
@@ -29,7 +32,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 public class LocationHintsNode extends XQNode {
 
   private boolean isEmpty;
-  private final XQNodeList<LocationHintNode> locationHints;
+  private final List<LocationHintNode> locationHints;
 
   public LocationHintsNode(
           final XQNode parentNode, XQNodeList<LocationHintNode> locationHints) {
@@ -45,5 +48,13 @@ public class LocationHintsNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_LOCATION_HINTS;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (locationHints != null) {
+      return new ArrayList<XQNode>(locationHints);
+    }
+    return null;
   }
 }

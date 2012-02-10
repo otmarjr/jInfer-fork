@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a list of in clauses.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class InClausesNode extends XQNode {
 
-  private final XQNodeList<InClauseNode> inClauses;
+  private final List<InClauseNode> inClauses;
 
   public InClausesNode(
           final XQNode parentNode, XQNodeList<InClauseNode> inClauses) {
@@ -40,5 +43,10 @@ public class InClausesNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_IN_CLAUSES;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(inClauses);
   }
 }

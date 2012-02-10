@@ -22,6 +22,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,12 +32,10 @@ import java.util.Map;
  * All has to be associated with the XQDocument instance.
  *
  * @author Jiri Schejbal
- * 
- * @see XQDocument
  */
 public abstract class XQNode {
 
-  private final XQNode parentNode;
+  private final XQNode parentNode; // TODO rio Is needed?
   private Map<String, String> attributes = new HashMap<String, String>();
 
   /**
@@ -65,7 +64,7 @@ public abstract class XQNode {
   protected void addAttribute(String name, String value) {
     attributes.put(name, value);
   }
-  /** TODO co je toto?
+  /** TODO rio What is this for?
    * Adds text content for this node.
    *
    * @param text Text content.
@@ -75,4 +74,6 @@ public abstract class XQNode {
   element.setTextContent(text);
   }
   }*/
+  
+  public abstract List<XQNode> getSubnodes();
 }

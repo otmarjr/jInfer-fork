@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing an item type.
  *
@@ -30,5 +32,10 @@ public abstract class ItemTypeNode extends XQNode {
 
   public ItemTypeNode(final XQNode parentNode) {
     super(parentNode);
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

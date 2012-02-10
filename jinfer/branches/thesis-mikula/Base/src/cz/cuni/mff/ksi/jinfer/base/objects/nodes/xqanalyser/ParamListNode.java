@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a list of parameters.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class ParamListNode extends XQNode {
 
-  private final XQNodeList<ParamNode> params;
+  private final List<ParamNode> params;
 
   public ParamListNode(final XQNode parentNode, XQNodeList<ParamNode> params) {
     super(parentNode);
@@ -39,5 +42,10 @@ public class ParamListNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_PARAM_LIST;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(params);
   }
 }

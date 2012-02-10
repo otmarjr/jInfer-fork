@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing an import.
  *
@@ -43,5 +45,10 @@ public abstract class ImportNode extends PrologChildNode {
     if (!locationHints.isEmpty()) {
       this.locationHints = locationHints;
     }
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

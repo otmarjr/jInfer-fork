@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a variable declaration.
  *
@@ -45,5 +48,17 @@ public class VarDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_VAR_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (typeDeclarationNode != null) {
+      subnodes.add(typeDeclarationNode);
+    }
+    subnodes.add(varValueNode);
+    
+    return subnodes;
   }
 }

@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a comma operator.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class CommaOperatorNode extends ExprNode {
 
-  private final XQNodeList<ExprNode> expressionNodes;
+  private final List<ExprNode> expressionNodes;
 
   public CommaOperatorNode(
           final XQNode parentNode, XQNodeList<ExprNode> expressionNodes) {
@@ -41,5 +44,10 @@ public class CommaOperatorNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_COMMA_OPERATOR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(expressionNodes);
   }
 }

@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a list of pragmas.
  *
@@ -40,5 +43,10 @@ public class PragmaListNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_PRAGMA_LIST;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(pragmas);
   }
 }

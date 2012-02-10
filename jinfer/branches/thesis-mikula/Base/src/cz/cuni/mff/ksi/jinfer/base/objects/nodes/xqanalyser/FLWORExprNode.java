@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing a FLWOR.
  *
@@ -49,5 +53,21 @@ public class FLWORExprNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_FLWOR_EXPR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    subnodes.add(tupleStreamNode);
+    if (whereClauseNode != null) {
+      subnodes.add(whereClauseNode);
+    }
+    if (orderByClauseNode != null) {
+      subnodes.add(orderByClauseNode);
+    }
+    subnodes.add(returnClauseNode);
+    
+    return subnodes;
   }
 }

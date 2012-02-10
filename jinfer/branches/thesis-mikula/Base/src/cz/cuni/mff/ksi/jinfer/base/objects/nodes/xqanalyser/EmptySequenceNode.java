@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing an empty sequence.
  *
@@ -35,5 +39,10 @@ public class EmptySequenceNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_EMPTY_SEQUENCE;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

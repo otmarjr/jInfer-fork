@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing a constructor.
  *
@@ -142,5 +146,25 @@ public class ConstructorNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_CONSTRUCTOR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (nameNode != null) {
+      subnodes.add(nameNode);
+    }
+    if (piTargetNode != null) {
+      subnodes.add(piTargetNode);
+    }
+    if (attrListNode != null) {
+      subnodes.add(attrListNode);
+    }
+    if (contentNode != null) {
+      subnodes.add(contentNode);
+    }
+    
+    return subnodes;
   }
 }

@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a boundary space declaration.
  *
@@ -38,5 +40,10 @@ public class BoundarySpaceDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_BOUNDARY_SPACE_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

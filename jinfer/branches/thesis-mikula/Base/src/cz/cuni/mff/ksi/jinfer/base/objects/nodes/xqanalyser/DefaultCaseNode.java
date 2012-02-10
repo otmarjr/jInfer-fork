@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing a default case clause.
  *
@@ -44,5 +48,10 @@ public class DefaultCaseNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_DEFAULT_CASE;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(Arrays.asList(returnClauseNode));
   }
 }

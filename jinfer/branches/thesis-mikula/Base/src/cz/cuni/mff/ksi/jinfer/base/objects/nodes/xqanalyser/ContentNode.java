@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing a content of constructors.
  *
@@ -29,7 +33,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 public class ContentNode extends XQNode {
 
   private ExprNode exprNode;
-  private XQNodeList contentNodes;
+  private List<XQNode> contentNodes;
 
   public ContentNode(final XQNode parentNode, ExprNode exprNode) {
     super(parentNode);
@@ -53,5 +57,19 @@ public class ContentNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_CONTENT;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (exprNode != null) {
+      subnodes.add(exprNode);
+    }
+    if (contentNodes != null) {
+      subnodes.addAll(contentNodes);
+    }
+    
+    return subnodes;
   }
 }

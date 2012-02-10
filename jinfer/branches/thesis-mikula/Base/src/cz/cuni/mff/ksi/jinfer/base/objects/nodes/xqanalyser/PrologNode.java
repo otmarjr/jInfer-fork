@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a prolog.
  *
@@ -45,5 +48,13 @@ public class PrologNode extends ModuleChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_PROLOG;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (prologParts != null) {
+      return new ArrayList<XQNode>(prologParts);
+    }
+    return null;
   }
 }

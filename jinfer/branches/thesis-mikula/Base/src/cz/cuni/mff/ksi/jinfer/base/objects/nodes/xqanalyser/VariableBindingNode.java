@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a variable binding.
  *
@@ -41,5 +44,17 @@ public abstract class VariableBindingNode extends XQNode {
     addAttribute(AttrNames.ATTR_VAR_NAME, varName);
     this.typeDeclarationNode = typeDeclarationNode;
     this.bindingSequenceNode = bindingSequenceNode;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (typeDeclarationNode != null) {
+      subnodes.add(typeDeclarationNode);
+    }
+    subnodes.add(bindingSequenceNode);
+    
+    return subnodes;
   }
 }

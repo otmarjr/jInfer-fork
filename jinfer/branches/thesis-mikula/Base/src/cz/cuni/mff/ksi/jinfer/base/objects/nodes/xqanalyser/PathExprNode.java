@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a path expression.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class PathExprNode extends ExprNode {
 
-  private final XQNodeList<StepExprNode> steps;
+  private final List<StepExprNode> steps;
 
   public PathExprNode(
           final XQNode parentNode, XQNodeList<StepExprNode> steps,
@@ -43,5 +46,10 @@ public class PathExprNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_PATH_EXPR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(steps);
   }
 }

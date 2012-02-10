@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a kind test.
  *
@@ -86,5 +89,16 @@ public class KindTestNode extends ItemTypeNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_KIND_TEST;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (elementNode != null) {
+      subnodes.add(elementNode);
+    }
+    
+    return subnodes;
   }
 }

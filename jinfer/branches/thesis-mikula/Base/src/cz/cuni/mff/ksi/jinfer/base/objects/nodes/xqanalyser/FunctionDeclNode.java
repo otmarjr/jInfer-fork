@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a function declaration.
  *
@@ -47,5 +50,20 @@ public class FunctionDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_FUNCTION_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    if (paramListNode != null) {
+      subnodes.add(paramListNode);
+    }
+    if (returnTypeNode != null) {
+      subnodes.add(returnTypeNode);
+    }
+    subnodes.add(functionBodyNode);
+    
+    return subnodes;
   }
 }

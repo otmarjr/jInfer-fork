@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a base URI declaration.
  *
@@ -29,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 public class BaseURIDeclNode extends PrologChildNode {
 
   /**
-   * Creates a new node reperesenting a base URI declaration.
+   * Creates a new node representing a base URI declaration.
    * 
    * @param xqDocument Reference to associated XQuery document.
    * @param baseURI Base URI.
@@ -43,5 +45,10 @@ public class BaseURIDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_BASE_URI_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

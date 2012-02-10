@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a type swich expression.
  *
@@ -47,5 +50,16 @@ public class TypeswitchExprNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_TYPESWITCH_EXPR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    subnodes.add(operandExpressionNode);
+    subnodes.add(caseClausesNode);
+    subnodes.add(defaultCaseNode);
+    
+    return subnodes;
   }
 }

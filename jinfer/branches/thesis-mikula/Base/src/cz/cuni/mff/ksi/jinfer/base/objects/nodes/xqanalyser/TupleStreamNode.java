@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a tuple stream.
  *
@@ -28,7 +31,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class TupleStreamNode extends XQNode {
 
-  private final XQNodeList<VariableBindingNode> bindingClauses;
+  private final List<VariableBindingNode> bindingClauses;
 
   public TupleStreamNode(
           final XQNode parentNode, XQNodeList<VariableBindingNode> bindingClauses) {
@@ -40,5 +43,13 @@ public class TupleStreamNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_TUPLE_STREAM;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (bindingClauses != null) {
+      return new ArrayList<XQNode>(bindingClauses);
+    }
+    return null;
   }
 }

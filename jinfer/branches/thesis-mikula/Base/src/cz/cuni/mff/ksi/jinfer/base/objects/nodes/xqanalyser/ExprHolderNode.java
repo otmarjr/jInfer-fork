@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing a construction that holds an expression.
  *
@@ -34,5 +38,10 @@ public abstract class ExprHolderNode extends XQNode {
     super(parentNode);
     assert (exprNode != null);
     this.exprNode = exprNode;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(Arrays.asList(exprNode));
   }
 }

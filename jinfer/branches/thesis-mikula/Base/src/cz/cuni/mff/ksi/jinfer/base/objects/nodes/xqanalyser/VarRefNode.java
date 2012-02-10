@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a variable reference.
  *
@@ -37,5 +39,10 @@ public class VarRefNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_VAR_REF;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

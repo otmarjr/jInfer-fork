@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a validate expression.
  *
@@ -43,5 +46,14 @@ public class ValidateExprNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_VALIDATE_EXPR;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    final List<XQNode> subnodes = new ArrayList<XQNode>();
+    
+    subnodes.add(exprNode);
+    
+    return subnodes;
   }
 }

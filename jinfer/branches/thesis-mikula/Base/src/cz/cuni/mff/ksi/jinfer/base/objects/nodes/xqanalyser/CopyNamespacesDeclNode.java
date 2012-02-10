@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a copy namespace declaration.
  *
@@ -41,5 +43,10 @@ public class CopyNamespacesDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_COPY_NAMESPACE_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

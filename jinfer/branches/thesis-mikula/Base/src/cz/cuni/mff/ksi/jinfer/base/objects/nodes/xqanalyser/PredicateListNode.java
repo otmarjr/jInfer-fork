@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a list of predicates.
  *
@@ -39,5 +42,13 @@ public class PredicateListNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_PREDICATE_LIST;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    if (predicates != null) {
+      return new ArrayList<XQNode>(predicates);
+    }
+    return null;
   }
 }

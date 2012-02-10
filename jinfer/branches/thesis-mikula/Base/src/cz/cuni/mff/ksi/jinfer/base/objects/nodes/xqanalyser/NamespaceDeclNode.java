@@ -21,6 +21,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The node representing a namespace declaration.
  *
@@ -40,5 +43,10 @@ public class NamespaceDeclNode extends PrologChildNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_NAMESPACE_DECL;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

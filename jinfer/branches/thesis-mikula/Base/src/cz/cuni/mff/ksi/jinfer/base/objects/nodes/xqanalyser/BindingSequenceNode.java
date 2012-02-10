@@ -29,7 +29,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 public class BindingSequenceNode extends ExprHolderNode {
 
   /**
-   * Creates a new node reperesenting a binding sequnce.
+   * Creates a new node representing a binding sequence.
    *
    * @param xqDocument Reference to associated XQuery document.
    * @param exprNode The node with expression.

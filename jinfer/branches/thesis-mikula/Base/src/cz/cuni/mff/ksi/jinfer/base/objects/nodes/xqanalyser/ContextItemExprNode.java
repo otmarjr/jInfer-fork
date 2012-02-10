@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a context item.
  *
@@ -35,5 +37,10 @@ public class ContextItemExprNode extends ExprNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_CONTEXT_ITEM;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

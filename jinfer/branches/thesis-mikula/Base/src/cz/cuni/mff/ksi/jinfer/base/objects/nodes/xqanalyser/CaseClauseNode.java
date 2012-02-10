@@ -21,6 +21,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The node representing a case clause.
  *
@@ -47,5 +51,10 @@ public class CaseClauseNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_CASE_CLAUSE;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return new ArrayList<XQNode>(Arrays.asList(sequenceTypeNode, returnClauseNode));
   }
 }

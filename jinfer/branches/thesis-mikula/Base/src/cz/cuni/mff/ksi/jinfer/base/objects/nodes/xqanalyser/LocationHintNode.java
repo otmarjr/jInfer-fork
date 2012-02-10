@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * The node representing a location hint.
  *
@@ -37,5 +39,10 @@ public class LocationHintNode extends XQNode {
   @Override
   protected String getElementName() {
     return NodeNames.NODE_LOCATION_HINT;
+  }
+  
+  @Override
+  public List<XQNode> getSubnodes() {
+    return null;
   }
 }

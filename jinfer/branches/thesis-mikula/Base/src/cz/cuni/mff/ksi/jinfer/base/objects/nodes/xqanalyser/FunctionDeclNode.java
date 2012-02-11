@@ -34,6 +34,7 @@ public class FunctionDeclNode extends PrologChildNode {
   private final ParamListNode paramListNode;
   private final TypeNode returnTypeNode;
   private final FunctionBodyNode functionBodyNode;
+  private final String funcName;
 
   public FunctionDeclNode(
           final XQNode parentNode, String funcName, ParamListNode paramListNode,
@@ -41,7 +42,7 @@ public class FunctionDeclNode extends PrologChildNode {
     super(parentNode);
     assert (funcName != null);
     assert (functionBodyNode != null);
-    addAttribute(AttrNames.ATTR_NAME, funcName);
+    this.funcName = funcName;
     this.paramListNode = paramListNode;
     this.returnTypeNode = returnTypeNode;
     this.functionBodyNode = functionBodyNode;
@@ -65,5 +66,13 @@ public class FunctionDeclNode extends PrologChildNode {
     subnodes.add(functionBodyNode);
     
     return subnodes;
+  }
+  
+  public String getFuncName() {
+    return funcName;
+  }
+  
+  public TypeNode getReturnTypeNode() {
+    return returnTypeNode;
   }
 }

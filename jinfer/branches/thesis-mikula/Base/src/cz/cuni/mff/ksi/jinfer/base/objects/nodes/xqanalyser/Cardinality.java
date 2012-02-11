@@ -22,7 +22,7 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
 /**
- * The enumeration of items types cardinalitites.
+ * The enumeration of items types cardinalities.
  *
  * @author Jiri Schejbal
  */

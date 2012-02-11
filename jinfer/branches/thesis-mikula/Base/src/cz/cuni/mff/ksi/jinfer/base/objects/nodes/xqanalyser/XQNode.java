@@ -61,9 +61,10 @@ public abstract class XQNode {
    * @param name The name of the attribute.
    * @param value The value of the attribute.
    */
-  protected void addAttribute(String name, String value) {
+  public void addAttribute(String name, String value) {
     attributes.put(name, value);
   }
+  
   /** TODO rio What is this for?
    * Adds text content for this node.
    *

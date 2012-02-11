@@ -29,6 +29,8 @@ import java.util.List;
  * @author Jiri Schejbal
  */
 public class AtomicTypeNode extends ItemTypeNode {
+  
+  final String typeName;
 
   /**
    * Creates a new node representing atomic type.
@@ -39,7 +41,7 @@ public class AtomicTypeNode extends ItemTypeNode {
   public AtomicTypeNode(final XQNode parentNode, String typeName) {
     super(parentNode);
     assert (typeName != null);
-    addAttribute(AttrNames.ATTR_NAME, typeName);
+    this.typeName = typeName;
   }
 
   @Override
@@ -50,5 +52,9 @@ public class AtomicTypeNode extends ItemTypeNode {
   @Override
   public List<XQNode> getSubnodes() {
     return null;
+  }
+  
+  public String getTypeName() {
+    return typeName;
   }
 }

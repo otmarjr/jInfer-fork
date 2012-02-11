@@ -32,11 +32,12 @@ import java.util.List;
 public class TypeNode extends XQNode {
 
   private ItemTypeNode itemTypeNode;
+  private final Cardinality cardinality;
 
   public TypeNode(final XQNode parentNode, Cardinality cardinality) {
     super(parentNode);
     assert (cardinality != null);
-    addAttribute(AttrNames.ATTR_CARDINALITY, cardinality.toString());
+    this.cardinality = cardinality;
   }
 
   public TypeNode(
@@ -61,5 +62,13 @@ public class TypeNode extends XQNode {
     }
     
     return subnodes;
+  }
+  
+  public Cardinality getCardinality() {
+    return cardinality;
+  }
+  
+  public ItemTypeNode getItemTypeNode() {
+    return itemTypeNode;
   }
 }

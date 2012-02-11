@@ -19,8 +19,8 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
-import java.util.LinkedList;
-import java.util.List;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -32,11 +32,19 @@ import org.openide.util.lookup.ServiceProvider;
 public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private final static Logger LOG = Logger.getLogger(XQueryAnalyzerImpl.class);
+  
+  private List<FunctionDeclNode> functionDeclarationNodes;
 
   @Override
   public void start(InferenceDataHolder idh, XQueryAnalyzerCallback callback) throws InterruptedException {
-    LOG.debug(idh.getXQuerySyntaxTrees());
+    for (final ModuleNode mn : idh.getXQuerySyntaxTrees()) {
+      processSyntaxTree(mn);
+    }
     callback.finished(idh);
+  }
+  
+  private void processSyntaxTree(final ModuleNode root) {
+    final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
   }
 
   @Override

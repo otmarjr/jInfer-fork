@@ -32,8 +32,6 @@ import org.openide.util.lookup.ServiceProvider;
 public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private final static Logger LOG = Logger.getLogger(XQueryAnalyzerImpl.class);
-  
-  private List<FunctionDeclNode> functionDeclarationNodes;
 
   @Override
   public void start(InferenceDataHolder idh, XQueryAnalyzerCallback callback) throws InterruptedException {
@@ -46,6 +44,58 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private void processSyntaxTree(final ModuleNode root) {
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
   }
+  
+  
+  private Map<String, Type> analysisOfExpressionTypes(final Map<ExprNode, Type> expressionTypes, final XQNode root, final Map<String, Type> contextVarTypes, final FunctionsProcessor fp) {
+    // Copy context variable types as we do not want to modify it for the previous recursive calls.
+    final Map<String, Type> localContextVarTypes = new HashMap<String, Type>(contextVarTypes);
+    final Map<String, Type> newContextVarTypes = new HashMap<String, Type>();
+    
+    // Analyze types of the subnodes.
+    for (final XQNode subnode : root.getSubnodes()) {
+      final Map<String, Type> newVars = analysisOfExpressionTypes(expressionTypes, subnode, localContextVarTypes, fp);
+      newContextVarTypes.putAll(newVars);
+      // Extend context variable types for the next subnodes.
+      localContextVarTypes.putAll(newVars);
+    }
+    
+    // If root is an expression, analyze it and save its type.
+    if (ExprNode.class.isInstance(root)) {
+      expressionTypes.put((ExprNode)root, determineExpressionType(fp, (ExprNode)root));
+    }
+    
+    // If root extends context variables for its siblings in recursion, return those variables.
+    Map<String, Type> newVars = new HashMap<String, Type>();
+    if (VariableBindingNode.class.isInstance(root)) {
+      final VariableBindingNode variableBindingNode = (VariableBindingNode)root;
+      if (variableBindingNode.getTypeNode() != null) {
+        newVars.put(variableBindingNode.getVarName(), new Type(variableBindingNode.getTypeNode()));
+      } else {
+        final Type type = determineExpressionType(fp, variableBindingNode.getBindingSequenceNode().getExprNode());
+        newVars.put(variableBindingNode.getVarName(), type);
+      }
+    } else if (TupleStreamNode.class.isInstance(root)) {
+      newVars = newContextVarTypes;
+    }
+    
+    return newVars;
+  }
+  
+  private Type determineExpressionType(final FunctionsProcessor fp, final ExprNode expressionNode) {
+    final Class c = expressionNode.getClass();
+    if (c.equals(LiteralNode.class)) {
+      final LiteralNode literalNode = (LiteralNode)expressionNode;
+      return new Type(literalNode.getType());
+    } else if (c.equals(FunctionCallNode.class)) {
+      final FunctionCallNode functionCallNode = (FunctionCallNode)expressionNode;
+      return fp.getFunctionType(functionCallNode.getFuncName());
+    }
+    assert(false); // TODO rio
+    return null;
+  }
+  
+  
+  
 
   @Override
   public String getDisplayName() {

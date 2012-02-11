@@ -29,13 +29,16 @@ import java.util.List;
  * @author Jiri Schejbal
  */
 public class LiteralNode extends ExprNode {
+  
+  private final LiteralType type;
+  private final String value;
 
   public LiteralNode(final XQNode parentNode, LiteralType type, String value) {
     super(parentNode);
     assert (type != null);
     assert (value != null);
-    addAttribute(AttrNames.ATTR_TYPE, type.toString());
-    addAttribute(AttrNames.ATTR_VALUE, value);
+    this.type = type;
+    this.value = value;
   }
 
   public LiteralNode(final XQNode parentNode, StringLiteral stringLiteral) {
@@ -53,5 +56,9 @@ public class LiteralNode extends ExprNode {
   @Override
   public List<XQNode> getSubnodes() {
     return null;
+  }
+  
+  public LiteralType getType() {
+    return type;
   }
 }

@@ -44,4 +44,8 @@ public abstract class ExprHolderNode extends XQNode {
   public List<XQNode> getSubnodes() {
     return new ArrayList<XQNode>(Arrays.asList(exprNode));
   }
+  
+  public ExprNode getExprNode() {
+    return exprNode;
+  }
 }

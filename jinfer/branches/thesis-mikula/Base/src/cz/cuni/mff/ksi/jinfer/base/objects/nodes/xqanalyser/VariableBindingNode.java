@@ -33,6 +33,7 @@ public abstract class VariableBindingNode extends XQNode {
 
   private final TypeNode typeDeclarationNode;
   private final BindingSequenceNode bindingSequenceNode;
+  private final String varName;
 
   public VariableBindingNode(
           final XQNode parentNode, String varName,
@@ -41,7 +42,7 @@ public abstract class VariableBindingNode extends XQNode {
     super(parentNode);
     assert (varName != null);
     assert (bindingSequenceNode != null);
-    addAttribute(AttrNames.ATTR_VAR_NAME, varName);
+    this.varName = varName;
     this.typeDeclarationNode = typeDeclarationNode;
     this.bindingSequenceNode = bindingSequenceNode;
   }
@@ -56,5 +57,17 @@ public abstract class VariableBindingNode extends XQNode {
     subnodes.add(bindingSequenceNode);
     
     return subnodes;
+  }
+  
+  public TypeNode getTypeNode() {
+    return typeDeclarationNode;
+  }
+  
+  public BindingSequenceNode getBindingSequenceNode() {
+    return bindingSequenceNode;
+  }
+  
+  public String getVarName() {
+    return varName;
   }
 }

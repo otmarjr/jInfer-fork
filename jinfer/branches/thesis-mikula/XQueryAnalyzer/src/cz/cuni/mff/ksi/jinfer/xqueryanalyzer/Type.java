@@ -41,6 +41,24 @@ public class Type {
     this.cardinality = cardinality;
   }
   
+  public Type(final LiteralType literalType) {
+    category = Category.BUILT_IN;
+    cardinality = Cardinality.ONE;
+    switch(literalType) {
+      case DECIMAL:
+        buildinTypeName = "xs:decimal";
+        break;
+      case DOUBLE:
+        buildinTypeName = "xs:double";
+        break;
+      case INTEGER:
+        buildinTypeName = "xs:integer";
+        break;
+      case STRING:
+        buildinTypeName = "xs:string";
+    }
+  }
+  
   public Type(final TypeNode typeNode) {
     cardinality = typeNode.getCardinality();
     
@@ -49,6 +67,7 @@ public class Type {
       // TODO rio what is this type?
       category = Category.BUILT_IN;
       buildinTypeName = "xs:anyType";
+      assert(false);
     } else {
       if (itemTypeNode.getClass().equals(AtomicTypeNode.class)) {
         category = Category.BUILT_IN;
@@ -57,9 +76,11 @@ public class Type {
       } else if (itemTypeNode.getClass().equals(KindTestNode.class)) {
         // TODO rio vymysliet, preskumat
         category = Category.NODE;
+        assert(false);
       } else {
         // TODO rio ostavaju este 2 typy: AnyItemNode, NameTestNode - preskumat
         category = Category.BUILT_IN;
+        assert(false);
       }
     }
     

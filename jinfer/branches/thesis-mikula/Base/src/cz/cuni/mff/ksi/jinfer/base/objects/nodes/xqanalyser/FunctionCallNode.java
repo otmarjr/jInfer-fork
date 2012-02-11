@@ -32,12 +32,13 @@ import java.util.List;
 public class FunctionCallNode extends ExprNode {
 
   private final List<ExprNode> params;
+  private final String fncName;
 
   public FunctionCallNode(
           final XQNode parentNode, String fncName, XQNodeList<ExprNode> params) {
     super(parentNode);
     assert (fncName != null);
-    addAttribute(AttrNames.ATTR_NAME, fncName);
+    this.fncName = fncName;
     this.params = params;
   }
 
@@ -52,5 +53,9 @@ public class FunctionCallNode extends ExprNode {
       return new ArrayList<XQNode>(params);
     }
     return null;
+  }
+  
+  public String getFuncName() {
+    return fncName;
   }
 }

@@ -7,18 +7,21 @@ An XML schema refers to a description of an XML document in terms of its structu
 
 Various languages have been proposed to express XML schemata. The most known are Document Type Definition (DTD) \cite{Bray:08:EML} and XML Schema Definition (XML Schema, XSD) \cite{Walmsley:04:XSP, Thompson:04:XSP, Malhotra:04:XSP} which are briefly described in the following sections. Another examples of the XML schema languages are RELAX NG \cite{relaxng} and  Schematron \cite{schematron}.
 
-A validity of an XML document againt its XML schema expresses wheather the document is well-formed \cite{Bray:08:EML}, and at the same time, wheather it conforms to the XML schema.
+Validity of an XML document against its XML schema expresses whether the document is well-formed \cite{Bray:08:EML} and, at the same time, whether it conforms to the XML schema.
 
-\subsection{An XML Sample}
-To demonstrate the described technologies, we introduce a part of a simple XML document \ref{FIG_a_simple_xml_sample}. It represents books in a bookstore. Each book has a mandatory id, a title, a list of authors and an optional ISBN.
+\subsection{An XML Example}
+To demonstrate the described technologies, we introduce a part of a simple XML document (see Figure \ref{FIG_a_simple_xml_example}). It represents books in a bookstore. Each book has a mandatory id, a title, a list of authors and an optional ISBN.
 
 \begin{figure}
-\caption{A simple XML sample.}
-\label{FIG_a_simple_xml_sample}
+\caption{A simple XML example.}
+\label{FIG_a_simple_xml_example}
 \begin{verbatim}
 <bookstore>
   <book id="b1">
-    <title>Compilers: Principles, Techniques, and Tools (2nd Edition)</title>
+    <title>
+      Compilers: Principles, Techniques, and Tools
+      (2nd Edition)
+    </title>
     <authors>
       <author>Alfred V. Aho</author>
       <author>Monica S. Lam</author>
@@ -38,11 +41,11 @@ To demonstrate the described technologies, we introduce a part of a simple XML d
 \end{figure}
 
 \subsection{DTD}
-Document Type Definition (DTD) expresses a structure of XML documents by declarations of elements. An element has its name and content is declared using syntax \texttt{<!ELEMENT $name$ $content$>}.
+Document Type Definition (DTD) expresses a structure of XML documents by declarations of elements. An element has its name and a content declared using syntax \texttt{<!ELEMENT $name$ $content$>}.
 
 The content of an element can be denoted by \texttt{EMPTY} for an empty element, \texttt{ANY} for any content, \texttt{(\#PCDATA)} allowing only textual content (without any other subelements), or specified using regular expressions. Names of subelements are combined using operators (\texttt{|}, \texttt{+}, \texttt{*}, \texttt{?} and \texttt{,}(comma)). To express the mixed content \texttt{\#PCDATA} can be used in an alternation list with the subelement names and this alternation has to be enclosed in \texttt{*} operator.
 
-Attributes of an element are specified in an attribute list \texttt{<!ATTLIST $element\_name$ $attribute\_name$ $type$ $default\_value$>}. Each attribute has its name, its type and its default value or definition of obligation of occurrence. The type can be an enumeration of values \texttt{($value_1$ | $value_2$ | $\dots$ | $value_n$)} or one of the following values.
+Attributes of an element are specified in an attribute list \texttt{<!ATTLIST\linebreak $element\_name$ $attribute\_name$ $type$ $default\_value$>}. Each attribute has its name, its type and its default value or definition of obligation of occurrence. The type can be an enumeration of values \texttt{($value_1$ | $value_2$ | $\dots$ | $value_n$)} or one of the following values.
 
 \begin{itemize}
 \item \texttt{CDATA} Character data - any string.
@@ -66,7 +69,7 @@ The dafault value is either a literal value or one of the following specifiers.
 
 The DTD also provides other constructs such as declaration of entities and notations not mentioned in this work.
 
-An example of DTD describing the book element from the XML sample \ref{FIG_a_simple_xml_sample} follows.
+An example of DTD describing the book element from the XML example in Figure \ref{FIG_a_simple_xml_example} follows.
 
 \begin{verbatim}
 <!ELEMENT book (title, authors, isbn?)>
@@ -84,7 +87,7 @@ An example of DTD describing the book element from the XML sample \ref{FIG_a_sim
 \todo[inline]{overit, zvalidovat}
 
 \subsection{XSD}
-Since the XSD language, containing many constructs and features, is quite comprehensive, we will describe just its basic principles. An important fact is that each XSD instance is a valid XML document. Its root element is always \texttt{<schema>} and the the XSD instance may (and it often does) begins with the following two lines.
+Since the XSD language, containing many constructs and features, is quite comprehensive, we will describe just its basic principles. An important fact is that each XSD instance is a valid XML document. Its root element is always \texttt{<schema>} and the XSD instance begins with the following two lines.
 
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -95,7 +98,7 @@ Definition of an element in the XSD is
 \begin{alltt}
 <xs:element name="\(name\)" type="\(type\)"/>
 \end{alltt}
-where $type$ is either one of the built-in types \todo{ref?} or a user-defined type. Definition of an attribute is similar.
+where $type$ is either one of the built-in types or a user-defined type. Definition of an attribute is similar.
 \begin{alltt}
 <xs:attribute name="\(name\)" type="\(type\)"/>
 \end{alltt}
@@ -104,7 +107,7 @@ Attributes are optional by default. If an attribute is mandatory, it is expresse
 <xs:attribute name="\(name\)" type="\(type\)" use="required"/>
 \end{alltt}
 
-The user-defined type in the XSD language is either a simple type, if it does not contain other elements and attributes, or a complex type otherwise. Attributes are only allowed to be of the simple types. Definition of the a simple type is
+The user-defined type in the XSD language is either a simple type, if it does not contain other elements and attributes, or a complex type otherwise. Attributes are only allowed to be of the simple types. Definition of a simple type is
 \begin{alltt}
 <xs:simpleType name="\(name\)">
    \(type details\)
@@ -118,7 +121,7 @@ A complex type is defined in the same way.
   \(type details\)
 </xs:complexType>
 \end{alltt}
-The complex types can contain many constructs. Subelements are declared using \texttt{<xs:sequence>}, \texttt{<xs:choice>} and \texttt{<xs:all>} schema elements. If the order of the subelements is significant, we use \texttt{<xs:sequence>}, where the subelements in an XML must occur in the same order as they are defined in the sequence. If the order is not significant, we use \texttt{<xs:all>}, where the subelements must only occur but their order is not relevant. Construct \texttt{<xs:choice>} is equivalent to the alternation of several elements in the DTD.
+The complex types can contain many constructs. Subelements are declared using \texttt{<xs:sequence>}, \texttt{<xs:choice>} and \texttt{<xs:all>} schema elements. If the order of the subelements is significant, we use \texttt{<xs:sequence>}, where the subelements in an XML instance must occur in the same order as they are defined in the sequence. If the order is not significant, we use \texttt{<xs:all>}. Construct \texttt{<xs:choice>} is equivalent to the alternation of several elements in the DTD.
 
 Moreover, these three construct can be nested and combined, assuming the combination is not ambiguous.
 
@@ -127,7 +130,7 @@ Many schema elements (including \texttt{<xs:element>}, \texttt{<xs:sequence>}, \
 <xs:element name="\(name\)" type="\(type\)" minOccurs="0" maxOccurs="1"/>
 \end{alltt}
 
-An element can has a mixed content (can contain text and other elements at the same time). Such element has to be of a complex type and definition of the type has to contain attribute \texttt{mixed} with value \texttt{true}. The following example demonstrates the mixed content along with the definition of the element type inside \texttt{<xs:element>} schema element.
+An element can have a mixed content (can contain text and other elements at the same time). Such element has to be of a complex type and definition of the type has to contain attribute \texttt{mixed} with value \texttt{true}. The following example demonstrates the mixed content along with the definition of the element type inside \texttt{<xs:element>} schema element.
 \begin{alltt}
 <xs:element name="\(name\)">
   <xs:complexType mixed="true">
@@ -138,7 +141,7 @@ An element can has a mixed content (can contain text and other elements at the s
 
 The XSD language consists of many more constructs we do not mention such as substitution groups, type extensions, integrity constranints and other.
 
-The book element from the sample XML \ref{FIG_a_simple_xml_sample} can be described using the XSD as follows.
+The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_example} can be described using the XSD as follows.
 \begin{alltt}
 <xs:element name="book">
   <xs:complexType>
@@ -163,7 +166,7 @@ XML Path Language (XPath, version 1.0) \cite{xpath} is a language to select frac
 
 \subsection{Path Expressions}
 A path expression is composed of individual path steps separated by \texttt{/} and can be absolute or relative. The absolute path begins with \texttt{/} representing the document node. The relative path needs a non-empty starting node-set to be evaluated. A path step is \\ \texttt{$axis$::$node\_test$[$predicate_1$]$\dots$[$predicate_n$]} \\
-where $axis$ and all predicates are optional.
+where all predicates are optional.
 
 \subsection{Axes}
 An axis specifies a node-set relative to the current node. The default axis is \texttt{child} selecting all children nodes of the current node. Another important axes are \texttt{attribute}, selecting attributes of the current node, and \texttt{descendant-or-self} selecting the current node and all its descendants in the tree. The remaining axes are: \texttt{ancestor}, \texttt{ancestor-or-self}, \texttt{descendant}, \texttt{following}, \texttt{following-sibling}, \texttt{namespace}, \texttt{parent}, \texttt{preceding}, \texttt{preceding-sibling}, and \texttt{self}.
@@ -177,38 +180,39 @@ A node test identifies node(s) within all nodes selected by an axis. It can be a
 \end{itemize}
 
 \subsection{Abbrevations}
-Abbrevations for several most widely used construct are defined.
+Abbrevations for several most widely used constructs are defined as follows.
 \begin{itemize}
+\item \texttt{$P$/$identifier$} stands for \texttt{$P$/child::$identifier$} (child is a default axis)
 \item \texttt{$P$/@$identifier$} stands for \texttt{$P$/atribute::$identifier$}
 \item \texttt{$P$/../$identifier$} stands for \texttt{$P$/parent::*/$identifier$}
 \item \texttt{$P$//$identifier$} stands for \texttt{$P$/descendant-or-self::node()/$identifier$} 
 \end{itemize}
 
 \subsection{Predicates}
-Predicates places additional conditions upon nodes that passed the node test. They can be either relative XPath paths or comparison expressions. The path predicates evaluate to true if they select a not empty set of nodes. Operators in the comparison expressions are \texttt{=}, \texttt{!=}, \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{\&eq;}, \texttt{\&ne;}, \texttt{\&lt;}, \texttt{\&gt;}, \texttt{\&le;}, and \texttt{\&ge;}. Operands are any XPath expressions (paths, literal values, etc).
+Predicates place additional conditions upon nodes that passed the node test. They can be either relative XPath paths or comparison expressions. The path predicates evaluate to true if they select a not empty set of nodes. Operators in the comparison expressions are \texttt{=}, \texttt{!=}, \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{\&eq;}, \texttt{\&ne;}, \texttt{\&lt;}, \texttt{\&gt;}, \texttt{\&le;}, and \texttt{\&ge;}. Operands are any XPath expressions (paths, literal values, etc).
 
 \subsection{Built-in Functions}
 XPath also provides a set of built-in functions. Few examples are \texttt{count($path$)}, returning a number of nodes selected by $path$, \texttt{position()}, returning the position of the current node in the current node-set, and \texttt{sum($path$)}, returning the sum of all nodes selected by $path$.
 
 \subsection{Usage Examples}
-Finally, we introduce several examples of XPath expressions, with their description, using the sample XML \ref{FIG_a_simple_xml_sample}.
+Finally, we introduce several examples of XPath expressions, with their description, using the sample XML in Figure \ref{FIG_a_simple_xml_example}.
 
-Path that selects \texttt{author} elements of the book with id $b1$:
+A path that selects \texttt{author} elements of the book with id $b1$:
 \begin{alltt}
 /bookstore/book[@id = "b1"]/authors/author
 \end{alltt}
 
-Expression returning a number of all books:
+An expression returning the number of all books:
 \begin{alltt}
 count(//book)
 \end{alltt}
 
-Path selecting the ISBN element of the book titles $XQuery$:
+A path selecting the ISBN element of the book entitled $XQuery$:
 \begin{alltt}
 /bookstore/book[title = "XQuery"]/isbn
 \end{alltt}
 
-Path returning the titles of the books written by more than one author:
+A path returning the titles of the books written by more than one author:
 \begin{alltt}
 /bookstore/book[count(authors/author) > 1]/title/text()
 \end{alltt}
@@ -216,16 +220,14 @@ Path returning the titles of the books written by more than one author:
 \todo[inline]{overit, otestovat}
 
 \section{XQuery}
-\todo[inline]{Tuto sekciu som vypracovaval primarne podla vasich slidov na prednasku Technologie XML. Mam to niekde uviest?}
-
 An XML Query Language (XQuery, version 1.0) \todo{ref} is a language designed to query XML data. It is based on XPath 2.0. XPath 2.0 is an extension of XPath 1.0 (but not entirely compatible), adding ordered sequences, their iterations, set operations, conditional expressions, quantified expressions, and XML Schema types.
 
-In the remainder of this section, basic features of the XQuery languages are briefly described. Many query samples can be found in  chapter \ref{CHAPTER_analysis_of_xquery}.
+In the remainder of this section, basic features of the XQuery languages are briefly described. Many query samples can be found in Chapter \ref{CHAPTER_analysis_of_xquery}.
 
 \subsection{Sequences}
-A sequence is an ordered set of items. The result of each XPath 2.0 (and also XQuery 1.0) path is a sequence. An item is either an atomic value or a node. An atomic value is a value of a XML Schema simple type. A node is an instance of one of the node types.
+A sequence is an ordered set of items. The result of each XPath 2.0 (and also XQuery 1.0) path is a sequence. An item is either an atomic value or a node. An atomic value is a value of an XML Schema simple type. A node is an instance of one of the node types.
 
-Each node has its identity, data type (simple or complex, according to the XML Schema types), typed value (can be retrieved by function \texttt{fn:data()}, and string value (retrieved by function \texttt{fn:string()}.
+Each node has its identity, data type (simple or complex, according to the XML Schema types), typed value (which can be retrieved by function \texttt{fn:data()}), and string value (which can be retrieved by function \texttt{fn:string()}).
 
 \subsection{FLWOR Expressions}
 A basic construct of the XQuery language is $FLWOR$. It is an abbrevation of its five clauses: for, let, where, order by, return. For clause is \\
@@ -246,13 +248,13 @@ and it orders the tuples of values that passed the where clause by the specified
 
 Return clause is \\
 \texttt{return $expr$} \\
-The result of the whole $FLWOR$ expression is $expr$. It can (and usually is) be constructed using the tuples of the for variable values and the let variables.
+The result of the whole $FLWOR$ expression is $expr$. It is constructed using the tuples of the for variable values and the let variables.
 
 \subsection{Conditional Expressions}
-XQuery provides common \texttt{if-than-else} conditional expressions with common syntax.
+XQuery provides common \texttt{if-then-else} conditional expressions with common syntax.
 \begin{alltt}
 if (\(condition\))
-than \(expr1\)
+then \(expr1\)
 else \(expr2\)
 \end{alltt}
 If $condition$ expression evaluates to true, $expr1$ is evaluated, else $expr2$ is evaluated. The else branch is optional.
@@ -271,9 +273,9 @@ satisfies \(expr2\)
 Firstly, $expr1$ is evaluated, and then the result of the quantified expression is true if $expr2$ is true for every (some) item, represented by $var$, of the result of $expr1$ (which is a sequence). 
 
 \subsection{Functions}
-XQuery provides a wide set of built-in functions. \todo{ref?}
+XQuery provides a wide set of built-in functions.
 
-And also new functions can defined using the following syntax.
+And also new functions can be defined using the following syntax.
 \begin{alltt}
 define function \(name\)(\(parameters\)) as \(type\)
 \{
@@ -282,21 +284,21 @@ define function \(name\)(\(parameters\)) as \(type\)
 \end{alltt}
 where $name$ is the function's name, $parameters$ is a list of parameters (with or without specification of their types), and $type$ is a type of a return value, which is the result of $expr$.
 
-\subsection{Comparison Expressions}
-Comparison expressions are of three types: $value$ comparison expressions, $general$ comparison expressions, and $node$ comparison expressions. A very brief insight follows. More details can be found in REF\todo{ref, moze to takto ostat?}.
+%\subsection{Comparison Expressions}
+%Comparison expressions are of three types: $value$ comparison expressions, $general$ comparison expressions, and %$node$ comparison expressions. A very brief insight follows. More details can be found in REF\todo{ref, moze to takto ostat?}.
 
-The $value$ comparison expressions use operators \texttt{lt}, \texttt{gt}, \texttt{le}, \texttt{ge}, \texttt{eq}, and \texttt{ne} and they compare operands that are or can be converted to atomic values.
+%The $value$ comparison expressions use operators \texttt{lt}, \texttt{gt}, \texttt{le}, \texttt{ge}, %\texttt{eq}, and \texttt{ne} and they compare operands that are or can be converted to atomic values.
 
-The $general$ comparison expressions use operators \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, and \texttt{!=} and they can also compare sequences.
+%The $general$ comparison expressions use operators \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, %and \texttt{!=} and they can also compare sequences.
 
-And the $node$ comparison expressions use operators \texttt{is}, \texttt{<<}, and \texttt{>>} and they compare nodes, their identities and order.
+%And the $node$ comparison expressions use operators \texttt{is}, \texttt{<<}, and \texttt{>>} and they compare %nodes, their identities and order.
 
 \todo[inline]{TODO XQuery Core?}
 
-\section{Other Technologies}
+%\section{Other Technologies}
 
-\begin{description}
-\item[XSLT] e\textbf{X}tensible \textbf{S}tylesheet \textbf{L}anguage \textbf{T}ransformations \cite{Clark:99:XTV} is a language to transform input XML document(s) into other (not necessarily XML) document(s).
-\end{description}
+%\begin{description}
+%\item[XSLT] e\textbf{X}tensible \textbf{S}tylesheet \textbf{L}anguage \textbf{T}ransformations %\cite{Clark:99:XTV} is a language to transform input XML document(s) into other (not necessarily XML) document(s).
+%\end{description}
 
 \todo[inline]{možná ňejaký automat apod. Prostě co budete dále v textu potřebovat. Skratky: XSD, XSLT, ...}

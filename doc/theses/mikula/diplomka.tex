@@ -30,11 +30,12 @@
 %% Pokud pouľíváte csLaTeX (doporučeno):
 %\usepackage{czech}
 %% Pokud nikoliv:
-\usepackage[czech]{babel}
-\usepackage[T1]{fontenc}
+%\usepackage[czech]{babel}
+%\usepackage[T1]{fontenc}
 
 %% Pouľité kódování znaků: obvykle latin2, cp1250 nebo utf8:
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
 %% Ostatní balíčky
 \usepackage{graphicx}
@@ -144,7 +145,7 @@ Faculty of Mathematics and Physics
 
 % Název katedry nebo ústavu, kde byla práce oficiálně zadána
 % (dle Organizační struktury MFF UK)
-Katedra softwarového inženýrství
+Department of Software Engineering
 
 \vfill
 
@@ -269,9 +270,6 @@ Keywords:
 \pagestyle{plain}
 \renewcommand\thepage{}
 \tableofcontents
-\newpage
-\renewcommand\thepage{\arabic{page}}
-\setcounter{page}{1}
 
 \newtheorem{theorem}{Theorem}
 \theoremstyle{definition}
@@ -281,6 +279,10 @@ Keywords:
 
 %%% Tabulky v diplomové práci, existují-li.
 \chapwithtoc{List of Tables}
+
+\newpage
+\renewcommand\thepage{\arabic{page}}
+\setcounter{page}{1}
 
 %%% Jednotlivé kapitoly práce jsou pro přehlednost uloľeny v samostatných souborech
 \include{introduction}

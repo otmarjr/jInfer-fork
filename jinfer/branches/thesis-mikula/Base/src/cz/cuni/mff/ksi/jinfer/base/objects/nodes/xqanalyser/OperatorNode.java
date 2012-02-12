@@ -34,14 +34,14 @@ public class OperatorNode extends ExprNode {
   private ExprNode operand;
   private TypeNode typeNode;
   private ExprNode rightSide;
+  private final Operator operator;
 
   public OperatorNode(
           final XQNode parentNode, Operator operator, ExprNode operand) {
     super(parentNode);
     assert (operator != null);
     assert (operand != null);
-    addAttribute(AttrNames.ATTR_NAME, operator.toString());
-    addAttribute(AttrNames.ATTR_CLASS, operator.getOpClass());
+    this.operator = operator;
     if (operator.getOpSubClass() != null) {
       addAttribute(AttrNames.ATTR_SUB_CLASS, operator.getOpSubClass());
     }
@@ -86,5 +86,21 @@ public class OperatorNode extends ExprNode {
     }
     
     return subnodes;
+  }
+  
+  public Operator getOperator() {
+    return operator;
+  }
+  
+  public TypeNode getTypeNode() {
+    return typeNode;
+  }
+  
+  public ExprNode getOperand() {
+    return operand;
+  }
+  
+  public ExprNode getRightSide() {
+    return rightSide;
   }
 }

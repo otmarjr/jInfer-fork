@@ -43,6 +43,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private void processSyntaxTree(final ModuleNode root) {
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
+    final Map<ExprNode, Type> expressionTypes = new HashMap<ExprNode, Type>();
+    analysisOfExpressionTypes(expressionTypes, root, new HashMap<String, Type>(), functionsProcessor);
   }
   
   
@@ -52,16 +54,19 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     final Map<String, Type> newContextVarTypes = new HashMap<String, Type>();
     
     // Analyze types of the subnodes.
-    for (final XQNode subnode : root.getSubnodes()) {
-      final Map<String, Type> newVars = analysisOfExpressionTypes(expressionTypes, subnode, localContextVarTypes, fp);
-      newContextVarTypes.putAll(newVars);
-      // Extend context variable types for the next subnodes.
-      localContextVarTypes.putAll(newVars);
+    final List<XQNode> subnodes = root.getSubnodes();
+    if (subnodes != null) {
+      for (final XQNode subnode : root.getSubnodes()) {
+        final Map<String, Type> newVars = analysisOfExpressionTypes(expressionTypes, subnode, localContextVarTypes, fp);
+        newContextVarTypes.putAll(newVars);
+        // Extend context variable types for the next subnodes.
+        localContextVarTypes.putAll(newVars);
+      }
     }
     
     // If root is an expression, analyze it and save its type.
     if (ExprNode.class.isInstance(root)) {
-      expressionTypes.put((ExprNode)root, determineExpressionType(fp, (ExprNode)root));
+      expressionTypes.put((ExprNode)root, determineExpressionType(fp, (ExprNode)root, expressionTypes, localContextVarTypes));
     }
     
     // If root extends context variables for its siblings in recursion, return those variables.
@@ -71,7 +76,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       if (variableBindingNode.getTypeNode() != null) {
         newVars.put(variableBindingNode.getVarName(), new Type(variableBindingNode.getTypeNode()));
       } else {
-        final Type type = determineExpressionType(fp, variableBindingNode.getBindingSequenceNode().getExprNode());
+        final Type type = determineExpressionType(fp, variableBindingNode.getBindingSequenceNode().getExprNode(), expressionTypes, localContextVarTypes);
         newVars.put(variableBindingNode.getVarName(), type);
       }
     } else if (TupleStreamNode.class.isInstance(root)) {
@@ -81,7 +86,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     return newVars;
   }
   
-  private Type determineExpressionType(final FunctionsProcessor fp, final ExprNode expressionNode) {
+  private Type determineExpressionType(final FunctionsProcessor fp, final ExprNode expressionNode, final Map<ExprNode, Type> expressionTypes, final Map<String, Type> contextVarTypes) {
     final Class c = expressionNode.getClass();
     if (c.equals(LiteralNode.class)) {
       final LiteralNode literalNode = (LiteralNode)expressionNode;
@@ -89,12 +94,74 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     } else if (c.equals(FunctionCallNode.class)) {
       final FunctionCallNode functionCallNode = (FunctionCallNode)expressionNode;
       return fp.getFunctionType(functionCallNode.getFuncName());
+    } else if (OperatorNode.class.isInstance(expressionNode)) {
+      return determineOperatorType((OperatorNode)expressionNode, expressionTypes);
+    } else if (VarRefNode.class.isInstance(expressionNode)) {
+      return contextVarTypes.get(((VarRefNode)expressionNode).getVarName());
     }
     assert(false); // TODO rio
     return null;
   }
   
+  private Type determineOperatorType(final OperatorNode operatorNode, final Map<ExprNode, Type> expressionTypes) {
+    if (operatorNode.getTypeNode() != null) {
+      return new Type(operatorNode.getTypeNode());
+    }
+    
+    final Operator operator = operatorNode.getOperator();
+    
+    if (isOperatorClassComparison(operator)) {
+      return new Type(Type.XSDAtomicType.BOOLEAN, Cardinality.ONE);
+    }
+    
+    if (isOperatorClassAddition(operator)) {
+      final Type leftType = expressionTypes.get(operatorNode.getOperand());
+      final Type rightType = expressionTypes.get(operatorNode.getRightSide());
+      if (leftType.isNumeric() && rightType.isNumeric()) {
+        return leftType; // TODO rio vybrat obecnejsi z typov
+      } else if (leftType.isNumeric()) {
+        return leftType;
+      } else if (rightType.isNumeric()) {
+        return rightType;
+      } // TODO rio else?
+    }
+    
+    if (operator == Operator.TO) {
+      return new Type(Type.XSDAtomicType.INT, Cardinality.ONE); // TODO rio je to tak?
+    }
+    
+    return null;
+  }
   
+  private boolean isOperatorClassComparison(final Operator op) {
+    switch (op) {
+      case GEN_EQUALS:
+      case GEN_GREATER_THAN:
+      case GEN_GREATER_THAN_EQUALS:
+      case GEN_LESS_THAN:
+      case GEN_LESS_THAN_EQUALS:
+      case GEN_NOT_EQUALS:
+      case VAL_EQUALS:
+      case VAL_GREATER_THAN:
+      case VAL_GREATER_THAN_EQUALS:
+      case VAL_LESS_THAN:
+      case VAL_LESS_THAN_EQUALS:
+      case VAL_NOT_EQUALS:
+        return true;
+      default:
+        return false;
+    }
+  }
+  
+  private boolean isOperatorClassAddition(final Operator op) {
+    switch (op) {
+      case PLUS:
+      case MINUS:
+        return true;
+      default:
+        return false; // TODO rio treba pridat aj unarne plus a minus
+    }
+  }
   
 
   @Override

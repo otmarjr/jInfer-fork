@@ -29,11 +29,13 @@ import java.util.List;
  * @author Jiri Schejbal
  */
 public class VarRefNode extends ExprNode {
+  
+  private final String varName;
 
   public VarRefNode(final XQNode parentNode, String varName) {
     super(parentNode);
     assert (varName != null);
-    addAttribute(AttrNames.ATTR_NAME, varName);
+    this.varName = varName;
   }
 
   @Override
@@ -44,5 +46,9 @@ public class VarRefNode extends ExprNode {
   @Override
   public List<XQNode> getSubnodes() {
     return null;
+  }
+  
+  public String getVarName() {
+    return varName;
   }
 }

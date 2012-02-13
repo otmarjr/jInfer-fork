@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.Type;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.TypeFactory;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +69,7 @@ public class FunctionsProcessor {
     for (final FunctionDeclNode functionDeclarationNode : functionDeclarationNodes.values()) {
       final String functionName = functionDeclarationNode.getFuncName();
       final TypeNode returnTypeNode = functionDeclarationNode.getReturnTypeNode();
-      fTypes.put(functionName, new Type(returnTypeNode));
+      fTypes.put(functionName, TypeFactory.createType(returnTypeNode));
     }
     return fTypes;
   }

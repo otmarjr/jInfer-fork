@@ -16,10 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.Type;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.TypeFactory;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.XSDType.XSDAtomicType;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -45,6 +49,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
     final Map<ExprNode, Type> expressionTypes = new HashMap<ExprNode, Type>();
     analysisOfExpressionTypes(expressionTypes, root, new HashMap<String, Type>(), functionsProcessor);
+    return;
   }
   
   
@@ -74,10 +79,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     if (VariableBindingNode.class.isInstance(root)) {
       final VariableBindingNode variableBindingNode = (VariableBindingNode)root;
       if (variableBindingNode.getTypeNode() != null) {
-        newVars.put(variableBindingNode.getVarName(), new Type(variableBindingNode.getTypeNode()));
+        newVars.put(variableBindingNode.getVarName(), TypeFactory.createType(variableBindingNode.getTypeNode()));
       } else {
         final Type type = determineExpressionType(fp, variableBindingNode.getBindingSequenceNode().getExprNode(), expressionTypes, localContextVarTypes);
-        newVars.put(variableBindingNode.getVarName(), type);
+        if (ForClauseNode.class.isInstance(variableBindingNode)) {
+          // If the binding is for binding, we make a for bound type.
+          newVars.put(variableBindingNode.getVarName(), TypeFactory.createForBoundType(type));
+        } else {
+          newVars.put(variableBindingNode.getVarName(), type);
+        }
       }
     } else if (TupleStreamNode.class.isInstance(root)) {
       newVars = newContextVarTypes;
@@ -87,17 +97,18 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   }
   
   private Type determineExpressionType(final FunctionsProcessor fp, final ExprNode expressionNode, final Map<ExprNode, Type> expressionTypes, final Map<String, Type> contextVarTypes) {
-    final Class c = expressionNode.getClass();
-    if (c.equals(LiteralNode.class)) {
+    if (LiteralNode.class.isInstance(expressionNode)) {
       final LiteralNode literalNode = (LiteralNode)expressionNode;
-      return new Type(literalNode.getType());
-    } else if (c.equals(FunctionCallNode.class)) {
+      return new XSDType(literalNode.getType());
+    } else if (FunctionCallNode.class.isInstance(expressionNode)) {
       final FunctionCallNode functionCallNode = (FunctionCallNode)expressionNode;
       return fp.getFunctionType(functionCallNode.getFuncName());
     } else if (OperatorNode.class.isInstance(expressionNode)) {
       return determineOperatorType((OperatorNode)expressionNode, expressionTypes);
     } else if (VarRefNode.class.isInstance(expressionNode)) {
       return contextVarTypes.get(((VarRefNode)expressionNode).getVarName());
+    } else if (FLWORExprNode.class.isInstance(expressionNode)) {
+      return expressionTypes.get(((FLWORExprNode)expressionNode).getReturnClauseNode().getExprNode());
     }
     assert(false); // TODO rio
     return null;
@@ -105,13 +116,13 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private Type determineOperatorType(final OperatorNode operatorNode, final Map<ExprNode, Type> expressionTypes) {
     if (operatorNode.getTypeNode() != null) {
-      return new Type(operatorNode.getTypeNode());
+      return TypeFactory.createType(operatorNode.getTypeNode());
     }
     
     final Operator operator = operatorNode.getOperator();
     
     if (isOperatorClassComparison(operator)) {
-      return new Type(Type.XSDAtomicType.BOOLEAN, Cardinality.ONE);
+      return new XSDType(XSDAtomicType.BOOLEAN, Cardinality.ONE);
     }
     
     if (isOperatorClassAddition(operator)) {
@@ -127,7 +138,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     }
     
     if (operator == Operator.TO) {
-      return new Type(Type.XSDAtomicType.INT, Cardinality.ONE); // TODO rio je to tak?
+      return new XSDType(XSDAtomicType.INTEGER, Cardinality.ZERO_OR_MORE);
     }
     
     return null;

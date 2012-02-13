@@ -70,4 +70,8 @@ public class FLWORExprNode extends ExprNode {
     
     return subnodes;
   }
+  
+  public ReturnClauseNode getReturnClauseNode() {
+    return returnClauseNode;
+  }
 }

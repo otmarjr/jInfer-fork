@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.XSDType.XSDAtomicType;
 import java.util.*;
@@ -109,6 +110,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       return contextVarTypes.get(((VarRefNode)expressionNode).getVarName());
     } else if (FLWORExprNode.class.isInstance(expressionNode)) {
       return expressionTypes.get(((FLWORExprNode)expressionNode).getReturnClauseNode().getExprNode());
+    } else if (PathExprNode.class.isInstance(expressionNode)) {
+      return new PathType((PathExprNode)expressionNode);
     }
     assert(false); // TODO rio
     return null;

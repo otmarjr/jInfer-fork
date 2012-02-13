@@ -320,18 +320,14 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \caption{Processing of Functions}
 \label{ALG_processing_of_functions}
 \begin{algorithmic}[1]
-\REQUIRE{\ \\
-    $getFunctionDeclarationNodes()$: Function defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}. \\
-    $getTypeTN()$: Function defined in Algorithm \ref{ALG_extraction_of_a_type_from_typenode}. \\
-    $syntaxTree$: A reference to the root node of a syntax tree.
-}
+\REQUIRE $syntaxTree$: A reference to the root node of a syntax tree.
 \ENSURE An associative array of function names with their types and references to the their declaration nodes.
 
 \STATE $functionArray$ = an empty associative array
-\FORALL{$functionDeclarationNode \in getFunctionDeclarationNodes(syntaxTree)$}
+\FORALL{$functionDeclarationNode \in$ \\ $getFunctionDeclarationNodes(syntaxTree)$}
     \STATE $functionName = functionDeclarationNode.funcName$
     \STATE $typeNode = functionDeclarationNode.getChild(TypeNode)$
-    \STATE $functionArray[functionName] = (getTypeTN(typeNode), functionDeclarationNode)$
+    \STATE $functionArray[functionName] =$ \\ $(getTypeTN(typeNode), functionDeclarationNode)$
 \ENDFOR
 \RETURN $functionArray$
 \end{algorithmic}
@@ -361,14 +357,14 @@ Without loss of generality, we will focus on locally defined functions. We will 
 
 For the rest of the thesis, we assume function $getFunctionReturnType()$ which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
-Later phases of the algorithm may need to process the declarations of certain functions. Therefore, we also store references to the entire function declaration nodes, accessible using function $getFunctionDeclNode()$.
+Later phases of the algorithm need to process the declarations of certain functions. Therefore, we also store references to the entire function declaration nodes, accessible using function $getFunctionDeclNode()$.
 
 \subsection{Auxiliary Functions}
 Before proceeding to the next phase of the algorithm, we introduce auxiliary functions used in pseudo algorithms.
 
 Function $memorizeType()$ takes two arguments $node$ and $type$ and it memorizes the given type of the specified expression node. This information can be then retrieved by function $getType()$, specifying the particular node as its argument.
 
-Another group consists of functions $set()$, $add()$, and $get()$. Function $set()$ memorizes a given value of a specified property of a specified node. It is used to assign a node with a named value, for example, $set(someNode, color, 'red')$ will assign $someNode$ with string value $'red'$ wich can be then retrieved by function $get()$, specifying the node and the property name. For example, $get(someNode, color)$ returns $'red'$. A subsequent call of $set()$ assigning a node with a value of already assigned property will overwrite it, leaving the property with the newer value. However, a property can has several values and this can be achieved using function $add()$ with the same syntax as function $set()$ but instead of overwriting the existing property, $add()$ will append the new value to the existing ones. Then, a call of $get()$ on this node and property returns a list of all its values, preserving the order of their addition.
+Another group consists of functions $set()$, $add()$, and $get()$. Function $set()$ memorizes a given value of a specified property of a specified node. It is used to assign a node with a named value, for example, $set(someNode, color, 'red')$ will assign $someNode$ with string value $'red'$ wich can be then retrieved by function $get()$, specifying the node and the property name. For example,\linebreak $get(someNode, color)$ returns $'red'$. A subsequent call of $set()$ assigning a node with a value of already assigned property will overwrite it, leaving the property with the newer value. However, a property can have several values and this can be achieved using function $add()$ with the same syntax as function $set()$ but instead of overwriting the existing property, $add()$ will append the new value to the existing ones. Then, a call of $get()$ on this node and property returns a list of all its values, preserving the order of their addition.
 
 \subsection{Determination of Global Variable Types}
 A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
@@ -380,10 +376,6 @@ A similar approach as in the case of functions can be applied to determine types
 \label{ALG_func_determineExpressionType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    $getFunctionReturnType()$: Function returning a type of a function. \\
-    $getVariableType()$: Function returning a type of a variable. \\
-    $determineOperatorType()$: Function defined in \ref{ALG_func_determineOperatorType}. \\
-    $getType()$: Function returning a type of already processed expression. \\
     $exprNode$: An expression node in the syntax tree. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
@@ -418,11 +410,6 @@ A similar approach as in the case of functions can be applied to determine types
 \label{ALG_func_determineOperatorType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\ 
-    $getType()$: Function returning a type of already processed expression. \\
-    $isOperatorClassComparison()$: Function defined in \ref{ALG_func_isOperatorClassComparison}. \\
-    $isOperatorClassAddition()$: Function defined in \ref{ALG_func_isOperatorClassAddition}. \\
-    $isNumericType()$: Function defined in \ref{ALG_func_isNumericType}. \\
-    $selectMoreGenericNumericType()$: Function that select a more generic numeric XSD type from two given types according to the type promotions rules (TODO-REF). \\
     $operatorNode$: An operator expression node in the syntax tree. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
@@ -435,8 +422,8 @@ A similar approach as in the case of functions can be applied to determine types
 \ELSIF{$isOperatorClassAddition(operator)$}
     \STATE $leftOperandType = getType(exprNode.leftSide)$
     \STATE $rightOperandType = getType(exprNode.rightSide)$
-    \IF{$isNumericType(leftOperandType)) AND isNumericType(rightOperandType)$}
-        \STATE $type = selectMoreGeneralNumericType(leftOperandType, rightOperandType)$
+    \IF{$isNumericType(leftOperandType)$ $AND$ $isNumericType(rightOperandType)$}
+        \STATE $type = selectMoreGeneralNumericType(leftOperandType,$ $rightOperandType)$
     \ELSIF{$isNumericType(leftOperandType)$}
         \STATE $type = leftOperandType$
     \ELSIF{$isNumericType(rightOperandType)$}
@@ -493,11 +480,11 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_4}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_4}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
-Function $determineExpressionType()$ is called within function $analysisOfExpressionTypes$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
+Function $determineExpressionType$ is called within function $analysis\-Of\-Expression\-Types$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
-The order of the recursion is to firstly process children of a node and then the node itself. The order of children processing is specified by function $o$ from the definition of the syntax tree \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
+The order of the recursion is to firstly process children of a node and then the node itself. The order of child processing is specified by function $o$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
 
 The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
@@ -506,11 +493,6 @@ The handling of new variable definitions relies on the fact that the definitions
 \label{ALG_func_analysisOfExpressionTypes}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    $memorizeType()$: Function memorizing a determined type of a specified node. \\
-    $set()$: Function memorizing a specified property of a specified node. \\
-    $add()$: Function adding a value to a list of specified properties of a specified node. \\
-    $get()$: Function returning a specified property (or list) set by functions $set()$ and $add()$. \\
-    $mergeContextVarTypes()$: Function defined in Algorithm \ref{ALG_function_mergeContextVarTypes}. \\
     $startingNode$: A node determining a subtree to perform the analysis on. \\
     $contextVarTypes$: Types of local variables valid in the current subtree.
 }
@@ -530,7 +512,7 @@ The handling of new variable definitions relies on the fact that the definitions
     \IF{$typeNode \neq null$}
         \STATE $type = getTypeTN(typeNode)$
     \ELSE
-        \STATE $type = determineExpressionType(startingNode.getChild(BindingSequenceNode).getChild(ExprNode), contextVarTypes)$
+        \STATE $type = determineExpressionType(startingNode.$ $getChild(BindingSequenceNode).getChild(ExprNode),$ $contextVarTypes)$
     \ENDIF
     \STATE $set(startingNode, newVars, (startingNode.varName, type))$
 \ELSIF{$is(startingNode, TupleStreamNode)$}
@@ -570,7 +552,6 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 \label{ALG_function_get_variable_type}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    $getGlobalVariableType()$: Function returning a determined type of a specified global variable. \\
     $contextVarTypes$: Types of local variables valid in current context. \\
     $var$: A variable to determine the type of.
 }
@@ -584,10 +565,10 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 \end{algorithmic}
 \end{algorithm}
 
-The types of processed global variables are available trough function $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in Algorithm \ref{ALG_func_determineExpressionType} is defined in Algorithm \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
+The types of processed global variables are available trough function \linebreak $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in Algorithm \ref{ALG_func_determineExpressionType} is defined in Algorithm \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
 
 \subsection{Determination of Expression Types}
-To determine types of expressions, we use already introduced function $analysisOfExpressionTypes$. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
+To determine types of expressions, we use already introduced function \linebreak $analysisOfExpressionTypes$. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
 
 We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
 
@@ -609,12 +590,12 @@ If the type $T$ of the formal argument is a built-in type or its sequence, then 
 \subsection{Arithmetic Operations}
 If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression node is $Operator$ and it represents one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ \todo{Niekam napisat mozne triedy operatora}), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
 
-If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$, $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
+If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, \linebreak $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$,\linebreak $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$,\linebreak $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
 
 \todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme. -- To urobim pocas implementacie pre nejaky vzorovy dotaz.}
 
 \section{Step 4: Key Discovery}
-In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in section \ref{Keys}, and extending it. Firstly, the syntax tree is searched for certain forms of FLWOR expressions to infer the keys from. Then, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
+In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
 
 \subsection{Join Patterns}
 
@@ -639,11 +620,11 @@ where $\$e_2/L_2 = \$e_1/L_1$
 return $C_R$
 \end{lstlisting}
 
-The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_other_for_join_pattern}, \ref{listing_other_let_join_pattern} and \ref{listing_join_pattern_3}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes. Actually, the join patterns from \ref{listing_other_for_join_pattern} and \ref{listing_other_let_join_pattern} are covered by the for and let join pattern in the original approach, but we introduce them explicitly because their structure in the syntax tree is different.
+The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_other_for_join_pattern}, \ref{listing_other_let_join_pattern} and \ref{listing_join_pattern_3}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes. Actually, the join patterns from Listings \ref{listing_other_for_join_pattern} and \ref{listing_other_let_join_pattern} are covered by the for and let join pattern in the original approach, but we introduce them explicitly because their structure in the syntax tree is different.
 
 Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of $PathType$ without predicates, using only child and descendant axes.
 
-As described in the original method and summarized in section \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns, and rules to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
+As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns, and rules to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
 
 \begin{algorithm}
 \caption{Processing of FLWOR expressions}
@@ -656,7 +637,7 @@ As described in the original method and summarized in section \ref{Keys} we reco
 
 \ENSURE Updated variable $forVars$.
 
-\STATE $bindingNodes = bindingNode \in flworNode.getChild(TupleStreamNode).getChildren()$
+\STATE $bindingNodes = bindingNode \in flworNode.getChild(TupleStreamNode).$ $getChildren()$
 
 \STATE $whereClause = flworNode.getChild(WhereClauseNode)$
 \STATE $checkJoinPattern3 = false$
@@ -669,10 +650,10 @@ As described in the original method and summarized in section \ref{Keys} we reco
 \ENDIF
 
 \FORALL{$bindingNode \in bindingNodes$}
-    \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).getChild(ExprNode)$
+    \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
     \IF{$getType(BindingExpr) == PathType$ using only child and descendant axes, ending with exactly one predicate $P$}
         \FORALL{$(var, node) \in forVars$}
-            \STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var, forVars)$
+            \STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var,$ $forVars)$
         \ENDFOR
     \ELSIF{$getType(BindingExpr) == PathType$ without predicates using only child and descendant axes}
         \IF{$is(bindingNode, ForClauseNode$}
@@ -684,6 +665,8 @@ As described in the original method and summarized in section \ref{Keys} we reco
 \RETURN $forVars$
 \end{algorithmic}
 \end{algorithm}
+
+\todo[inline]{Alg 6.12 FLWOR expressions - pre podmienky na riadkoch 13 a 17 definovat nejake funkcie}
 
 \begin{algorithm}
 \caption{Function determinateJoinPatterns}
@@ -752,13 +735,13 @@ For each found join pattern occurrence, the algorithm displayed in Algorithm \re
 \end{algorithm}
 
 \subsection{Rejection of Uniqueness}
-While the previous steps of the key discovery produce positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. An aim of this step is to eliminate or decrease the number of falsely inferred keys.
+While the previous steps of the key discovery produce positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys.
 \todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
 When the algorithm discovers that a certain element is probably not unique, it assign the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
 The first group of XQuery constructs utilized by this step is a group of $distinct-values()$ function and aggregation functions $min()$, $max()$, TODO \todo{Doplnit} as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they can not be keys.
 
-Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates. Predicates in a path restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates. \todo[inline]{Toto asi nebude uplne pravda pre nejake exoticke predikaty. Overit pri implementacii.}
+Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates. Predicates in a path restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates. \todo[inline]{Toto asi nebude uplne pravda pre nejake exoticke predikaty. Overit pri implementacii. A: Kdyžtak popište.}
 
 \begin{algorithm}
 \caption{Rejection of uniqueness - aggregation functions}
@@ -797,7 +780,7 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
 \IF{$is(node, FLWORExprNode)$}
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
         \IF{$is(bindingNode, ForClauseNode)$}
-            \STATE $expr = bindingNode.getChild(BindingSequenceNode).getChild(ExprNode)$
+            \STATE $expr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
             \IF{$getType(expr) == PathExpr$ without predicates, using only child and descendant axes}
                 \STATE add $bindingNode.varName$ to $forVars$
             \ENDIF

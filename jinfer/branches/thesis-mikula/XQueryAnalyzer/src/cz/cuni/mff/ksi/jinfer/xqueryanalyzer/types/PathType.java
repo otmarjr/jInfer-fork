@@ -16,14 +16,20 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
+
 /**
  *
  * @author rio
  */
 public class PathType implements Type {
   
-  private final Object path = null; // TODO rio reprezentacia cesty
+  private final PathExprNode pathExpr;
 
+  public PathType(final PathExprNode pathExpr) {
+    this.pathExpr = pathExpr;
+  }
+  
   @Override
   public Category getCategory() {
     return Category.PATH;

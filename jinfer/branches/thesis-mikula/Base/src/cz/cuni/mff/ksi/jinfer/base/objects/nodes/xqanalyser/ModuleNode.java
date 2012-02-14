@@ -32,6 +32,8 @@ import java.util.List;
 public class ModuleNode extends XQNode {
 
   private final List<ModuleChildNode> moduleChildren;
+  private final PrologNode prologNode;
+  private final QueryBodyNode queryBodyNode;
 
   public ModuleNode(
           final XQNode parentNode, VersionDecl versionDecl, Module module) {
@@ -43,6 +45,21 @@ public class ModuleNode extends XQNode {
     }
     addAttribute(AttrNames.ATTR_MODULE_TYPE, module.getModuleTypeString());
     moduleChildren = module.getNodes();
+    
+    XQNode pNode = null;
+    XQNode qbNode = null;
+    for (final ModuleChildNode child : moduleChildren) {
+      if (PrologNode.class.isInstance(child)) {
+        assert(pNode == null);
+        pNode = child;
+      } else if (QueryBodyNode.class.isInstance(child)) {
+        assert(qbNode == null);
+        qbNode = child;
+      }
+    }
+    
+    prologNode = (PrologNode)pNode;
+    queryBodyNode = (QueryBodyNode)qbNode;
   }
 
   @Override
@@ -57,4 +74,13 @@ public class ModuleNode extends XQNode {
     }
     return null;
   }
+
+  public PrologNode getPrologNode() {
+    return prologNode;
+  }
+
+  public QueryBodyNode getQueryBodyNode() {
+    return queryBodyNode;
+  }
+  
 }

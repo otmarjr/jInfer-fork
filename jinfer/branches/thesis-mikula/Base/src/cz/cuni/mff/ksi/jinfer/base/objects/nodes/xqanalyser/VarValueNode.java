@@ -31,16 +31,19 @@ import java.util.List;
  */
 public class VarValueNode extends XQNode {
 
-  private ExprNode exprNode;
+  private final boolean isExternal;
+  private final ExprNode exprNode;
 
   public VarValueNode(final XQNode parentNode) {
     super(parentNode);
-    addAttribute(AttrNames.ATTR_EXTERNAL, Boolean.TRUE.toString());
+    isExternal = true;
+    exprNode = null;
   }
 
   public VarValueNode(final XQNode parentNode, ExprNode exprNode) {
     super(parentNode);
     assert (exprNode != null);
+    isExternal = false;
     this.exprNode = exprNode;
   }
 
@@ -58,5 +61,13 @@ public class VarValueNode extends XQNode {
     }
     
     return subnodes;
+  }
+  
+  public boolean isExternal() {
+    return isExternal;
+  }
+  
+  public ExprNode getExprNode() {
+    return exprNode;
   }
 }

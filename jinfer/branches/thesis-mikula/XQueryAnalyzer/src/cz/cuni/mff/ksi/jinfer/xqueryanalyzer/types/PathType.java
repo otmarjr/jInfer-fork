@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
 
 /**
- *
+ * TODO rio poriadne spracovavat, napr zlucovat cesty v ktorych su premenne, ktore su tiez cesty a podobne
  * @author rio
  */
 public class PathType implements Type {

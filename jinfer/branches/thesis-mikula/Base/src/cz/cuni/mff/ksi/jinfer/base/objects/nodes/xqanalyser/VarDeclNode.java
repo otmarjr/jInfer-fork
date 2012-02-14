@@ -31,6 +31,7 @@ import java.util.List;
  */
 public class VarDeclNode extends PrologChildNode {
 
+  private final String varName;
   private final TypeNode typeDeclarationNode;
   private final VarValueNode varValueNode;
 
@@ -40,7 +41,7 @@ public class VarDeclNode extends PrologChildNode {
     super(parentNode);
     assert (varName != null);
     assert (varValueNode != null);
-    addAttribute(AttrNames.ATTR_NAME, varName);
+    this.varName = varName;
     this.typeDeclarationNode = typeDeclarationNode;
     this.varValueNode = varValueNode;
   }
@@ -60,5 +61,17 @@ public class VarDeclNode extends PrologChildNode {
     subnodes.add(varValueNode);
     
     return subnodes;
+  }
+  
+  public String getVarName() {
+    return varName;
+  }
+
+  public TypeNode getTypeDeclarationNode() {
+    return typeDeclarationNode;
+  }
+
+  public VarValueNode getVarValueNode() {
+    return varValueNode;
   }
 }

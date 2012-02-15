@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.Type;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +41,33 @@ public class FunctionsProcessor {
     return functionDeclarationNodes.get(functionName);
   }
   
-  public Type getFunctionType(final String functionName) {
-    return functionTypes.get(functionName);
+  public Type getFunctionType(final FunctionCallNode functionCallNode) {
+    final String qualifiedName = functionCallNode.getFuncName();
+    
+    final int colonPos = qualifiedName.lastIndexOf(':');
+    final String prefix = qualifiedName.substring(0, colonPos);
+    final String name = qualifiedName.substring(colonPos + 1);
+    
+    if (prefix.isEmpty() || prefix.equals("fn")) {
+      if (BuiltinFunctions.isBuiltinFunction(name)) {
+        return BuiltinFunctions.getFunctionCallType(functionCallNode);
+      }
+      
+      if (functionTypes.containsKey(name)) {
+        return functionTypes.get(name);
+      }
+    } else {
+      if (functionTypes.containsKey(name)) {
+        return functionTypes.get(name);
+      }
+      
+      if (BuiltinFunctions.isBuiltinFunction(name)) {
+        return BuiltinFunctions.getFunctionCallType(functionCallNode);
+      }
+    }
+    
+    assert(false);
+    return null;
   }
   
   private Map<String, FunctionDeclNode> getFunctionDeclarationNodes(final ModuleNode root) {

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.Cardinality;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.LiteralType;

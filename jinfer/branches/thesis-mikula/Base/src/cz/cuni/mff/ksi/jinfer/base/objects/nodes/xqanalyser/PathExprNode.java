@@ -52,4 +52,8 @@ public class PathExprNode extends ExprNode {
   public List<XQNode> getSubnodes() {
     return new ArrayList<XQNode>(steps);
   }
+  
+  public List<StepExprNode> getSteps() {
+    return steps;
+  }
 }

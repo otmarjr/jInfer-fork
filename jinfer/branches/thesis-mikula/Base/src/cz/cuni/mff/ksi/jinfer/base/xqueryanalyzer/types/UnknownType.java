@@ -14,27 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
-
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
 
 /**
- * TODO rio poriadne spracovavat, napr zlucovat cesty v ktorych su premenne, ktore su tiez cesty a podobne
+ *
  * @author rio
  */
-public class PathType implements Type {
-  
-  private final PathExprNode pathExpr;
+public class UnknownType implements Type {
 
-  public PathType(final PathExprNode pathExpr) {
-    this.pathExpr = pathExpr;
-  }
-  
   @Override
   public Category getCategory() {
-    return Category.PATH;
+    return Category.UNKNOWN;
   }
-  
+
   @Override
   public boolean isNumeric() {
     return false;

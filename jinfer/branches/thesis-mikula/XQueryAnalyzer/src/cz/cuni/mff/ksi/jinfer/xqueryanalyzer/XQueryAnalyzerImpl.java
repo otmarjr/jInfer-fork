@@ -16,15 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.Type;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.PathType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.XSDType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types.XSDType.XSDAtomicType;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -49,7 +45,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private void processSyntaxTree(final ModuleNode root) {
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
     final ExpressionsProcessor expressionProcessor = new ExpressionsProcessor(root, functionsProcessor);
-    final Map<ExprNode, Type> expressionTypes = expressionProcessor.process();
+    expressionProcessor.process();
     return;
   }
   

@@ -58,4 +58,8 @@ public class FunctionCallNode extends ExprNode {
   public String getFuncName() {
     return fncName;
   }
+  
+  public List<ExprNode> getParams() {
+    return params;
+  }
 }

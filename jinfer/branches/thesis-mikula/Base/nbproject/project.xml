@@ -115,6 +115,7 @@
                 <package>cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser</package>
                 <package>cz.cuni.mff.ksi.jinfer.base.regexp</package>
                 <package>cz.cuni.mff.ksi.jinfer.base.utils</package>
+                <package>cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types</package>
                 <package>org.apache.log4j</package>
                 <package>org.apache.log4j.chainsaw</package>
                 <package>org.apache.log4j.config</package>

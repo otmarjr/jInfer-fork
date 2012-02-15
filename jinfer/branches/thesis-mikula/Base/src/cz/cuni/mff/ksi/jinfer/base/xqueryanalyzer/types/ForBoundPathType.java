@@ -14,23 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
+
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type.Category;
 
 /**
- * TODO rio
+ * TODO rio comment
  * @author rio
  */
-public interface Type {
+public class ForBoundPathType implements Type {
   
-  public enum Category {
-    BUILT_IN,
-    NODE,
-    PATH,
-    UNKNOWN,
-    FOR_BOUND_PATH;
+  private final PathType pathType; // PathType which is bound in a respective for expression.
+    
+  public ForBoundPathType(final PathType pathType) {
+    this.pathType = pathType;
   }
-  
-  public Category getCategory();
 
-  public boolean isNumeric();
+  @Override
+  public Category getCategory() {
+    return Category.FOR_BOUND_PATH;
+  }
+
+  @Override
+  public boolean isNumeric() {
+    return false;
+  }
+
 }

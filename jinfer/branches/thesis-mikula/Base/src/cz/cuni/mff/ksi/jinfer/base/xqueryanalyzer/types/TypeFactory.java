@@ -14,9 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO rio comment
@@ -64,6 +68,37 @@ public class TypeFactory {
       default:
         throw new IllegalStateException(); // TODO rio
     }
+  }
+  
+  public static PathType createPathType(final PathExprNode pathExprNode) {
+    final List<StepExprNode> steps = new ArrayList<StepExprNode>();
+    final Map<StepExprNode, ForBoundPathType> forBoundSubsteps = new HashMap<StepExprNode, ForBoundPathType>();
+    
+    for (final StepExprNode stepNode : pathExprNode.getSteps()) {
+      final ExprNode detailNode = stepNode.getDetailNode();
+      if (detailNode != null) {
+        if (VarRefNode.class.isInstance(detailNode)) {
+          final VarRefNode varRefNode = (VarRefNode)detailNode;
+          final Type type = varRefNode.getType(); // TODO rio je ok?
+          switch (type.getCategory()) {
+            case FOR_BOUND_PATH:
+              final ForBoundPathType fbpt = (ForBoundPathType)type;
+              forBoundSubsteps.put(stepNode, fbpt);
+              steps.add(stepNode);
+              break;
+            case PATH:
+              steps.addAll(((PathType)type).getStepNodes());
+            default:
+              assert(false); // TODO rio
+              throw new IllegalStateException();
+          }
+        }
+      } else {
+        steps.add(stepNode);
+      }
+    }
+    
+    return new PathType(steps, forBoundSubsteps);
   }
   
 }

@@ -14,22 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.Cardinality;
 
 /**
  *
  * @author rio
  */
-public class UnknownType implements Type {
+public class NodeType extends CardinalityType {
+  
+  public enum NType {
+    DOCUMENT;
+  }
+  
+  private final NType nType;
+  
+  public NodeType(final NType nType, final Cardinality cardinality) {
+    super(cardinality);
+    this.nType = nType;
+  }
 
   @Override
   public Category getCategory() {
-    return Category.UNKNOWN;
+    return Category.NODE;
   }
 
   @Override
   public boolean isNumeric() {
     return false;
   }
+  
   
 }

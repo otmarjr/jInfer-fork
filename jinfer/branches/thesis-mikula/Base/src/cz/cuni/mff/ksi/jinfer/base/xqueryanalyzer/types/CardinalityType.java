@@ -14,28 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.Cardinality;
 
 /**
- * TODO rio comment
+ *
  * @author rio
  */
-public class ForBoundPathType implements Type {
+public abstract class CardinalityType implements Type {
   
-  private final PathType pathType;
-
-  public ForBoundPathType(final PathType pathType) {
-    this.pathType = pathType;
+  private final Cardinality cardinality;
+  
+  protected CardinalityType(final Cardinality cardinality) {
+    this.cardinality = cardinality;
   }
   
-  @Override
-  public Category getCategory() {
-    return Category.FOR_BOUND_PATH;
+  public Cardinality getCardinality() {
+    return cardinality;
   }
-  
-  @Override
-  public boolean isNumeric() {
-    return false;
-  }
-
 }

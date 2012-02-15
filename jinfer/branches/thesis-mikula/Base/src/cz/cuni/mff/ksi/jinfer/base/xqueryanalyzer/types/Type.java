@@ -14,23 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.types;
-
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.Cardinality;
+package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
 
 /**
- *
+ * TODO rio
  * @author rio
  */
-public abstract class CardinalityType implements Type {
+public interface Type {
   
-  private final Cardinality cardinality;
-  
-  protected CardinalityType(final Cardinality cardinality) {
-    this.cardinality = cardinality;
+  public enum Category {
+    BUILT_IN,
+    NODE,
+    PATH,
+    UNKNOWN,
+    FOR_BOUND_PATH;
   }
   
-  public Cardinality getCardinality() {
-    return cardinality;
-  }
+  public Category getCategory();
+
+  public boolean isNumeric();
 }

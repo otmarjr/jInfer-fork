@@ -21,14 +21,27 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
+
 /**
  * The node representing an expression.
  *
  * @author Jiri Schejbal
  */
 public abstract class ExprNode extends XQNode {
+  
+  private Type type;
 
   public ExprNode(final XQNode parentNode) {
     super(parentNode);
   }
+
+  public Type getType() {
+    return type;
+  }
+
+  public void setType(Type type) {
+    this.type = type;
+  }
+  
 }

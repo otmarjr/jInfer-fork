@@ -30,14 +30,14 @@ import java.util.List;
  */
 public class LiteralNode extends ExprNode {
   
-  private final LiteralType type;
+  private final LiteralType literalType;
   private final String value;
 
   public LiteralNode(final XQNode parentNode, LiteralType type, String value) {
     super(parentNode);
     assert (type != null);
     assert (value != null);
-    this.type = type;
+    this.literalType = type;
     this.value = value;
   }
 
@@ -58,7 +58,7 @@ public class LiteralNode extends ExprNode {
     return null;
   }
   
-  public LiteralType getType() {
-    return type;
+  public LiteralType getLiteralType() {
+    return literalType;
   }
 }

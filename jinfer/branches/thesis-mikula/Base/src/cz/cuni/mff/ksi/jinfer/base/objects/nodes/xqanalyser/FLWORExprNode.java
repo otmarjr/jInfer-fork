@@ -74,4 +74,12 @@ public class FLWORExprNode extends ExprNode {
   public ReturnClauseNode getReturnClauseNode() {
     return returnClauseNode;
   }
+  
+  public TupleStreamNode getTupleStreamNode() {
+    return tupleStreamNode;
+  }
+  
+  public WhereClauseNode getWhereClauseNode() {
+    return whereClauseNode;
+  }
 }

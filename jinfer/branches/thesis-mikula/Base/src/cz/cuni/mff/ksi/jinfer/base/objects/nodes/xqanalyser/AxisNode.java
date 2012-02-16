@@ -33,6 +33,7 @@ import java.util.List;
 public class AxisNode extends XQNode {
 
   private final ItemTypeNode nodeTestNode;
+  private final AxisKind axisKind;
 
   /**
    * Creates a new node representing an axis.
@@ -48,7 +49,7 @@ public class AxisNode extends XQNode {
     super(parentNode);
     assert (axisKind != null);
     addAttribute(AttrNames.ATTR_DIRECTION, axisKind.getDirectionValue());
-    addAttribute(AttrNames.ATTR_KIND, axisKind.toString());
+    this.axisKind = axisKind;
     addAttribute(AttrNames.ATTR_ABBREVIATED,
             Boolean.toString(isAbbreviated));
     this.nodeTestNode = nodeTestNode;
@@ -66,4 +67,9 @@ public class AxisNode extends XQNode {
     }
     return null;
   }
+
+  public AxisKind getAxisKind() {
+    return axisKind;
+  }
+  
 }

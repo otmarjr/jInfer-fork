@@ -27,6 +27,10 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * TODO rio
+ *
+ * Hlavna trieda XQuery modulu. Postupne pusta jednotlive kroky algoritmu
+ * na zistovanie informacii z dotazov.
+ *
  * @author rio
  */
 @ServiceProvider(service = XQueryAnalyzer.class)
@@ -46,6 +50,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
     final ExpressionsProcessor expressionProcessor = new ExpressionsProcessor(root, functionsProcessor);
     expressionProcessor.process();
+    final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
+    bti.process();
     return;
   }
   

@@ -55,4 +55,8 @@ public class ParamNode extends XQNode {
     
     return subnodes;
   }
+  
+  public TypeNode getTypeDeclarationNode() {
+    return typeDeclarationNode;
+  }
 }

@@ -28,12 +28,21 @@ import java.util.Map;
 /**
  * TODO rio
  *
+ * Zistovanie typov vyrazov v jednom syntaktickom strome.
+ * 
+ * Najprv zisti typy globalnych premennych a typy vyrazov v prologu dotazu. Potom
+ * vyrazy v tele dotazu.
+ * 
+ * TODO rio Treba dorobit analyzu volani funkcii s tym, ze sa bude zistovat typ tak, ze sa vyuzije tele funkcie.
+ * TODO rio Skompletovat rozne pomocne metody.
+ * TODO rio Porozmyslat, ci nie je porebne zlucit zistovanie typov user-defined funkcii a globalnych premennych, kedze glob. premenna moze pouzivat funkcie a opacne.
+ * 
  * @author rio
  */
 public class ExpressionsProcessor {
   
-  private final ModuleNode root;
-  private final FunctionsProcessor fp;
+  private final ModuleNode root; // Koren syntaktickeho stromu
+  private final FunctionsProcessor fp; // Procesor funkcii dodany z vonku.
 
   public ExpressionsProcessor(final ModuleNode root, final FunctionsProcessor fp) {
     this.root = root;

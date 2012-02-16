@@ -98,4 +98,31 @@ public class FunctionsProcessor {
     }
     return fTypes;
   }
+  
+  public ParamListNode getParamListNode(final String functionName) {
+    final int colonPos = functionName.lastIndexOf(':');
+    final String prefix = functionName.substring(0, colonPos);
+    final String name = functionName.substring(colonPos + 1);
+    
+    if (prefix.isEmpty() || prefix.equals("fn")) {
+      if (BuiltinFunctions.isBuiltinFunction(name)) {
+        return BuiltinFunctions.getParamListNode(name);
+      }
+      
+      if (functionDeclarationNodes.containsKey(functionName)) {
+        return functionDeclarationNodes.get(functionName).getParamListNode();
+      }
+    } else {
+      if (functionDeclarationNodes.containsKey(functionName)) {
+        return functionDeclarationNodes.get(functionName).getParamListNode();
+      }
+      
+      if (BuiltinFunctions.isBuiltinFunction(name)) {
+        return BuiltinFunctions.getParamListNode(name);
+      }
+    }
+    
+    assert(false);
+    return null;
+  }
 }

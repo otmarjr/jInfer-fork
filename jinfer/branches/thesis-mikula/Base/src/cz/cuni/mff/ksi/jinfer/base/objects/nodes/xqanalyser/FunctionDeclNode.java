@@ -75,4 +75,8 @@ public class FunctionDeclNode extends PrologChildNode {
   public TypeNode getReturnTypeNode() {
     return returnTypeNode;
   }
+  
+  public ParamListNode getParamListNode() {
+    return paramListNode;
+  }
 }

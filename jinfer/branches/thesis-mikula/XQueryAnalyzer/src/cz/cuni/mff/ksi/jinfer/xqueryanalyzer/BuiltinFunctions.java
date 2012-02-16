@@ -16,13 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.Cardinality;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.FunctionCallNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.UnknownType;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +38,7 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("doc", new NodeType(NodeType.NType.DOCUMENT, Cardinality.ONE));
     builtinFunctionTypes.put("min", new UnknownType());
   }
-  
+    
   public static boolean isBuiltinFunction(final String functionName) {
     if (builtinFunctionTypes.containsKey(functionName)) {
       return true;
@@ -68,5 +69,32 @@ public class BuiltinFunctions {
       assert(false);
       return null;
     }
+  }
+  
+  public static ParamListNode getParamListNode(final String functionName) {
+    if (!builtinFunctionTypes.containsKey(functionName)) {
+      return null;
+    }
+    
+    final XQNodeList<ParamNode> paramNodes = new XQNodeList<ParamNode>();
+    
+    if (functionName.equals("data")) {
+      final ParamNode paramNode = new ParamNode(null, "arg", new TypeNode(null, Cardinality.ZERO_OR_MORE));
+      paramNodes.add(paramNode);
+    } else if (functionName.equals("doc")) {
+      final ItemTypeNode itemTypeNode = new AtomicTypeNode(null, "xs:string");
+      final ParamNode paramNode = new ParamNode(null, "uri", new TypeNode(null, Cardinality.ZERO_OR_ONE, itemTypeNode));
+      paramNodes.add(paramNode);
+    } else if (functionName.equals("min")) {
+      final ParamNode paramNode1 = new ParamNode(null, "arg", new TypeNode(null, Cardinality.ZERO_OR_MORE));
+      final ItemTypeNode itemTypeNode2 = new AtomicTypeNode(null, "xs:string");
+      final ParamNode paramNode2 = new ParamNode(null, "collation", new TypeNode(null, Cardinality.ONE, itemTypeNode2));
+      paramNodes.add(paramNode1);
+      paramNodes.add(paramNode2);
+    } else {
+      assert(false); // TODO rio
+    }
+    
+    return new ParamListNode(null, paramNodes);
   }
 }

@@ -48,4 +48,8 @@ public class ParamListNode extends XQNode {
   public List<XQNode> getSubnodes() {
     return new ArrayList<XQNode>(params);
   }
+  
+  public List<ParamNode> getParamNodes() {
+    return params;
+  }
 }

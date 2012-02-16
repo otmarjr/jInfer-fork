@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class KeysInferrer {
   
-  public void processFLWORExpr(final FLWORExprNode flworExpr, Map<String, FLWORExprNode> forVariables) {
+  public Map<String, VariableBindingNode> processFLWORExpr(final FLWORExprNode flworExpr, Map<String, VariableBindingNode> forVariables) {
     final List<VariableBindingNode> bindingNodes = flworExpr.getTupleStreamNode().getBindingClauses();
     final WhereClauseNode whereClauseNode = flworExpr.getWhereClauseNode();
     
@@ -50,20 +50,26 @@ public class KeysInferrer {
       final Type bindingExprType = bindingExpr.getType();
       if (bindingExprType.getCategory() == Type.Category.PATH
               || bindingExprType.getCategory() == Type.Category.FOR_BOUND_PATH) {
-        
+        if (usesOnlyChildAndDescendantAxes(bindingExprType)) {
+          final ExprNode predicate = endsWithExactlyOnePredicate(bindingExprType);
+          if (predicate != null) {
+            // determineJoinPatters
+          } else {
+            if (ForClauseNode.class.isInstance(bindingNode)) {
+              forVariables.put(bindingNode.getVarName(), bindingNode);
+            }
+          }
+        }
       }
     }
+    
+    return forVariables;
   }
   
-  private static boolean isConformingPathType(final Type type) { // TODO rio zjednotit path types pod spolocny typ
+  private static boolean usesOnlyChildAndDescendantAxes(final Type type) { // TODO rio zjednotit path types pod spolocny typ
     if (type.getCategory() == Type.Category.PATH) {
       final PathType pathType = (PathType)type;
-      final StepExprNode lastStepNode = pathType.getStepNodes().get(pathType.getStepNodes().size() - 1);
       for (final StepExprNode stepNode : pathType.getStepNodes()) {
-        if (stepNode.hasPredicates() && stepNode != lastStepNode) {
-          return false;
-        }
-        
         if (stepNode.isAxisStep()) {
           final AxisNode axisNode = stepNode.getAxisNode();
           if (axisNode.getAxisKind() != AxisKind.CHILD
@@ -75,27 +81,42 @@ public class KeysInferrer {
         final ExprNode detailNode = stepNode.getDetailNode();
         if (detailNode != null) {
           if (VarRefNode.class.isInstance(detailNode)) {
-            if (isConformingPathType(pathType.getForBoundSubsteps().get(stepNode)) == false) {
+            if (usesOnlyChildAndDescendantAxes(pathType.getForBoundSubsteps().get(stepNode)) == false) {
               return false;
             }
           }
         }
       }
-      
-      if (!lastStepNode.hasPredicates()) {
-        return false;
-      }
-      
-      if (lastStepNode.getPredicateListNode().getPredicates().size() != 1) {
-        return false;
-      }
     } else if (type.getCategory() == Type.Category.FOR_BOUND_PATH) {
       final ForBoundPathType fbpt = (ForBoundPathType)type;
-      return isConformingPathType(fbpt.getPathType());
+      return usesOnlyChildAndDescendantAxes(fbpt.getPathType());
     } else {
       assert(false);
     }
     
     return true;
+  }
+  
+  // Vracia ten jediny predikat na konci.
+  private static ExprNode endsWithExactlyOnePredicate(final Type type) {
+    PathType pathType = null;
+    if (type.getCategory() == Type.Category.PATH) {
+      pathType = (PathType)type;
+    } else if (type.getCategory() == Type.Category.FOR_BOUND_PATH) {
+      pathType = ((ForBoundPathType)type).getPathType();
+    } else {
+      assert(false);
+    }
+      
+    final StepExprNode lastStepNode = pathType.getStepNodes().get(pathType.getStepNodes().size() - 1);
+    if (!lastStepNode.hasPredicates()) {
+      return null;
+    }
+
+    if (lastStepNode.getPredicateListNode().getPredicates().size() != 1) {
+      return null;
+    }
+    
+    return lastStepNode.getPredicateListNode().getPredicates().get(0);
   }
 }

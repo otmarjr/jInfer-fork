@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class PredicateListNode extends XQNode {
 
-  private final XQNodeList<ExprNode> predicates;
+  private final List<ExprNode> predicates;
 
   public PredicateListNode(
           final XQNode parentNode, XQNodeList<ExprNode> predicates) {
@@ -50,5 +50,9 @@ public class PredicateListNode extends XQNode {
       return new ArrayList<XQNode>(predicates);
     }
     return null;
+  }
+  
+  public List<ExprNode> getPredicates() {
+    return predicates;
   }
 }

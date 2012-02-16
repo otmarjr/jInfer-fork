@@ -52,4 +52,8 @@ public class TupleStreamNode extends XQNode {
     }
     return null;
   }
+  
+  public List<VariableBindingNode> getBindingClauses() {
+    return bindingClauses;
+  }
 }

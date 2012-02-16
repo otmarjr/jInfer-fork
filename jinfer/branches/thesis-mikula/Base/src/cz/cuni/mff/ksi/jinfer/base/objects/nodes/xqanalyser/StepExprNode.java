@@ -95,4 +95,12 @@ public class StepExprNode extends XQNode {
     
     return subnodes;
   }
+  
+  public AxisNode getAxisNode() {
+    return axisNode;
+  }
+  
+  public PredicateListNode getPredicateListNode() {
+    return predicateListNode;
+  }
 }

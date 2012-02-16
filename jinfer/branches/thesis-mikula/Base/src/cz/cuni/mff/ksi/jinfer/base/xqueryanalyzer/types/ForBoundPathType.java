@@ -39,5 +39,9 @@ public class ForBoundPathType implements Type {
   public boolean isNumeric() {
     return false;
   }
+  
+  public PathType getPathType() {
+    return pathType;
+  }
 
 }

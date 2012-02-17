@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public abstract class XQNode {
 
-  private final XQNode parentNode; // TODO rio Is needed?
+  private XQNode parentNode; // TODO rio Is needed?
   private Map<String, String> attributes = new HashMap<String, String>();
 
   /**
@@ -77,4 +77,13 @@ public abstract class XQNode {
   }*/
   
   public abstract List<XQNode> getSubnodes();
+  
+  public XQNode getParentNode() {
+    return parentNode;
+  }
+  
+  public void setParentNode(final XQNode parentNode) {
+    assert(parentNode == null);
+    this.parentNode = parentNode;
+  }
 }

@@ -39,4 +39,17 @@ public class JoinPattern {
     this.firstVariableBindingNode = firstVariableFBindingNode;
     this.secondVariableBindingNode = secondVariableBindingNode;
   }
+
+  public VariableBindingNode getFirstVariableBindingNode() {
+    return firstVariableBindingNode;
+  }
+
+  public VariableBindingNode getSecondVariableBindingNode() {
+    return secondVariableBindingNode;
+  }
+
+  public JoinPatternType getType() {
+    return type;
+  }
+  
 }

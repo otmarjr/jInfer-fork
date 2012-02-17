@@ -33,6 +33,7 @@ public class KeysInferrer {
   
   private final XQNode root;  
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
+  private final List<ClassifiedJoinPattern> classifiedJoinPatterns = new ArrayList<ClassifiedJoinPattern>();
   
   public KeysInferrer(final XQNode root) {
     this.root = root;
@@ -200,4 +201,17 @@ public class KeysInferrer {
     
     return false;
   }
+  
+  private void classifyJoinPatterns() {
+    for (final JoinPattern joinPattern : joinPatterns) {
+      if (joinPattern.getType() == JoinPattern.JoinPatternType.FOR) {
+        classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 10));
+      } else if (joinPattern.getType() == JoinPattern.JoinPatternType.JP3) {
+        classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 5));
+      } else {
+        // TODO rio pravidla R2-R5
+      }
+    }
+  }
+  
 }

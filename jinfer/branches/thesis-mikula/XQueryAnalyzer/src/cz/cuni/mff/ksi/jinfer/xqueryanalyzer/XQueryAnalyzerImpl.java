@@ -52,6 +52,9 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     expressionProcessor.process();
     final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
     bti.process();
+    
+    final KeysInferrer keysInferrer = new KeysInferrer(root);
+    keysInferrer.process();
     return;
   }
   

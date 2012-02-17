@@ -83,7 +83,11 @@ public abstract class XQNode {
   }
   
   public void setParentNode(final XQNode parentNode) {
-    assert(parentNode == null);
+    if (this.parentNode != null) {
+      System.out.println(this.parentNode);
+      System.out.println(parentNode);
+      assert(this.parentNode == null);
+    }
     this.parentNode = parentNode;
   }
 }

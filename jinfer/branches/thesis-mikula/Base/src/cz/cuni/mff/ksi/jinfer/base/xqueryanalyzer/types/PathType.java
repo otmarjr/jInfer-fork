@@ -63,4 +63,8 @@ public class PathType implements Type {
   public boolean isForBound() {
     return isForBound;
   }
+  
+  public List<String> getSpecialFunctionCalls() {
+    return specialFunctionCalls;
+  }
 }

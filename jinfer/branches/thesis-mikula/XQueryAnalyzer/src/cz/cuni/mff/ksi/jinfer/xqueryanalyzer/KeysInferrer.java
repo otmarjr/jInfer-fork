@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ public class KeysInferrer {
   public void process() {
     Map<String, ForClauseNode> forVariables = new HashMap<String, ForClauseNode>();
     processRecursive(root, forVariables);
+    classifyJoinPatterns();
   }
   
   private void processRecursive(final XQNode node, Map<String, ForClauseNode> forVariables) {
@@ -205,13 +207,121 @@ public class KeysInferrer {
   private void classifyJoinPatterns() {
     for (final JoinPattern joinPattern : joinPatterns) {
       if (joinPattern.getType() == JoinPattern.JoinPatternType.FOR) {
-        classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 10));
+        classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 100));
       } else if (joinPattern.getType() == JoinPattern.JoinPatternType.JP3) {
-        classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 5));
+        classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 50));
       } else {
         // TODO rio pravidla R2-R5
+        
+        // R2
+        final FLWORExprNode flworNode = (FLWORExprNode)joinPattern.getSecondVariableBindingNode().getParentNode().getParentNode();
+        List<PathType> returnPathTypes = getTargetReturnPathTypes(flworNode, joinPattern.getSecondVariableBindingNode().getVarName());
+        boolean cont = true;
+        for (final PathType pathType : returnPathTypes) {
+          if (!cont) {
+            break;
+          }
+          for (final String functionName : pathType.getSpecialFunctionCalls()) {
+            if (functionName.equals("min")
+                    || functionName.equals("max")
+                    || functionName.equals("avg")
+                    || functionName.equals("sum")) { // TODO rio pozor na nazvy funkcii, mozu byt aj prefixovane.
+              classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 100));
+              cont = false;
+              break;
+            }
+          }
+        }
+        
+        // R3
+        cont = true;
+        for (final PathType pathType : returnPathTypes) {
+          if (!cont) {
+            break;
+          }
+          for (final String functionName : pathType.getSpecialFunctionCalls()) {
+            if (functionName.equals("count")) { // TODO rio pozor na nazvy funkcii, mozu byt aj prefixovane.
+              classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 75));
+              cont = false;
+              break;
+            }
+          }
+        }
+        
+        // R4 R5
+        final List<PathExprNode> returnPaths = getTargetReturnPaths(flworNode, joinPattern.getSecondVariableBindingNode().getVarName());
+        final int returnPathsNumber = returnPaths.size();
+        if (returnPathsNumber > 1) {
+          classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O2, 100));
+        } else {
+          classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O2, 50));
+        }
       }
     }
   }
   
+  private static boolean isTargetPath(final PathType pathType, final String varName) {
+    final StepExprNode firstStep = pathType.getStepNodes().get(0);
+    final ExprNode detailNode = firstStep.getDetailNode();
+    
+    if (detailNode == null) {
+      return false;
+    }
+    
+    if (!VarRefNode.class.isInstance(detailNode)) {
+      return false;
+    }
+    
+    if (((VarRefNode)detailNode).getVarName().equals(varName)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  private static List<PathType> getTargetReturnPathTypes(final FLWORExprNode flworNode, final String varName) {
+    final List<PathType> paths = new ArrayList<PathType>();
+    getTargetReturnPathTypesRecursive(flworNode.getReturnClauseNode(), varName, paths);
+    return paths;
+  }
+  
+  private static void getTargetReturnPathTypesRecursive(final XQNode node, final String varName, final List<PathType> paths) {
+    if (ExprNode.class.isInstance(node)) {
+      final Type type = ((ExprNode)node).getType();
+      if (type.getCategory() == Type.Category.PATH) {
+        if (isTargetPath((PathType)type, varName)) {
+          paths.add((PathType)type);
+        }
+      }
+    }
+    
+    final List<XQNode> subnodes = node.getSubnodes();
+    if (subnodes != null) {
+      for (final XQNode subnode : subnodes) {
+        getTargetReturnPathTypesRecursive(subnode, varName, paths);
+      }
+    }
+  }
+  
+  private static List<PathExprNode> getTargetReturnPaths(final FLWORExprNode flworNode, final String varName) {
+    final List<PathExprNode> paths = new ArrayList<PathExprNode>();
+    getTargetReturnPathsRecursive(flworNode, varName, paths);
+    return paths;
+  }
+  
+  private static void getTargetReturnPathsRecursive(final XQNode node, final String varName, final List<PathExprNode> paths) {
+    if (PathExpr.class.isInstance(node)) {
+      final PathType type = TypeFactory.createPathType((PathExprNode)node);
+      if (isTargetPath(type, varName)) {
+        paths.add((PathExprNode)node);
+      }
+    }
+    
+    final List<XQNode> subnodes = node.getSubnodes();
+    if (subnodes != null) {
+      for (final XQNode subnode : subnodes) {
+        getTargetReturnPathsRecursive(subnode, varName, paths);
+      }
+    }
+  }
 }

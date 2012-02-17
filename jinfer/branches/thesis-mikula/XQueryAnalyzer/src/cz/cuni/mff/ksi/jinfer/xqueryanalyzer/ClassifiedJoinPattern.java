@@ -28,7 +28,7 @@ public class ClassifiedJoinPattern {
   }
   
   private final JoinPattern joinPattern;
-  private final int weight; // Multiplied by 10.
+  private final int weight; // Multiplied by 100.
   private final Type type;
   
   public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {

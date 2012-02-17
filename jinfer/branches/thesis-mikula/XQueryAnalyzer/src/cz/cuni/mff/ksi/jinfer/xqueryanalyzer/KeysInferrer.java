@@ -19,8 +19,11 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -28,7 +31,33 @@ import java.util.Map;
  */
 public class KeysInferrer {
   
-  public Map<String, VariableBindingNode> processFLWORExpr(final FLWORExprNode flworExpr, Map<String, VariableBindingNode> forVariables) {
+  private final XQNode root;  
+  private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
+  
+  public KeysInferrer(final XQNode root) {
+    this.root = root;
+  }
+  
+  public void process() {
+    Map<String, ForClauseNode> forVariables = new HashMap<String, ForClauseNode>();
+    processRecursive(root, forVariables);
+  }
+  
+  private void processRecursive(final XQNode node, Map<String, ForClauseNode> forVariables) {
+    if (FLWORExprNode.class.isInstance(node)) {
+      forVariables = processFLWORExpr((FLWORExprNode)node, forVariables);
+    }
+    
+    final List<XQNode> subnodes = node.getSubnodes();
+    if (subnodes != null) {
+      for (final XQNode subnode : node.getSubnodes()) {
+        processRecursive(subnode, forVariables);
+      }
+    }
+  }
+  
+  // TODO rio Vyriesit planost premennych v mape forVariables. Aj do DP.
+  public Map<String, ForClauseNode> processFLWORExpr(final FLWORExprNode flworExpr, Map<String, ForClauseNode> forVariables) {
     final List<VariableBindingNode> bindingNodes = flworExpr.getTupleStreamNode().getBindingClauses();
     final WhereClauseNode whereClauseNode = flworExpr.getWhereClauseNode();
     
@@ -51,10 +80,12 @@ public class KeysInferrer {
         if (usesOnlyChildAndDescendantAxes((PathType)bindingExprType)) {
           final ExprNode predicate = endsWithExactlyOnePredicate((PathType)bindingExprType);
           if (predicate != null) {
-            // determineJoinPatterns
+            for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
+              determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), forVariables, checkJoinPattern3, whereExpr);
+            }
           } else {
             if (ForClauseNode.class.isInstance(bindingNode)) {
-              forVariables.put(bindingNode.getVarName(), bindingNode);
+              forVariables.put(bindingNode.getVarName(), (ForClauseNode)bindingNode);
             }
           }
         }
@@ -99,5 +130,74 @@ public class KeysInferrer {
     }
     
     return lastStepNode.getPredicateListNode().getPredicates().get(0);
+  }
+  
+  private void determineJoinPattern(final VariableBindingNode bindingNode, final ExprNode predicate, final ForClauseNode forClauseNode, final String forVar, final Map<String, ForClauseNode> forVariables, final boolean checkJoinPattern3, final ExprNode whereExpr) {
+    // At first, check join pattern 3.
+    if (checkJoinPattern3) {
+      if (ForClauseNode.class.isInstance((bindingNode))) {
+        if (isExprJoinForm(whereExpr, bindingNode.getVarName(), forVar)) {
+          joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode));
+        }
+      }
+      return;
+    }
+    
+    // Check for and let join patterns.
+    if (isExprJoinForm(predicate, bindingNode.getVarName(), forVar)) {
+      if (ForClauseNode.class.isInstance(bindingNode)) {
+        joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode));
+        forVariables.remove(forVar);
+      } else if (LetClauseNode.class.isInstance(bindingNode)) {
+        joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.LET, forClauseNode, bindingNode));
+        forVariables.remove(forVar);
+      } else {
+        assert(false);
+      }
+    }
+  }
+  
+  private static boolean isExprJoinForm(final ExprNode exprNode, final String var1, final String var2) {
+    if (!OperatorNode.class.isInstance(exprNode)) {
+      return false;
+    }
+    
+    final OperatorNode operatorNode = (OperatorNode)exprNode;
+    if (operatorNode.getOperator() != Operator.GEN_EQUALS) {
+      return false;
+    }
+    
+    final Type leftOperandType = operatorNode.getOperand().getType();
+    final Type rightOperandType = operatorNode.getRightSide().getType();
+    
+    if (leftOperandType.getCategory() != Type.Category.PATH || rightOperandType.getCategory() != Type.Category.PATH) {
+      return false;
+    }
+    
+    final PathType leftPathType = (PathType)leftOperandType;
+    final PathType rightPathType = (PathType)rightOperandType;
+    
+    final ExprNode leftDetailNode = leftPathType.getStepNodes().get(0).getDetailNode();
+    final ExprNode rightDetailNode = rightPathType.getStepNodes().get(0).getDetailNode();
+    
+    if (leftDetailNode == null || rightDetailNode == null) {
+      return false;
+    }
+    
+    if (!VarRefNode.class.isInstance(leftDetailNode) || !VarRefNode.class.isInstance(rightDetailNode)) {
+      return false;
+    }
+    
+    final VarRefNode leftVarRefNode = (VarRefNode)leftDetailNode;
+    final VarRefNode rightVarRefNode = (VarRefNode)rightDetailNode;
+    
+    if ((leftVarRefNode.getVarName().equals(var1) && rightVarRefNode.getVarName().equals(var2))
+            ||
+            (rightVarRefNode.getVarName().equals(var1) && leftVarRefNode.getVarName().equals(var2)))
+    {
+      return true;
+    }
+    
+    return false;
   }
 }

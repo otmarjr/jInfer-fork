@@ -47,6 +47,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   }
   
   private void processSyntaxTree(final ModuleNode root) {
+    init(root); // Sets references to parent nodes.
+    
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
     final ExpressionsProcessor expressionProcessor = new ExpressionsProcessor(root, functionsProcessor);
     expressionProcessor.process();
@@ -82,5 +84,10 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     return new LinkedList<String>();
   }
   
-  
+  private void init(final XQNode node) {
+    final List<XQNode> subnodes = node.getSubnodes();
+    for (final XQNode subnode : subnodes) {
+      subnode.setParentNode(node);
+    }
+  }
 }

@@ -71,8 +71,7 @@ public class BuiltinTypesInferrer {
     for (int i = 0; i < params.size(); ++i) {
       final ExprNode param = params.get(i);
       final Type paramType = param.getType();
-      if (paramType.getCategory() == Type.Category.PATH
-              || paramType.getCategory() == Type.Category.FOR_BOUND_PATH) {
+      if (paramType.getCategory() == Type.Category.PATH) {
         final TypeNode paramTypeDeclarationNode = paramNodes.get(i).getTypeDeclarationNode();
         if (paramTypeDeclarationNode == null) {
           continue;
@@ -102,12 +101,12 @@ public class BuiltinTypesInferrer {
         }
         final Type leftType = leftOperand.getType();
         final Type rightType = rightOperand.getType();
-        if (leftType.getCategory() == Type.Category.PATH || leftType.getCategory() == Type.Category.FOR_BOUND_PATH) {
+        if (leftType.getCategory() == Type.Category.PATH) {
           if (rightType.isNumeric() && rightType.getCategory() == Type.Category.BUILT_IN) {
             pathType = leftType;
             type = rightType;
           }
-        } else if (rightType.getCategory() == Type.Category.PATH || rightType.getCategory() == Type.Category.FOR_BOUND_PATH) {
+        } else if (rightType.getCategory() == Type.Category.PATH) {
           if (leftType.isNumeric() && leftType.getCategory() == Type.Category.BUILT_IN) {
             pathType = rightType;
             type = leftType;
@@ -126,12 +125,12 @@ public class BuiltinTypesInferrer {
         final ExprNode rightOperand = opNode.getRightSide();
         final Type leftType = leftOperand.getType();
         final Type rightType = rightOperand.getType();
-        if (leftType.getCategory() == Type.Category.PATH || leftType.getCategory() == Type.Category.FOR_BOUND_PATH) {
+        if (leftType.getCategory() == Type.Category.PATH) {
           if (rightType.getCategory() == Type.Category.BUILT_IN) {
             pathType = leftType;
             type = rightType;
           }
-        } else if (rightType.getCategory() == Type.Category.PATH || rightType.getCategory() == Type.Category.FOR_BOUND_PATH) {
+        } else if (rightType.getCategory() == Type.Category.PATH) {
           if (leftType.getCategory() == Type.Category.BUILT_IN) {
             pathType = rightType;
             type = leftType;

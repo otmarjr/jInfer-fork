@@ -28,12 +28,14 @@ import java.util.Map;
 public class PathType implements Type {
   
   private final List<StepExprNode> stepNodes;
-  private final Map<StepExprNode, ForBoundPathType> forBoundSubsteps; // StepExprNode -> ForBoundPathType
+  private final Map<StepExprNode, PathType> forBoundSubsteps; // StepExprNode -> ForBoundPathType
   private final List<String> specialFunctionCalls = new ArrayList<String>(); // An ordered list of functions that have been applied to this path.
+  private final boolean isForBound;
   
-  public PathType(final List<StepExprNode> stepNodes, final Map<StepExprNode, ForBoundPathType> forBoundSubsteps) {
+  public PathType(final List<StepExprNode> stepNodes, final Map<StepExprNode, PathType> forBoundSubsteps, final boolean isForBound) {
     this.stepNodes = stepNodes;
     this.forBoundSubsteps = forBoundSubsteps;
+    this.isForBound = isForBound;
   }
   
   @Override
@@ -54,7 +56,11 @@ public class PathType implements Type {
     specialFunctionCalls.add(specialFunctionName);
   }  
   
-  public Map<StepExprNode, ForBoundPathType> getForBoundSubsteps() {
+  public Map<StepExprNode, PathType> getForBoundSubsteps() {
     return forBoundSubsteps;
+  }
+  
+  public boolean isForBound() {
+    return isForBound;
   }
 }

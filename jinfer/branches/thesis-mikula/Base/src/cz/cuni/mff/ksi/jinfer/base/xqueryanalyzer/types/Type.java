@@ -26,8 +26,7 @@ public interface Type {
     BUILT_IN,
     NODE,
     PATH,
-    UNKNOWN,
-    FOR_BOUND_PATH;
+    UNKNOWN;
   }
   
   public Category getCategory();

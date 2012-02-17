@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
-import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.ForBoundPathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import java.util.List;
@@ -33,7 +32,7 @@ public class KeysInferrer {
     final List<VariableBindingNode> bindingNodes = flworExpr.getTupleStreamNode().getBindingClauses();
     final WhereClauseNode whereClauseNode = flworExpr.getWhereClauseNode();
     
-    boolean checkJoinPattern3 = false;
+    boolean checkJoinPattern3 = false; // Doplnit do diplomky do volania funckie determineJoinPatterns.
     ExprNode whereExpr = null;
     
     if (whereClauseNode != null) {
@@ -48,12 +47,11 @@ public class KeysInferrer {
     for (final VariableBindingNode bindingNode : bindingNodes) {
       final ExprNode bindingExpr = bindingNode.getBindingSequenceNode().getExprNode();
       final Type bindingExprType = bindingExpr.getType();
-      if (bindingExprType.getCategory() == Type.Category.PATH
-              || bindingExprType.getCategory() == Type.Category.FOR_BOUND_PATH) {
-        if (usesOnlyChildAndDescendantAxes(bindingExprType)) {
-          final ExprNode predicate = endsWithExactlyOnePredicate(bindingExprType);
+      if (bindingExprType.getCategory() == Type.Category.PATH) {
+        if (usesOnlyChildAndDescendantAxes((PathType)bindingExprType)) {
+          final ExprNode predicate = endsWithExactlyOnePredicate((PathType)bindingExprType);
           if (predicate != null) {
-            // determineJoinPatters
+            // determineJoinPatterns
           } else {
             if (ForClauseNode.class.isInstance(bindingNode)) {
               forVariables.put(bindingNode.getVarName(), bindingNode);
@@ -66,48 +64,31 @@ public class KeysInferrer {
     return forVariables;
   }
   
-  private static boolean usesOnlyChildAndDescendantAxes(final Type type) { // TODO rio zjednotit path types pod spolocny typ
-    if (type.getCategory() == Type.Category.PATH) {
-      final PathType pathType = (PathType)type;
-      for (final StepExprNode stepNode : pathType.getStepNodes()) {
-        if (stepNode.isAxisStep()) {
-          final AxisNode axisNode = stepNode.getAxisNode();
-          if (axisNode.getAxisKind() != AxisKind.CHILD
-                  && axisNode.getAxisKind() != AxisKind.DESCENDANT_OR_SELF) {
+  private static boolean usesOnlyChildAndDescendantAxes(final PathType pathType) {
+    for (final StepExprNode stepNode : pathType.getStepNodes()) {
+      if (stepNode.isAxisStep()) {
+        final AxisNode axisNode = stepNode.getAxisNode();
+        if (axisNode.getAxisKind() != AxisKind.CHILD
+                && axisNode.getAxisKind() != AxisKind.DESCENDANT_OR_SELF) {
+          return false;
+        }
+      }
+
+      final ExprNode detailNode = stepNode.getDetailNode();
+      if (detailNode != null) {
+        if (VarRefNode.class.isInstance(detailNode)) {
+          if (usesOnlyChildAndDescendantAxes(pathType.getForBoundSubsteps().get(stepNode)) == false) {
             return false;
           }
         }
-        
-        final ExprNode detailNode = stepNode.getDetailNode();
-        if (detailNode != null) {
-          if (VarRefNode.class.isInstance(detailNode)) {
-            if (usesOnlyChildAndDescendantAxes(pathType.getForBoundSubsteps().get(stepNode)) == false) {
-              return false;
-            }
-          }
-        }
       }
-    } else if (type.getCategory() == Type.Category.FOR_BOUND_PATH) {
-      final ForBoundPathType fbpt = (ForBoundPathType)type;
-      return usesOnlyChildAndDescendantAxes(fbpt.getPathType());
-    } else {
-      assert(false);
     }
     
     return true;
   }
   
   // Vracia ten jediny predikat na konci.
-  private static ExprNode endsWithExactlyOnePredicate(final Type type) {
-    PathType pathType = null;
-    if (type.getCategory() == Type.Category.PATH) {
-      pathType = (PathType)type;
-    } else if (type.getCategory() == Type.Category.FOR_BOUND_PATH) {
-      pathType = ((ForBoundPathType)type).getPathType();
-    } else {
-      assert(false);
-    }
-      
+  private static ExprNode endsWithExactlyOnePredicate(final PathType pathType) {
     final StepExprNode lastStepNode = pathType.getStepNodes().get(pathType.getStepNodes().size() - 1);
     if (!lastStepNode.hasPredicates()) {
       return null;

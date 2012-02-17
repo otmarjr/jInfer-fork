@@ -56,7 +56,8 @@ public class TypeFactory {
         return new UnknownType();
         
       case PATH:
-        return new ForBoundPathType((PathType)forBindingExprType);
+        final PathType pathType = (PathType)forBindingExprType;
+        return new PathType(pathType.getStepNodes(), pathType.getForBoundSubsteps(), true);
       
       case BUILT_IN:
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ONE);
@@ -72,7 +73,7 @@ public class TypeFactory {
   
   public static PathType createPathType(final PathExprNode pathExprNode) {
     final List<StepExprNode> steps = new ArrayList<StepExprNode>();
-    final Map<StepExprNode, ForBoundPathType> forBoundSubsteps = new HashMap<StepExprNode, ForBoundPathType>();
+    final Map<StepExprNode, PathType> forBoundSubsteps = new HashMap<StepExprNode, PathType>();
     
     for (final StepExprNode stepNode : pathExprNode.getSteps()) {
       final ExprNode detailNode = stepNode.getDetailNode();
@@ -80,17 +81,15 @@ public class TypeFactory {
         if (VarRefNode.class.isInstance(detailNode)) {
           final VarRefNode varRefNode = (VarRefNode)detailNode;
           final Type type = varRefNode.getType(); // TODO rio je ok?
-          switch (type.getCategory()) {
-            case FOR_BOUND_PATH:
-              final ForBoundPathType fbpt = (ForBoundPathType)type;
-              forBoundSubsteps.put(stepNode, fbpt);
-              steps.add(stepNode);
-              break;
-            case PATH:
-              steps.addAll(((PathType)type).getStepNodes());
-            default:
-              assert(false); // TODO rio
-              throw new IllegalStateException();
+          if (type.getCategory() != Type.Category.PATH) {
+            assert(false);
+          }
+          final PathType pathType = (PathType)type;
+          if (pathType.isForBound()) {
+            forBoundSubsteps.put(stepNode, pathType);
+            steps.add(stepNode);
+          } else {
+            steps.addAll(((PathType)type).getStepNodes());
           }
         }
       } else {
@@ -98,7 +97,7 @@ public class TypeFactory {
       }
     }
     
-    return new PathType(steps, forBoundSubsteps);
+    return new PathType(steps, forBoundSubsteps, false);
   }
   
 }

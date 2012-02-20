@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.VariableBindingNode;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 
 /**
  *
@@ -33,11 +34,15 @@ public class JoinPattern {
   private final JoinPatternType type;
   private final VariableBindingNode firstVariableBindingNode;
   private final VariableBindingNode secondVariableBindingNode;
+  private final PathType pathType1;
+  private final PathType pathType2;
   
-  public JoinPattern(final JoinPatternType type, final VariableBindingNode firstVariableFBindingNode, final VariableBindingNode secondVariableBindingNode) {
+  public JoinPattern(final JoinPatternType type, final VariableBindingNode firstVariableBindingNode, final VariableBindingNode secondVariableBindingNode) {
     this.type = type;
-    this.firstVariableBindingNode = firstVariableFBindingNode;
+    this.firstVariableBindingNode = firstVariableBindingNode;
     this.secondVariableBindingNode = secondVariableBindingNode;
+    pathType1 = (PathType)firstVariableBindingNode.getBindingSequenceNode().getExprNode().getType();
+    pathType2 = (PathType)secondVariableBindingNode.getBindingSequenceNode().getExprNode().getType();
   }
 
   public VariableBindingNode getFirstVariableBindingNode() {

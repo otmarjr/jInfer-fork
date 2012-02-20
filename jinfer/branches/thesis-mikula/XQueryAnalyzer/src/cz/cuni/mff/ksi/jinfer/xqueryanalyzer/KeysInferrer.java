@@ -35,6 +35,7 @@ public class KeysInferrer {
   private final XQNode root;  
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<ClassifiedJoinPattern> classifiedJoinPatterns = new ArrayList<ClassifiedJoinPattern>();
+  private final Map<PathType, Integer> negativeWeights = new HashMap<PathType, Integer>();
   
   public KeysInferrer(final XQNode root) {
     this.root = root;
@@ -324,4 +325,33 @@ public class KeysInferrer {
       }
     }
   }
+  
+  private void rejectionOfUniqueness_aggregationFunctions(final XQNode node) {
+    if (FunctionCallNode.class.isInstance(node)) {
+      final FunctionCallNode funcCallNode = (FunctionCallNode)node;
+      final String funcName = funcCallNode.getFuncName();
+      if (funcName.equals("distinct-values")
+              || funcName.equals("min")
+              || funcName.equals("max")) { // TODO dalsie funkcie, aj do DP, riesit aj prefixy
+        final ExprNode argument = funcCallNode.getParams().get(0);
+        assert(argument != null);
+        final Type type = argument.getType();
+        if (type.getCategory() != Type.Category.PATH) {
+          return;
+        }
+        
+        final PathType pathType = (PathType)type;
+        if (usesOnlyChildAndDescendantAxes(pathType)) {
+          Integer oldWeight = negativeWeights.get(pathType);
+          int newWeight = 100;
+          if (oldWeight != null) {
+            newWeight += oldWeight.intValue();
+          }
+          negativeWeights.put(pathType, newWeight);
+        }
+      }
+    }
+  }
+  
+  
 }

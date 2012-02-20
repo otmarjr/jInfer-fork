@@ -16,7 +16,7 @@ Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, o)$ where
 \begin{itemize}
 \item $V \subset \mathbb{N}$ is a set of nodes, each node representing a particular XQuery construct in query $Q$,
 \item $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ ($b$ is a child of $a$) in query $Q$,
-\item $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}, \todo{Tohle je hrozné peklo. Potřebujeme to takto? Nedalo by se to nacpat do 1-2 tabulek/obrázků? Je nutné aby každá položky byla na samostatném řádku. Trochu to vypadá jako umělé natahování diplomky.}
+\item $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \todo{Tohle je hrozné peklo. Potřebujeme to takto? Nedalo by se to nacpat do 1-2 tabulek/obrázků? Je nutné aby každá položky byla na samostatném řádku. Trochu to vypadá jako umělé natahování diplomky.}
 \item $\mathcal{P}$ is a set of functions specifying additional properties of the nodes and distinguishing the nodes of the same classes,
 \item and $o : V \rightarrow \mathcal{O}$ is a function specifying an order of children of the nodes, where $\mathcal{O} = \{o_v : E_v \rightarrow \mathbb{N} | v \in V, E_v = \{(v, w) | w \in V, (v,w) \in E\}\}$ is set of functions specifying the children order for each node. For every $v \in V, o(v) = o_v$ so that $o_v(v,w)$ is a sequential number of a construct represented by $w$ amongst constructs represented by children of $v$ in query $Q$.
 \end{itemize}
@@ -47,7 +47,7 @@ For every $v \in V$, abbreviation
 
 \subsection{Closer Look at the Nodes of the Syntax Tree}
 \todo[inline]{Dat figures do appendixu?}
-The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \ref{FIG_syntax_tree_node_types_part_3}, \ref{FIG_syntax_tree_node_types_part_4}, \ref{FIG_syntax_tree_node_types_part_5}, \ref{FIG_syntax_tree_node_types_part_6}, \ref{FIG_syntax_tree_node_types_part_7}, \ref{FIG_syntax_tree_node_types_part_8}, \ref{FIG_syntax_tree_node_types_part_9}. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
+The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in tables in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}. The tables are composed of classes in italic and their subclasses. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining non-bold nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
 
 For example, an instance of the syntax tree cannot directly contain nodes of $Node$ and $ExprNode$ classes (for every $v \in V, c(v) \neq Node, c(v) \neq ExprNode$), but it can contain nodes of $AttributeNode$ and $LiteralNode$ classes. Regarding the multiplicity of types, a node of $LiteralNode$ class is also considered to be of two indirect types: $ExprNode$ and $Node$.
 
@@ -58,179 +58,57 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \begin{figure}
 \caption{Syntax tree node types part 1.}
 \label{FIG_syntax_tree_node_types_part_1}
-\begin{description}
-\item \textbf{Node}
-\begin{description}
-\item AttributeNode (I)
-\item AttrListNode (IL)
-\item AxisNode (I)
-\item CaseClauseNode (I)
-\item CaseClausesNode (I)
-\item CDataSectionNode (L)
-\item ContentNode (IL)
-\item DefaultCaseNode (I)
-\item EntityRefNode (L)
-\item \textbf{ExprHolderNode}
-\item \textbf{ExprNode}
-\item FunctionBodyNode (IL)
-\item CharRefNode (L)
-\item InClausesNode (I)
-\item \textbf{ItemTypeNode}
-\item LocationHintNode (L)
-\end{description}
-\end{description}
+\begin{tabular}{l l | l}
+\multicolumn{2}{l|}{\textbf{\emph{Node}}} & \textbf{\emph{ExprNode}} \\
+\hline
+AttributeNode (I) & ModuleNode (I) & CommaOperatorNode (I) \\
+AttrListNode (IL) & NameNode (IL) & ConstructorNode (I) \\
+AxisNode (I) & OrderByClauseNode (I) & ContextItemExprNode (L) \\
+CaseClauseNode (I) & OrderSpecNode (I) & EmptySequenceNode (L) \\
+CaseClausesNode (I) & ParamListNode (I) & ExtensionExprNode (I) \\
+CDataSectionNode (L) & ParamNode (I) & FLWORExprNode (I) \\
+ContentNode (IL) & PITargetNode (IL) & FunctionCallNode (IL) \\
+DefaultCaseNode (I) & PragmaListNode (I) & IfExprNode (I) \\
+EntityRefNode (L) & PragmaNode (L) & LiteralNode (L) \\
+\textbf{ExprHolderNode} & PredicateListNode (I) & OperatorNode (I) \\
+\textbf{ExprNode} & \textbf{PrologChildNode} & OrderedExprNode (I) \\
+FunctionBodyNode (IL) & StepExprNode (I) & PathExprNode (I) \\
+CharRefNode (L) & StringNode (L) & QuantifiedExprNode (I) \\
+InClausesNode (I) & TupleStreamNode (I) & TypeswitchExprNode (I) \\
+\textbf{ItemTypeNode} & TypeNode (L) & UnorderedExprNode (I) \\
+LocationHintNode (L) & \textbf{VariableBindingNode} & ValidateExprNode (I) \\
+LocationHintsNode (IL) & VarValueNode (IL) & VarRefNode (L) \\
+\textbf{ModuleChildNode} & & \\
+\end{tabular}
 \end{figure}
 
 \begin{figure}
 \caption{Syntax tree node types part 2.}
 \label{FIG_syntax_tree_node_types_part_2}
-\begin{description}
-\item \textbf{Node}
-\begin{description}
-\item LocationHintsNode (IL)
-\item \textbf{ModuleChildNode}
-\item ModuleNode (I)
-\item NameNode (IL)
-\item OrderByClauseNode (I)
-\item OrderSpecNode (I)
-\item ParamListNode (I)
-\item ParamNode (I)
-\item PITargetNode (IL)
-\item PragmaListNode (I)
-\item PragmaNode (L)
-\item PredicateListNode (I)
-\item \textbf{PrologChildNode}
-\item StepExprNode (I)
-\item StringNode (L)
-\item TupleStreamNode (I)
-\item TypeNode (L)
-\item \textbf{VariableBindingNode}
-\item VarValueNode (IL)
-\end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 3.}
-\label{FIG_syntax_tree_node_types_part_3}
-\begin{description}
-\item \textbf{ExprHolderNode}
-  \begin{description}
-  \item BindingSequenceNode (I)
-  \item DefaultValueNode (I)
-  \item ElseExpressionNode (I)
-  \item OperandExpressionNode (I)
-  \item ReturnClauseNode (I)
-  \item TestExpressionNode (I)
-  \item ThenExpressionNode (I)
-  \item WhereClauseNode (I)
-  \end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 4.}
-\label{FIG_syntax_tree_node_types_part_4}
-\begin{description}
-\item \textbf{ExprNode}
-  \begin{description}
-  \item CommaOperatorNode (I)
-  \item ConstructorNode (I)
-  \item ContextItemExprNode (L)
-  \item EmptySequenceNode (L)
-  \item ExtensionExprNode (I)
-  \item FLWORExprNode (I)
-  \item FunctionCallNode (IL)
-  \item IfExprNode (I)
-  \item LiteralNode (L)
-  \item OperatorNode (I)
-  \item OrderedExprNode (I)
-  \item PathExprNode (I)
-  \item QuantifiedExprNode (I)
-  \item TypeswitchExprNode (I)
-  \item UnorderedExprNode (I)
-  \item ValidateExprNode (I)
-  \item VarRefNode (L)
-  \end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 5.}
-\label{FIG_syntax_tree_node_types_part_5}
-\begin{description}
-\item \textbf{ItemTypeNode}
-  \begin{description}
-  \item AnyItemNode (L)
-  \item AtomicTypeNode (L)
-  \item KindTestNode (IL)
-  \item NameTestNode (L)
-  \end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 6.}
-\label{FIG_syntax_tree_node_types_part_6}
-\begin{description}
-\item \textbf{ModuleChildNode}
-  \begin{description}
-  \item ModuleDeclNode (L)
-  \item PrologNode (IL)
-  \item QueryBodyNode (I)
-  \end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 7.}
-\label{FIG_syntax_tree_node_types_part_7}
-\begin{description}
-\item \textbf{PrologChildNode}
-  \begin{description}
-  \item BaseURIDeclNode (L)
-  \item BoundarySpaceDeclNode (L)
-  \item ConstructionDeclNode (L)
-  \item CopyNamespacesDeclNode (L)
-  \item DefaultCollationDeclNode (L)
-  \item DefaultNamespaceDeclNode (L)
-  \item EmptyOrderDeclNode (L)
-  \item FunctionDeclNode (I)
-  \item \textbf{ImportNode}
-    \begin{description}
-    \item ModuleImportNode (I)
-    \item SchemaImportNode (I)
-    \end{description}
-  \item NamespaceDeclNode (L)
-  \item OptionDeclNode (L)
-  \item OrderingModeDeclNode (L)
-  \item VarDeclNode (I)
-  \end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 8.}
-\label{FIG_syntax_tree_node_types_part_8}
-\begin{description}
-\item StepExprNode (I)
-  \begin{description}
-  \item SelfOrDescendantStepNode (L)
-  \end{description}
-\end{description}
-\end{figure}
-
-\begin{figure}
-\caption{Syntax tree node types part 9.}
-\label{FIG_syntax_tree_node_types_part_9}
-\begin{description}
-\item \textbf{VariableBindingNode}
-  \begin{description}
-  \item ForClauseNode (I)
-  \item InClauseNode (I)
-  \item LetClauseNode (I)
-  \end{description}
-\end{description}
+\begin{tabular}{l | l}
+\textbf{\emph{PrologChildNode}} & \textbf{\emph{ExprHolderNode}} \\
+\hline
+BaseURIDeclNode (L) & BindingSequenceNode (I) \\
+BoundarySpaceDeclNode (L) & DefaultValueNode (I) \\
+ConstructionDeclNode (L) & ElseExpressionNode (I) \\
+CopyNamespacesDeclNode (L) & OperandExpressionNode (I) \\
+DefaultCollationDeclNode (L) & ReturnClauseNode (I) \\
+DefaultNamespaceDeclNode (L) & TestExpressionNode (I) \\
+EmptyOrderDeclNode (L) & ThenExpressionNode (I) \\
+FunctionDeclNode (I) & WhereClauseNode (I) \\
+\cline{2-2} \textbf{ImportNode} & \textbf{\emph{ItemTypeNode}} \\
+\cline{2-2} NamespaceDeclNode (L) & AnyItemNode (L) \\
+OptionDeclNode (L) & AtomicTypeNode (L) \\
+OrderingModeDeclNode (L) & KindTestNode (IL) \\
+VarDeclNode (I) & NameTestNode (L) \\
+\cline{1-2} \textbf{\emph{ImportNode}} & \textbf{\emph{VariableBindingNode}} \\
+\cline{1-2} ModuleImportNode (I) & ForClauseNode (I) \\
+SchemaImportNode (I) & InClauseNode (I) \\
+\cline{1-1} \textbf{\emph{ModuleChildNode}} & LetClauseNode (I) \\
+\cline{1-2} ModuleDeclNode (L) & \emph{StepExprNode} (I) \\
+\cline{2-2}PrologNode (IL) & SelfOrDescendantStepNode (L) \\
+QueryBodyNode (I) & 
+\end{tabular}
 \end{figure}
 
 Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function.
@@ -737,9 +615,9 @@ For each found join pattern occurrence, the algorithm displayed in Algorithm \re
 \subsection{Rejection of Uniqueness}
 While the previous steps of the key discovery produce positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys.
 \todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
-When the algorithm discovers that a certain element is probably not unique, it assign the element with a negative weight that will decrease the sum of its weights in the summarizing step.
+When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
-The first group of XQuery constructs utilized by this step is a group of $distinct-values()$ function and aggregation functions $min()$, $max()$, TODO \todo{Doplnit} as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they can not be keys.
+The first group of XQuery constructs utilized by this step is a group of $distinct-values()$ function and aggregation functions $min()$, $max()$, TODO \todo{Doplnit} as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
 
 Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates. Predicates in a path restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates. \todo[inline]{Toto asi nebude uplne pravda pre nejake exoticke predikaty. Overit pri implementacii. A: Kdyžtak popište.}
 
@@ -757,11 +635,6 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
         \ENDIF
     \ENDIF
 \ENDIF
-
-\FORALL{$subnode \in node.getChildren()$}
-    \STATE call this function recursively with $subnode$
-\ENDFOR
-
 \end{algorithmic}
 \end{algorithm}
 
@@ -775,9 +648,9 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
 \begin{algorithmic}[1]
 \REQUIRE $node$: A node of the syntax tree.
 
-\STATE $forVars =$ an empty array
-
 \IF{$is(node, FLWORExprNode)$}
+	\STATE $forVars =$ an empty array
+
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
         \IF{$is(bindingNode, ForClauseNode)$}
             \STATE $expr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
@@ -786,11 +659,11 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
             \ENDIF
         \ENDIF
     \ENDFOR
-\ENDIF
-
-\STATE $whereClause = node.getChild(WhereClauseNode)$
-\IF{$whereClause != null$}
-    \STATE $processWhere(forVars, whereClause.getChild(ExprNode))$
+    
+    \STATE $whereClause = node.getChild(WhereClauseNode)$
+	\IF{$whereClause != null$}
+    	\STATE $processWhere(forVars, whereClause.getChild(ExprNode))$
+	\ENDIF
 \ENDIF
 \end{algorithmic}
 \end{algorithm}

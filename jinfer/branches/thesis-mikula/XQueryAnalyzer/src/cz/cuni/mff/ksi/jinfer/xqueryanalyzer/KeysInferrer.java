@@ -58,6 +58,9 @@ public class KeysInferrer {
         processRecursive(subnode, forVariables);
       }
     }
+    
+    rejectionOfUniqueness_aggregationFunctions(node);
+    rejectionOfUniqueness_comparisonWithAConstant(node);
   }
   
   // TODO rio Vyriesit planost premennych v mape forVariables. Aj do DP.
@@ -342,16 +345,87 @@ public class KeysInferrer {
         
         final PathType pathType = (PathType)type;
         if (usesOnlyChildAndDescendantAxes(pathType)) {
-          Integer oldWeight = negativeWeights.get(pathType);
-          int newWeight = 100;
-          if (oldWeight != null) {
-            newWeight += oldWeight.intValue();
-          }
-          negativeWeights.put(pathType, newWeight);
+          memorizeNegativeWeight(pathType, 100);
         }
       }
     }
   }
   
+  private void rejectionOfUniqueness_comparisonWithAConstant(final XQNode node) {
+    if (!FLWORExprNode.class.isInstance(node)) {
+      return;
+    }
+    
+    final FLWORExprNode flworNode = (FLWORExprNode)node;
+    final List<String> forVars = new ArrayList<String>();
+    
+    for (final VariableBindingNode bindingNode : flworNode.getTupleStreamNode().getBindingClauses()) {
+      if (ForClauseNode.class.isInstance(bindingNode)) {
+        final ExprNode exprNode = bindingNode.getBindingSequenceNode().getExprNode();
+        if (exprNode.getType().getCategory() == Type.Category.PATH) {
+          if (usesOnlyChildAndDescendantAxes((PathType)exprNode.getType())) { // TODO rio Musi byt aj bez predikatov??
+            forVars.add(bindingNode.getVarName());
+          }
+        }
+      }
+    }
+    
+    final WhereClauseNode whereClauseNode = flworNode.getWhereClauseNode();
+    if (whereClauseNode != null) {
+      rejectionOfUniqueness_processWhere(flworNode, forVars);
+    }
+  }
   
+  private void rejectionOfUniqueness_processWhere(final ExprNode whereExprNode, final List<String> forVars) {
+    if (!OperatorNode.class.isInstance(whereExprNode)) {
+      return;
+    }
+    
+    final Operator op = ((OperatorNode)whereExprNode).getOperator();
+    if (op == Operator.GEN_EQUALS) {
+      final ExprNode leftOperand = ((OperatorNode)whereExprNode).getOperand();
+      final ExprNode rightOperand = ((OperatorNode)whereExprNode).getRightSide();
+      
+      if (leftOperand.getType().getCategory() == Type.Category.PATH
+              && LiteralNode.class.isInstance(rightOperand)) { // TODO rio v DP sa pise, ze typ je konstanta, toto je menej obecne
+        final PathType pathType = (PathType)leftOperand.getType();
+        if (usesOnlyChildAndDescendantAxes(pathType)) {
+          for (final String var : forVars) {
+            final ExprNode detailNode = pathType.getStepNodes().get(0).getDetailNode();
+            if (detailNode != null) {
+              if (VarRefNode.class.isInstance(detailNode)) {
+                if (((VarRefNode)detailNode).getVarName().equals(var)) {
+                  memorizeNegativeWeight(pathType, 90);
+                }
+              }
+            }
+          }
+        }
+      } else if (rightOperand.getType().getCategory() == Type.Category.PATH
+              && LiteralNode.class.isInstance(leftOperand)) { // TODO rio v DP sa pise, ze typ je konstanta, toto je menej obecne
+        final PathType pathType = (PathType)rightOperand.getType();
+        if (usesOnlyChildAndDescendantAxes(pathType)) {
+          for (final String var : forVars) {
+            final ExprNode detailNode = pathType.getStepNodes().get(0).getDetailNode();
+            if (detailNode != null) {
+              if (VarRefNode.class.isInstance(detailNode)) {
+                if (((VarRefNode)detailNode).getVarName().equals(var)) {
+                  memorizeNegativeWeight(pathType, 90);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  private void memorizeNegativeWeight(final PathType pathType, final int weight) {
+    Integer oldWeight = negativeWeights.get(pathType);
+    int newWeight = weight;
+    if (oldWeight != null) {
+      newWeight += oldWeight.intValue();
+    }
+    negativeWeights.put(pathType, newWeight);
+  }
 }

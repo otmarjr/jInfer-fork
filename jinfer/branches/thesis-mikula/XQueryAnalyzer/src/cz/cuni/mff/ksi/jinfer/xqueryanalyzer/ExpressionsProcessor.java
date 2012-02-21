@@ -147,7 +147,7 @@ public class ExpressionsProcessor {
     } else if (VarRefNode.class.isInstance(expressionNode)) {
       return contextVarTypes.get(((VarRefNode) expressionNode).getVarName());
     } else if (FLWORExprNode.class.isInstance(expressionNode)) {
-      return ((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType(); // TODO
+      return TypeFactory.createForUnboundType(((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType());
     } else if (PathExprNode.class.isInstance(expressionNode)) {
       return TypeFactory.createPathType((PathExprNode)expressionNode);
     }

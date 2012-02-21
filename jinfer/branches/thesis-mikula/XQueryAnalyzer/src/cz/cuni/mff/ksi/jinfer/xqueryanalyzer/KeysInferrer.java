@@ -61,6 +61,7 @@ public class KeysInferrer {
     
     rejectionOfUniqueness_aggregationFunctions(node);
     rejectionOfUniqueness_comparisonWithAConstant(node);
+    // TODO rio zlucovanie vah
   }
   
   // TODO rio Vyriesit planost premennych v mape forVariables. Aj do DP.
@@ -86,11 +87,11 @@ public class KeysInferrer {
       if (bindingExprType.getCategory() == Type.Category.PATH) {
         if (usesOnlyChildAndDescendantAxes((PathType)bindingExprType)) {
           final ExprNode predicate = endsWithExactlyOnePredicate((PathType)bindingExprType);
-          if (predicate != null) {
+          if (predicate != null && isWithoutPredicatesExceptLastStep((PathType)bindingExprType)) {
             for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
               determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), forVariables, checkJoinPattern3, whereExpr);
             }
-          } else {
+          } else if (isWithoutPredicates((PathType)bindingExprType)) {
             if (ForClauseNode.class.isInstance(bindingNode)) {
               forVariables.put(bindingNode.getVarName(), (ForClauseNode)bindingNode);
             }
@@ -215,8 +216,6 @@ public class KeysInferrer {
       } else if (joinPattern.getType() == JoinPattern.JoinPatternType.JP3) {
         classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 50));
       } else {
-        // TODO rio pravidla R2-R5
-        
         // R2
         final FLWORExprNode flworNode = (FLWORExprNode)joinPattern.getSecondVariableBindingNode().getParentNode().getParentNode();
         List<PathType> returnPathTypes = getTargetReturnPathTypes(flworNode, joinPattern.getSecondVariableBindingNode().getVarName());
@@ -329,6 +328,43 @@ public class KeysInferrer {
     }
   }
   
+  private static boolean isWithoutPredicates(final PathType pathType) {
+    final Map<StepExprNode, PathType> subSteps = pathType.getForBoundSubsteps();
+    for (final StepExprNode stepExprNode : pathType.getStepNodes()) {
+      if (stepExprNode.hasPredicates()) {
+        return false;
+      }
+      if (subSteps.containsKey(stepExprNode)) {
+        if (!isWithoutPredicates(subSteps.get(stepExprNode))) {
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  }
+  
+  private static boolean isWithoutPredicatesExceptLastStep(final PathType pathType) {
+    final Map<StepExprNode, PathType> subSteps = pathType.getForBoundSubsteps();
+    final List<StepExprNode> stepNodes = pathType.getStepNodes();
+    for (final StepExprNode stepExprNode : stepNodes) {
+      if (stepExprNode == stepNodes.get(stepNodes.size() - 1)) {
+        break;
+      }
+      
+      if (stepExprNode.hasPredicates()) {
+        return false;
+      }
+      if (subSteps.containsKey(stepExprNode)) {
+        if (!isWithoutPredicates(subSteps.get(stepExprNode))) {
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  }
+  
   private void rejectionOfUniqueness_aggregationFunctions(final XQNode node) {
     if (FunctionCallNode.class.isInstance(node)) {
       final FunctionCallNode funcCallNode = (FunctionCallNode)node;
@@ -344,7 +380,7 @@ public class KeysInferrer {
         }
         
         final PathType pathType = (PathType)type;
-        if (usesOnlyChildAndDescendantAxes(pathType)) {
+        if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           memorizeNegativeWeight(pathType, 100);
         }
       }
@@ -363,7 +399,7 @@ public class KeysInferrer {
       if (ForClauseNode.class.isInstance(bindingNode)) {
         final ExprNode exprNode = bindingNode.getBindingSequenceNode().getExprNode();
         if (exprNode.getType().getCategory() == Type.Category.PATH) {
-          if (usesOnlyChildAndDescendantAxes((PathType)exprNode.getType())) { // TODO rio Musi byt aj bez predikatov??
+          if (usesOnlyChildAndDescendantAxes((PathType)exprNode.getType())) {
             forVars.add(bindingNode.getVarName());
           }
         }
@@ -387,9 +423,9 @@ public class KeysInferrer {
       final ExprNode rightOperand = ((OperatorNode)whereExprNode).getRightSide();
       
       if (leftOperand.getType().getCategory() == Type.Category.PATH
-              && LiteralNode.class.isInstance(rightOperand)) { // TODO rio v DP sa pise, ze typ je konstanta, toto je menej obecne
+              && LiteralNode.class.isInstance(rightOperand)) {
         final PathType pathType = (PathType)leftOperand.getType();
-        if (usesOnlyChildAndDescendantAxes(pathType)) {
+        if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
             final ExprNode detailNode = pathType.getStepNodes().get(0).getDetailNode();
             if (detailNode != null) {
@@ -402,9 +438,9 @@ public class KeysInferrer {
           }
         }
       } else if (rightOperand.getType().getCategory() == Type.Category.PATH
-              && LiteralNode.class.isInstance(leftOperand)) { // TODO rio v DP sa pise, ze typ je konstanta, toto je menej obecne
+              && LiteralNode.class.isInstance(leftOperand)) {
         final PathType pathType = (PathType)rightOperand.getType();
-        if (usesOnlyChildAndDescendantAxes(pathType)) {
+        if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
             final ExprNode detailNode = pathType.getStepNodes().get(0).getDetailNode();
             if (detailNode != null) {

@@ -55,19 +55,54 @@ public class TypeFactory {
       case UNKNOWN:
         return new UnknownType();
         
-      case PATH:
+      case PATH: {
         final PathType pathType = (PathType)forBindingExprType;
         return new PathType(pathType.getStepNodes(), pathType.getForBoundSubsteps(), true);
+      }
       
-      case BUILT_IN:
+      case BUILT_IN: {
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ONE);
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ZERO);
         final XSDType xsdType = (XSDType)forBindingExprType;
         final XSDType.XSDAtomicType atomicType = xsdType.getAtomicType();
         return new XSDType(atomicType, Cardinality.ONE);
+      }
+        
+      case NODE: {
+        final NodeType nodeType = (NodeType)forBindingExprType;
+        return new NodeType(nodeType.getNType(), Cardinality.ONE);
+      }
         
       default:
-        throw new IllegalStateException(); // TODO rio
+        assert(false);
+        throw new IllegalStateException();
+    }
+  }
+  
+  public static Type createForUnboundType(final Type returnClauseType) {
+    switch (returnClauseType.getCategory()) {
+      case UNKNOWN:
+        return new UnknownType();
+        
+      case PATH: {
+        final PathType pathType = (PathType)returnClauseType;
+        return new PathType(pathType.getStepNodes(), pathType.getForBoundSubsteps(), false);
+      }
+        
+      case BUILT_IN: {
+        final XSDType xsdType = (XSDType)returnClauseType;
+        final XSDType.XSDAtomicType atomicType = xsdType.getAtomicType();
+        return new XSDType(atomicType, Cardinality.ZERO_OR_MORE);
+      }
+        
+      case NODE: {
+        final NodeType nodeType = (NodeType)returnClauseType;
+        return new NodeType(nodeType.getNType(), Cardinality.ZERO_OR_MORE);
+      }
+        
+      default:
+        assert(false);
+        throw new IllegalStateException();
     }
   }
   

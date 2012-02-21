@@ -25,7 +25,15 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.Cardinality;
 public class NodeType extends CardinalityType {
   
   public enum NType {
-    DOCUMENT;
+    ANY_KIND,
+    ATTRIBUTE,
+    COMMENT,
+    DOCUMENT,
+    ELEMENT,
+    PROCESSING_INSTRUCTION,
+    SCHEMA_ATTRIBUTE,
+    SCHEMA_ELEMENT,
+    TEXT; 
   }
   
   private final NType nType;
@@ -45,5 +53,7 @@ public class NodeType extends CardinalityType {
     return false;
   }
   
-  
+  public NType getNType() {
+    return nType;
+  }
 }

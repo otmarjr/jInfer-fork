@@ -16,7 +16,7 @@ Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, o)$ where
 \begin{itemize}
 \item $V \subset \mathbb{N}$ is a set of nodes, each node representing a particular XQuery construct in query $Q$,
 \item $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ ($b$ is a child of $a$) in query $Q$,
-\item $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}, \todo{Tohle je hrozné peklo. Potřebujeme to takto? Nedalo by se to nacpat do 1-2 tabulek/obrázků? Je nutné aby každá položky byla na samostatném řádku. Trochu to vypadá jako umělé natahování diplomky.}
+\item $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2},
 \item $\mathcal{P}$ is a set of functions specifying additional properties of the nodes and distinguishing the nodes of the same classes,
 \item and $o : V \rightarrow \mathcal{O}$ is a function specifying an order of children of the nodes, where $\mathcal{O} = \{o_v : E_v \rightarrow \mathbb{N} | v \in V, E_v = \{(v, w) | w \in V, (v,w) \in E\}\}$ is set of functions specifying the children order for each node. For every $v \in V, o(v) = o_v$ so that $o_v(v,w)$ is a sequential number of a construct represented by $w$ amongst constructs represented by children of $v$ in query $Q$.
 \end{itemize}
@@ -46,7 +46,6 @@ For every $v \in V$, abbreviation
 \todo[inline]{Q: Je nutne presnejsie popisat kedy a preco tieto skratky maju zmysel? V pseudo-kodoch budu samozrejme pouzivane len v pripadoch, ked su dobre definovane a maju zmysel. A: Ne, ale hodilo by se slovně popsat co znamenají.}
 
 \subsection{Closer Look at the Nodes of the Syntax Tree}
-\todo[inline]{Dat figures do appendixu?}
 The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in tables in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}. The tables are composed of classes in italic and their subclasses. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining non-bold nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
 
 For example, an instance of the syntax tree cannot directly contain nodes of $Node$ and $ExprNode$ classes (for every $v \in V, c(v) \neq Node, c(v) \neq ExprNode$), but it can contain nodes of $AttributeNode$ and $LiteralNode$ classes. Regarding the multiplicity of types, a node of $LiteralNode$ class is also considered to be of two indirect types: $ExprNode$ and $Node$.
@@ -135,10 +134,13 @@ We want to capture the following types.
 \begin{itemize}
 \item XML Schema built-in atomic types \todo{link do appendixu}.
 \item Types $ElementType$, $AttributeType$, $NodeType$, $TextNodeType$,\linebreak $CommentType$, $ProcessingInstructionType$, $DocumentType$ representing an element, attribute, node, text node, comment, processing instruction, document node.
-\item Type representing a node selected by a certain path expression. The path expression is included in this type. Let this type be identified as $PathType$.
+\item Type representing a node or a set of nodes selected by a certain path expression. The path expression is included in this type. Let this type be identified as $PathType$.
+\item $UnknownType$ representing a type without known details, which does not suit one of the three previous types. An example is XSD type $anyType$.
 \end{itemize}
 
-To capture sequences, we assign each type with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Every type can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
+\todo[inline]{Doplnit PathType o boolean for bound, volania zoznam funkcii volanych na tuto path.}
+
+To capture sequences, we assign the first two categories of types (all types except of $PathType$ and $UnknownType$) with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
 \begin{itemize}
 \item An empty sequence.
@@ -148,9 +150,7 @@ To capture sequences, we assign each type with its cardinality as proposed in \t
 \item A sequence containing one or more items (modifier $+$).
 \end{itemize}
 
-$PathType$ has always cardinality of zero-or-more, because the result of a path expression is a general sequence and since we do not evaluate the queries, we cannot determine its actual cardinality.
-
-If we cannot determine the type of an expression, we express that using $null$. An example of such case is path expression $/rootElement/(elementA * 2)$. \todo{Nejak dopisat}
+$PathType$ is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, $UnknownType$ is neither assigned with the cardinality. Expressions of $UnknownType$ are not utilized it the inference, therefore, their cardinality is not needed.
 
 The analysis of expression types can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
 
@@ -267,16 +267,12 @@ A similar approach as in the case of functions can be applied to determine types
 \ELSIF{$is(exprNode, VarRefNode)$}
      \STATE $type = getVariableType(contextVarTypes, exprNode.varName)$
 \ELSIF{$is(exprNode, PathExprNode)$}
-     \IF{$exprNode$ selects an element set}
-         \STATE $type = ElementType$, zero-or-more cardinality, $exprNode$ included
-     \ELSIF{$exprNode$ selects an attribute set}
-         \STATE $type = AttributeType$, zero-or-more cardinality, $exprNode$ included
-     \ENDIF
+     \STATE $type = createPathType(exprNode)$
 \ELSIF{$is(exprNode, OperatorNode)$}
      \STATE $type = determineOperatorType(exprNode, contextVarTypes)$
 \ELSIF{$is(exprNode, FLWORExprNode)$}
      \STATE $returnClauseNode = exprNode.getChild(ReturnClauseNode)$
-     \STATE $type = getType(returnClauseNode)$
+     \STATE $type = createForUnboundType(getType(returnClauseNode))$
 \ENDIF
 
 \RETURN $type$
@@ -391,6 +387,9 @@ The handling of new variable definitions relies on the fact that the definitions
         \STATE $type = getTypeTN(typeNode)$
     \ELSE
         \STATE $type = determineExpressionType(startingNode.$ $getChild(BindingSequenceNode).getChild(ExprNode),$ $contextVarTypes)$
+        \IF{$is(startingNode, ForClauseNode)$}
+            \STATE $type = createForBoundType(type)$
+        \ENDIF
     \ENDIF
     \STATE $set(startingNode, newVars, (startingNode.varName, type))$
 \ELSIF{$is(startingNode, TupleStreamNode)$}
@@ -445,10 +444,43 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 
 The types of processed global variables are available trough function \linebreak $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in Algorithm \ref{ALG_func_determineExpressionType} is defined in Algorithm \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
 
+\begin{algorithm}
+\caption{Function createPathType}
+\label{ALG_function_create_path_type}
+\begin{algorithmic}[1]
+\REQUIRE $pathExprNode$: A reference to a PathExprNode to create the PathType from.
+\ENSURE The PathType of $pathExprNode$ expression.
+
+\STATE TODO
+\end{algorithmic}
+\end{algorithm}
+
 \subsection{Determination of Expression Types}
 To determine types of expressions, we use already introduced function \linebreak $analysisOfExpressionTypes$. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
 
+\begin{algorithm}
+\caption{Function createForBoundType}
+\label{ALG_function_create_for_bound_type}
+\begin{algorithmic}[1]
+\REQUIRE $type$: A type to create the for bound type from.
+\ENSURE The for bound type from $type$.
+
+\STATE TODO
+\end{algorithmic}
+\end{algorithm}
+
 We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
+
+\begin{algorithm}
+\caption{Function createForUnboundType}
+\label{ALG_function_create_for_unbound_type}
+\begin{algorithmic}[1]
+\REQUIRE $type$: A type to create the for unbound type from.
+\ENSURE The for unbound type from $type$.
+
+\STATE TODO
+\end{algorithmic}
+\end{algorithm}
 
 \section{Step 3: Inference of Built-in Types}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
@@ -617,9 +649,9 @@ While the previous steps of the key discovery produce positive statements about 
 \todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
 When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
-The first group of XQuery constructs utilized by this step is a group of $distinct-values()$ function and aggregation functions $min()$, $max()$, TODO \todo{Doplnit} as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
+The first group of XQuery constructs utilized by this step is a group of $distinct-values$ function and aggregation functions $min$, $max$, $sum$ as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
 
-Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates. Predicates in a path restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates. \todo[inline]{Toto asi nebude uplne pravda pre nejake exoticke predikaty. Overit pri implementacii. A: Kdyžtak popište.}
+Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates in their lasts steps. Predicates in a path's last step restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates.
 
 \begin{algorithm}
 \caption{Rejection of uniqueness - aggregation functions}
@@ -628,9 +660,9 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 \REQUIRE $node$: A node of the syntax tree.
 
 \IF{$is(node, FunctionCallNode)$}
-    \IF{$node.fncName$ is one of $distinct-values$, $min$, $max$, TODO}
+    \IF{$node.fncName$ is one of $distinct-values$, $min$, $max$, $sum$}
         \STATE $argument = node.getChild(0)$
-        \IF{$getType(argument) == PathType$ using only child and descendant axes}
+        \IF{$getType(argument) == PathType$ using only child and descendant axes, without predicates except the last step}
             \STATE memorize $argument$ as the negative key statement, weight 1
         \ENDIF
     \ENDIF
@@ -654,7 +686,7 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
         \IF{$is(bindingNode, ForClauseNode)$}
             \STATE $expr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-            \IF{$getType(expr) == PathExpr$ without predicates, using only child and descendant axes}
+            \IF{$getType(expr) == PathExpr$ without predicates except the last step, using only child and descendant axes}
                 \STATE add $bindingNode.varName$ to $forVars$
             \ENDIF
         \ENDIF
@@ -680,7 +712,7 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
 \IF{$is(exprNode, OperatorNode$)}
     \IF{$exprNode.operator == GEN\_EQUALS$}
         \FORALL{$var \in forVars$}
-            \IF{$exprNode$ is of a form $var/L = C$ where $L$ is a path without predicates using only child and descendant axes, and getType(C) is a constant}
+            \IF{$exprNode$ is of a form $var/L = C$ where $L$ is a path without predicates, except the last step, using only child and descendant axes, and C is a literal constant}
                 \STATE memorize $var/L$ as the negative key statement, weight 0.9
             \ENDIF
         \ENDFOR
@@ -692,5 +724,3 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
 
 \end{algorithmic}
 \end{algorithm}
-
-\todo[inline]{Doplnit algoritmus comparison with a constant pre predikaty.}

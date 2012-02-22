@@ -48,14 +48,17 @@ public class KeysInferrer {
   }
   
   private void processRecursive(final XQNode node, Map<String, ForClauseNode> forVariables) {
+    // Copy for variables to not affect the for variables in higher levels of recursion.
+    Map<String, ForClauseNode> newForVariables = new HashMap<String, ForClauseNode>(forVariables);
+    
     if (FLWORExprNode.class.isInstance(node)) {
-      forVariables = processFLWORExpr((FLWORExprNode)node, forVariables);
+      newForVariables = processFLWORExpr((FLWORExprNode)node, newForVariables);
     }
     
     final List<XQNode> subnodes = node.getSubnodes();
     if (subnodes != null) {
       for (final XQNode subnode : node.getSubnodes()) {
-        processRecursive(subnode, forVariables);
+        processRecursive(subnode, newForVariables);
       }
     }
     
@@ -64,7 +67,6 @@ public class KeysInferrer {
     // TODO rio zlucovanie vah
   }
   
-  // TODO rio Vyriesit planost premennych v mape forVariables. Aj do DP.
   public Map<String, ForClauseNode> processFLWORExpr(final FLWORExprNode flworExpr, Map<String, ForClauseNode> forVariables) {
     final List<VariableBindingNode> bindingNodes = flworExpr.getTupleStreamNode().getBindingClauses();
     final WhereClauseNode whereClauseNode = flworExpr.getWhereClauseNode();

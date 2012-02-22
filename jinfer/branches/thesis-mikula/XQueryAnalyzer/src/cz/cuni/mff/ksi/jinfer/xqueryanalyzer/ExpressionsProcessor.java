@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO rio
+ * TODO rio comment
  *
  * Zistovanie typov vyrazov v jednom syntaktickom strome.
  * 
@@ -151,7 +151,7 @@ public class ExpressionsProcessor {
     } else if (PathExprNode.class.isInstance(expressionNode)) {
       return TypeFactory.createPathType((PathExprNode)expressionNode);
     }
-    assert (false); // TODO rio
+    assert (false); // TODO rio dorobit pre ostatne typy
     return null;
   }
 

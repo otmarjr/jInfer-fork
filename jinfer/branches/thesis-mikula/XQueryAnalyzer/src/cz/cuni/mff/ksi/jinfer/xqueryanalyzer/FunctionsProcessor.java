@@ -43,26 +43,13 @@ public class FunctionsProcessor {
   
   public Type getFunctionType(final FunctionCallNode functionCallNode) {
     final String qualifiedName = functionCallNode.getFuncName();
+    final String builtinFunctionName = BuiltinFunctions.isBuiltinFunction(qualifiedName);
     
-    final int colonPos = qualifiedName.lastIndexOf(':');
-    final String prefix = qualifiedName.substring(0, colonPos);
-    final String name = qualifiedName.substring(colonPos + 1);
-    
-    if (prefix.isEmpty() || prefix.equals("fn")) {
-      if (BuiltinFunctions.isBuiltinFunction(name)) {
-        return BuiltinFunctions.getFunctionCallType(functionCallNode);
-      }
-      
-      if (functionTypes.containsKey(name)) {
-        return functionTypes.get(name);
-      }
+    if (builtinFunctionName != null) {
+      return BuiltinFunctions.getFunctionCallType(functionCallNode);
     } else {
-      if (functionTypes.containsKey(name)) {
-        return functionTypes.get(name);
-      }
-      
-      if (BuiltinFunctions.isBuiltinFunction(name)) {
-        return BuiltinFunctions.getFunctionCallType(functionCallNode);
+      if (functionTypes.containsKey(qualifiedName)) {
+        return functionTypes.get(qualifiedName);
       }
     }
     
@@ -99,26 +86,15 @@ public class FunctionsProcessor {
     return fTypes;
   }
   
+  // TODO rio Dopisat do DP, ze pocitame s tym, ze builtin funkcie su bud bez rpefixu alebo s prefixom fn:
   public ParamListNode getParamListNode(final String functionName) {
-    final int colonPos = functionName.lastIndexOf(':');
-    final String prefix = functionName.substring(0, colonPos);
-    final String name = functionName.substring(colonPos + 1);
-    
-    if (prefix.isEmpty() || prefix.equals("fn")) {
-      if (BuiltinFunctions.isBuiltinFunction(name)) {
-        return BuiltinFunctions.getParamListNode(name);
-      }
-      
-      if (functionDeclarationNodes.containsKey(functionName)) {
-        return functionDeclarationNodes.get(functionName).getParamListNode();
-      }
+    final String builtinFunctionName = BuiltinFunctions.isBuiltinFunction(functionName);
+            
+    if (builtinFunctionName != null) {
+      return BuiltinFunctions.getParamListNode(builtinFunctionName);
     } else {
       if (functionDeclarationNodes.containsKey(functionName)) {
         return functionDeclarationNodes.get(functionName).getParamListNode();
-      }
-      
-      if (BuiltinFunctions.isBuiltinFunction(name)) {
-        return BuiltinFunctions.getParamListNode(name);
       }
     }
     

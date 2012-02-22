@@ -38,13 +38,37 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("doc", new NodeType(NodeType.NType.DOCUMENT, Cardinality.ONE));
     builtinFunctionTypes.put("min", new UnknownType());
   }
-    
-  public static boolean isBuiltinFunction(final String functionName) {
-    if (builtinFunctionTypes.containsKey(functionName)) {
-      return true;
+  
+  private final static List<String> DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES = new ArrayList<String>();
+  static {
+    DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES.add("");
+    DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES.add("fn");
+  }
+  
+  /**
+   * Zisti ci je funkcia vstavana. Ak ano vrati jej meno, inak null.
+   */
+  public static String isBuiltinFunction(final String functionName) {
+    String prefix;
+    String name;
+    final int colonPos = functionName.lastIndexOf(':');
+    if (colonPos != -1) {
+      prefix = functionName.substring(0, colonPos);
+      name = functionName.substring(colonPos + 1);
     } else {
-      return false;
+      prefix = "";
+      name = functionName;
     }
+    
+    for (final String builtinFunctionsPrefix : DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES) {
+      if (prefix.equals(builtinFunctionsPrefix)) {
+        if (builtinFunctionTypes.containsKey(name)) {
+          return name;
+        }
+      }
+    }
+    
+    return null;
   }
   
   public static Type getFunctionCallType(final FunctionCallNode functionCallNode) {

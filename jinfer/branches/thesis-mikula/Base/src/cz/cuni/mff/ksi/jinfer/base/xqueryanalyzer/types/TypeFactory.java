@@ -115,7 +115,7 @@ public class TypeFactory {
       if (detailNode != null) {
         if (VarRefNode.class.isInstance(detailNode)) {
           final VarRefNode varRefNode = (VarRefNode)detailNode;
-          final Type type = varRefNode.getType(); // TODO rio je ok?
+          final Type type = varRefNode.getType();
           if (type.getCategory() != Type.Category.PATH) {
             assert(false);
           }
@@ -126,6 +126,8 @@ public class TypeFactory {
           } else {
             steps.addAll(((PathType)type).getStepNodes());
           }
+        } else {
+          steps.add(stepNode);
         }
       } else {
         steps.add(stepNode);

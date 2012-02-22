@@ -557,6 +557,80 @@ If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expr
 \section{Step 4: Key Discovery}
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
 
+\subsection{Auxiliary Functions}
+\todo[inline]{Dalsie pomocne funkcie a okomentovat.}
+\todo[inline]{Algoritmu pouzivaju nejake nedefinovane funkcie, napr stepNode.getAxisNode().}
+
+\begin{algorithm}
+\caption{Function usesOnlyChildAndDescendantAxes}
+\label{ALG_function_uses_only_child_and_descendant_axes}
+\begin{algorithmic}[1]
+\REQUIRE $pathType$: A $PathType$ instance.
+\ENSURE A boolean result.
+
+\FORALL{$stepNode \in pathType.stepNodes$}
+	\IF{$stepNode.isAxisStep()$}
+		\STATE $axisKind = stepNode.getAxisNode().getAxisKind()$
+		\IF{$axisKind$ $!=$ $CHILD$ $AND$ $axisKind$ $!=$ $DESCENDANT$}
+			\RETURN false
+		\ENDIF
+	\ENDIF
+\ENDFOR
+
+\STATE $detailNode = stepNode.getChild(ExprNode)$
+\IF{$detailNode != null$}
+	\IF{$is(detailNode, VarRefNode)$}
+		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode]) ==$ false}
+			\RETURN false
+		\ENDIF
+	\ENDIF
+\ENDIF
+
+\RETURN true
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function isWithoutPredicates}
+\label{ALG_function_is_without_predicates}
+\begin{algorithmic}[1]
+\REQUIRE $pathType$: A $PathType$ instance.
+\ENSURE A boolean result.
+
+\FORALL{$stepNode \in pathType.stepNodes$}
+	\IF{$stepNode.hasPredicates()$}
+		\RETURN false
+	\ENDIF
+	\IF{$pathType.forBoundSubsteps[stepNode]$ $!=$ $null$}
+		\IF{$isWithoutPredicates(pathType.forBoundSubsteps[stepNode]$ $==$ false}
+			\RETURN false
+		\ENDIF
+	\ENDIF
+\ENDFOR
+
+\RETURN true
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function endsWithExactlyOnePredicate}
+\label{ALG_function_ends_with_exactly_one_predicate}
+\begin{algorithmic}[1]
+\REQUIRE $pathType$: A $PathType$ instance.
+\ENSURE If $pathType$ ends with exactly one predicate, return value is the predicate, otherwise return value is false.
+
+\STATE $lastStepNode =$ last item from $pathType.stepNodes$
+\IF{$lastStepNode.hasPredicates()$ $==$ false}
+	\RETURN false
+\ENDIF
+\IF{number of item in list $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$ is higher than 1}
+	\RETURN false
+\ENDIF
+
+\RETURN the only item in $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$
+\end{algorithmic}
+\end{algorithm}
+
 \subsection{Join Patterns}
 
 \begin{lstlisting}[mathescape, float, caption=Other form of the for join pattern., frame=single, label=listing_other_for_join_pattern]
@@ -773,35 +847,5 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
         \STATE $processWhere(forVars, exprNode.rightSide)$
     \ENDIF
 \ENDIF
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-\caption{Function usesOnlyChildAndDescendantAxes}
-\label{ALG_function_uses_only_child_and_descendant_axes}
-\begin{algorithmic}[1]
-\REQUIRE $pathType$: A $PathType$ instance.
-\ENSURE A boolean result.
-
-\todo[inline]{Dalsie pomocne funkcie a zaradit ich do nejakej kapitoly o pom. funkciach.}
-\FORALL{$stepNode \in pathType.stepNodes$}
-	\IF{$stepNode.isAxisStep()$}
-		\STATE $axisKind = stepNode.getAxisNode().getAxisKind()$
-		\IF{$axisKind$ $!=$ $CHILD$ $AND$ $axisKind$ $!=$ $DESCENDANT$}
-			\RETURN false
-		\ENDIF
-	\ENDIF
-\ENDFOR
-
-\STATE $detailNode = stepNode.getChild(ExprNode)$
-\IF{$detailNode != null$}
-	\IF{$is(detailNode, VarRefNode)$}
-		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode]) ==$ false}
-			\RETURN false
-		\ENDIF
-	\ENDIF
-\ENDIF
-
-\RETURN true
 \end{algorithmic}
 \end{algorithm}

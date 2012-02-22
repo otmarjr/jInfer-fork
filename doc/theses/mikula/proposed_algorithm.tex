@@ -129,7 +129,11 @@ For example, a node of $FLWORExpr$ class contains four subnodes of\linebreak $Tu
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we statically (i.e. without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will not use the determined types of all expressions, however this step may be useful in a future extending.
 
-We want to capture the following types.
+The analysis of expression types can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
+
+But firstly, we describe types of expressions we want to capture and their features.
+
+\subsection{Expression Types}
 
 \begin{itemize}
 \item XML Schema built-in atomic types \todo{link do appendixu}.
@@ -138,7 +142,22 @@ We want to capture the following types.
 \item $UnknownType$ representing a type without known details, which does not suit one of the three previous types. An example is XSD type $anyType$.
 \end{itemize}
 
-\todo[inline]{Doplnit PathType o boolean for bound, volania zoznam funkcii volanych na tuto path.}
+\subsection{PathType}
+$PathType$ contains additional information. The represented path is contained by a list of its steps, in particular instances of $StepExprNode$. If a step is a reference to a variable which type is $PathType$, we also want to include this information. Therefore, $PathType$ contain association between the steps and other $PathTypes$ and this association is defined for the $PathType$ variable steps.
+
+To differ between a common $PathType$ selecting a set of nodes and a $PathType$ bound to a for variable in a FLWOR expression, $PathType$ structure contains a flag $isForBound$.
+
+Additionaly, $PathType$ contains a list of special functions that were called with an argument of $PathType$ type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of $PathType$ because then, we can determine a type of the function call more precisely. Those special functions are built-in functions $data$, $min$, $max$ \todo{Doplnit}.
+
+In summary, we represent $PathType$ as a structure with the following member variables. \todo{Radsej UML?}
+\begin{itemize}
+\item $stepNodes$ - A list of references to $StepExprNode$ instances.
+\item $forBoundSubsteps$ - An association between references from $stepNodes$ and instances of $PathType$ type.
+\item $isForBound$ - Boolean flag determining if the type was bound to a for variable in a for clause.
+\item $specialFunctionCalls$ - List of special functions called with this instance as an argument.
+\end{itemize}
+
+\subsection{Cardinality of Types}
 
 To capture sequences, we assign the first two categories of types (all types except of $PathType$ and $UnknownType$) with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
@@ -151,8 +170,6 @@ To capture sequences, we assign the first two categories of types (all types exc
 \end{itemize}
 
 $PathType$ is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, $UnknownType$ is neither assigned with the cardinality. Expressions of $UnknownType$ are not utilized it the inference, therefore, their cardinality is not needed.
-
-The analysis of expression types can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
 
 \todo[inline]{Este by sa dala urobit analyza volania funkcii, do ktorych su predavane nejake elementy/atributy o ktorych vieme ich path expression. Vysledkom tejto funkcie by totiz zas mohli byt elementy/atributy o ktorych vieme (pozmenenu) path expression a nie len nezname elementy/atributy.
 A: Přesně tak. A jak říkám - není třeba vše co navrhnete implementovat.
@@ -231,7 +248,7 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{ALG Extraction of a Type from TypeNode nie uplne sedi s definiciou typov. DP JS ma nieco navyse.}
+\todo[inline]{ALG Extraction of a Type from TypeNode nie uplne sedi s definiciou typov. DP JS ma nieco navyse. A tento alg je nedokonceny!!}
 
 For the rest of the thesis, we assume function $getFunctionReturnType()$ which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
@@ -246,8 +263,6 @@ Another group consists of functions $set()$, $add()$, and $get()$. Function $set
 
 \subsection{Determination of Global Variable Types}
 A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
-
-\todo[inline]{ALG \ref{ALG_func_determineExpressionType}: Vymysliet a dopisat ako ziskavat typ z PathExprNode. Bude potrebne vyskusat implementaciu, ako sa chova.}
 
 \begin{algorithm}
 \caption{Function determineExpressionType()}
@@ -451,7 +466,28 @@ The types of processed global variables are available trough function \linebreak
 \REQUIRE $pathExprNode$: A reference to a PathExprNode to create the PathType from.
 \ENSURE The PathType of $pathExprNode$ expression.
 
-\STATE TODO
+\STATE $stepNodes =$ an empty array
+\STATE $forBoundSubsteps =$ an empty associative array
+\FORALL{$stepNode \in pathExprNode.getChildren()$}
+	\STATE $detailNode = stepNode.getChild(DetailNode)$
+	\IF{$detailNode != null$}
+		\IF{$is(detailNode, VarRefNode)$}
+			\STATE $type = getType(detailNode)$ // $PathType$
+			\IF{$type.isForBound$}
+				\STATE $forBoundSubsteps[stepNode] = type$
+				\STATE add $stepNode$ to $stepNodes$
+			\ELSE
+				\STATE add all $type.stepNodes$ to $stepNodes$
+			\ENDIF
+		\ELSE
+			\STATE add $stepNode$ to $stepNodes$
+		\ENDIF
+	\ELSE
+		\STATE add $stepNode$ to $stepNodes$
+	\ENDIF
+\ENDFOR
+
+\RETURN $PathType$ with $stepNodes$, $forBoundSubsteps$, and $isForBound$ set to $false$
 \end{algorithmic}
 \end{algorithm}
 
@@ -465,7 +501,14 @@ To determine types of expressions, we use already introduced function \linebreak
 \REQUIRE $type$: A type to create the for bound type from.
 \ENSURE The for bound type from $type$.
 
-\STATE TODO
+\IF{$type$ is $UnknownType$}
+	\RETURN $UnknownType$
+\ELSIF{$type$ is $NodeType$ or XSD atomic type}
+	\RETURN $type$ with cardinality set to exactly-one
+\ELSE
+	\STATE // $PathType$
+	\RETURN $type$ with $isForBound$ flag set to $true$
+\ENDIF
 \end{algorithmic}
 \end{algorithm}
 
@@ -478,7 +521,14 @@ We can also determine expression types in functions. To do this for a certain fu
 \REQUIRE $type$: A type to create the for unbound type from.
 \ENSURE The for unbound type from $type$.
 
-\STATE TODO
+\IF{$type$ is $UnknownType$}
+	\RETURN $UnknownType$
+\ELSIF{$type$ is $NodeType$ or XSD atomic type}
+	\RETURN $type$ with cardinality set to zero-or-more
+\ELSE
+	\STATE // $PathType$
+	\RETURN $type$ with $isForBound$ flag set to $false$
+\ENDIF
 \end{algorithmic}
 \end{algorithm}
 
@@ -686,7 +736,7 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
         \IF{$is(bindingNode, ForClauseNode)$}
             \STATE $expr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-            \IF{$getType(expr) == PathExpr$ without predicates except the last step, using only child and descendant axes}
+            \IF{$getType(expr) == PathType$ using only child and descendant axes}
                 \STATE add $bindingNode.varName$ to $forVars$
             \ENDIF
         \ENDIF

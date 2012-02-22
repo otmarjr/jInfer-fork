@@ -469,7 +469,7 @@ The types of processed global variables are available trough function \linebreak
 \STATE $stepNodes =$ an empty array
 \STATE $forBoundSubsteps =$ an empty associative array
 \FORALL{$stepNode \in pathExprNode.getChildren()$}
-	\STATE $detailNode = stepNode.getChild(DetailNode)$
+	\STATE $detailNode = stepNode.getChild(ExprNode)$
 	\IF{$detailNode != null$}
 		\IF{$is(detailNode, VarRefNode)$}
 			\STATE $type = getType(detailNode)$ // $PathType$
@@ -613,7 +613,7 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
     \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
     \IF{$getType(BindingExpr) == PathType$ using only child and descendant axes, ending with exactly one predicate $P$}
         \FORALL{$(var, node) \in forVars$}
-            \STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var,$ $forVars)$
+            \STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
         \ENDFOR
     \ELSIF{$getType(BindingExpr) == PathType$ without predicates using only child and descendant axes}
         \IF{$is(bindingNode, ForClauseNode$}
@@ -637,7 +637,9 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
     $P$: A predicate from the binding expression. \\
     $forBindingNode$: A for binding node from an ancestor FLWOR node. \\
     $forVar$: A variable from the ancestor for binding node. \\
-    $forVars$: An array of couples of for variables and their for clause nodes.
+    $forVars$: An array of couples of for variables and their for clause nodes. \\
+    $checkJoinPattern3$: A flag determining whether to analyze the join pattern as possible join pattern 3. \\
+    $whereExpr$: An expression from a where clause of the current FLWOR node.
 }
 
 \ENSURE Updated variable $forVars$.
@@ -767,10 +769,39 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
             \ENDIF
         \ENDFOR
     \ELSIF{$exprNode.operator == AND$}
-        \STATE processWhere(forVars, exprNode.leftSide)
-        \STATE processWhere(forVars, exprNode.rightSide)
+        \STATE $processWhere(forVars, exprNode.leftSide)$
+        \STATE $processWhere(forVars, exprNode.rightSide)$
     \ENDIF
 \ENDIF
+\end{algorithmic}
+\end{algorithm}
 
+\begin{algorithm}
+\caption{Function usesOnlyChildAndDescendantAxes}
+\label{ALG_function_uses_only_child_and_descendant_axes}
+\begin{algorithmic}[1]
+\REQUIRE $pathType$: A $PathType$ instance.
+\ENSURE A boolean result.
+
+\todo[inline]{Dalsie pomocne funkcie a zaradit ich do nejakej kapitoly o pom. funkciach.}
+\FORALL{$stepNode \in pathType.stepNodes$}
+	\IF{$stepNode.isAxisStep()$}
+		\STATE $axisKind = stepNode.getAxisNode().getAxisKind()$
+		\IF{$axisKind$ $!=$ $CHILD$ $AND$ $axisKind$ $!=$ $DESCENDANT$}
+			\RETURN false
+		\ENDIF
+	\ENDIF
+\ENDFOR
+
+\STATE $detailNode = stepNode.getChild(ExprNode)$
+\IF{$detailNode != null$}
+	\IF{$is(detailNode, VarRefNode)$}
+		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode]) ==$ false}
+			\RETURN false
+		\ENDIF
+	\ENDIF
+\ENDIF
+
+\RETURN true
 \end{algorithmic}
 \end{algorithm}

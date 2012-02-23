@@ -571,17 +571,17 @@ Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_on
 
 \FORALL{$stepNode \in pathType.stepNodes$}
 	\IF{$stepNode.isAxisStep()$}
-		\STATE $axisKind = stepNode.getAxisNode().getAxisKind()$
-		\IF{$axisKind$ $!=$ $CHILD$ $AND$ $axisKind$ $!=$ $DESCENDANT$}
+		\STATE $axisKind$ = $stepNode.getAxisNode().getAxisKind()$
+		\IF{$axisKind$ $\neq$ $CHILD$ AND $axisKind$ $\neq$ $DESCENDANT$}
 			\RETURN false
 		\ENDIF
 	\ENDIF
 \ENDFOR
 
-\STATE $detailNode = stepNode.getChild(ExprNode)$
-\IF{$detailNode != null$}
+\STATE $detailNode$ = $stepNode.getChild(ExprNode)$
+\IF{$detailNode \neq$ null}
 	\IF{$is(detailNode, VarRefNode)$}
-		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode]) ==$ false}
+		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode])$ == false}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -598,14 +598,14 @@ Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predica
 \label{ALG_function_is_without_predicates}
 \begin{algorithmic}[1]
 \REQUIRE $pathType$: A $PathType$ instance.
-\ENSURE A boolean result.
+\ENSURE A boolean result.getTargetReturnPathTypesRecursive
 
 \FORALL{$stepNode \in pathType.stepNodes$}
 	\IF{$stepNode.hasPredicates()$}
 		\RETURN false
 	\ENDIF
-	\IF{$pathType.forBoundSubsteps[stepNode]$ $!=$ $null$}
-		\IF{$isWithoutPredicates(pathType.forBoundSubsteps[stepNode]$ $==$ false}
+	\IF{$pathType.forBoundSubsteps[stepNode]$ $\neq$ null}
+		\IF{$isWithoutPredicates(pathType.forBoundSubsteps[stepNode]$ == false}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -615,7 +615,7 @@ Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predica
 \end{algorithmic}
 \end{algorithm}
 
-Function $endsWithExactlyOnePredicate$ checks if a path represented by a given $PathType$ instance contains exactly one predicate in its last step and if so, the predicate is returned. Otherwise, it returns false.
+Function $endsWithExactlyOnePredicate$ in Algorithm \ref{ALG_function_ends_with_exactly_one_predicate} checks if a path represented by a given $PathType$ instance contains exactly one predicate in its last step and if so, the predicate is returned. Otherwise, it returns false.
 
 \begin{algorithm}
 \caption{Function endsWithExactlyOnePredicate}
@@ -624,7 +624,7 @@ Function $endsWithExactlyOnePredicate$ checks if a path represented by a given $
 \REQUIRE $pathType$: A $PathType$ instance.
 \ENSURE If $pathType$ ends with exactly one predicate, return value is the predicate, otherwise return value is false.
 
-\STATE $lastStepNode =$ last item from $pathType.stepNodes$
+\STATE $lastStepNode$ = last item from $pathType.stepNodes$
 \IF{$lastStepNode.hasPredicates()$ $==$ false}
 	\RETURN false
 \ENDIF
@@ -633,6 +633,118 @@ Function $endsWithExactlyOnePredicate$ checks if a path represented by a given $
 \ENDIF
 
 \RETURN the only item in $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$
+\end{algorithmic}
+\end{algorithm}
+
+Function $isTargetPath$ in Algorithm \ref{ALG_function_is_target_path} checks if a path represented by a given $PathType$ instance is so-called target path for the specified variable. A target path for a variable is a path where its first step is a reference to the variable.
+
+\begin{algorithm}
+\caption{Function isTargetPath}
+\label{ALG_function_is_target_path}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $pathType$: A $PathType$ instance. \\
+  $varName$: A variable name.
+}
+\ENSURE Returns true, if the first step of path represented by the $PathType$ instance is a reference to the specified variable.
+
+\todo[inline]{Upravit styl vsetkych algoritmov (null, ==, !=, true/false, ...) tak ako je tu.}
+
+\STATE $firstStep$ = first item from  $pathType.stepNodes$
+\STATE $detailNode$ = $firstStep.detailNode$
+\IF{$detailNode$ == null}
+	\RETURN false
+\ENDIF
+\IF{$is(detailNode, VarRefNode)$ == false}
+	\RETURN false
+\ENDIF
+\IF{$detailNode.varName$ == $varName$}
+	\RETURN true
+\ELSE
+	\RETURN false
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+Function $getTargetReturnPathTypes$ in Algorithm \ref{ALG_function_get_target_return_path_types} searches the given FLWOR for $PathTypes$ representing so-called target return paths. A target return path is a return path in a where clause of a FLWOR. The FLWOR is processed recursively using function $getTargetReturnPathTypesRecursive$ in Algorithm \ref{ALG_function_get_target_return_path_types_recursive}.
+
+\begin{algorithm}
+\caption{Function getTargetReturnPathTypes}
+\label{ALG_function_get_target_return_path_types}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $flworNode$: A $FLWORExprNode$ instance to search for target return paths. \\
+  $varName$: A variable name.
+}
+\ENSURE A list of target return paths for the specified variable, in the given FLWOR, represented by $PathType$ instances.
+
+\STATE $pathTypes$ = an empty array
+\STATE $getTargetReturnPathTypesRecursive(flworNode.$ $getChild(ReturnClauseNode), varName, pathTypes)$
+\RETURN $pathTypes$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function getTargetReturnPathTypesRecursive}
+\label{ALG_function_get_target_return_path_types_recursive}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $node$: A node to search for target return paths. \\
+  $varName$: A variable name. \\
+  $pathTypes$ An output list to add found target return path types to.
+}
+
+\IF{$is(node, ExprNode)$}
+	\STATE $type$ = $getType(node)$
+	\IF{$type$ is $PathType$ AND $isTargetPath(type, varName)$}
+		\STATE add $type$ to $pathTypes$
+	\ENDIF
+\ENDIF
+\FORALL{$child \in node.getChildren()$}
+	\STATE $getTargetReturnPathTypesRecursive(child, varName, pathTypes)$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+A similar couple of functions is function $getTargetReturnPaths$ and function $getTargetReturnPathsRecursive$. Only difference between those two couples of functions is that the former one searches for all expressions which are of $PathType$ representing a target return path, while the later one searches only for instances of $PathExprNode$.
+
+To ilustrate this difference, we introduce the following example. Assuming $P$ is a return target path expression for variable $var$ and $flwor$ is a FLWOR expression with return clause $data(P)$, function call $getTargetReturnPathTypes(flwor, var)$ returns two $PathTypes$. One is the type of expression $P$ and the other is the type of the function call $data(P)$ which is also $PathType$. On the other hand, function call $getTargetReturnPaths(flwor, var)$ returns just one $PathType$ representing $P$. 
+
+\begin{algorithm}
+\caption{Function getTargetReturnPaths}
+\label{ALG_function_get_target_return_paths}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $flworNode$: A $FLWORExprNode$ instance to search for target return paths. \\
+  $varName$: A variable name.
+}
+\ENSURE A list of target return paths for the specified variable, in the given FLWOR, represented by $PartExprNode$ instances.
+
+\STATE $paths$ = an empty array
+\STATE $getTargetReturnPathsRecursive(flworNode.$ $getChild(ReturnClauseNode), varName, paths)$
+\RETURN $paths$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function getTargetReturnPathsRecursive}
+\label{ALG_function_get_target_return_paths_recursive}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $node$: A node to search for target return paths. \\
+  $varName$: A variable name. \\
+  $paths$ An output list to add found target return path types to.
+}
+
+\IF{$is(node, PathExprNode)$}
+	\STATE $type$ = $getType(node)$
+	\IF{$type$ is $PathType$ AND $isTargetPath(type, varName)$}
+		\STATE add $type$ to $paths$
+	\ENDIF
+\ENDIF
+\FORALL{$child \in node.getChildren()$}
+	\STATE $getTargetReturnPathsRecursive(child, varName, paths)$
+\ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -744,7 +856,6 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
     \ENDIF
 \ENDIF
 
-
 \RETURN $forVars$
 \end{algorithmic}
 \end{algorithm}
@@ -824,7 +935,8 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 \IF{$is(node, FunctionCallNode)$}
     \IF{$node.fncName$ is one of $distinct-values$, $min$, $max$, $sum$}
         \STATE $argument = node.getChild(0)$
-        \IF{$getType(argument) == PathType$ using only child and descendant axes, without predicates except the last step}
+        \STATE $type = getType(argument)$
+        \IF{$type$ is $PathType$ AND $usesOnlyChildAndDescendantAxes(type)$ AND $isWithoutPredicatesExceptLastStep(type)$}
             \STATE memorize $argument$ as the negative key statement, weight 1
         \ENDIF
     \ENDIF
@@ -848,7 +960,7 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
         \IF{$is(bindingNode, ForClauseNode)$}
             \STATE $expr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-            \IF{$getType(expr) == PathType$ using only child and descendant axes}
+            \IF{$getType(expr)$ is $PathType$ AND $usesOnlyChildAndDescendantAxes(getType(expr))$}
                 \STATE add $bindingNode.varName$ to $forVars$
             \ENDIF
         \ENDIF
@@ -874,7 +986,7 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
 \IF{$is(exprNode, OperatorNode$)}
     \IF{$exprNode.operator == GEN\_EQUALS$}
         \FORALL{$var \in forVars$}
-            \IF{$exprNode$ is of a form $var/L = C$ where $L$ is a path without predicates, except the last step, using only child and descendant axes, and C is a literal constant}
+            \IF{$exprNode$ is of a form $var/L = C$ where $getType(var/L)$ is $PathType$ AND $isWithoutPredicatesExceptLastStep(getType(var/L))$ AND $usesOnlyChildAndDescendantAxes(getType(var/L))$ AND $C$ is a literal constant}
                 \STATE memorize $var/L$ as the negative key statement, weight 0.9
             \ENDIF
         \ENDFOR

@@ -558,8 +558,9 @@ If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expr
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
 
 \subsection{Auxiliary Functions}
-\todo[inline]{Dalsie pomocne funkcie a okomentovat.}
-\todo[inline]{Algoritmu pouzivaju nejake nedefinovane funkcie, napr stepNode.getAxisNode().}
+Firstly, we define some auxiliary functions used by algorithms in this chapter.
+
+Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of $PathType$ as its arguments and returns true if the path uses only child and descendant axes. Otherwise, it returns false.
 
 \begin{algorithm}
 \caption{Function usesOnlyChildAndDescendantAxes}
@@ -590,6 +591,8 @@ In this step, the algorithm discovers keys of elements, incorporating the approa
 \end{algorithmic}
 \end{algorithm}
 
+Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predicates} checks whether a path represented by a given $PathType$ instance does not contain predicates. A Similar function is  $isWithoutPredicatesExceptLastStep$. This function is not explicitly defined, because its definition is the same as the definition of function $isWithoutPredicates$, except it does not check the last step of the path. So the last step may contain predicates and the function will return true.
+
 \begin{algorithm}
 \caption{Function isWithoutPredicates}
 \label{ALG_function_is_without_predicates}
@@ -612,6 +615,8 @@ In this step, the algorithm discovers keys of elements, incorporating the approa
 \end{algorithmic}
 \end{algorithm}
 
+Function $endsWithExactlyOnePredicate$ checks if a path represented by a given $PathType$ instance contains exactly one predicate in its last step and if so, the predicate is returned. Otherwise, it returns false.
+
 \begin{algorithm}
 \caption{Function endsWithExactlyOnePredicate}
 \label{ALG_function_ends_with_exactly_one_predicate}
@@ -630,6 +635,8 @@ In this step, the algorithm discovers keys of elements, incorporating the approa
 \RETURN the only item in $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$
 \end{algorithmic}
 \end{algorithm}
+
+\todo[inline]{Algoritmy pouzivaju nejake nedefinovane funkcie, napr stepNode.getAxisNode().}
 
 \subsection{Join Patterns}
 
@@ -685,13 +692,17 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 
 \FORALL{$bindingNode \in bindingNodes$}
     \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-    \IF{$getType(BindingExpr) == PathType$ using only child and descendant axes, ending with exactly one predicate $P$}
-        \FORALL{$(var, node) \in forVars$}
-            \STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
-        \ENDFOR
-    \ELSIF{$getType(BindingExpr) == PathType$ without predicates using only child and descendant axes}
-        \IF{$is(bindingNode, ForClauseNode$}
-            \STATE add $(bindingNode.varName, bindingNode)$ to forVars
+    \STATE $type = getType(bindingExpr)$
+    \IF{$type$ is $PathType$ $AND$ $usesOnlyChildAndDescendantAxes(type)$ $AND$ $isWithoutPredicatesExceptLastStep(type)$}
+    	\STATE $P = endsWithExactlyOnePredicate(type)$
+    	\IF{$P$}
+        	\FORALL{$(var, node) \in forVars$}
+            	\STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
+        	\ENDFOR
+        \ELSIF{$isWithoutPredicates(type)$}
+        	\IF{$is(bindingNode, ForClauseNode$}
+            	\STATE add $(bindingNode.varName, bindingNode)$ to forVars
+        	\ENDIF
         \ENDIF
     \ENDIF
 \ENDFOR
@@ -755,13 +766,38 @@ For each found join pattern occurrence, the algorithm displayed in Algorithm \re
 
 \ENSURE $\mathcal{O'}$: A set of the classified join pattern occurrences from $\mathcal{O}$ assigned with their respective weights.
 
+\todo[inline]{Definovat getParent() na Node.}
+\todo[inline]{Popisat preco raz bereme target return path types a raz priamo paths.}
+
 \FORALL{$jpOccurrence \in \mathcal{O}$}
     \IF{$jpOccurrence$ is the for join pattern}
         \STATE mark $jpOccurrence$ as case (O1), weight 1
     \ELSIF{$jpOccurrence$ is the join pattern 3}
         \STATE mark $jpOccurrence$ as case (O1), weight 0.5
     \ELSE
-        \STATE TODO (R2,R3,R4,R5)
+        \STATE $secondBindingNode =$ the second binding node from $jpOccurrence$
+        \STATE $flworNode = secondBindingNode.getParent().getParent()$
+        \STATE $secondVarName = secondBindingNode.varName$
+        \STATE $returnPathTypes = getReturnPathTypes(flworNode, secondVarName)$
+        \FORALL{$returnPathType \in returnPathTypes$}
+        	\IF{$returnPathType.specialFunctionCalls$ contains one of $min$, $max$, $sum$, $avg$}
+        		\STATE mark $jpOccurrence$ as case (O1), weight 1 // R2
+        		\STATE continue the outmost for cycle with next $jpOccurrence$
+        	\ENDIF
+        \ENDFOR
+        \FORALL{$returnPathType \in returnPathTypes$}
+        	\IF{$returnPathType.specialFunctionCalls$ contains $count$}
+        		\STATE mark $jpOccurrence$ as case (O1), weight 0.75 // R3
+        		\STATE continue the outmost for cycle with next $jpOccurrence$
+        	\ENDIF
+        \ENDFOR
+        \STATE $targetReturnPaths = getTargetReturnPaths(flworNode, secontVarName)$
+        \STATE $retPathsNumber = $ number of paths in $targetReturnPaths$
+        \IF{$retPathsNumber > 1$}
+        	\STATE mark $jpOccurrence$ as case (O2), weight 1 // R4
+        \ELSE
+            \STATE mark $jpOccurrence$ as case (O2), weight 0.5 // R5
+        \ENDIF
     \ENDIF
     \STATE update $jpOccurrence$ in $\mathcal{O}$
 \ENDFOR

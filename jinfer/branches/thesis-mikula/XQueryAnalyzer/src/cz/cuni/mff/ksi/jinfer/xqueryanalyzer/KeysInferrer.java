@@ -108,9 +108,8 @@ public class KeysInferrer {
   private static boolean usesOnlyChildAndDescendantAxes(final PathType pathType) {
     for (final StepExprNode stepNode : pathType.getStepNodes()) {
       if (stepNode.isAxisStep()) {
-        final AxisNode axisNode = stepNode.getAxisNode();
-        if (axisNode.getAxisKind() != AxisKind.CHILD
-                && axisNode.getAxisKind() != AxisKind.DESCENDANT_OR_SELF) {
+        final AxisKind axisKind = stepNode.getAxisNode().getAxisKind();
+        if (axisKind != AxisKind.CHILD && axisKind != AxisKind.DESCENDANT) {
           return false;
         }
       }
@@ -223,9 +222,6 @@ public class KeysInferrer {
         List<PathType> returnPathTypes = getTargetReturnPathTypes(flworNode, joinPattern.getSecondVariableBindingNode().getVarName());
         boolean cont = true;
         for (final PathType pathType : returnPathTypes) {
-          if (!cont) {
-            break;
-          }
           for (final String functionName : pathType.getSpecialFunctionCalls()) {
             if (functionName.equals("min")
                     || functionName.equals("max")
@@ -236,14 +232,17 @@ public class KeysInferrer {
               break;
             }
           }
-        }
-        
-        // R3
-        cont = true;
-        for (final PathType pathType : returnPathTypes) {
           if (!cont) {
             break;
           }
+        }
+        
+        if (!cont) {
+          continue;
+        }
+        
+        // R3
+        for (final PathType pathType : returnPathTypes) {
           for (final String functionName : pathType.getSpecialFunctionCalls()) {
             if (functionName.equals("count")) { // TODO rio pozor na nazvy funkcii, mozu byt aj prefixovane.
               classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 75));
@@ -251,8 +250,15 @@ public class KeysInferrer {
               break;
             }
           }
+          if (!cont) {
+            break;
+          }
         }
         
+        if (!cont) {
+          continue;
+        }
+
         // R4 R5
         final List<PathExprNode> returnPaths = getTargetReturnPaths(flworNode, joinPattern.getSecondVariableBindingNode().getVarName());
         final int returnPathsNumber = returnPaths.size();

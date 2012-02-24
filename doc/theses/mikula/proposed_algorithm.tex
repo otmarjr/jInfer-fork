@@ -41,6 +41,7 @@ For every $v \in V$, abbreviation
 \item $v.getChildren()$ stands for $\{w | w \in V, (v,w) \in E\}$ which is a set of all children of $v$.
 \item $v.getChild(i)$, $i \in \mathbb{N} \cup \{0\}$, stands for $w \in V$ so that $o(v)(v,w) = i + 1$.
 \item $v.getChild(class), class \in C$, stands for $w \in V$ so that $(v,w) \in E$ and $c(w) = class$, if $\Bigl | \{u | u \in V, (v,u) \in E, c(u) = class\}\Bigr | = 1$.
+\item If exists $u \in V$ so that $(u,v) \in E$, $v.getParent()$ stands for that $u$.
 \end{itemize}
 
 \todo[inline]{Q: Je nutne presnejsie popisat kedy a preco tieto skratky maju zmysel? V pseudo-kodoch budu samozrejme pouzivane len v pripadoch, ked su dobre definovane a maju zmysel. A: Ne, ale hodilo by se slovně popsat co znamenají.}
@@ -115,7 +116,7 @@ Some pseudo code algorithms in the following sections need to determine a class 
 \begin{define}[Function is(v, class)]For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
 \end{define}
 
-For instance, assuming $v \in V, c(v) = LiteralNode$, calls $is(v, LiteralNode)$, $is(v, ExprNode)$ return $true$, while call $is(v, ContentNode)$ returns $false$.
+For instance, assuming $v \in V, c(v) = LiteralNode$, calls $is(v, LiteralNode)$, $is(v, ExprNode)$ returns $true$, while call $is(v, ContentNode)$ returns $false$.
 
 \subsection{Characteristics of the Syntax Tree}
 An important characteristic of the syntax tree is related to a definition of local variables and their scope in the XQuery language. The representation of a definition of a local variable in the syntax tree is a node of $VariableBinding$ class. Nodes of that class have only two children; a node representing the type of the variable and a node representing the binding expression (expression defining the value of the variable, and thus, it cannot use the variable). Hence, the entire subtree does not contain any expressions that use the variable. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ class node. It depends on the type of XQuery construct that the variable binding is a (indirect) component of.
@@ -369,7 +370,7 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_4}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_1}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
 Function $determineExpressionType$ is called within function $analysis\-Of\-Expression\-Types$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
@@ -557,7 +558,7 @@ If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expr
 \section{Step 4: Key Discovery}
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
 
-\subsection{Auxiliary Functions}
+\subsection{Auxiliary Functions} \label{step_4_auxiliary_functions}
 Firstly, we define some auxiliary functions used by algorithms in this chapter.
 
 Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of $PathType$ as its arguments and returns true if the path uses only child and descendant axes. Otherwise, it returns false.
@@ -570,8 +571,8 @@ Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_on
 \ENSURE A boolean result.
 
 \FORALL{$stepNode \in pathType.stepNodes$}
-	\IF{$stepNode.isAxisStep()$}
-		\STATE $axisKind$ = $stepNode.getAxisNode().getAxisKind()$
+	\IF{$stepNode.isAxisStep$}
+		\STATE $axisKind$ = $stepNode.axisNode.getAxisKind()$
 		\IF{$axisKind$ $\neq$ $CHILD$ AND $axisKind$ $\neq$ $DESCENDANT$}
 			\RETURN false
 		\ENDIF
@@ -748,8 +749,6 @@ To ilustrate this difference, we introduce the following example. Assuming $P$ i
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Algoritmy pouzivaju nejake nedefinovane funkcie, napr stepNode.getAxisNode().}
-
 \subsection{Join Patterns}
 
 \begin{lstlisting}[mathescape, float, caption=Other form of the for join pattern., frame=single, label=listing_other_for_join_pattern]
@@ -777,7 +776,7 @@ The two join patterns from the original approach are shown in Listings \ref{list
 
 Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of $PathType$ without predicates, using only child and descendant axes.
 
-As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns, and rules to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
+As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns, and rules (R1 - R5) to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
 
 \begin{algorithm}
 \caption{Processing of FLWOR expressions}
@@ -823,8 +822,6 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Alg 6.12 FLWOR expressions - pre podmienky na riadkoch 13 a 17 definovat nejake funkcie}
-
 \begin{algorithm}
 \caption{Function determinateJoinPatterns}
 \label{ALG_func_determinateJoinPatterns}
@@ -860,14 +857,14 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Processing function pre join pattern 3.}
-
 To find the occurrences of the join patterns, the algorithm recursively, in pre-order, searches the syntax tree and every node representing a FLWOR expression is processed. The FLWOR processing is shown in Algorithm \ref{ALG_processing_of_flwor_expressions}. Its input is an array of couples containing names of variables which has been bound in for clauses in FLWOR expressions represented by ancestor nodes, and references to those respective for clause nodes. The processing iterates through subnodes of a current node and the iteration consists of two logical parts.
 
 In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. The responsible code is partially moved to function $determineJoinPatterns()$ in Algorithm \ref{ALG_func_determinateJoinPatterns}. If the subnode does not form an occurrence, and if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the currect FLWOR node or in its descendant FLWOR nodes, later in the recursion.
 
 \subsection{Analysis of the Join Pattern Occurrences}
-For each found join pattern occurrence, the algorithm displayed in Algorithm \ref{ALG_classification_of_join_pattern_occurrences} decides whether it is (O1) or (O2) case, using the rules from the original method and the rule for the join pattern 3 considering it of case (O1) and assigning it with weight of 0.5.
+For each found join pattern occurrence, the algorithm displayed in Algorithm \ref{ALG_classification_of_join_pattern_occurrences} and Algorithms \ref{ALG_function_check_r2}, \ref{ALG_function_check_r3}, \ref{ALG_function_use_r4_r5} decides whether it is (O1) or (O2) case, using the rules from the original method and the rule for the join pattern 3 considering it of case (O1) and assigning it with weight of 0.5.
+
+As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrences}, rules R2 and R3 are applied using instances of $PathType$ while, rules R4 and R5 use instances of $PathExprNode$. This difference is partially explained in definition of the auxiliary functions in Chapter \ref{step_4_auxiliary_functions}. Rules R4 and R5 count target return paths. If they use instances of $PathType$, they can count one path more times (as is described in the mentioned chapter), and thus, give a wrong result.
 
 \begin{algorithm}
 \caption{Classification of join pattern occurrences}
@@ -876,9 +873,6 @@ For each found join pattern occurrence, the algorithm displayed in Algorithm \re
 \REQUIRE $\mathcal{O}$: A set of all found join pattern occurrences.
 
 \ENSURE $\mathcal{O'}$: A set of the classified join pattern occurrences from $\mathcal{O}$ assigned with their respective weights.
-
-\todo[inline]{Definovat getParent() na Node.}
-\todo[inline]{Popisat preco raz bereme target return path types a raz priamo paths.}
 
 \FORALL{$jpOccurrence \in \mathcal{O}$}
     \IF{$jpOccurrence$ is the for join pattern}
@@ -889,31 +883,82 @@ For each found join pattern occurrence, the algorithm displayed in Algorithm \re
         \STATE $secondBindingNode =$ the second binding node from $jpOccurrence$
         \STATE $flworNode = secondBindingNode.getParent().getParent()$
         \STATE $secondVarName = secondBindingNode.varName$
-        \STATE $returnPathTypes = getReturnPathTypes(flworNode, secondVarName)$
-        \FORALL{$returnPathType \in returnPathTypes$}
-        	\IF{$returnPathType.specialFunctionCalls$ contains one of $min$, $max$, $sum$, $avg$}
-        		\STATE mark $jpOccurrence$ as case (O1), weight 1 // R2
-        		\STATE continue the outmost for cycle with next $jpOccurrence$
-        	\ENDIF
-        \ENDFOR
-        \FORALL{$returnPathType \in returnPathTypes$}
-        	\IF{$returnPathType.specialFunctionCalls$ contains $count$}
-        		\STATE mark $jpOccurrence$ as case (O1), weight 0.75 // R3
-        		\STATE continue the outmost for cycle with next $jpOccurrence$
-        	\ENDIF
-        \ENDFOR
-        \STATE $targetReturnPaths = getTargetReturnPaths(flworNode, secontVarName)$
-        \STATE $retPathsNumber = $ number of paths in $targetReturnPaths$
-        \IF{$retPathsNumber > 1$}
-        	\STATE mark $jpOccurrence$ as case (O2), weight 1 // R4
-        \ELSE
-            \STATE mark $jpOccurrence$ as case (O2), weight 0.5 // R5
-        \ENDIF
+        \STATE $returnPathTypes = getReturnPathTypes(flworNode,$ $secondVarName)$
+		\IF{$checkR2(returnPathTypes, jpOccurrence)$}
+			\STATE continue
+		\ENDIF
+		\IF{$checkR3(returnPathTypes, jpOccurrence)$}
+			\STATE continue
+		\ENDIF
+		\STATE $targetReturnPaths = getTargetReturnPaths(flworNode,$ $secontVarName)$
+		\STATE $useR4R5(returnPaths, jpOccurrence)$
     \ENDIF
     \STATE update $jpOccurrence$ in $\mathcal{O}$
 \ENDFOR
 
 \RETURN $\mathcal{O}$
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function checkR2}
+\label{ALG_function_check_r2}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $returnPathTypes$: A list of target return path types. \\
+  $jpOccurrence$: An occurrence of a join pattern to classify.
+}
+
+\ENSURE True if the $jpOccurrence$ was classified as case (O1) using the R2 rule. False otherwise.
+
+\FORALL{$returnPathType \in returnPathTypes$}
+	\IF{$returnPathType.specialFunctionCalls$ contains one of $min$, $max$, $sum$, $avg$}
+    	\STATE mark $jpOccurrence$ as case (O1), weight 1 // R2
+  		\RETURN true
+  	\ENDIF
+\ENDFOR
+
+\RETURN false
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function checkR3}
+\label{ALG_function_check_r3}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $returnPathTypes$: A list of target return path types. \\
+  $jpOccurrence$: An occurrence of a join pattern to classify.
+}
+
+\ENSURE True if the $jpOccurrence$ was classified as case (O1) using the R3 rule. False otherwise.
+
+\FORALL{$returnPathType \in returnPathTypes$}
+    \IF{$returnPathType.specialFunctionCalls$ contains $count$}
+        \STATE mark $jpOccurrence$ as case (O1), weight 0.75 // R3
+        \RETURN true
+    \ENDIF
+\ENDFOR
+
+\RETURN false
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Function useR4R5}
+\label{ALG_function_use_r4_r5}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+  $targetReturnPaths$: A list of target return paths. \\
+  $jpOccurrence$: An occurrence of a join pattern to classify.
+}
+
+\STATE $retPathsNumber = $ number of paths in $targetReturnPaths$
+\IF{$retPathsNumber > 1$}
+	\STATE mark $jpOccurrence$ as case (O2), weight 1 // R4
+\ELSE
+	\STATE mark $jpOccurrence$ as case (O2), weight 0.5 // R5
+\ENDIF
 \end{algorithmic}
 \end{algorithm}
 

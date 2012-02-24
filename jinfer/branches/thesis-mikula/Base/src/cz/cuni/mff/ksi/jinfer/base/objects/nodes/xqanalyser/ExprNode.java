@@ -32,10 +32,6 @@ public abstract class ExprNode extends XQNode {
   
   private Type type;
 
-  public ExprNode(final XQNode parentNode) {
-    super(parentNode);
-  }
-
   public Type getType() {
     return type;
   }

@@ -30,21 +30,19 @@ public class PathExpr {
 
   private InitialStep pathStartNode;
   private XQNodeList<StepExprNode> steps;
-  //private XQDocument xqDocument;
   private InitialStep initialStep;
 
-  public PathExpr(Object xqDocument) { // TODO rio XQDocument nahradeny Objectom...
-    //this.xqDocument = xqDocument;
+  public PathExpr() {
     steps = new XQNodeList<StepExprNode>();
   }
 
-  public PathExpr(Object xqDocument, StepExprNode firstStep) {
-    this(xqDocument);
+  public PathExpr(StepExprNode firstStep) {
+    this();
     add(firstStep);
   }
 
   public void insertRootDescendantStep() {
-    steps.add(0, new SelfOrDescendantStepNode(null));
+    steps.add(0, new SelfOrDescendantStepNode());
   }
 
   public ExprNode getNode() {
@@ -53,10 +51,10 @@ public class PathExpr {
       if (!step.hasPredicates() && !step.isAxisStep()) {
         return step.getDetailNode();
       } else {
-        return new PathExprNode(null, steps, initialStep);
+        return new PathExprNode(steps, initialStep);
       }
     } else {
-      return new PathExprNode(null, steps, initialStep);
+      return new PathExprNode(steps, initialStep);
     }
   }
 

@@ -30,10 +30,6 @@ import java.util.List;
  */
 public class ContextItemExprNode extends ExprNode {
 
-  public ContextItemExprNode(final XQNode parentNode) {
-    super(parentNode);
-  }
-
   @Override
   protected String getElementName() {
     return NodeNames.NODE_CONTEXT_ITEM;

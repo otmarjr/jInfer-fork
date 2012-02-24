@@ -30,8 +30,7 @@ import java.util.List;
  */
 public class ConstructionDeclNode extends PrologChildNode {
 
-  public ConstructionDeclNode(final XQNode parentNode, ConstructionMode mode) {
-    super(parentNode);
+  public ConstructionDeclNode(ConstructionMode mode) {
     assert (mode != null);
     addAttribute(AttrNames.ATTR_MODE, mode.toString());
   }

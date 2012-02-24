@@ -21,7 +21,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +30,7 @@ import java.util.List;
  */
 public class OptionDeclNode extends PrologChildNode {
 
-  public OptionDeclNode(final XQNode parentNode, String name, String value) {
-    super(parentNode);
+  public OptionDeclNode(String name, String value) {
     assert (name != null);
     assert (value != null);
     addAttribute(AttrNames.ATTR_NAME, name);

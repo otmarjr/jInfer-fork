@@ -34,16 +34,14 @@ public class TypeNode extends XQNode {
   private ItemTypeNode itemTypeNode;
   private final Cardinality cardinality;
 
-  public TypeNode(final XQNode parentNode, Cardinality cardinality) {
-    super(parentNode);
+  public TypeNode(Cardinality cardinality) {
     assert (cardinality != null);
     this.cardinality = cardinality;
   }
 
-  public TypeNode(
-          final XQNode parentNode, Cardinality cardinality,
+  public TypeNode(Cardinality cardinality,
           ItemTypeNode itemTypeNode) {
-    this(parentNode, cardinality);
+    this(cardinality);
     assert (itemTypeNode != null);
     this.itemTypeNode = itemTypeNode;
   }

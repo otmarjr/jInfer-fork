@@ -33,8 +33,7 @@ public class OrderedExprNode extends ExprNode {
 
   private final ExprNode exprNode;
 
-  public OrderedExprNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public OrderedExprNode(ExprNode exprNode) {
     assert (exprNode != null);
     this.exprNode = exprNode;
   }

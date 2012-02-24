@@ -33,14 +33,12 @@ public class NameNode extends XQNode {
 
   private ExprNode exprNode;
 
-  public NameNode(final XQNode parentNode, String name) {
-    super(parentNode);
+  public NameNode(String name) {
     assert (name != null);
     addAttribute(AttrNames.ATTR_NAME, name);
   }
 
-  public NameNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public NameNode(ExprNode exprNode) {
     assert (exprNode != null);
     this.exprNode = exprNode;
   }

@@ -33,7 +33,7 @@ public class Content {
 
     private List<ContentItem> items = new ArrayList<ContentItem>();
 
-    public Content(Object xqDocument, ContentItem item) { // TODO Prvy argument zmeneny z dokumentu na objekt, co s tym?
+    public Content(ContentItem item) {
         add(item);
     }
 

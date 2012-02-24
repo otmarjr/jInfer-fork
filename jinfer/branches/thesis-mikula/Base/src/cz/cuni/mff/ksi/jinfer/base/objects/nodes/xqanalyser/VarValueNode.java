@@ -34,14 +34,12 @@ public class VarValueNode extends XQNode {
   private final boolean isExternal;
   private final ExprNode exprNode;
 
-  public VarValueNode(final XQNode parentNode) {
-    super(parentNode);
+  public VarValueNode() {
     isExternal = true;
     exprNode = null;
   }
 
-  public VarValueNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public VarValueNode(ExprNode exprNode) {
     assert (exprNode != null);
     isExternal = false;
     this.exprNode = exprNode;

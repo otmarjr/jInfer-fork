@@ -33,10 +33,8 @@ public class OrderByClauseNode extends XQNode {
 
   private final List<OrderSpecNode> orderSpecs;
 
-  public OrderByClauseNode(
-          final XQNode parentNode, Boolean stable,
+  public OrderByClauseNode(Boolean stable,
           XQNodeList<OrderSpecNode> orderSpecs) {
-    super(parentNode);
     assert (stable != null);
     assert (orderSpecs != null);
     addAttribute(AttrNames.ATTR_STABLE, stable.toString());

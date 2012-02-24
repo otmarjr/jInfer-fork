@@ -42,20 +42,16 @@ public class StepExprNode extends XQNode {
     hasPredicates = predicateListNode != null;
   }
 
-  public StepExprNode(
-          final XQNode parentNode, ExprNode exprNode,
+  public StepExprNode(ExprNode exprNode,
           PredicateListNode predicateListNode) {
-    super(parentNode);
     assert (exprNode != null);
     detailNode = exprNode;
     isAxisStep = false;
     addPredicates(predicateListNode);
   }
 
-  public StepExprNode(
-          final XQNode parentNode, AxisNode axisNode,
+  public StepExprNode(AxisNode axisNode,
           PredicateListNode predicateListNode) {
-    super(parentNode);
     assert (axisNode != null);
     this.axisNode = axisNode;
     isAxisStep = true;

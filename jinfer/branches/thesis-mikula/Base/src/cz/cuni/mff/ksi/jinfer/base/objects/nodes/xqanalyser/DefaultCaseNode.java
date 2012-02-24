@@ -34,10 +34,8 @@ public class DefaultCaseNode extends XQNode {
 
   private final ReturnClauseNode returnClauseNode;
 
-  public DefaultCaseNode(
-          final XQNode parentNode, String varName,
+  public DefaultCaseNode(String varName,
           ReturnClauseNode returnClauseNode) {
-    super(parentNode);
     assert (returnClauseNode != null);
     if (varName != null) {
       addAttribute(AttrNames.ATTR_VAR_NAME, varName);

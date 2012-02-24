@@ -33,8 +33,7 @@ public class QueryBodyNode extends ModuleChildNode {
 
   private final ExprNode exprNode;
 
-  public QueryBodyNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public QueryBodyNode(ExprNode exprNode) {
     assert (exprNode != null);
     this.exprNode = exprNode;
   }

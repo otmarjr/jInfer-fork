@@ -32,10 +32,6 @@ import java.util.List;
  */
 public class EmptySequenceNode extends ExprNode {
 
-  public EmptySequenceNode(final XQNode parentNode) {
-    super(parentNode);
-  }
-
   @Override
   protected String getElementName() {
     return NodeNames.NODE_EMPTY_SEQUENCE;

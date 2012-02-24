@@ -40,16 +40,6 @@ public abstract class XQNode {
   private String textContent; // TODO rio needed?
 
   /**
-   * Creates the XML node associated with the given XQuery XML document.
-   *
-   * @param xqDocument The reference to XQuery XML document this node is
-   *      associated to.
-   */
-  public XQNode(final XQNode parentNode) {
-    this.parentNode = parentNode;
-  }
-
-  /**
    * Gets the name of the element representing the XQuery construction.
    *
    * @return Name of element.

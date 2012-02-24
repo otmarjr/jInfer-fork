@@ -33,16 +33,15 @@ public class LiteralNode extends ExprNode {
   private final LiteralType literalType;
   private final String value;
 
-  public LiteralNode(final XQNode parentNode, LiteralType type, String value) {
-    super(parentNode);
+  public LiteralNode(LiteralType type, String value) {
     assert (type != null);
     assert (value != null);
     this.literalType = type;
     this.value = value;
   }
 
-  public LiteralNode(final XQNode parentNode, StringLiteral stringLiteral) {
-    this(parentNode, LiteralType.STRING, stringLiteral.getValue());
+  public LiteralNode(StringLiteral stringLiteral) {
+    this(LiteralType.STRING, stringLiteral.getValue());
     assert (stringLiteral != null);
     addAttribute(AttrNames.ATTR_QUOT_MARK,
             stringLiteral.getQuotMark().toString());

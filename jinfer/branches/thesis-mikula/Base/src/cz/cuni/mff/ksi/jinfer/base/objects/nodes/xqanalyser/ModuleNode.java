@@ -35,9 +35,7 @@ public class ModuleNode extends XQNode {
   private final PrologNode prologNode;
   private final QueryBodyNode queryBodyNode;
 
-  public ModuleNode(
-          final XQNode parentNode, VersionDecl versionDecl, Module module) {
-    super(parentNode);
+  public ModuleNode(VersionDecl versionDecl, Module module) {
     assert (module != null);
     if (versionDecl != null) {
       addAttribute(AttrNames.ATTR_VERSION, versionDecl.getVersion());

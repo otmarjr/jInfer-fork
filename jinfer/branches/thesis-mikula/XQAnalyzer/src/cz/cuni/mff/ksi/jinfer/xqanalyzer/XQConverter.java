@@ -86,7 +86,7 @@ public class XQConverter {
    * created XML representation can be reached by method
    * <code>getDocument()</code>.
    *
-   * @throws XQParseException if scanning or parsing failes.
+   * @throws XQParseException if scanning or parsing fails.
    */
   public void convert() throws XQParseException {
     try {

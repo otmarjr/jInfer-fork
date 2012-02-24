@@ -33,13 +33,12 @@ public class FunctionBodyNode extends XQNode {
 
   private ExprNode exprNode;
 
-  public FunctionBodyNode(final XQNode parentNode) {
-    super(parentNode);
+  public FunctionBodyNode() {
     addAttribute(AttrNames.ATTR_EXTERNAL, Boolean.TRUE.toString());
   }
 
-  public FunctionBodyNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public FunctionBodyNode(ExprNode exprNode) {
+    super();
     assert (exprNode != null);
     this.exprNode = exprNode;
   }

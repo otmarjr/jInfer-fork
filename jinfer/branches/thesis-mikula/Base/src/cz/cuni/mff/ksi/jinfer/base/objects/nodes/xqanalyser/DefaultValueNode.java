@@ -28,8 +28,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class DefaultValueNode extends ExprHolderNode {
 
-  public DefaultValueNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode, exprNode);
+  public DefaultValueNode(ExprNode exprNode) {
+    super(exprNode);
   }
 
   @Override

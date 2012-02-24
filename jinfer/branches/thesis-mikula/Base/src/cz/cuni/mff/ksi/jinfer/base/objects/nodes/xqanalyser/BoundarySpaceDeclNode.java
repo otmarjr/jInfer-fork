@@ -30,9 +30,7 @@ import java.util.List;
  */
 public class BoundarySpaceDeclNode extends PrologChildNode {
 
-  public BoundarySpaceDeclNode(
-          final XQNode parentNode, BoundarySpaceMode mode) {
-    super(parentNode);
+  public BoundarySpaceDeclNode(BoundarySpaceMode mode) {
     assert (mode != null);
     addAttribute(AttrNames.ATTR_MODE, mode.toString());
   }

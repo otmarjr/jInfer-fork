@@ -36,8 +36,7 @@ public class BaseURIDeclNode extends PrologChildNode {
    * @param xqDocument Reference to associated XQuery document.
    * @param baseURI Base URI.
    */
-  public BaseURIDeclNode(final XQNode parentNode, String baseURI) {
-    super(parentNode);
+  public BaseURIDeclNode(String baseURI) {
     assert (baseURI != null);
     addAttribute(AttrNames.ATTR_URI, baseURI);
   }

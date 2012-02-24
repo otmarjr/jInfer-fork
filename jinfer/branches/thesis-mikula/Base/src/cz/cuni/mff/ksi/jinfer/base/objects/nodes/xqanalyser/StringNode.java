@@ -30,8 +30,7 @@ import java.util.List;
  */
 public class StringNode extends XQNode {
 
-  public StringNode(final XQNode parentNode, String value) {
-    super(parentNode);
+  public StringNode(String value) {
     assert (value != null);
     addAttribute(AttrNames.ATTR_VALUE, value);
   }

@@ -41,6 +41,6 @@ public class EntityRefContentItem extends ContentItem {
           XQNodeList<XQNode> nodes,
           StringContent stringContent) {
     flushStringContent(nodes, stringContent);
-    nodes.add(new EntityRefNode(null, entityRef)); // TODO moze byt null?
+    nodes.add(new EntityRefNode(entityRef));
   }
 }

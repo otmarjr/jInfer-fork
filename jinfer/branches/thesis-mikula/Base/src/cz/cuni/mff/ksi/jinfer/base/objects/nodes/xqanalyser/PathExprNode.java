@@ -33,10 +33,8 @@ public class PathExprNode extends ExprNode {
 
   private final List<StepExprNode> steps;
 
-  public PathExprNode(
-          final XQNode parentNode, XQNodeList<StepExprNode> steps,
+  public PathExprNode(XQNodeList<StepExprNode> steps,
           InitialStep beginsWith) {
-    super(parentNode);
     assert (steps != null);
     assert (beginsWith != null);
     addAttribute(AttrNames.ATTR_INITIAL_STEP, beginsWith.toString());

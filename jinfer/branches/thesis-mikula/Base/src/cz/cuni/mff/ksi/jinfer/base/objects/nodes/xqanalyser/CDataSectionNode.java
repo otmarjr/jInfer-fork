@@ -30,8 +30,7 @@ import java.util.List;
  */
 public class CDataSectionNode extends XQNode {
 
-  public CDataSectionNode(final XQNode parentNode, String content) {
-    super(parentNode);
+  public CDataSectionNode(String content) {
     addTextContent(content);
   }
 

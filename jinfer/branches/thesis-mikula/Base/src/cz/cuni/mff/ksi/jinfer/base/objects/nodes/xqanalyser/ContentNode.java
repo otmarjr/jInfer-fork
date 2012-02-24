@@ -22,7 +22,6 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,20 +34,17 @@ public class ContentNode extends XQNode {
   private ExprNode exprNode;
   private List<XQNode> contentNodes;
 
-  public ContentNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public ContentNode(final ExprNode exprNode) {
     this.exprNode = exprNode;
   }
 
-  public ContentNode(final XQNode parentNode, String content) {
-    super(parentNode);
+  public ContentNode(final String content) {
     if (content != null) {
       addAttribute(AttrNames.ATTR_CONTENT, content);
     }
   }
 
-  public ContentNode(final XQNode parentNode, Content content) {
-    super(parentNode);
+  public ContentNode(final Content content) {
     if (content != null) {
       contentNodes = content.getNodes();
     }

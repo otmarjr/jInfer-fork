@@ -22,7 +22,6 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,10 +34,8 @@ public class ExtensionExprNode extends ExprNode {
   private final PragmaListNode pragmaListNode;
   private final DefaultValueNode defaultValueNode;
 
-  public ExtensionExprNode(
-          final XQNode parentNode, PragmaListNode pragmaListNode,
+  public ExtensionExprNode(PragmaListNode pragmaListNode,
           DefaultValueNode defaultValueNode) {
-    super(parentNode);
     assert (pragmaListNode != null);
     this.pragmaListNode = pragmaListNode;
     this.defaultValueNode = defaultValueNode;

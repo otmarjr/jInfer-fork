@@ -34,8 +34,7 @@ public abstract class ExprHolderNode extends XQNode {
 
   private final ExprNode exprNode;
 
-  public ExprHolderNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public ExprHolderNode(ExprNode exprNode) {
     assert (exprNode != null);
     this.exprNode = exprNode;
   }

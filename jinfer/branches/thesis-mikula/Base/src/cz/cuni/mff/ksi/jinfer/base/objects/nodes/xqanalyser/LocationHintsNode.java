@@ -34,9 +34,7 @@ public class LocationHintsNode extends XQNode {
   private boolean isEmpty;
   private final List<LocationHintNode> locationHints;
 
-  public LocationHintsNode(
-          final XQNode parentNode, XQNodeList<LocationHintNode> locationHints) {
-    super(parentNode);
+  public LocationHintsNode(XQNodeList<LocationHintNode> locationHints) {
     this.locationHints = locationHints;
     isEmpty = locationHints.isEmpty();
   }

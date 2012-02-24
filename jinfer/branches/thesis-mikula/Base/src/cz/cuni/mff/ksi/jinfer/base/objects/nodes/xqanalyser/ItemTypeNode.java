@@ -30,10 +30,6 @@ import java.util.List;
  */
 public abstract class ItemTypeNode extends XQNode {
 
-  public ItemTypeNode(final XQNode parentNode) {
-    super(parentNode);
-  }
-  
   @Override
   public List<XQNode> getSubnodes() {
     return null;

@@ -27,8 +27,4 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  * @author Jiri Schejbal
  */
 public abstract class ModuleChildNode extends XQNode {
-
-  public ModuleChildNode(final XQNode parentNode) {
-    super(parentNode);
-  }
 }

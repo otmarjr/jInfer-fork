@@ -34,9 +34,7 @@ public class PrologNode extends ModuleChildNode {
   private boolean isEmpty;
   private final XQNodeList<PrologChildNode> prologParts;
 
-  public PrologNode(
-          final XQNode parentNode, XQNodeList<PrologChildNode> prologParts) {
-    super(parentNode);
+  public PrologNode(XQNodeList<PrologChildNode> prologParts) {
     isEmpty = (prologParts == null) || (prologParts.size() == 0);
     this.prologParts = prologParts;
   }

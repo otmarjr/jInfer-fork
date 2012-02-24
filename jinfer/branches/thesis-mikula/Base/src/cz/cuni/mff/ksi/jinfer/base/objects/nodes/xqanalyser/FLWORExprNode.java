@@ -37,11 +37,9 @@ public class FLWORExprNode extends ExprNode {
   private final OrderByClauseNode orderByClauseNode;
   private final ReturnClauseNode returnClauseNode;
 
-  public FLWORExprNode(
-          final XQNode parentNode, TupleStreamNode tupleStreamNode,
+  public FLWORExprNode(TupleStreamNode tupleStreamNode,
           WhereClauseNode whereClauseNode, OrderByClauseNode orderByClauseNode,
           ReturnClauseNode returnClauseNode) {
-    super(parentNode);
     assert (tupleStreamNode != null);
     assert (returnClauseNode != null);
     this.tupleStreamNode = tupleStreamNode;

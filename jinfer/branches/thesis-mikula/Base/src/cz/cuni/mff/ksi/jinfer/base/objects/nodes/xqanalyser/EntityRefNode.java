@@ -32,8 +32,7 @@ import java.util.List;
  */
 public class EntityRefNode extends XQNode {
 
-  public EntityRefNode(final XQNode parentNode, String name) {
-    super(parentNode);
+  public EntityRefNode(String name) {
     assert (name != null);
     addAttribute(AttrNames.ATTR_NAME, name.substring(1, name.length() - 1));
   }

@@ -28,11 +28,9 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class SchemaImportNode extends ImportNode {
 
-  public SchemaImportNode(
-          final XQNode parentNode, SchemaPrefix schemaPrefix,
+  public SchemaImportNode(SchemaPrefix schemaPrefix,
           String targetNamespace, LocationHintsNode locationHints) {
-    super(parentNode,
-            (schemaPrefix == null) ? null : schemaPrefix.getPrefixName(),
+    super((schemaPrefix == null) ? null : schemaPrefix.getPrefixName(),
             targetNamespace, locationHints);
     if (schemaPrefix != null && schemaPrefix.getIsDefault()) {
       addAttribute(AttrNames.ATTR_DEFUALT_TARGET_NAMESPACE,

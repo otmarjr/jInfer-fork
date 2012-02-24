@@ -32,8 +32,7 @@ public class VarRefNode extends ExprNode {
   
   private final String varName;
 
-  public VarRefNode(final XQNode parentNode, String varName) {
-    super(parentNode);
+  public VarRefNode(String varName) {
     assert (varName != null);
     this.varName = varName;
   }

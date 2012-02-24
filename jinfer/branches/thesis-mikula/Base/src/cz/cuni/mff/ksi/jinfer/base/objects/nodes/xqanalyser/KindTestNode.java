@@ -34,8 +34,7 @@ public class KindTestNode extends ItemTypeNode {
   private NodeKind nodeKind;
   private KindTestNode elementNode;
 
-  public KindTestNode(final XQNode parentNode, NodeKind nodeKind) {
-    super(parentNode);
+  public KindTestNode(NodeKind nodeKind) {
     assert (nodeKind != null);
     this.nodeKind = nodeKind;
     addAttribute(AttrNames.ATTR_KIND, nodeKind.toString());
@@ -45,8 +44,8 @@ public class KindTestNode extends ItemTypeNode {
     return nodeKind;
   }
 
-  public KindTestNode(final XQNode parentNode, NodeKind nodeKind, String name) {
-    this(parentNode, nodeKind);
+  public KindTestNode(NodeKind nodeKind, String name) {
+    this(nodeKind);
     switch (nodeKind) {
       case PROCESSING_INSTRUCTION:
         addAttribute(AttrNames.ATTR_TARGET, name);
@@ -59,9 +58,8 @@ public class KindTestNode extends ItemTypeNode {
     }
   }
 
-  public KindTestNode(
-          final XQNode parentNode, NodeKind nodeKind, KindTestSuffix suffix) {
-    this(parentNode, nodeKind);
+  public KindTestNode(NodeKind nodeKind, KindTestSuffix suffix) {
+    this(nodeKind);
     assert (nodeKind == NodeKind.ELEMENT || nodeKind == NodeKind.ATTRIBUTE);
     if (suffix != null) {
       if (suffix.getName() != null) {
@@ -77,9 +75,8 @@ public class KindTestNode extends ItemTypeNode {
     }
   }
 
-  public KindTestNode(
-          final XQNode parentNode, NodeKind nodeKind, KindTestNode elementNode) {
-    this(parentNode, nodeKind);
+  public KindTestNode(NodeKind nodeKind, KindTestNode elementNode) {
+    this(nodeKind);
     assert (nodeKind == NodeKind.DOCUMENT);
     assert (elementNode.getNodeKind() == NodeKind.ELEMENT
             || elementNode.getNodeKind() == NodeKind.SCHEMA_ELEMENT);

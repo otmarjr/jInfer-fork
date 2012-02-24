@@ -28,10 +28,9 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class ModuleImportNode extends ImportNode {
 
-  public ModuleImportNode(
-          final XQNode parentNode, String namespacePrefix, String targetNamespace,
+  public ModuleImportNode(String namespacePrefix, String targetNamespace,
           LocationHintsNode locationHints) {
-    super(parentNode, namespacePrefix, targetNamespace, locationHints);
+    super(namespacePrefix, targetNamespace, locationHints);
   }
 
   @Override

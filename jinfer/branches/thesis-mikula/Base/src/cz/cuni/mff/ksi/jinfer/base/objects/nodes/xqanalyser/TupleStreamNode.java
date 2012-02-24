@@ -33,9 +33,7 @@ public class TupleStreamNode extends XQNode {
 
   private final List<VariableBindingNode> bindingClauses;
 
-  public TupleStreamNode(
-          final XQNode parentNode, XQNodeList<VariableBindingNode> bindingClauses) {
-    super(parentNode);
+  public TupleStreamNode(XQNodeList<VariableBindingNode> bindingClauses) {
     assert (bindingClauses != null);
     this.bindingClauses = bindingClauses;
   }

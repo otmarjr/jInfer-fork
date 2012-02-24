@@ -38,8 +38,7 @@ public class AtomicTypeNode extends ItemTypeNode {
    * @param xqDocument Reference to associated XQuery document.
    * @param typeName Name of atomic type.
    */
-  public AtomicTypeNode(final XQNode parentNode, String typeName) {
-    super(parentNode);
+  public AtomicTypeNode(String typeName) {
     assert (typeName != null);
     this.typeName = typeName;
   }

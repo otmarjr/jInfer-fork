@@ -43,10 +43,8 @@ public class AxisNode extends XQNode {
    * @param nodeTestNode The node with node test.
    * @param isAbbreviated Flags showing weather the abbreviated syntax is used.
    */
-  public AxisNode(
-          final XQNode parentNode, AxisKind axisKind,
+  public AxisNode(AxisKind axisKind,
           ItemTypeNode nodeTestNode, boolean isAbbreviated) {
-    super(parentNode);
     assert (axisKind != null);
     addAttribute(AttrNames.ATTR_DIRECTION, axisKind.getDirectionValue());
     this.axisKind = axisKind;

@@ -321,7 +321,7 @@ public class KeysInferrer {
   }
   
   private static void getTargetReturnPathsRecursive(final XQNode node, final String varName, final List<PathExprNode> paths) {
-    if (PathExpr.class.isInstance(node)) {
+    if (PathExprNode.class.isInstance(node)) {
       final PathType type = TypeFactory.createPathType((PathExprNode)node);
       if (isTargetPath(type, varName)) {
         paths.add((PathExprNode)node);

@@ -35,8 +35,9 @@ import java.util.Map;
  */
 public abstract class XQNode {
 
-  private XQNode parentNode; // TODO rio Is needed?
+  private XQNode parentNode;
   private Map<String, String> attributes = new HashMap<String, String>();
+  private String textContent; // TODO rio needed?
 
   /**
    * Creates the XML node associated with the given XQuery XML document.
@@ -70,11 +71,11 @@ public abstract class XQNode {
    *
    * @param text Text content.
    */
-  /*protected void addTextContent(String text) {
-  if (text != null) {
-  element.setTextContent(text);
+  protected void addTextContent(String text) {
+    if (text != null) {
+      textContent = text;
+    }
   }
-  }*/
   
   public abstract List<XQNode> getSubnodes();
   

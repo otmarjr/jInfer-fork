@@ -33,14 +33,12 @@ public class PITargetNode extends XQNode {
 
   private ExprNode exprNode;
 
-  public PITargetNode(final XQNode parentNode, String piTarget) {
-    super(parentNode);
+  public PITargetNode(String piTarget) {
     assert (piTarget != null);
     addAttribute(AttrNames.ATTR_TARGET, piTarget);
   }
 
-  public PITargetNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode);
+  public PITargetNode(ExprNode exprNode) {
     assert (exprNode != null);
     this.exprNode = exprNode;
   }

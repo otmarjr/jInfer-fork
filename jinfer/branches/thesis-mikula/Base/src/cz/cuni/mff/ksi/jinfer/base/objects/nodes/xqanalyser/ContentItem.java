@@ -31,7 +31,7 @@ public abstract class ContentItem {
   protected static void flushStringContent(
           XQNodeList<XQNode> nodes, StringContent content) {
     if (!content.isEmpty()) {
-      nodes.add(new StringNode(null, content.toString())); // TODO mozeme tu nechat null?
+      nodes.add(new StringNode(content.toString()));
       content.clear();
     }
   }

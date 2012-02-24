@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The node representing a type swich expression.
+ * The node representing a type switch expression.
  *
  * @author Jiri Schejbal
  */
@@ -35,10 +35,8 @@ public class TypeswitchExprNode extends ExprNode {
   private final CaseClausesNode caseClausesNode;
   private final DefaultCaseNode defaultCaseNode;
 
-  public TypeswitchExprNode(
-          final XQNode parentNode, OperandExpressionNode operandExpressionNode,
+  public TypeswitchExprNode(OperandExpressionNode operandExpressionNode,
           CaseClausesNode caseClausesNode, DefaultCaseNode defaultCaseNode) {
-    super(parentNode);
     assert (operandExpressionNode != null);
     assert (caseClausesNode != null);
     assert (defaultCaseNode != null);

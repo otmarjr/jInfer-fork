@@ -32,10 +32,8 @@ public abstract class ImportNode extends PrologChildNode {
 
   private LocationHintsNode locationHints;
 
-  public ImportNode(
-          final XQNode parentNode, String namespacePrefix, String targetNamespace,
+  public ImportNode(String namespacePrefix, String targetNamespace,
           LocationHintsNode locationHints) {
-    super(parentNode);
     assert (targetNamespace != null);
     assert (locationHints != null);
     if (namespacePrefix != null) {

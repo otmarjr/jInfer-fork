@@ -30,9 +30,7 @@ import java.util.List;
  */
 public class DefaultNamespaceDeclNode extends PrologChildNode {
 
-  public DefaultNamespaceDeclNode(
-          final XQNode parentNode, DefaultNamespaceKind kind, String targetNamespace) {
-    super(parentNode);
+  public DefaultNamespaceDeclNode(DefaultNamespaceKind kind, String targetNamespace) {
     assert (kind != null);
     assert (targetNamespace != null);
     addAttribute(AttrNames.ATTR_KIND, kind.toString());

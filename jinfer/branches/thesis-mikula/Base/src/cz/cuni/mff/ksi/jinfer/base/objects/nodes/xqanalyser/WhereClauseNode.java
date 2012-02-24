@@ -28,8 +28,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class WhereClauseNode extends ExprHolderNode {
 
-  public WhereClauseNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode, exprNode);
+  public WhereClauseNode(ExprNode exprNode) {
+    super(exprNode);
   }
 
   @Override

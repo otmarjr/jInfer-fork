@@ -30,15 +30,6 @@ import java.util.List;
  */
 public class AnyItemNode extends ItemTypeNode {
 
-  /**
-   * Creates a new node representing any item type.
-   *
-   * @param xqDocument Reference to associated XQuery document.
-   */
-  public AnyItemNode(final XQNode parentNode) {
-    super(parentNode);
-  }
-
   @Override
   protected String getElementName() {
     return NodeNames.NODE_ANY_ITEM;

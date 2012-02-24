@@ -30,8 +30,7 @@ import java.util.List;
  */
 public class LocationHintNode extends XQNode {
 
-  public LocationHintNode(final XQNode parentNode, String uri) {
-    super(parentNode);
+  public LocationHintNode(String uri) {
     assert (uri != null);
     addAttribute(AttrNames.ATTR_URI, uri);
   }

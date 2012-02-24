@@ -42,6 +42,6 @@ public class CharRefContentItem extends ContentItem {
           XQNodeList<XQNode> nodes,
           StringContent stringContent) {
     flushStringContent(nodes, stringContent);
-    nodes.add(new CharRefNode(null, charRef)); // TODO moze byt null?
+    nodes.add(new CharRefNode(charRef));
   }
 }

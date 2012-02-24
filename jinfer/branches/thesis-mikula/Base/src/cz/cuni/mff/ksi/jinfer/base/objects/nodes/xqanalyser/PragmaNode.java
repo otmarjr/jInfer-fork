@@ -30,8 +30,7 @@ import java.util.List;
  */
 public class PragmaNode extends XQNode {
 
-  public PragmaNode(final XQNode parentNode, String name, String content) {
-    super(parentNode);
+  public PragmaNode(String name, String content) {
     assert (name != null);
     addAttribute(AttrNames.ATTR_NAME, name);
     if (content != null) {

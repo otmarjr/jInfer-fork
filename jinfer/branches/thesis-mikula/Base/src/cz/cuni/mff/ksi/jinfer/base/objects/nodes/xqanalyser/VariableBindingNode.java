@@ -35,11 +35,9 @@ public abstract class VariableBindingNode extends XQNode {
   private final BindingSequenceNode bindingSequenceNode;
   private final String varName;
 
-  public VariableBindingNode(
-          final XQNode parentNode, String varName,
+  public VariableBindingNode(String varName,
           TypeNode typeDeclarationNode,
           BindingSequenceNode bindingSequenceNode) {
-    super(parentNode);
     assert (varName != null);
     assert (bindingSequenceNode != null);
     this.varName = varName;

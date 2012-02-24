@@ -33,9 +33,7 @@ public class CommaOperatorNode extends ExprNode {
 
   private final List<ExprNode> expressionNodes;
 
-  public CommaOperatorNode(
-          final XQNode parentNode, XQNodeList<ExprNode> expressionNodes) {
-    super(parentNode);
+  public CommaOperatorNode(XQNodeList<ExprNode> expressionNodes) {
     assert (expressionNodes != null);
     assert (expressionNodes.size() > 1);
     this.expressionNodes = expressionNodes;

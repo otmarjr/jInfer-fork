@@ -33,9 +33,7 @@ public class PragmaListNode extends XQNode {
 
   private final XQNodeList<PragmaNode> pragmas;
 
-  public PragmaListNode(
-          final XQNode parentNode, XQNodeList<PragmaNode> pragmas) {
-    super(parentNode);
+  public PragmaListNode(XQNodeList<PragmaNode> pragmas) {
     assert (pragmas != null);
     this.pragmas = pragmas;
   }

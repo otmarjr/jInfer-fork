@@ -35,10 +35,8 @@ public class CaseClauseNode extends XQNode {
   private final TypeNode sequenceTypeNode;
   private final ReturnClauseNode returnClauseNode;
 
-  public CaseClauseNode(
-          final XQNode parentNode, String varName,
+  public CaseClauseNode(String varName,
           TypeNode sequenceTypeNode, ReturnClauseNode returnClauseNode) {
-    super(parentNode);
     assert (sequenceTypeNode != null);
     assert (returnClauseNode != null);
     if (varName != null) {

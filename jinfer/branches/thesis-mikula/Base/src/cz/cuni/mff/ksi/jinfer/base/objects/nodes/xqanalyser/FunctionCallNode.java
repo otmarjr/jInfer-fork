@@ -34,9 +34,7 @@ public class FunctionCallNode extends ExprNode {
   private final List<ExprNode> params;
   private final String fncName;
 
-  public FunctionCallNode(
-          final XQNode parentNode, String fncName, XQNodeList<ExprNode> params) {
-    super(parentNode);
+  public FunctionCallNode(String fncName, XQNodeList<ExprNode> params) {
     assert (fncName != null);
     this.fncName = fncName;
     this.params = params;

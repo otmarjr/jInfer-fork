@@ -33,10 +33,8 @@ public class ParamNode extends XQNode {
 
   private final TypeNode typeDeclarationNode;
 
-  public ParamNode(
-          final XQNode parentNode, String paramName,
+  public ParamNode(String paramName,
           TypeNode typeDeclarationNode) {
-    super(parentNode);
     assert (paramName != null);
     addAttribute(AttrNames.ATTR_NAME, paramName);
     this.typeDeclarationNode = typeDeclarationNode;

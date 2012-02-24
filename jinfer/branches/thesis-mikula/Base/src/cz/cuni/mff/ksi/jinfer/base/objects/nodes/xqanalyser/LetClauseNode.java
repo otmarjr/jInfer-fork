@@ -28,11 +28,10 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class LetClauseNode extends VariableBindingNode {
 
-  public LetClauseNode(
-          final XQNode parentNode, String varName,
+  public LetClauseNode(String varName,
           TypeNode typeDeclarationNode,
           BindingSequenceNode bindingSequenceNode) {
-    super(parentNode, varName, typeDeclarationNode, bindingSequenceNode);
+    super(varName, typeDeclarationNode, bindingSequenceNode);
   }
 
   @Override

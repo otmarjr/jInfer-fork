@@ -28,8 +28,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class ElseExpressionNode extends ExprHolderNode {
 
-  public ElseExpressionNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode, exprNode);
+  public ElseExpressionNode(ExprNode exprNode) {
+    super(exprNode);
   }
 
   @Override

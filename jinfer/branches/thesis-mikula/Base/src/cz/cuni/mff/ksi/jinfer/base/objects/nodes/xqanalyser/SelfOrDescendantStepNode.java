@@ -28,8 +28,8 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class SelfOrDescendantStepNode extends StepExprNode {
 
-  public SelfOrDescendantStepNode(final XQNode parentNode) {
-    super(parentNode, new AxisNode(parentNode, AxisKind.DESCENDANT_OR_SELF,
-            new KindTestNode(parentNode, NodeKind.ANY_KIND), true), null); // TODO tie parentNode-y v tych dvoch vyrabanych objektoch su ok? Asi nie...
+  public SelfOrDescendantStepNode() {
+    super(new AxisNode(AxisKind.DESCENDANT_OR_SELF,
+            new KindTestNode(NodeKind.ANY_KIND), true), null); // TODO tie parentNode-y v tych dvoch vyrabanych objektoch su ok? Asi nie...
   }
 }

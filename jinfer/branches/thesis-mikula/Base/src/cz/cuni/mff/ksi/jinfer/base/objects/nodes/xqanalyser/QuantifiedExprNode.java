@@ -34,10 +34,8 @@ public class QuantifiedExprNode extends ExprNode {
   private final InClausesNode inClausesNode;
   private final TestExpressionNode testExpressionNode;
 
-  public QuantifiedExprNode(
-          final XQNode parentNode, Quantifier quantifier,
+  public QuantifiedExprNode(Quantifier quantifier,
           InClausesNode inClausesNode, TestExpressionNode testExpressionNode) {
-    super(parentNode);
     assert (quantifier != null);
     assert (inClausesNode != null);
     assert (testExpressionNode != null);

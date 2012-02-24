@@ -22,7 +22,6 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,9 +36,7 @@ public class ConstructorNode extends ExprNode {
   private AttrListNode attrListNode;
   private PITargetNode piTargetNode;
 
-  private ConstructorNode(
-          final XQNode parentNode, ConstructorKind kind, ConstructorType type) {
-    super(parentNode);
+  private ConstructorNode(ConstructorKind kind, ConstructorType type) {
     assert (kind != null);
     assert (type != null);
     addAttribute(AttrNames.ATTR_KIND, kind.toString());
@@ -55,11 +52,10 @@ public class ConstructorNode extends ExprNode {
    * @param contentNode
    */
   public ConstructorNode(
-          final XQNode parentNode,
           ConstructorKind kind,
           ConstructorType type,
           ContentNode contentNode) {
-    this(parentNode, kind, type);
+    this(kind, type);
     /*assert(kind == ConstructorKind.DIRECT);
     assert(type == ConstructorType.COMMENT);
     assert(kind == ConstructorKind.COMPUTED);
@@ -83,13 +79,12 @@ public class ConstructorNode extends ExprNode {
    * @param contentNode
    */
   public ConstructorNode(
-          final XQNode parentNode,
           ConstructorKind kind,
           ConstructorType type,
           NameNode nameNode,
           AttrListNode attrListNode,
           ContentNode contentNode) {
-    this(parentNode, kind, type);
+    this(kind, type);
     assert (kind == ConstructorKind.DIRECT);
     assert (type == ConstructorType.ELEMENT);
     assert (nameNode != null);
@@ -109,12 +104,11 @@ public class ConstructorNode extends ExprNode {
    * @param contentNode
    */
   public ConstructorNode(
-          final XQNode parentNode,
           ConstructorKind kind,
           ConstructorType type,
           PITargetNode piTargetNode,
           ContentNode contentNode) {
-    this(parentNode, kind, type);
+    this(kind, type);
     assert (type == ConstructorType.PROCESSING_INSTRUCTION);
     assert (piTargetNode != null);
     this.piTargetNode = piTargetNode;
@@ -130,12 +124,11 @@ public class ConstructorNode extends ExprNode {
    * @param contentNode
    */
   public ConstructorNode(
-          final XQNode parentNode,
           ConstructorKind kind,
           ConstructorType type,
           NameNode nameNode,
           ContentNode contentNode) {
-    this(parentNode, kind, type);
+    this( kind, type);
     assert (kind == ConstructorKind.COMPUTED);
     assert (type == ConstructorType.ELEMENT
             || type == ConstructorType.ATTRIBUTE);

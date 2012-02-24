@@ -21,7 +21,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQConverter;
 import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQParseException;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,6 +74,15 @@ public class XQueryProcessor implements Processor<ModuleNode> {
       converter.convert();
     } catch (final XQParseException e) {
       LOG.error("Error parsing XQuery file, ignoring and going on.", e);
+      
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      PrintStream ps = new PrintStream(baos);
+      e.printStackTrace(ps);
+      String content = baos.toString();
+      LOG.error(content);
+      
+      
+      
       return Collections.EMPTY_LIST;
     }
     final List<ModuleNode> result = new ArrayList<ModuleNode>();

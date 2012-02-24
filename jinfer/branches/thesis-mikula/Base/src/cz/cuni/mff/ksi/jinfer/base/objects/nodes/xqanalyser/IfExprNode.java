@@ -36,11 +36,9 @@ public class IfExprNode extends ExprNode {
   private final ElseExpressionNode elseExpressionNode;
 
   public IfExprNode(
-          final XQNode parentNode,
           TestExpressionNode testExpressionNode,
           ThenExpressionNode thenExpressionNode,
           ElseExpressionNode elseExpressionNode) {
-    super(parentNode);
     assert (testExpressionNode != null);
     assert (thenExpressionNode != null);
     assert (elseExpressionNode != null);

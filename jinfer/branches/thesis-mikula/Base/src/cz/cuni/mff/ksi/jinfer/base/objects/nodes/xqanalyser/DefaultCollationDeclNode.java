@@ -30,9 +30,7 @@ import java.util.List;
  */
 public class DefaultCollationDeclNode extends PrologChildNode {
 
-  public DefaultCollationDeclNode(
-          final XQNode parentNode, String collationURI) {
-    super(parentNode);
+  public DefaultCollationDeclNode(String collationURI) {
     assert (collationURI != null);
     addAttribute(AttrNames.ATTR_URI, collationURI);
   }

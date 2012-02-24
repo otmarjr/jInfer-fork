@@ -33,9 +33,7 @@ public class CaseClausesNode extends XQNode {
 
   private final List<CaseClauseNode> cases;
 
-  public CaseClausesNode(
-          final XQNode parentNode, XQNodeList<CaseClauseNode> cases) {
-    super(parentNode);
+  public CaseClausesNode(XQNodeList<CaseClauseNode> cases) {
     assert (cases != null);
     this.cases = cases;
   }

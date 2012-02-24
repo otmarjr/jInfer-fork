@@ -21,8 +21,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,8 +30,7 @@ import java.util.List;
  */
 public class EmptyOrderDeclNode extends PrologChildNode {
 
-  public EmptyOrderDeclNode(final XQNode parentNode, EmptyOrderMode mode) {
-    super(parentNode);
+  public EmptyOrderDeclNode(EmptyOrderMode mode) {
     assert (mode != null);
     addAttribute(AttrNames.ATTR_MODE, mode.toString());
   }

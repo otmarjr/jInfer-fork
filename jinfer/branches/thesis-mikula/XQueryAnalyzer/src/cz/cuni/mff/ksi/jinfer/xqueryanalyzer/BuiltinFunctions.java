@@ -103,22 +103,22 @@ public class BuiltinFunctions {
     final XQNodeList<ParamNode> paramNodes = new XQNodeList<ParamNode>();
     
     if (functionName.equals("data")) {
-      final ParamNode paramNode = new ParamNode(null, "arg", new TypeNode(null, Cardinality.ZERO_OR_MORE));
+      final ParamNode paramNode = new ParamNode("arg", new TypeNode( Cardinality.ZERO_OR_MORE));
       paramNodes.add(paramNode);
     } else if (functionName.equals("doc")) {
-      final ItemTypeNode itemTypeNode = new AtomicTypeNode(null, "xs:string");
-      final ParamNode paramNode = new ParamNode(null, "uri", new TypeNode(null, Cardinality.ZERO_OR_ONE, itemTypeNode));
+      final ItemTypeNode itemTypeNode = new AtomicTypeNode("xs:string");
+      final ParamNode paramNode = new ParamNode("uri", new TypeNode(Cardinality.ZERO_OR_ONE, itemTypeNode));
       paramNodes.add(paramNode);
     } else if (functionName.equals("min")) {
-      final ParamNode paramNode1 = new ParamNode(null, "arg", new TypeNode(null, Cardinality.ZERO_OR_MORE));
-      final ItemTypeNode itemTypeNode2 = new AtomicTypeNode(null, "xs:string");
-      final ParamNode paramNode2 = new ParamNode(null, "collation", new TypeNode(null, Cardinality.ONE, itemTypeNode2));
+      final ParamNode paramNode1 = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_MORE));
+      final ItemTypeNode itemTypeNode2 = new AtomicTypeNode("xs:string");
+      final ParamNode paramNode2 = new ParamNode("collation", new TypeNode(Cardinality.ONE, itemTypeNode2));
       paramNodes.add(paramNode1);
       paramNodes.add(paramNode2);
     } else {
       assert(false); // TODO rio
     }
     
-    return new ParamListNode(null, paramNodes);
+    return new ParamListNode(paramNodes);
   }
 }

@@ -28,8 +28,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class NameTestNode extends ItemTypeNode {
 
-  public NameTestNode(final XQNode parentNode, String name) {
-    super(parentNode);
+  public NameTestNode(String name) {
     assert (name != null);
     addAttribute(AttrNames.ATTR_NAME, name);
   }

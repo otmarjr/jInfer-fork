@@ -43,11 +43,13 @@ public class AttrListNode extends XQNode {
    * @param xqDocument Reference to associated XQuery document.
    * @param attributes List of attribute nodes.
    */
-  public AttrListNode(
-          final XQNode parentNode, XQNodeList<AttributeNode> attributes) {
-    super(parentNode);
+  public AttrListNode(XQNodeList<AttributeNode> attributes) {
     isEmpty = attributes == null || attributes.size() == 0;
-    children = new ArrayList<XQNode>(attributes);
+    if (attributes == null) {
+      children = new ArrayList<XQNode>();
+    } else {
+      children = new ArrayList<XQNode>(attributes);
+    }
   }
 
   /**

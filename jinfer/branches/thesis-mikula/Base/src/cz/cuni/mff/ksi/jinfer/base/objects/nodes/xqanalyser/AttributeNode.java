@@ -42,9 +42,7 @@ public class AttributeNode extends XQNode {
    * @param nameNode The node with attribute name.
    * @param contentNode The node with attribute content.
    */
-  public AttributeNode(
-          final XQNode parentNode, NameNode nameNode, ContentNode contentNode) {
-    super(parentNode);
+  public AttributeNode(NameNode nameNode, ContentNode contentNode) {
     assert (nameNode != null);
     this.nameNode = nameNode;
     this.contentNode = contentNode;

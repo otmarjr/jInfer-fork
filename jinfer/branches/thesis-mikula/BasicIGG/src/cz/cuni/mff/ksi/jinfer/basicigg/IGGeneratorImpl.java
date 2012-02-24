@@ -254,7 +254,10 @@ public class IGGeneratorImpl implements IGGenerator {
         if (FileUtils.getExtension(f.getAbsolutePath()).equals(xqueryProcessor.getExtension())) {
           // TODO rio Toto je hack, kedze nam vyleze len jeden syntax tree ale kvoli rozhraniu processoru musi byt vysledok list.
           final List<ModuleNode> syntaxTree = xqueryProcessor.process(new FileInputStream(f));
-          ret.add(syntaxTree.get(0));
+          if (syntaxTree.size() > 0) {
+            assert(syntaxTree.size() == 1);
+            ret.add(syntaxTree.get(0));
+          } 
         }
       } catch (final FileNotFoundException e) {
         throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);

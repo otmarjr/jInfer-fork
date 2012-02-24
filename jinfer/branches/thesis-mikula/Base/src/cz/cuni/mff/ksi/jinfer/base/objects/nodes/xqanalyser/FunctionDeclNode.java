@@ -36,10 +36,8 @@ public class FunctionDeclNode extends PrologChildNode {
   private final FunctionBodyNode functionBodyNode;
   private final String funcName;
 
-  public FunctionDeclNode(
-          final XQNode parentNode, String funcName, ParamListNode paramListNode,
+  public FunctionDeclNode(String funcName, ParamListNode paramListNode,
           TypeNode returnTypeNode, FunctionBodyNode functionBodyNode) {
-    super(parentNode);
     assert (funcName != null);
     assert (functionBodyNode != null);
     this.funcName = funcName;

@@ -31,9 +31,7 @@ import java.util.List;
  */
 public class NamespaceDeclNode extends PrologChildNode {
 
-  public NamespaceDeclNode(
-          final XQNode parentNode, String namespacePrefix, String targetNameSpace) {
-    super(parentNode);
+  public NamespaceDeclNode(String namespacePrefix, String targetNameSpace) {
     assert (namespacePrefix != null);
     assert (targetNameSpace != null);
     addAttribute(AttrNames.ATTR_NAMESPACE_PREFIX, namespacePrefix);

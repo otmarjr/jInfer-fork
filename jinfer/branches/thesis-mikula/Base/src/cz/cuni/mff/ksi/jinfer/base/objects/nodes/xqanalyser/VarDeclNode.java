@@ -35,10 +35,8 @@ public class VarDeclNode extends PrologChildNode {
   private final TypeNode typeDeclarationNode;
   private final VarValueNode varValueNode;
 
-  public VarDeclNode(
-          final XQNode parentNode, String varName, TypeNode typeDeclarationNode,
+  public VarDeclNode(String varName, TypeNode typeDeclarationNode,
           VarValueNode varValueNode) {
-    super(parentNode);
     assert (varName != null);
     assert (varValueNode != null);
     this.varName = varName;

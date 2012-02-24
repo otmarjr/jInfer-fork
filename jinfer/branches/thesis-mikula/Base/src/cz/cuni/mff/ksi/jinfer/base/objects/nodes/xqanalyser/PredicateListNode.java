@@ -33,9 +33,7 @@ public class PredicateListNode extends XQNode {
 
   private final List<ExprNode> predicates;
 
-  public PredicateListNode(
-          final XQNode parentNode, XQNodeList<ExprNode> predicates) {
-    super(parentNode);
+  public PredicateListNode( XQNodeList<ExprNode> predicates) {
     this.predicates = predicates;
   }
 

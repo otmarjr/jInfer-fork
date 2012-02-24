@@ -36,9 +36,7 @@ public class OperatorNode extends ExprNode {
   private ExprNode rightSide;
   private final Operator operator;
 
-  public OperatorNode(
-          final XQNode parentNode, Operator operator, ExprNode operand) {
-    super(parentNode);
+  public OperatorNode(Operator operator, ExprNode operand) {
     assert (operator != null);
     assert (operand != null);
     this.operator = operator;
@@ -48,10 +46,9 @@ public class OperatorNode extends ExprNode {
     this.operand = operand;
   }
 
-  public OperatorNode(
-          final XQNode parentNode, Operator operator,
+  public OperatorNode(Operator operator,
           ExprNode exprNode, TypeNode typeNode) {
-    this(parentNode, operator, exprNode);
+    this(operator, exprNode);
     assert (operator == Operator.INSTANCE_OF
             || operator == Operator.CASTABLE_AS
             || operator == Operator.TREAT_AS
@@ -60,10 +57,9 @@ public class OperatorNode extends ExprNode {
     this.typeNode = typeNode;
   }
 
-  public OperatorNode(
-          final XQNode parentNode, Operator operator,
+  public OperatorNode(Operator operator,
           ExprNode leftSide, ExprNode rightSide) {
-    this(parentNode, operator, leftSide);
+    this(operator, leftSide);
     assert (rightSide != null);
     this.rightSide = rightSide;
   }

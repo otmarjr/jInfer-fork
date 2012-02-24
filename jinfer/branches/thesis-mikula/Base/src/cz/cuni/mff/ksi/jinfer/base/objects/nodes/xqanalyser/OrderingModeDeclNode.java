@@ -30,8 +30,7 @@ import java.util.List;
  */
 public class OrderingModeDeclNode extends PrologChildNode {
 
-  public OrderingModeDeclNode(final XQNode parentNode, OrderingMode mode) {
-    super(parentNode);
+  public OrderingModeDeclNode(OrderingMode mode) {
     assert (mode != null);
     addAttribute(AttrNames.ATTR_MODE, mode.toString());
   }

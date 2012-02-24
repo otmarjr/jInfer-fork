@@ -33,9 +33,7 @@ public class InClausesNode extends XQNode {
 
   private final List<InClauseNode> inClauses;
 
-  public InClausesNode(
-          final XQNode parentNode, XQNodeList<InClauseNode> inClauses) {
-    super(parentNode);
+  public InClausesNode(XQNodeList<InClauseNode> inClauses) {
     assert (inClauses != null);
     this.inClauses = inClauses;
   }

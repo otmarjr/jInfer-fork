@@ -34,8 +34,8 @@ public class BindingSequenceNode extends ExprHolderNode {
    * @param xqDocument Reference to associated XQuery document.
    * @param exprNode The node with expression.
    */
-  public BindingSequenceNode(final XQNode parentNode, ExprNode exprNode) {
-    super(parentNode, exprNode);
+  public BindingSequenceNode(ExprNode exprNode) {
+    super(exprNode);
   }
 
   @Override

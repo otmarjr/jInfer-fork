@@ -27,8 +27,4 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  * @author Jiri Schejbal
  */
 public abstract class PrologChildNode extends XQNode {
-
-  public PrologChildNode(final XQNode parentNode) {
-    super(parentNode);
-  }
 }

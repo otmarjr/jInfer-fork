@@ -28,11 +28,10 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class ForClauseNode extends VariableBindingNode {
 
-  public ForClauseNode(
-          final XQNode parentNode, String varName,
+  public ForClauseNode(String varName,
           TypeNode typeDeclarationNode, String positionalVar,
           BindingSequenceNode bindingSequenceNode) {
-    super(parentNode, varName, typeDeclarationNode, bindingSequenceNode);
+    super(varName, typeDeclarationNode, bindingSequenceNode);
     if (positionalVar != null) {
       addAttribute(AttrNames.ATTR_POSITIONAL_VAR, varName);
     }

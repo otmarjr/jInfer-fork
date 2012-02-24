@@ -30,9 +30,7 @@ import java.util.List;
  */
 public class ModuleDeclNode extends ModuleChildNode {
 
-  public ModuleDeclNode(
-          final XQNode parentNode, String namespacePrefix, String targetNameSpace) {
-    super(parentNode);
+  public ModuleDeclNode(String namespacePrefix, String targetNameSpace) {
     assert (namespacePrefix != null);
     assert (targetNameSpace != null);
     addAttribute(AttrNames.ATTR_NAMESPACE_PREFIX, namespacePrefix);

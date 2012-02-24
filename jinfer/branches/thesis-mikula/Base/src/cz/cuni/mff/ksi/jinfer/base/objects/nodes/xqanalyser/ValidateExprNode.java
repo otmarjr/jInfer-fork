@@ -33,9 +33,7 @@ public class ValidateExprNode extends ExprNode {
 
   private final ExprNode exprNode;
 
-  public ValidateExprNode(
-          final XQNode parentNode, ValidationMode validationMode, ExprNode exprNode) {
-    super(parentNode);
+  public ValidateExprNode(ValidationMode validationMode, ExprNode exprNode) {
     assert (exprNode != null);
     if (validationMode != null) {
       addAttribute(AttrNames.ATTR_MODE, validationMode.toString());

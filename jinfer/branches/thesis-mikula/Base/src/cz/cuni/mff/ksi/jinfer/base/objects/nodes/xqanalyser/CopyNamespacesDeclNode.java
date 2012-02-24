@@ -30,10 +30,8 @@ import java.util.List;
  */
 public class CopyNamespacesDeclNode extends PrologChildNode {
 
-  public CopyNamespacesDeclNode(
-          final XQNode parentNode, PreserveMode preserveMode,
+  public CopyNamespacesDeclNode(PreserveMode preserveMode,
           InheritMode inheritMode) {
-    super(parentNode);
     assert (preserveMode != null);
     assert (inheritMode != null);
     addAttribute(AttrNames.ATTR_PRESERVE_MODE, preserveMode.toString());

@@ -33,8 +33,7 @@ public class ParamListNode extends XQNode {
 
   private final List<ParamNode> params;
 
-  public ParamListNode(final XQNode parentNode, XQNodeList<ParamNode> params) {
-    super(parentNode);
+  public ParamListNode(XQNodeList<ParamNode> params) {
     assert (params != null);
     this.params = params;
   }

@@ -33,9 +33,7 @@ public class OrderSpecNode extends XQNode {
 
   private final ExprNode exprNode;
 
-  public OrderSpecNode(
-          final XQNode parentNode, ExprNode exprNode, OrderModifier orderModifier) {
-    super(parentNode);
+  public OrderSpecNode(ExprNode exprNode, OrderModifier orderModifier) {
     assert (exprNode != null);
     assert (orderModifier != null);
     OrderDirection orderDirection = orderModifier.getOrderDirection();

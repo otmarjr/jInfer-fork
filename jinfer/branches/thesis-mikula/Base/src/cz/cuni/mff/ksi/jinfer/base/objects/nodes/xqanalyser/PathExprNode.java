@@ -32,12 +32,13 @@ import java.util.List;
 public class PathExprNode extends ExprNode {
 
   private final List<StepExprNode> steps;
+  private final InitialStep initialStep;
 
-  public PathExprNode(XQNodeList<StepExprNode> steps,
+  public PathExprNode(List<StepExprNode> steps,
           InitialStep beginsWith) {
     assert (steps != null);
     assert (beginsWith != null);
-    addAttribute(AttrNames.ATTR_INITIAL_STEP, beginsWith.toString());
+    this.initialStep = beginsWith;
     this.steps = steps;
   }
 
@@ -53,5 +54,9 @@ public class PathExprNode extends ExprNode {
   
   public List<StepExprNode> getSteps() {
     return steps;
+  }
+  
+  public InitialStep getInitialStep() {
+    return initialStep;
   }
 }

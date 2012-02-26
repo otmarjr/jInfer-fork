@@ -37,6 +37,9 @@ public class KeysInferrer {
   private final List<ClassifiedJoinPattern> classifiedJoinPatterns = new ArrayList<ClassifiedJoinPattern>();
   private final Map<PathType, Integer> negativeWeights = new HashMap<PathType, Integer>();
   
+  private final List<WeightedKey> keys = new ArrayList<WeightedKey>();
+  private final List<WeightedForeignKey> foreignKeys = new ArrayList<WeightedForeignKey>();
+  
   public KeysInferrer(final XQNode root) {
     this.root = root;
   }
@@ -106,7 +109,7 @@ public class KeysInferrer {
   }
   
   private static boolean usesOnlyChildAndDescendantAxes(final PathType pathType) {
-    for (final StepExprNode stepNode : pathType.getStepNodes()) {
+    for (final StepExprNode stepNode : pathType.getPathExprNode().getSteps()) {
       if (stepNode.isAxisStep()) {
         final AxisKind axisKind = stepNode.getAxisNode().getAxisKind();
         if (axisKind != AxisKind.CHILD && axisKind != AxisKind.DESCENDANT) {
@@ -117,7 +120,7 @@ public class KeysInferrer {
       final ExprNode detailNode = stepNode.getDetailNode();
       if (detailNode != null) {
         if (VarRefNode.class.isInstance(detailNode)) {
-          if (usesOnlyChildAndDescendantAxes(pathType.getForBoundSubsteps().get(stepNode)) == false) {
+          if (usesOnlyChildAndDescendantAxes(pathType.getSubsteps().get(stepNode)) == false) {
             return false;
           }
         }
@@ -129,7 +132,7 @@ public class KeysInferrer {
   
   // Vracia ten jediny predikat na konci.
   private static ExprNode endsWithExactlyOnePredicate(final PathType pathType) {
-    final StepExprNode lastStepNode = pathType.getStepNodes().get(pathType.getStepNodes().size() - 1);
+    final StepExprNode lastStepNode = pathType.getPathExprNode().getSteps().get(pathType.getPathExprNode().getSteps().size() - 1);
     if (!lastStepNode.hasPredicates()) {
       return null;
     }
@@ -145,20 +148,34 @@ public class KeysInferrer {
     // At first, check join pattern 3.
     if (checkJoinPattern3) {
       if (ForClauseNode.class.isInstance((bindingNode))) {
-        if (isExprJoinForm(whereExpr, bindingNode.getVarName(), forVar)) {
-          joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode));
+        PathExprNode L1 = null;
+        PathExprNode L2 = null;
+        if (isExprJoinFormWhereClause(whereExpr, bindingNode.getVarName(), forVar, L1, L2)) {
+          final PathExprNode P1 = (PathExprNode)forClauseNode.getBindingSequenceNode().getExprNode(); // TODO rio Su tieto dva riadky OK? Je exprNode vzdy naozaj PathExprNode?
+          final PathExprNode P2 = (PathExprNode)bindingNode.getBindingSequenceNode().getExprNode();
+          joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode, P1, P2, L1, L2));
         }
       }
       return;
     }
     
     // Check for and let join patterns.
-    if (isExprJoinForm(predicate, bindingNode.getVarName(), forVar)) {
+    PathExprNode L1 = null;
+    PathExprNode L2 = null;
+    if (isExprJoinFormPredicate(predicate, forVar, L1, L2)) {
+      final PathExprNode P1 = (PathExprNode)forClauseNode.getBindingSequenceNode().getExprNode(); // TODO rio Su tieto dva riadky OK? Je exprNode vzdy naozaj PathExprNode?
+      final PathExprNode P2WithPredicate = (PathExprNode)bindingNode.getBindingSequenceNode().getExprNode();
+      final StepExprNode lastStep = P2WithPredicate.getSteps().get(P2WithPredicate.getSteps().size() - 1);
+      final StepExprNode newLastStep = new StepExprNode(lastStep.getDetailNode(), null);
+      final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getSteps());
+      newSteps.set(P2WithPredicate.getSteps().size() - 1, newLastStep);
+      
+      final PathExprNode P2 = new PathExprNode(newSteps, InitialStep.CONTEXT);
       if (ForClauseNode.class.isInstance(bindingNode)) {
-        joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode));
+        joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, L1, L2));
         forVariables.remove(forVar);
       } else if (LetClauseNode.class.isInstance(bindingNode)) {
-        joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.LET, forClauseNode, bindingNode));
+        joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.LET, forClauseNode, bindingNode, P1, P2, L1, L2));
         forVariables.remove(forVar);
       } else {
         assert(false);
@@ -166,7 +183,7 @@ public class KeysInferrer {
     }
   }
   
-  private static boolean isExprJoinForm(final ExprNode exprNode, final String var1, final String var2) {
+  private static boolean isExprJoinFormWhereClause(final ExprNode exprNode, final String var1, final String var2, PathExprNode pathL1, PathExprNode pathL2) {
     if (!OperatorNode.class.isInstance(exprNode)) {
       return false;
     }
@@ -186,8 +203,8 @@ public class KeysInferrer {
     final PathType leftPathType = (PathType)leftOperandType;
     final PathType rightPathType = (PathType)rightOperandType;
     
-    final ExprNode leftDetailNode = leftPathType.getStepNodes().get(0).getDetailNode();
-    final ExprNode rightDetailNode = rightPathType.getStepNodes().get(0).getDetailNode();
+    final ExprNode leftDetailNode = leftPathType.getPathExprNode().getSteps().get(0).getDetailNode();
+    final ExprNode rightDetailNode = rightPathType.getPathExprNode().getSteps().get(0).getDetailNode();
     
     if (leftDetailNode == null || rightDetailNode == null) {
       return false;
@@ -200,11 +217,72 @@ public class KeysInferrer {
     final VarRefNode leftVarRefNode = (VarRefNode)leftDetailNode;
     final VarRefNode rightVarRefNode = (VarRefNode)rightDetailNode;
     
-    if ((leftVarRefNode.getVarName().equals(var1) && rightVarRefNode.getVarName().equals(var2))
-            ||
-            (rightVarRefNode.getVarName().equals(var1) && leftVarRefNode.getVarName().equals(var2)))
-    {
+    if (leftVarRefNode.getVarName().equals(var1) && rightVarRefNode.getVarName().equals(var2)) {
+      List<StepExprNode> L1Steps = leftPathType.getPathExprNode().getSteps().subList(1, leftPathType.getPathExprNode().getSteps().size());
+      List<StepExprNode> L2Steps = rightPathType.getPathExprNode().getSteps().subList(1, rightPathType.getPathExprNode().getSteps().size());
+      pathL1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
+      pathL2 = new PathExprNode(L2Steps, InitialStep.CONTEXT);
       return true;
+    }
+    
+    if (rightVarRefNode.getVarName().equals(var1) && leftVarRefNode.getVarName().equals(var2)) {
+      List<StepExprNode> L2Steps = leftPathType.getPathExprNode().getSteps().subList(1, leftPathType.getPathExprNode().getSteps().size());
+      List<StepExprNode> L1Steps = rightPathType.getPathExprNode().getSteps().subList(1, rightPathType.getPathExprNode().getSteps().size());
+      pathL1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
+      pathL2 = new PathExprNode(L2Steps, InitialStep.CONTEXT);
+      return true;
+    }
+    
+    return false;
+  }
+  
+  private static boolean isExprJoinFormPredicate(final ExprNode exprNode, final String var1, PathExprNode pathL1, PathExprNode pathL2) {
+    if (!OperatorNode.class.isInstance(exprNode)) {
+      return false;
+    }
+    
+    final OperatorNode operatorNode = (OperatorNode)exprNode;
+    if (operatorNode.getOperator() != Operator.GEN_EQUALS) {
+      return false;
+    }
+    
+    final Type leftOperandType = operatorNode.getOperand().getType();
+    final Type rightOperandType = operatorNode.getRightSide().getType();
+    
+    if (leftOperandType.getCategory() != Type.Category.PATH || rightOperandType.getCategory() != Type.Category.PATH) {
+      return false;
+    }
+    
+    final PathType leftPathType = (PathType)leftOperandType;
+    final PathType rightPathType = (PathType)rightOperandType;
+    
+    final ExprNode leftDetailNode = leftPathType.getPathExprNode().getSteps().get(0).getDetailNode();
+    final ExprNode rightDetailNode = rightPathType.getPathExprNode().getSteps().get(0).getDetailNode();
+    
+    if (leftDetailNode == null && rightDetailNode == null) {
+      return false;
+    }
+    
+    if (VarRefNode.class.isInstance(leftDetailNode)) {
+      final VarRefNode leftVarRefNode = (VarRefNode)leftDetailNode;
+      
+      if (leftVarRefNode.getVarName().equals(var1)) {
+        List<StepExprNode> L1Steps = leftPathType.getPathExprNode().getSteps().subList(1, leftPathType.getPathExprNode().getSteps().size());
+        pathL1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
+        pathL2 = (PathExprNode)operatorNode.getRightSide();
+        return true;
+      }
+    }
+      
+    if (VarRefNode.class.isInstance(rightDetailNode)) {
+      final VarRefNode rightVarRefNode = (VarRefNode)rightDetailNode;
+      
+      if (rightVarRefNode.getVarName().equals(var1)) {
+        List<StepExprNode> L1Steps = rightPathType.getPathExprNode().getSteps().subList(1, rightPathType.getPathExprNode().getSteps().size());
+        pathL1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
+        pathL2 = (PathExprNode)operatorNode.getOperand();
+        return true;
+      }
     }
     
     return false;
@@ -244,7 +322,7 @@ public class KeysInferrer {
         // R3
         for (final PathType pathType : returnPathTypes) {
           for (final String functionName : pathType.getSpecialFunctionCalls()) {
-            if (functionName.equals("count")) { // TODO rio pozor na nazvy funkcii, mozu byt aj prefixovane.
+            if (functionName.equals("count")) {
               classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 75));
               cont = false;
               break;
@@ -272,7 +350,7 @@ public class KeysInferrer {
   }
   
   private static boolean isTargetPath(final PathType pathType, final String varName) {
-    final StepExprNode firstStep = pathType.getStepNodes().get(0);
+    final StepExprNode firstStep = pathType.getPathExprNode().getSteps().get(0);
     final ExprNode detailNode = firstStep.getDetailNode();
     
     if (detailNode == null) {
@@ -337,8 +415,8 @@ public class KeysInferrer {
   }
   
   private static boolean isWithoutPredicates(final PathType pathType) {
-    final Map<StepExprNode, PathType> subSteps = pathType.getForBoundSubsteps();
-    for (final StepExprNode stepExprNode : pathType.getStepNodes()) {
+    final Map<StepExprNode, PathType> subSteps = pathType.getSubsteps();
+    for (final StepExprNode stepExprNode : pathType.getPathExprNode().getSteps()) {
       if (stepExprNode.hasPredicates()) {
         return false;
       }
@@ -353,8 +431,8 @@ public class KeysInferrer {
   }
   
   private static boolean isWithoutPredicatesExceptLastStep(final PathType pathType) {
-    final Map<StepExprNode, PathType> subSteps = pathType.getForBoundSubsteps();
-    final List<StepExprNode> stepNodes = pathType.getStepNodes();
+    final Map<StepExprNode, PathType> subSteps = pathType.getSubsteps();
+    final List<StepExprNode> stepNodes = pathType.getPathExprNode().getSteps();
     for (final StepExprNode stepExprNode : stepNodes) {
       if (stepExprNode == stepNodes.get(stepNodes.size() - 1)) {
         break;
@@ -438,7 +516,7 @@ public class KeysInferrer {
         final PathType pathType = (PathType)leftOperand.getType();
         if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
-            final ExprNode detailNode = pathType.getStepNodes().get(0).getDetailNode();
+            final ExprNode detailNode = pathType.getPathExprNode().getSteps().get(0).getDetailNode();
             if (detailNode != null) {
               if (VarRefNode.class.isInstance(detailNode)) {
                 if (((VarRefNode)detailNode).getVarName().equals(var)) {
@@ -453,7 +531,7 @@ public class KeysInferrer {
         final PathType pathType = (PathType)rightOperand.getType();
         if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
-            final ExprNode detailNode = pathType.getStepNodes().get(0).getDetailNode();
+            final ExprNode detailNode = pathType.getPathExprNode().getSteps().get(0).getDetailNode();
             if (detailNode != null) {
               if (VarRefNode.class.isInstance(detailNode)) {
                 if (((VarRefNode)detailNode).getVarName().equals(var)) {
@@ -474,5 +552,16 @@ public class KeysInferrer {
       newWeight += oldWeight.intValue();
     }
     negativeWeights.put(pathType, newWeight);
+  }
+  
+  private void classifiedJoinPatternsToKeys() {
+    for (final ClassifiedJoinPattern cjp : classifiedJoinPatterns) {
+      final JoinPattern jp = cjp.getJoinPattern();
+      final ClassifiedJoinPattern.Type type = cjp.getType();
+      final int weight = cjp.getWeight();
+      
+      //final Key key = new Key(null, null)
+      // TODO rio
+    }
   }
 }

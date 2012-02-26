@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.VariableBindingNode;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 
@@ -36,13 +37,22 @@ public class JoinPattern {
   private final VariableBindingNode secondVariableBindingNode;
   private final PathType pathType1;
   private final PathType pathType2;
+  private final PathExprNode P1;
+  private final PathExprNode P2;
+  private final PathExprNode L1;
+  private final PathExprNode L2;
   
-  public JoinPattern(final JoinPatternType type, final VariableBindingNode firstVariableBindingNode, final VariableBindingNode secondVariableBindingNode) {
+  public JoinPattern(final JoinPatternType type, final VariableBindingNode firstVariableBindingNode, final VariableBindingNode secondVariableBindingNode,
+          final PathExprNode P1, final PathExprNode P2, final PathExprNode L1, final PathExprNode L2) {
     this.type = type;
     this.firstVariableBindingNode = firstVariableBindingNode;
     this.secondVariableBindingNode = secondVariableBindingNode;
     pathType1 = (PathType)firstVariableBindingNode.getBindingSequenceNode().getExprNode().getType();
     pathType2 = (PathType)secondVariableBindingNode.getBindingSequenceNode().getExprNode().getType();
+    this.P1 = P1;
+    this.P2 = P2;
+    this.L1 = L1;
+    this.L2 = L2;
   }
 
   public VariableBindingNode getFirstVariableBindingNode() {
@@ -56,5 +66,23 @@ public class JoinPattern {
   public JoinPatternType getType() {
     return type;
   }
+
+  public PathExprNode getL1() {
+    return L1;
+  }
+
+  public PathExprNode getL2() {
+    return L2;
+  }
+
+  public PathExprNode getP1() {
+    return P1;
+  }
+
+  public PathExprNode getP2() {
+    return P2;
+  }
+  
+  
   
 }

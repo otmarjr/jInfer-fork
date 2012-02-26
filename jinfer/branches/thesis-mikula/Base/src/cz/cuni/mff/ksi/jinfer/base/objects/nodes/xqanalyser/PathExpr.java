@@ -21,6 +21,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
 
+import java.util.List;
+
 /**
  * This class represents the path expression.
  *
@@ -28,8 +30,7 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser;
  */
 public class PathExpr {
 
-  private InitialStep pathStartNode;
-  private XQNodeList<StepExprNode> steps;
+  private List<StepExprNode> steps;
   private InitialStep initialStep;
 
   public PathExpr() {
@@ -46,7 +47,7 @@ public class PathExpr {
   }
 
   public ExprNode getNode() {
-    if (steps.size() == 1 && initialStep == pathStartNode.CONTEXT) {
+    if (steps.size() == 1 && initialStep == InitialStep.CONTEXT) {
       StepExprNode step = steps.get(0);
       if (!step.hasPredicates() && !step.isAxisStep()) {
         return step.getDetailNode();

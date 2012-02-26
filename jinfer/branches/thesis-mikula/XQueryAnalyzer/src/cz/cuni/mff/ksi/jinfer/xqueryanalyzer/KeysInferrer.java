@@ -377,9 +377,12 @@ public class KeysInferrer {
     if (FunctionCallNode.class.isInstance(node)) {
       final FunctionCallNode funcCallNode = (FunctionCallNode)node;
       final String funcName = funcCallNode.getFuncName();
-      if (funcName.equals("distinct-values")
-              || funcName.equals("min")
-              || funcName.equals("max")) { // TODO dalsie funkcie, aj do DP, riesit aj prefixy
+      final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(funcName);
+      if (builtinFuncName != null
+              && builtinFuncName.equals("distinct-values")
+              || builtinFuncName.equals("min")
+              || builtinFuncName.equals("max")
+              || builtinFuncName.equals("sum")) {
         final ExprNode argument = funcCallNode.getParams().get(0);
         assert(argument != null);
         final Type type = argument.getType();

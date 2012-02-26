@@ -74,15 +74,6 @@ public class XQueryProcessor implements Processor<ModuleNode> {
       converter.convert();
     } catch (final XQParseException e) {
       LOG.error("Error parsing XQuery file, ignoring and going on.", e);
-      
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      PrintStream ps = new PrintStream(baos);
-      e.printStackTrace(ps);
-      String content = baos.toString();
-      LOG.error(content);
-      
-      
-      
       return Collections.EMPTY_LIST;
     }
     final List<ModuleNode> result = new ArrayList<ModuleNode>();

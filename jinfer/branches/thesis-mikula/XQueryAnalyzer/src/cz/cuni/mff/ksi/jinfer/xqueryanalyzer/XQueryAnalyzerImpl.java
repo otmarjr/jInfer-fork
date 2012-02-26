@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
@@ -26,7 +25,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO rio
+ * TODO rio comment
  *
  * Hlavna trieda XQuery modulu. Postupne pusta jednotlive kroky algoritmu
  * na zistovanie informacii z dotazov.
@@ -37,6 +36,9 @@ import org.openide.util.lookup.ServiceProvider;
 public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private final static Logger LOG = Logger.getLogger(XQueryAnalyzerImpl.class);
+  
+  private static final String NAME = "XQuery_Analyzer";
+  private static final String DISPLAY_NAME = "XQuery analyzer";
 
   @Override
   public void start(InferenceDataHolder idh, XQueryAnalyzerCallback callback) throws InterruptedException {
@@ -62,26 +64,22 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   @Override
   public String getDisplayName() {
-    // TODO rio
-    return "XQueryAnalyzer";
+    return DISPLAY_NAME;
   }
 
   @Override
   public String getModuleDescription() {
-    // TODO rio
-    return "XQueryAnalyzer";
+    return getDisplayName();
   }
 
   @Override
   public String getName() {
-    // TODO rio
-    return "XQueryAnalyzer";
+    return NAME;
   }
 
   @Override
   public List<String> getCapabilities() {
-    // TODO rio
-    return new LinkedList<String>();
+    return Collections.emptyList();
   }
   
   private void init(final XQNode node) {

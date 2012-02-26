@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class BuiltinTypesInferrer {
   
   private final ModuleNode root;
   private final FunctionsProcessor fp;
-  private final Map<Type, Type> inferredTypes = new HashMap<Type, Type>(); // TODO rio Type->Type je blbost. Treba nejak vymyslet path->Type.
+  private final Map<PathType, Type> inferredTypes = new HashMap<PathType, Type>();
   
   public BuiltinTypesInferrer(final ModuleNode root, final FunctionsProcessor fp) {
     this.root = root;
@@ -76,7 +77,7 @@ public class BuiltinTypesInferrer {
         if (paramTypeDeclarationNode == null) {
           continue;
         }
-        inferredTypes.put(paramType, TypeFactory.createType(paramTypeDeclarationNode));
+        inferredTypes.put((PathType)paramType, TypeFactory.createType(paramTypeDeclarationNode));
       }
     }
   }
@@ -84,7 +85,7 @@ public class BuiltinTypesInferrer {
   public void processOperator(final OperatorNode opNode) {
     final Operator op = opNode.getOperator();
     
-    Type pathType = null;
+    PathType pathType = null;
     Type type = null;
     
     switch (op) {
@@ -103,12 +104,12 @@ public class BuiltinTypesInferrer {
         final Type rightType = rightOperand.getType();
         if (leftType.getCategory() == Type.Category.PATH) {
           if (rightType.isNumeric() && rightType.getCategory() == Type.Category.BUILT_IN) {
-            pathType = leftType;
+            pathType = (PathType)leftType;
             type = rightType;
           }
         } else if (rightType.getCategory() == Type.Category.PATH) {
           if (leftType.isNumeric() && leftType.getCategory() == Type.Category.BUILT_IN) {
-            pathType = rightType;
+            pathType = (PathType)rightType;
             type = leftType;
           }
         }
@@ -127,12 +128,12 @@ public class BuiltinTypesInferrer {
         final Type rightType = rightOperand.getType();
         if (leftType.getCategory() == Type.Category.PATH) {
           if (rightType.getCategory() == Type.Category.BUILT_IN) {
-            pathType = leftType;
+            pathType = (PathType)leftType;
             type = rightType;
           }
         } else if (rightType.getCategory() == Type.Category.PATH) {
           if (leftType.getCategory() == Type.Category.BUILT_IN) {
-            pathType = rightType;
+            pathType = (PathType)rightType;
             type = leftType;
           }
         }

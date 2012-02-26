@@ -98,7 +98,7 @@ public class Runner {
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
     // TODO rio Selection in properties panel is not implemented yet.
-    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(XQueryAnalyzer.class, "XQueryAnalyzer");
+    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(XQueryAnalyzer.class, "XQuery_Analyzer");
   }
 
   /**

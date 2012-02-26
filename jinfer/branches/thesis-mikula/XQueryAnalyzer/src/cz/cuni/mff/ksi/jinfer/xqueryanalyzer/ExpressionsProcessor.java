@@ -34,7 +34,6 @@ import java.util.Map;
  * vyrazy v tele dotazu.
  * 
  * TODO rio Treba dorobit analyzu volani funkcii s tym, ze sa bude zistovat typ tak, ze sa vyuzije tele funkcie.
- * TODO rio Skompletovat rozne pomocne metody.
  * TODO rio Porozmyslat, ci nie je porebne zlucit zistovanie typov user-defined funkcii a globalnych premennych, kedze glob. premenna moze pouzivat funkcie a opacne.
  * 
  * @author rio
@@ -150,6 +149,10 @@ public class ExpressionsProcessor {
       return TypeFactory.createForUnboundType(((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType());
     } else if (PathExprNode.class.isInstance(expressionNode)) {
       return TypeFactory.createPathType((PathExprNode)expressionNode);
+    } else if (ConstructorNode.class.isInstance(expressionNode)) {
+      //final ConstructorNode constructorNode = (ConstructorNode)expressionNode;
+      // TODO rio Aky typ ma constructor?
+      return new UnknownType();
     }
     assert (false); // TODO rio dorobit pre ostatne typy
     return null;
@@ -168,21 +171,76 @@ public class ExpressionsProcessor {
 
     if (isOperatorClassAddition(operator)) {
       final Type leftType = operatorNode.getOperand().getType();
+      
+      // Moze byt aj unarny operator, v takom pripade je typ jasny.
+      if (operatorNode.getRightSide() == null) {
+        return leftType;
+      }
+      
       final Type rightType = operatorNode.getRightSide().getType();
+      
+      // TODO rio Co so sekvenciami? Plati aj pre ne?
       if (leftType.isNumeric() && rightType.isNumeric()) {
-        return leftType; // TODO rio vybrat obecnejsi z typov
+        return selectCommonType(leftType, rightType); 
       } else if (leftType.isNumeric()) {
         return leftType;
       } else if (rightType.isNumeric()) {
         return rightType;
-      } // TODO rio else?
+      }
     }
 
     if (operator == Operator.TO) {
       return new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ZERO_OR_MORE);
     }
 
-    return null;
+    return new UnknownType();
+  }
+  
+  private static Type selectCommonType(final Type numericType1, final Type numericType2) {
+    assert(numericType1.isNumeric());
+    assert(numericType2.isNumeric());
+    
+    final XSDType type1 = (XSDType)numericType1;
+    final XSDType type2 = (XSDType)numericType2;
+    
+    final XSDType.XSDAtomicType atomic1 = type1.getAtomicType();
+    final XSDType.XSDAtomicType atomic2 = type2.getAtomicType();
+    
+    if (atomic1 == atomic2) {
+      return type1;
+    }
+    
+    if (atomic1 == XSDType.XSDAtomicType.DOUBLE) {
+      return type1;
+    }
+    if (atomic2 == XSDType.XSDAtomicType.DOUBLE) {
+      return type2;
+    }
+    
+    if (atomic1 == XSDType.XSDAtomicType.FLOAT) {
+      return type1;
+    }
+    if (atomic2 == XSDType.XSDAtomicType.FLOAT) {
+      return type2;
+    }
+    
+    if (atomic1 == XSDType.XSDAtomicType.DECIMAL) {
+      return type1;
+    }
+    if (atomic2 == XSDType.XSDAtomicType.DECIMAL) {
+      return type2;
+    }
+    
+    if (atomic1 == XSDType.XSDAtomicType.INTEGER) {
+      return type1;
+    }
+    if (atomic2 == XSDType.XSDAtomicType.INTEGER) {
+      return type2;
+    }
+    
+    return new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE);
+    
+    // TODO rio Nie je dokoncene, ale nam pravdepodobne bude stacit.
   }
 
   private static boolean isOperatorClassComparison(final Operator op) {
@@ -209,9 +267,11 @@ public class ExpressionsProcessor {
     switch (op) {
       case PLUS:
       case MINUS:
+      case UNARY_PLUS:
+      case UNARY_MINUS:
         return true;
       default:
-        return false; // TODO rio treba pridat aj unarne plus a minus
+        return false;
     }
   }
 }

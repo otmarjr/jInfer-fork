@@ -27,6 +27,16 @@ import java.util.Map;
  */
 public class PathType implements Type {
   
+  public final static List<String> SPECIAL_FUNCTION_NAMES = new ArrayList<String>();
+  static {
+    SPECIAL_FUNCTION_NAMES.add("data");
+    SPECIAL_FUNCTION_NAMES.add("distinc-values");
+    SPECIAL_FUNCTION_NAMES.add("min");
+    SPECIAL_FUNCTION_NAMES.add("max");
+    SPECIAL_FUNCTION_NAMES.add("avg");
+    SPECIAL_FUNCTION_NAMES.add("sum");
+  }
+  
   private final List<StepExprNode> stepNodes;
   private final Map<StepExprNode, PathType> forBoundSubsteps; // StepExprNode -> ForBoundPathType
   private final List<String> specialFunctionCalls = new ArrayList<String>(); // An ordered list of functions that have been applied to this path.

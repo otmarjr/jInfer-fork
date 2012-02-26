@@ -17,9 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,7 +55,7 @@ public class TypeFactory {
         
       case PATH: {
         final PathType pathType = (PathType)forBindingExprType;
-        return new PathType(pathType.getStepNodes(), pathType.getForBoundSubsteps(), true);
+        return new PathType(pathType.getPathExprNode(), pathType.getSubsteps(), true);
       }
       
       case BUILT_IN: {
@@ -86,7 +84,7 @@ public class TypeFactory {
         
       case PATH: {
         final PathType pathType = (PathType)returnClauseType;
-        return new PathType(pathType.getStepNodes(), pathType.getForBoundSubsteps(), false);
+        return new PathType(pathType.getPathExprNode(), pathType.getSubsteps(), false);
       }
         
       case BUILT_IN: {
@@ -107,8 +105,7 @@ public class TypeFactory {
   }
   
   public static PathType createPathType(final PathExprNode pathExprNode) {
-    final List<StepExprNode> steps = new ArrayList<StepExprNode>();
-    final Map<StepExprNode, PathType> forBoundSubsteps = new HashMap<StepExprNode, PathType>();
+    final Map<StepExprNode, PathType> substeps = new HashMap<StepExprNode, PathType>();
     
     for (final StepExprNode stepNode : pathExprNode.getSteps()) {
       final ExprNode detailNode = stepNode.getDetailNode();
@@ -120,21 +117,12 @@ public class TypeFactory {
             assert(false);
           }
           final PathType pathType = (PathType)type;
-          if (pathType.isForBound()) {
-            forBoundSubsteps.put(stepNode, pathType);
-            steps.add(stepNode);
-          } else {
-            steps.addAll(((PathType)type).getStepNodes());
-          }
-        } else {
-          steps.add(stepNode);
+          substeps.put(stepNode, pathType);
         }
-      } else {
-        steps.add(stepNode);
       }
     }
     
-    return new PathType(steps, forBoundSubsteps, false);
+    return new PathType(pathExprNode, substeps, false);
   }
   
 }

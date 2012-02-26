@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.StepExprNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +38,14 @@ public class PathType implements Type {
     SPECIAL_FUNCTION_NAMES.add("sum");
   }
   
-  private final List<StepExprNode> stepNodes;
-  private final Map<StepExprNode, PathType> forBoundSubsteps; // StepExprNode -> ForBoundPathType
+  private final PathExprNode pathExprNode;
+  private final Map<StepExprNode, PathType> substeps; // StepExprNode -> PathType
   private final List<String> specialFunctionCalls = new ArrayList<String>(); // An ordered list of functions that have been applied to this path.
   private final boolean isForBound;
   
-  public PathType(final List<StepExprNode> stepNodes, final Map<StepExprNode, PathType> forBoundSubsteps, final boolean isForBound) {
-    this.stepNodes = stepNodes;
-    this.forBoundSubsteps = forBoundSubsteps;
+  public PathType(final PathExprNode pathExprNode, final Map<StepExprNode, PathType> forBoundSubsteps, final boolean isForBound) {
+    this.pathExprNode = pathExprNode;
+    this.substeps = forBoundSubsteps;
     this.isForBound = isForBound;
   }
   
@@ -58,16 +59,19 @@ public class PathType implements Type {
     return false;
   }
   
-  public List<StepExprNode> getStepNodes() {
-    return stepNodes;
+  /*public List<StepExprNode> getStepNodes() {
+    return pathExprNode.getSteps();
+  }*/
+  public PathExprNode getPathExprNode() {
+    return pathExprNode;
   }
   
   public void addSpecialFunctionCall(final String specialFunctionName) {
     specialFunctionCalls.add(specialFunctionName);
   }  
   
-  public Map<StepExprNode, PathType> getForBoundSubsteps() {
-    return forBoundSubsteps;
+  public Map<StepExprNode, PathType> getSubsteps() {
+    return substeps;
   }
   
   public boolean isForBound() {

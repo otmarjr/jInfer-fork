@@ -20,32 +20,13 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
  *
  * @author rio
  */
-public class ClassifiedJoinPattern {
+public class WeightedKey {
   
-  public enum Type {
-    O1,
-    O2
-  }
+  private final Key key;
+  private final int weight;
   
-  private final JoinPattern joinPattern;
-  private final int weight; // Multiplied by 100.
-  private final Type type;
-  
-  public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {
-    this.joinPattern = joinPattern;
-    this.type = type;
+  public WeightedKey(final Key key, final int weight) {
+    this.key = key;
     this.weight = weight;
-  }
-  
-  public Type getType() {
-    return type;
-  }
-  
-  public int getWeight() {
-    return weight;
-  }
-  
-  public JoinPattern getJoinPattern() {
-    return joinPattern;
   }
 }

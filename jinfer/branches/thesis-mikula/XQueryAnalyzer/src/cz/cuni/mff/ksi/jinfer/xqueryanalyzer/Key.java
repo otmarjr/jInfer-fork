@@ -16,36 +16,31 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExpr;
+
 /**
- *
+ * TODO rio comment
  * @author rio
  */
-public class ClassifiedJoinPattern {
+public class Key {
   
-  public enum Type {
-    O1,
-    O2
+  private final PathExpr contextPath;
+  private final PathExpr targetPath;
+  private final PathExpr keyPath;
+  
+  public Key(final PathExpr contextPath, final PathExpr targetPath, final PathExpr keyPath) {
+    this.contextPath = contextPath;
+    this.targetPath = targetPath;
+    this.keyPath = keyPath;
   }
   
-  private final JoinPattern joinPattern;
-  private final int weight; // Multiplied by 100.
-  private final Type type;
-  
-  public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {
-    this.joinPattern = joinPattern;
-    this.type = type;
-    this.weight = weight;
+  public Key(final PathExpr targetPath, final PathExpr keyPath) {
+    this.contextPath = null;
+    this.targetPath = targetPath;
+    this.keyPath = keyPath;
   }
   
-  public Type getType() {
-    return type;
-  }
-  
-  public int getWeight() {
-    return weight;
-  }
-  
-  public JoinPattern getJoinPattern() {
-    return joinPattern;
+  public boolean isPossitive() {
+    return true;
   }
 }

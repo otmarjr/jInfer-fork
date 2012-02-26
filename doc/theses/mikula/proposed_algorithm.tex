@@ -130,6 +130,8 @@ For example, a node of $FLWORExpr$ class contains four subnodes of\linebreak $Tu
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we statically (i.e. without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will not use the determined types of all expressions, however this step may be useful in a future extending.
 
+\todo[inline]{Niektore typy mozu byt take, ze pri prvom prechode ich nevieme zistit, ale ked uz mame zistene ine typy, tak dokazeme zistit aj tie, co sme pred tym nevedeli. Takze by bolo treba robit viac priechodov, ale skor nieco ako dopologicke triedenie, co zavisi na com, a potom typy zistovat v tomto poradi (mozno aj v druhom kole).}
+
 The analysis of expression types can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
 
 But firstly, we describe types of expressions we want to capture and their features.
@@ -275,7 +277,7 @@ A similar approach as in the case of functions can be applied to determine types
 }
 \ENSURE The expression type.
 
-\STATE $type = null$
+\STATE $type = UnknownType$
 \IF{$is(exprNode, LiteralNode)$}
      \STATE $type =$ XSD atomic type $exprNode.type$, exactly-once cardinality
 \ELSIF{$is(exprNode, FunctionCallNode)$}
@@ -305,7 +307,7 @@ A similar approach as in the case of functions can be applied to determine types
 }
 \ENSURE The operator expression type.
 
-\STATE $type = null$
+\STATE $type = UnknownType$
 \STATE $operator = operatorNode.operator$
 \IF{$isOperatorClassComparison(operator)$}
     \STATE $type = xs:boolean$, exactly-one cardinality
@@ -347,7 +349,7 @@ A similar approach as in the case of functions can be applied to determine types
 \REQUIRE $operator$: Representation of a XQuery operator.
 \ENSURE $true$ if $operator$ is an addition operator, $false$ otherwise.
 
-\IF{$operator$ equals one of $PLUS$, $MINUS$}
+\IF{$operator$ equals one of $PLUS$, $MINUS$, $UNARY\_PLUS$, $UNARY\_MINUS$}
     \RETURN $true$
 \ELSE
     \RETURN $false$

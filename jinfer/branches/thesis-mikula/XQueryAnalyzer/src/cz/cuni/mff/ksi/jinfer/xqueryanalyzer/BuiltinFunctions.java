@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.NodeType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.UnknownType;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.XSDType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,8 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("data", new UnknownType());
     builtinFunctionTypes.put("doc", new NodeType(NodeType.NType.DOCUMENT, Cardinality.ONE));
     builtinFunctionTypes.put("min", new UnknownType());
+    builtinFunctionTypes.put("distinct-values", new UnknownType());
+    builtinFunctionTypes.put("count", new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE));
   }
   
   private final static List<String> DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES = new ArrayList<String>();
@@ -72,23 +75,23 @@ public class BuiltinFunctions {
   }
   
   public static Type getFunctionCallType(final FunctionCallNode functionCallNode) {
-    String functionName = functionCallNode.getFuncName();
-    functionName = functionName.substring(functionName.lastIndexOf(':') + 1);
+    final String functionName = functionCallNode.getFuncName();
+    final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(functionName);
     
-    if (functionName.equals("data")) {
-      final Type type = functionCallNode.getParams().get(0).getType();
-      if (PathType.class.isInstance(type)) {
-        ((PathType)type).addSpecialFunctionCall("data");
+    assert (builtinFuncName != null);
+    
+    for (final String specFuncName : PathType.SPECIAL_FUNCTION_NAMES) {
+      if (builtinFuncName.equals(specFuncName)) {
+        final Type type = functionCallNode.getParams().get(0).getType();
+        if (PathType.class.isInstance(type)) {
+          ((PathType)type).addSpecialFunctionCall(builtinFuncName);
+        }
+        return type;
       }
-      return type;
-    } else if (functionName.equals("min")) {
-      final Type type = functionCallNode.getParams().get(0).getType();
-      if (PathType.class.isInstance(type)) {
-        ((PathType)type).addSpecialFunctionCall("min");
-      }
-      return type;
-    } else if (builtinFunctionTypes.containsKey(functionName)) {
-      return builtinFunctionTypes.get(functionName);
+    }
+    
+    if (builtinFunctionTypes.containsKey(builtinFuncName)) {
+      return builtinFunctionTypes.get(builtinFuncName);
     } else {
       assert(false);
       return null;
@@ -102,21 +105,21 @@ public class BuiltinFunctions {
     
     final XQNodeList<ParamNode> paramNodes = new XQNodeList<ParamNode>();
     
-    if (functionName.equals("data")) {
+    if (functionName.equals("data") || functionName.equals("count")) {
       final ParamNode paramNode = new ParamNode("arg", new TypeNode( Cardinality.ZERO_OR_MORE));
       paramNodes.add(paramNode);
     } else if (functionName.equals("doc")) {
       final ItemTypeNode itemTypeNode = new AtomicTypeNode("xs:string");
       final ParamNode paramNode = new ParamNode("uri", new TypeNode(Cardinality.ZERO_OR_ONE, itemTypeNode));
       paramNodes.add(paramNode);
-    } else if (functionName.equals("min")) {
+    } else if (functionName.equals("min") || functionName.equals("distinct-values")) {
       final ParamNode paramNode1 = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_MORE));
       final ItemTypeNode itemTypeNode2 = new AtomicTypeNode("xs:string");
       final ParamNode paramNode2 = new ParamNode("collation", new TypeNode(Cardinality.ONE, itemTypeNode2));
       paramNodes.add(paramNode1);
       paramNodes.add(paramNode2);
     } else {
-      assert(false); // TODO rio
+      assert(false); // TODO rio Doplnit dalsie vstavane funckie podla potreby.
     }
     
     return new ParamListNode(paramNodes);

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO rio
+ * TODO rio comment
  * Analyza globalnych funkcii pre jeden syntakticky strom.
  * @author rio
  */
@@ -86,7 +86,7 @@ public class FunctionsProcessor {
     return fTypes;
   }
   
-  // TODO rio Dopisat do DP, ze pocitame s tym, ze builtin funkcie su bud bez rpefixu alebo s prefixom fn:
+  // TODO rio Dopisat do DP, ze pocitame s tym, ze builtin funkcie su bud bez prefixu alebo s prefixom fn:
   public ParamListNode getParamListNode(final String functionName) {
     final String builtinFunctionName = BuiltinFunctions.isBuiltinFunction(functionName);
             

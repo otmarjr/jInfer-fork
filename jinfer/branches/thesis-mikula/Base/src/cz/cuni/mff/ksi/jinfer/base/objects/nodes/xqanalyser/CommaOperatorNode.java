@@ -48,4 +48,8 @@ public class CommaOperatorNode extends ExprNode {
   public List<XQNode> getSubnodes() {
     return new ArrayList<XQNode>(expressionNodes);
   }
+  
+  public List<ExprNode> getExpressionNodes() {
+    return expressionNodes;
+  }
 }

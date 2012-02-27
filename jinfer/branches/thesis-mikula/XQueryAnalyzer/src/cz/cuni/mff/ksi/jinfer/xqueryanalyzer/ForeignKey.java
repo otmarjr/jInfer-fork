@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExpr;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
 
 /**
  *
@@ -25,10 +25,10 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExpr;
 public class ForeignKey {
 
   private final Key key;
-  private final PathExpr foreignTargetPath;
-  private final PathExpr foreignKeyPath;
+  private final PathExprNode foreignTargetPath;
+  private final PathExprNode foreignKeyPath;
   
-  public ForeignKey(final Key key, final PathExpr foreignTargetPath, final PathExpr foreignKeyPath) {
+  public ForeignKey(final Key key, final PathExprNode foreignTargetPath, final PathExprNode foreignKeyPath) {
     this.key = key;
     this.foreignTargetPath = foreignTargetPath;
     this.foreignKeyPath = foreignKeyPath;

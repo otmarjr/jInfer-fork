@@ -59,6 +59,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     
     final KeysInferrer keysInferrer = new KeysInferrer(root);
     keysInferrer.process();
+    Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
     return;
   }
   
@@ -84,8 +85,11 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private void init(final XQNode node) {
     final List<XQNode> subnodes = node.getSubnodes();
-    for (final XQNode subnode : subnodes) {
-      subnode.setParentNode(node);
+    if (subnodes != null) {
+      for (final XQNode subnode : subnodes) {
+        subnode.setParentNode(node);
+        init(subnode);
+      }
     }
   }
 }

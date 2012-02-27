@@ -21,6 +21,8 @@ import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,7 +146,16 @@ public class ExpressionsProcessor {
     } else if (OperatorNode.class.isInstance(expressionNode)) {
       return determineOperatorType((OperatorNode) expressionNode);
     } else if (VarRefNode.class.isInstance(expressionNode)) {
-      return contextVarTypes.get(((VarRefNode) expressionNode).getVarName());
+      // TODO rio Toto dopisat do DP. Je to kvoli tomu, aby vo FLWORoch bola premenna obsahujuca cestu sama cesta zacinajuce touto premennou, aby bolo mozne ju povazovat za target return path.
+      final Type varType = contextVarTypes.get(((VarRefNode) expressionNode).getVarName());
+      if (varType.getCategory() == Type.Category.PATH) {
+        final List<StepExprNode> steps = new ArrayList<StepExprNode>();
+        final StepExprNode step = new StepExprNode(expressionNode, null);
+        steps.add(step);
+        final Map<StepExprNode, PathType> substeps = new HashMap<StepExprNode, PathType>();
+        substeps.put(step, (PathType)varType);
+        return new PathType(new PathExprNode(steps, InitialStep.CONTEXT), substeps, false);
+      }
     } else if (FLWORExprNode.class.isInstance(expressionNode)) {
       return TypeFactory.createForUnboundType(((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType());
     } else if (PathExprNode.class.isInstance(expressionNode)) {
@@ -153,6 +164,16 @@ public class ExpressionsProcessor {
       //final ConstructorNode constructorNode = (ConstructorNode)expressionNode;
       // TODO rio Aky typ ma constructor?
       return new UnknownType();
+    } else if (CommaOperatorNode.class.isInstance(expressionNode)) {
+      final CommaOperatorNode commaOperatorNode = (CommaOperatorNode)expressionNode;
+      final Type type = commaOperatorNode.getExpressionNodes().get(0).getType();
+      for (final ExprNode exprNode : commaOperatorNode.getExpressionNodes()) {
+        if (!exprNode.getType().equals(type)) {
+          return new UnknownType();
+        }
+        // TODO rio Toto nie je presne, pravidla budu zlozitejsie.
+        return new UnknownType();
+      }
     }
     assert (false); // TODO rio dorobit pre ostatne typy
     return null;

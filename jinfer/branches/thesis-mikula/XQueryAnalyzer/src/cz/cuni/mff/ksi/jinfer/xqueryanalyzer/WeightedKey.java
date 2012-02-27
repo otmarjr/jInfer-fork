@@ -27,6 +27,19 @@ public class WeightedKey {
   
   public WeightedKey(final Key key, final int weight) {
     this.key = key;
-    this.weight = weight;
+    if (key.isPossitive()) {
+      this.weight = weight;
+    } else {
+      this.weight = 0 - weight;
+    }
   }
+  
+  public int getWeight() {
+    return weight;
+  }
+
+  public Key getKey() {
+    return key;
+  }
+  
 }

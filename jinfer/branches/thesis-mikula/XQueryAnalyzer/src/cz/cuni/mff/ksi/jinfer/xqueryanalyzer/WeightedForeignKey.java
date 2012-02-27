@@ -22,11 +22,20 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
  */
 public class WeightedForeignKey {
   
-  private final Key key;
+  private final ForeignKey key;
   private final int weight;
   
-  public WeightedForeignKey(final Key key, final int weight) {
+  public WeightedForeignKey(final ForeignKey key, final int weight) {
     this.key = key;
     this.weight = weight;
   }
+
+  public int getWeight() {
+    return weight;
+  }
+
+  public ForeignKey getKey() {
+    return key;
+  }
+  
 }

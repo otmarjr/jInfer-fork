@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,23 +68,32 @@ public class KeySummarizer {
     
   }
   
-  public void summarize(final WeightedKey key) {
+  public void summarize(final WeightedKey key, final List<NegativeUniquenessStatement> nuss) {
     if (!keys.containsKey(key.getKey())) {
       final SummarizedInfo si = new SummarizedInfo();
       keys.put(key.getKey(), si);
     }
     
     final SummarizedInfo si = keys.get(key.getKey());
-    si.add(key.getWeight());
+    int weight = key.getWeight();
+    
+    for (final NegativeUniquenessStatement nus : nuss) {
+      if (nus.getContextPath().equals(TypeFactory.createPathType(key.getKey().getContextPath()))
+              && nus.getKeyPath().equals(TypeFactory.createPathType(key.getKey().getKeyPath()))) {
+        weight -= nus.getWeight();
+      }
+    }
+    
+    si.add(weight);
     
     keysTotalCount += 1;
     final int count = si.getCount();
     if (keysMaxCount < count) {
       keysMaxCount = count;
     }
-    final int weight = si.getWeight();
-    if (keysMaxWeight < Math.abs(weight)) {
-      keysMaxWeight = Math.abs(weight);
+    final int sWeight = si.getWeight();
+    if (keysMaxWeight < Math.abs(sWeight)) {
+      keysMaxWeight = Math.abs(sWeight);
     }
   }
   

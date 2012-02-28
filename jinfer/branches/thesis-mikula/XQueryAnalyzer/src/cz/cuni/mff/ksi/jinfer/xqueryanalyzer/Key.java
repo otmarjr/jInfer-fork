@@ -44,6 +44,20 @@ public class Key {
     return true;
   }
 
+  public PathExprNode getContextPath() {
+    return contextPath;
+  }
+
+  public PathExprNode getKeyPath() {
+    return keyPath;
+  }
+
+  public PathExprNode getTargetPath() {
+    return targetPath;
+  }
+  
+  
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {

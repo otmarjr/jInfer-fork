@@ -153,9 +153,9 @@ public class KeysInferrer {
   private final XQNode root;
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<ClassifiedJoinPattern> classifiedJoinPatterns = new ArrayList<ClassifiedJoinPattern>();
-  private final Map<PathType, Integer> negativeWeights = new HashMap<PathType, Integer>();
   private final List<WeightedKey> keys = new ArrayList<WeightedKey>();
   private final List<WeightedForeignKey> foreignKeys = new ArrayList<WeightedForeignKey>();
+  private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
   private final JoinExprFormParser jefp = new JoinExprFormParser();
 
@@ -171,7 +171,7 @@ public class KeysInferrer {
   }
 
   public Map<Key, KeySummarizer.SummarizedInfo> getKeys() {
-    return summarizeKeys(keys);
+    return summarizeKeys(keys, negativeUniquenessStatements);
   }
 
   public List<WeightedForeignKey> getForeignKeys() {
@@ -495,10 +495,11 @@ public class KeysInferrer {
       final String funcName = funcCallNode.getFuncName();
       final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(funcName);
       if (builtinFuncName != null
-              && builtinFuncName.equals("distinct-values")
-              || builtinFuncName.equals("min")
-              || builtinFuncName.equals("max")
-              || builtinFuncName.equals("sum")) {
+              && builtinFuncName.equals("distinct-values") // TODO rio do DP dopisat, ze bereme len distinct-values, kedze min, max a sum sa uz zapocitavaju v ramci hladania join patterns.
+              //|| builtinFuncName.equals("min")
+              //|| builtinFuncName.equals("max")
+              //|| builtinFuncName.equals("sum")
+              ) {
         final ExprNode argument = funcCallNode.getParams().get(0);
         assert (argument != null);
         final Type type = argument.getType();
@@ -584,12 +585,13 @@ public class KeysInferrer {
   }
 
   private void memorizeNegativeWeight(final PathType pathType, final int weight) {
-    Integer oldWeight = negativeWeights.get(pathType);
+    /*Integer oldWeight = negativeWeights.get(pathType);
     int newWeight = weight;
     if (oldWeight != null) {
       newWeight += oldWeight.intValue();
     }
-    negativeWeights.put(pathType, newWeight);
+    negativeWeights.put(pathType, newWeight);*/
+    negativeUniquenessStatements.add(new NegativeUniquenessStatement(pathType, weight));
   }
 
   private void classifiedJoinPatternsToKeys() {
@@ -623,10 +625,10 @@ public class KeysInferrer {
     }
   }
 
-  private static Map<Key, KeySummarizer.SummarizedInfo> summarizeKeys(List<WeightedKey> wKeys) {
+  private static Map<Key, KeySummarizer.SummarizedInfo> summarizeKeys(List<WeightedKey> wKeys, List<NegativeUniquenessStatement> nuss) {
     final KeySummarizer ks = new KeySummarizer();
     for (final WeightedKey wk : wKeys) {
-      ks.summarize(wk);
+      ks.summarize(wk, nuss);
     }
     return ks.getSummarizedKeys();
   }

@@ -202,7 +202,7 @@ public class KeysInferrer {
     final List<VariableBindingNode> bindingNodes = flworExpr.getTupleStreamNode().getBindingClauses();
     final WhereClauseNode whereClauseNode = flworExpr.getWhereClauseNode();
 
-    boolean checkJoinPattern3 = false; // Doplnit do diplomky do volania funckie determineJoinPatterns.
+    boolean checkJoinPattern3 = false;
     ExprNode whereExpr = null;
 
     if (whereClauseNode != null) {
@@ -600,7 +600,7 @@ public class KeysInferrer {
 
       if (cjp.getType() == ClassifiedJoinPattern.Type.O1) {
         final Key key = new Key(jp.getP1(), jp.getL1());
-        final Key notKey = new NegativeKey(jp.getP2(), jp.getP2());
+        final Key notKey = new NegativeKey(jp.getP2(), jp.getL2());
         final ForeignKey foreignKey = new ForeignKey(key, jp.getP2(), jp.getL2());
 
         final WeightedKey wKey = new WeightedKey(key, weight);

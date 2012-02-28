@@ -43,4 +43,48 @@ public class Key {
   public boolean isPossitive() {
     return true;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    
+    if (!(obj instanceof Key)) { 
+      return false;
+    }
+    
+    final Key k = (Key)obj;
+    
+    if (contextPath == null) {
+      if (k.contextPath != null) {
+        return false;
+      }
+    } else {
+      if (!contextPath.equals(k.contextPath)) {
+        return false;
+      }
+    }
+    
+    if (!targetPath.equals(k.targetPath)) {
+      return false;
+    }
+    
+    if (!keyPath.equals(k.keyPath)) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 37 * hash + (this.contextPath != null ? this.contextPath.hashCode() : 0);
+    hash = 37 * hash + (this.targetPath != null ? this.targetPath.hashCode() : 0);
+    hash = 37 * hash + (this.keyPath != null ? this.keyPath.hashCode() : 0);
+    return hash;
+  }
+  
+  
 }

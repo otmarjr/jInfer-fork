@@ -59,4 +59,37 @@ public class PathExprNode extends ExprNode {
   public InitialStep getInitialStep() {
     return initialStep;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    
+    if (!(obj instanceof PathExprNode)) {
+      return false;
+    }
+    
+    final PathExprNode path = (PathExprNode)obj;
+    
+    if (!initialStep.equals(path.initialStep)) {
+      return false;
+    }
+    
+    if (!steps.equals(path.steps)) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 23 * hash + (this.steps != null ? this.steps.hashCode() : 0);
+    hash = 23 * hash + (this.initialStep != null ? this.initialStep.hashCode() : 0);
+    return hash;
+  }
+  
+  
 }

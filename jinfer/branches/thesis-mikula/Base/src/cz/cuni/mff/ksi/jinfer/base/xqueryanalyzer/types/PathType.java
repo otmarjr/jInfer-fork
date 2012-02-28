@@ -81,4 +81,47 @@ public class PathType implements Type {
   public List<String> getSpecialFunctionCalls() {
     return specialFunctionCalls;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    
+    if (!(obj instanceof PathType)) {
+      return false;
+    }
+    
+    final PathType path = (PathType)obj;
+    
+    if (isForBound != path.isForBound) {
+      return false;
+    }
+    
+    if (!pathExprNode.equals(path.pathExprNode)) {
+      return false;
+    }
+    
+    if (!substeps.equals(path.substeps)) {
+      return false;
+    }
+    
+    if (!specialFunctionCalls.equals(path.specialFunctionCalls)) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 37 * hash + (this.pathExprNode != null ? this.pathExprNode.hashCode() : 0);
+    hash = 37 * hash + (this.substeps != null ? this.substeps.hashCode() : 0);
+    hash = 37 * hash + (this.specialFunctionCalls != null ? this.specialFunctionCalls.hashCode() : 0);
+    hash = 37 * hash + (this.isForBound ? 1 : 0);
+    return hash;
+  }
+  
+  
 }

@@ -69,5 +69,31 @@ public class AxisNode extends XQNode {
   public AxisKind getAxisKind() {
     return axisKind;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final AxisNode other = (AxisNode) obj;
+    if (this.nodeTestNode != other.nodeTestNode && (this.nodeTestNode == null || !this.nodeTestNode.equals(other.nodeTestNode))) {
+      return false;
+    }
+    if (this.axisKind != other.axisKind) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 37 * hash + (this.nodeTestNode != null ? this.nodeTestNode.hashCode() : 0);
+    hash = 37 * hash + (this.axisKind != null ? this.axisKind.hashCode() : 0);
+    return hash;
+  }
   
 }

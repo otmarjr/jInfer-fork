@@ -99,4 +99,44 @@ public class StepExprNode extends XQNode {
   public PredicateListNode getPredicateListNode() {
     return predicateListNode;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final StepExprNode other = (StepExprNode) obj;
+    if (this.hasPredicates != other.hasPredicates) {
+      return false;
+    }
+    if (this.isAxisStep != other.isAxisStep) {
+      return false;
+    }
+    if (this.detailNode != other.detailNode && (this.detailNode == null || !this.detailNode.equals(other.detailNode))) {
+      return false;
+    }
+    if (this.predicateListNode != other.predicateListNode && (this.predicateListNode == null || !this.predicateListNode.equals(other.predicateListNode))) {
+      return false;
+    }
+    if (this.axisNode != other.axisNode && (this.axisNode == null || !this.axisNode.equals(other.axisNode))) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 59 * hash + (this.hasPredicates ? 1 : 0);
+    hash = 59 * hash + (this.isAxisStep ? 1 : 0);
+    hash = 59 * hash + (this.detailNode != null ? this.detailNode.hashCode() : 0);
+    hash = 59 * hash + (this.predicateListNode != null ? this.predicateListNode.hashCode() : 0);
+    hash = 59 * hash + (this.axisNode != null ? this.axisNode.hashCode() : 0);
+    return hash;
+  }
+  
+  
 }

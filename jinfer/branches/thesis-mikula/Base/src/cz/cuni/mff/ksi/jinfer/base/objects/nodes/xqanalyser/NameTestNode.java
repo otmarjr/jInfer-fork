@@ -40,6 +40,10 @@ public class NameTestNode extends ItemTypeNode {
     return NodeNames.NODE_NAME_TEST;
   }
 
+  public String getName() {
+    return name;
+  }
+  
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {

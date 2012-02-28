@@ -70,6 +70,10 @@ public class AxisNode extends XQNode {
     return axisKind;
   }
 
+  public ItemTypeNode getNodeTestNode() {
+    return nodeTestNode;
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {

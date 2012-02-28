@@ -19,7 +19,12 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
+import java.lang.reflect.Type;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -46,6 +51,81 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       processSyntaxTree(mn);
     }
     callback.finished(idh);
+  }
+  
+  private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) {
+    for (final PathType pathType : inferredTypes.keySet()) {
+      final PathTypeParser ptp = new PathTypeParser(pathType);
+      while (ptp.goNextStep()) {
+        final StepExprNode step = ptp.getActualStep();
+        final PathTypeEvaluationContextNodesSet contextSet = evaluateStep(null, step, grammar);
+        // TODO rio dokoncit
+      }
+    }
+  }
+  
+  private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {
+    if (SelfOrDescendantStepNode.class.isInstance(step)) {
+      return contextSet;
+    }
+    
+    if (contextSet == null) {
+      contextSet = new PathTypeEvaluationContextNodesSet();
+      for (final Element element : grammar) {
+        contextSet.addNode(element);
+      }
+    }
+    
+    final PathTypeEvaluationContextNodesSet result = new PathTypeEvaluationContextNodesSet();
+    
+    if (step.isAxisStep()) {
+      final AxisNode axisNode = step.getAxisNode();
+      final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
+      switch (axisNode.getAxisKind()) {
+        case ATTRIBUTE: {
+          assert(NameTestNode.class.isInstance(itemTypeNode)); // Mozno dokoncit, v pripade potreby
+          final NameTestNode ntn = (NameTestNode)itemTypeNode;
+          final String attName = ntn.getName();
+          for (final AbstractStructuralNode node : contextSet.getNodes()) {
+            if (node.isElement()) {
+              for (final Attribute att : ((Element)node).getAttributes()) {
+                if (att.getName().equals(attName)) {
+                  result.addAttribute(att);
+                }
+              }
+            }
+          }
+          break;
+        }
+          
+        case CHILD: {
+          assert(NameTestNode.class.isInstance(itemTypeNode)); // Mozno dokoncit, v pripade potreby
+          final NameTestNode ntn = (NameTestNode)itemTypeNode;
+          final String nodeName = ntn.getName();
+          for (final AbstractStructuralNode node : contextSet.getNodes()) {
+            if (node.isElement()) {
+              for (final AbstractStructuralNode subnode : ((Element)node).getSubnodes().getTokens()) {
+                if (subnode.isElement()) {
+                  for (final Element element : grammar) {
+                    if (element.getName().equals(subnode.getName())) {
+                      result.addNode(element);
+                    }
+                  }
+                }
+              }
+            }
+          }
+          break;
+        }
+          
+        default:
+          assert(false); // Mozno dokoncit, v pripade potreby
+      }
+    } else {
+      assert(false); // Mozno dokoncit, v pripade potreby
+    }
+    
+    return result;
   }
   
   private void processSyntaxTree(final ModuleNode root) {

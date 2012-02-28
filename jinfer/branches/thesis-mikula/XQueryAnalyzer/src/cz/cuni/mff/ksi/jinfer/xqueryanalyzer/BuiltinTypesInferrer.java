@@ -39,11 +39,12 @@ public class BuiltinTypesInferrer {
     this.fp = fp;
   }
   
-  public void process() {
+  public Map<PathType, Type> process() {
     processRecursive(root);
+    return inferredTypes;
   }
   
-  public void processRecursive(final XQNode node) {
+  private void processRecursive(final XQNode node) {
     if (FunctionCallNode.class.isInstance(node)) {
       processFunctionCall((FunctionCallNode)node);
     } else if (OperatorNode.class.isInstance(node)) {
@@ -59,7 +60,7 @@ public class BuiltinTypesInferrer {
     }
   }
   
-  public void processFunctionCall(final FunctionCallNode fcn) {
+  private void processFunctionCall(final FunctionCallNode fcn) {
     final List<ExprNode> params = fcn.getParams();
     final ParamListNode paramListNode = fp.getParamListNode(fcn.getFuncName());
     
@@ -82,7 +83,7 @@ public class BuiltinTypesInferrer {
     }
   }
   
-  public void processOperator(final OperatorNode opNode) {
+  private void processOperator(final OperatorNode opNode) {
     final Operator op = opNode.getOperator();
     
     PathType pathType = null;
@@ -149,4 +150,5 @@ public class BuiltinTypesInferrer {
       inferredTypes.put(pathType, type);
     }
   }
+  
 }

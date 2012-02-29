@@ -150,7 +150,7 @@ public class KeysInferrer {
       return L2;
     }
   }
-  private final XQNode root;
+
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<ClassifiedJoinPattern> classifiedJoinPatterns = new ArrayList<ClassifiedJoinPattern>();
   private final List<WeightedKey> keys = new ArrayList<WeightedKey>();
@@ -159,13 +159,12 @@ public class KeysInferrer {
   
   private final JoinExprFormParser jefp = new JoinExprFormParser();
 
-  public KeysInferrer(final XQNode root) {
-    this.root = root;
-  }
-
-  public void process() {
+  public void process(final XQNode root) {
     Map<String, ForClauseNode> forVariables = new HashMap<String, ForClauseNode>();
     processRecursive(root, forVariables);
+  }
+  
+  public void summarize() {
     classifyJoinPatterns();
     classifiedJoinPatternsToKeys();
   }

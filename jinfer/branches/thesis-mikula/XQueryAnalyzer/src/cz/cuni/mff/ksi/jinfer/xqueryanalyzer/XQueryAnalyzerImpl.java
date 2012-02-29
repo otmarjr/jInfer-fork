@@ -25,6 +25,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.XSDType;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -45,6 +47,11 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private static final String NAME = "XQuery_Analyzer";
   private static final String DISPLAY_NAME = "XQuery analyzer";
   
+  private static final String METADATA_KEY_TYPE = "xquery_analyzer_type";
+  private static final String METADATA_KEY_HAS_PREDICATES = "xquery_analyzer_type";
+  private static final String METADATA_KEY_KEYS = "xquery_analyzer_keys";
+  
+  private final KeysInferrer keysInferrer = new KeysInferrer();
   private Map<PathType, Type> inferredTypes;
 
   @Override
@@ -53,29 +60,89 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       processSyntaxTree(mn);
       saveInferredTypes(idh.getGrammar(), inferredTypes);
     }
+    
+    keysInferrer.summarize();
+    final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
+    saveInferredKeys(idh.getGrammar(), keys);
+    
     callback.finished(idh);
   }
   
   private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) {
     for (final PathType pathType : inferredTypes.keySet()) {
+      final Type inferredType = inferredTypes.get(pathType);
+      if (inferredType.getCategory() != Type.Category.BUILT_IN) {
+        continue;
+      }
+      
       final PathTypeParser ptp = new PathTypeParser(pathType);
-      PathTypeEvaluationContextNodesSet contextSet = null;
+      final boolean hasPredicates = ptp.isHasPredicates();      
+      
+      PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
+      contextSet.addNode(grammar.get(0));
       for (final StepExprNode step : ptp.getSteps()) {
         contextSet = evaluateStep(contextSet, step, grammar);
       }
+
+      for (final AbstractStructuralNode node : contextSet.getNodes()) {
+        final Map<String, Object> metadata = node.getMetadata();
+        final XSDType type = (XSDType)metadata.get(METADATA_KEY_TYPE);
+        if (type == null) {
+          metadata.put(METADATA_KEY_TYPE, inferredType);
+          metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
+        } else {
+          final XSDType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific((XSDType)inferredType, type);
+          if (moreSpecificType != null) {
+            metadata.put(METADATA_KEY_TYPE, moreSpecificType);
+            metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
+          } else {
+            final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
+            if (!hasPredicates && oldHasPredicates) {
+              metadata.put(METADATA_KEY_TYPE, inferredType);
+              metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys) {
+    for (final Key key : keys.keySet()) {
+      final KeySummarizer.SummarizedInfo keyInfo = keys.get(key);
       
-      // TODO rio dokoncit
-      // Urcite pravidla pre vysledny typ v pripade kolizie roznych odvodenych tvrdeni. Asi bude zalezat aj na tom, ci PathType (ne)ma predikaty.
+      if (keyInfo.getNormalizedWeight() < 0.3) {
+        continue;
+      }
+
+      final PathType contextPath = key.getContextPath() != null ? TypeFactory.createPathType(key.getContextPath()) : null;
+      
+      PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
+      contextSet.addNode(grammar.get(0));
+      
+      if (contextPath != null) {
+        final PathTypeParser ptp = new PathTypeParser(contextPath);
+        for (final StepExprNode step : ptp.getSteps()) {
+          contextSet = evaluateStep(contextSet, step, grammar);
+        }
+      }
+      
+      for (final AbstractStructuralNode node : contextSet.getNodes()) {
+        final Map<String, Object> metadata = node.getMetadata();
+        final List<Key> savedKeys = (List<Key>)metadata.get(METADATA_KEY_KEYS);
+        if (savedKeys == null) {
+          final List<Key> keyList = new ArrayList<Key>();
+          keyList.add(key);
+          metadata.put(METADATA_KEY_KEYS, keyList);
+        } else {
+          savedKeys.add(key);
+        }
+      }
     }
   }
   
   private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {
-    if (contextSet == null) {
-      contextSet = new PathTypeEvaluationContextNodesSet();
-      for (final Element element : grammar) {
-        contextSet.addNode(element);
-      }
-    }
+    assert(contextSet != null);
     
     if (SelfOrDescendantStepNode.class.isInstance(step)) {
       return contextSet;
@@ -143,9 +210,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     bti.process();
     inferredTypes = bti.getInferredTypes();
     
-    final KeysInferrer keysInferrer = new KeysInferrer(root);
-    keysInferrer.process();
-    Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
+    keysInferrer.process(root);
   }
   
   @Override

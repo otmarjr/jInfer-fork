@@ -150,5 +150,9 @@ public class BuiltinTypesInferrer {
       inferredTypes.put(pathType, type);
     }
   }
-  
+
+  public Map<PathType, Type> getInferredTypes() {
+    return inferredTypes;
+  }
+    
 }

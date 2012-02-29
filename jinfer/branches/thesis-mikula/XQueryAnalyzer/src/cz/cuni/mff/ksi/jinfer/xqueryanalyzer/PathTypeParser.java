@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.VarRefNode;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -28,7 +29,7 @@ import java.util.Stack;
  *
  * @author rio
  */
-public class PathTypeParser {
+public final class PathTypeParser {
   
   private final Stack<Integer> stepsIndices = new Stack<Integer>(); // Zasobnik indexov, kde sa prave nachadzame v kazdom liste v zasobniku listov krokov. Hodnota udava ktory je dalsi v poradi (0 -> ideme prave na nulu).
   private final Stack<List<StepExprNode>> stepsStack = new Stack<List<StepExprNode>>();
@@ -36,22 +37,32 @@ public class PathTypeParser {
   private StepExprNode actualStep;
   private InitialStep initialStep;
   private boolean isFirstStep = true;
+  private boolean hasPredicates = false;
+  private List<StepExprNode> steps = new ArrayList<StepExprNode>();
   
   public PathTypeParser(final PathType pathType) {
     stepsIndices.push(0);
     stepsStack.push(pathType.getPathExprNode().getSteps());
     pathTypesStack.push(pathType);
+    
+    while(goNextStep()) {
+      steps.add(actualStep);
+    }
   }
    
-  public boolean goNextStep() {
+  private boolean goNextStep() {
     int index = stepsIndices.pop();
-    final List<StepExprNode> steps = stepsStack.peek();
+    final List<StepExprNode> actualSteps = stepsStack.peek();
     final PathType actualPathType = pathTypesStack.peek();
     
-    if (steps.size() > index) {
-      actualStep = steps.get(index);
+    if (actualSteps.size() > index) {
+      actualStep = actualSteps.get(index);
       ++index;
       stepsIndices.push(index);
+      
+      if (actualStep.hasPredicates()) {
+        hasPredicates = true;
+      }
       
       final ExprNode detailNode = actualStep.getDetailNode();
       if (VarRefNode.class.isInstance(detailNode)) {
@@ -82,12 +93,17 @@ public class PathTypeParser {
     }
   }
   
-  public StepExprNode getActualStep() {
-    return actualStep;
-  }
-  
   // Platne az po prvom volani goNextStep.
   public InitialStep getInitialStep() {
     return initialStep;
   }
+
+  public boolean isHasPredicates() {
+    return hasPredicates;
+  }
+
+  public List<StepExprNode> getSteps() {
+    return steps;
+  }
+  
 }

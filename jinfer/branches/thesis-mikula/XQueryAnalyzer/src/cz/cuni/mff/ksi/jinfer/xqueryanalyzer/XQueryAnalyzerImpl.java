@@ -24,7 +24,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
-import java.lang.reflect.Type;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -44,11 +44,14 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   
   private static final String NAME = "XQuery_Analyzer";
   private static final String DISPLAY_NAME = "XQuery analyzer";
+  
+  private Map<PathType, Type> inferredTypes;
 
   @Override
   public void start(InferenceDataHolder idh, XQueryAnalyzerCallback callback) throws InterruptedException {
     for (final ModuleNode mn : idh.getXQuerySyntaxTrees()) {
       processSyntaxTree(mn);
+      saveInferredTypes(idh.getGrammar(), inferredTypes);
     }
     callback.finished(idh);
   }
@@ -56,24 +59,26 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) {
     for (final PathType pathType : inferredTypes.keySet()) {
       final PathTypeParser ptp = new PathTypeParser(pathType);
-      while (ptp.goNextStep()) {
-        final StepExprNode step = ptp.getActualStep();
-        final PathTypeEvaluationContextNodesSet contextSet = evaluateStep(null, step, grammar);
-        // TODO rio dokoncit
+      PathTypeEvaluationContextNodesSet contextSet = null;
+      for (final StepExprNode step : ptp.getSteps()) {
+        contextSet = evaluateStep(contextSet, step, grammar);
       }
+      
+      // TODO rio dokoncit
+      // Urcite pravidla pre vysledny typ v pripade kolizie roznych odvodenych tvrdeni. Asi bude zalezat aj na tom, ci PathType (ne)ma predikaty.
     }
   }
   
   private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {
-    if (SelfOrDescendantStepNode.class.isInstance(step)) {
-      return contextSet;
-    }
-    
     if (contextSet == null) {
       contextSet = new PathTypeEvaluationContextNodesSet();
       for (final Element element : grammar) {
         contextSet.addNode(element);
       }
+    }
+    
+    if (SelfOrDescendantStepNode.class.isInstance(step)) {
+      return contextSet;
     }
     
     final PathTypeEvaluationContextNodesSet result = new PathTypeEvaluationContextNodesSet();
@@ -107,7 +112,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
               for (final AbstractStructuralNode subnode : ((Element)node).getSubnodes().getTokens()) {
                 if (subnode.isElement()) {
                   for (final Element element : grammar) {
-                    if (element.getName().equals(subnode.getName())) {
+                    if (element.getName().equals(nodeName)) {
                       result.addNode(element);
                     }
                   }
@@ -136,11 +141,11 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     expressionProcessor.process();
     final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
     bti.process();
+    inferredTypes = bti.getInferredTypes();
     
     final KeysInferrer keysInferrer = new KeysInferrer(root);
     keysInferrer.process();
     Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
-    return;
   }
   
   @Override

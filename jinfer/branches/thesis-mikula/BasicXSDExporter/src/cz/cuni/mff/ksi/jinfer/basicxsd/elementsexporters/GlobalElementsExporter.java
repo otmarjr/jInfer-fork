@@ -89,6 +89,8 @@ public final class GlobalElementsExporter extends AbstractElementsExporter {
     indentator.increaseIndentation();
 
     processElementContent(element);
+    
+    processElementKeys(element);
 
     indentator.decreaseIndentation();
 

@@ -23,6 +23,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
@@ -30,6 +32,7 @@ import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.XSDType;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
+import sun.misc.UCDecoder;
 
 /**
  * TODO rio comment
@@ -107,7 +110,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     }
   }
   
-  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys) {
+  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys) throws InterruptedException {
+    final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
+    
+    if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
+      return;
+    }
+    
+    final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
+    
     for (final Key key : keys.keySet()) {
       final KeySummarizer.SummarizedInfo keyInfo = keys.get(key);
       
@@ -118,12 +129,12 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       final PathType contextPath = key.getContextPath() != null ? TypeFactory.createPathType(key.getContextPath()) : null;
       
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
-      contextSet.addNode(grammar.get(0));
+      contextSet.addNode(root);
       
       if (contextPath != null) {
         final PathTypeParser ptp = new PathTypeParser(contextPath);
         for (final StepExprNode step : ptp.getSteps()) {
-          contextSet = evaluateStep(contextSet, step, grammar);
+          contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
         }
       }
       

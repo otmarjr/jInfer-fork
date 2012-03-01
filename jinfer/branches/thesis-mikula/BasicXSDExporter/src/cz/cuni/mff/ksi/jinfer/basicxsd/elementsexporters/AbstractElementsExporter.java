@@ -21,17 +21,22 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
 import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.Key;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.PathTypeParser;
 import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
@@ -48,6 +53,7 @@ public abstract class AbstractElementsExporter {
   protected final Indentator indentator;
   protected final String typenamePrefix;
   protected final String typenamePostfix;
+  private int keyNumber = 1;
 
   /**
    * Constructor.
@@ -144,6 +150,8 @@ public abstract class AbstractElementsExporter {
       default:
         throw new IllegalStateException("Unknown or illegal enum member.");
     }
+    
+    processElementKeys(element);
 
     indentator.decreaseIndentation();
 
@@ -164,6 +172,76 @@ public abstract class AbstractElementsExporter {
     }
 
     processElementAttributes(element);
+  }
+  
+  protected void processElementKeys(final Element element) {
+    final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_analyzer_keys");
+    
+    if (keys == null) {
+      return;
+    }
+    
+    for (final Key key : keys) {
+      final PathType targetPath = TypeFactory.createPathType(key.getTargetPath());
+      final PathType keyPath = TypeFactory.createPathType(key.getKeyPath());
+      final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
+      final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
+
+      indentator.indent("<xs:key name=\"key" + new Integer(keyNumber).toString() + "\">\n");
+      ++keyNumber;
+      indentator.increaseIndentation();
+      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPathParser) + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPathParser) + "\"/>\n");
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:key>\n");
+    }
+  }
+  
+  // TODO rio refactor
+  private String pathTypeParserToString(final PathTypeParser parser) {
+    final StringBuilder stringBuilder = new StringBuilder();
+    boolean isFirstNode = true;
+    boolean printChildAxis = true;
+    
+    for (final StepExprNode step : parser.getSteps()) {
+      assert(step.hasPredicates() == false);
+            
+      if (SelfOrDescendantStepNode.class.isInstance(step)) {
+        if (isFirstNode) {
+          stringBuilder.append(".");
+        }
+        stringBuilder.append("//");
+        printChildAxis = false;
+      } else {
+        assert(step.isAxisStep());
+        final AxisNode axisNode = step.getAxisNode();
+
+        switch (axisNode.getAxisKind()) {
+          case ATTRIBUTE:
+            stringBuilder.append("@");
+            break;
+            
+          case CHILD:
+            if (!isFirstNode && printChildAxis) {
+              stringBuilder.append("/");
+            }
+            break;
+            
+          default:
+            assert(false);
+        }
+        
+        final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
+        assert(NameTestNode.class.isInstance(itemTypeNode));
+        stringBuilder.append(((NameTestNode)itemTypeNode).getName());
+        
+        printChildAxis = true;
+      }
+      
+      isFirstNode = false;
+    }
+    
+    return stringBuilder.toString();
   }
 
   private void processElementAttributes(final Element element) throws InterruptedException {

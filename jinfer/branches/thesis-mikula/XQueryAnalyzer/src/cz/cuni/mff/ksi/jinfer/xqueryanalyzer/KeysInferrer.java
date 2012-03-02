@@ -158,6 +158,9 @@ public class KeysInferrer {
   private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
   private final JoinExprFormParser jefp = new JoinExprFormParser();
+  
+  private Map<Key, KeySummarizer.SummarizedInfo> summarizedKeys;
+  private Map<Key, List<ForeignKey>> keysToForeignKeys;
 
   public void process(final XQNode root) {
     Map<String, ForClauseNode> forVariables = new HashMap<String, ForClauseNode>();
@@ -167,14 +170,31 @@ public class KeysInferrer {
   public void summarize() {
     classifyJoinPatterns();
     classifiedJoinPatternsToKeys();
+    summarizedKeys = summarizeKeys(keys, negativeUniquenessStatements);
+    
+    keysToForeignKeys = new HashMap<Key, List<ForeignKey>>();
+    for (final WeightedForeignKey wfk : foreignKeys) {
+      final ForeignKey fk = wfk.getKey();
+      final Key k = fk.getKey();
+      
+      assert(summarizedKeys.containsKey(k));
+      
+      if (keysToForeignKeys.containsKey(k)) {
+        keysToForeignKeys.get(k).add(fk);
+      } else {
+        final List<ForeignKey> fkList = new ArrayList<ForeignKey>();
+        fkList.add(fk);
+        keysToForeignKeys.put(k, fkList);
+      }
+    }
   }
 
   public Map<Key, KeySummarizer.SummarizedInfo> getKeys() {
-    return summarizeKeys(keys, negativeUniquenessStatements);
+    return summarizedKeys;
   }
-
-  public List<WeightedForeignKey> getForeignKeys() {
-    return foreignKeys;
+  
+  public Map<Key, List<ForeignKey>> getForeignKeys() {
+    return keysToForeignKeys;
   }
 
   private void processRecursive(final XQNode node, Map<String, ForClauseNode> forVariables) {

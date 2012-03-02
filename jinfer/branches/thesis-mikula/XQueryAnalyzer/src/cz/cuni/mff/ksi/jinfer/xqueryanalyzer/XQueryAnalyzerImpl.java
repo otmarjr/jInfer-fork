@@ -53,6 +53,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private static final String METADATA_KEY_TYPE = "xquery_analyzer_type";
   private static final String METADATA_KEY_HAS_PREDICATES = "xquery_analyzer_type";
   private static final String METADATA_KEY_KEYS = "xquery_analyzer_keys";
+  private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_analyzer_foreign_keys";
   
   private final KeysInferrer keysInferrer = new KeysInferrer();
   private Map<PathType, Type> inferredTypes;
@@ -66,7 +67,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     
     keysInferrer.summarize();
     final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
-    saveInferredKeys(idh.getGrammar(), keys);
+    final Map<Key, List<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
+    saveInferredKeys(idh.getGrammar(), keys, foreignKeys);
     
     callback.finished(idh);
   }
@@ -110,7 +112,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     }
   }
   
-  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys) throws InterruptedException {
+  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys, Map<Key, List<ForeignKey>> foreignKeys) throws InterruptedException {
     final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
     
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
@@ -138,6 +140,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         }
       }
       
+      final List<ForeignKey> fKeys = foreignKeys.get(key);
+      
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
         final List<Key> savedKeys = (List<Key>)metadata.get(METADATA_KEY_KEYS);
@@ -147,6 +151,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
           metadata.put(METADATA_KEY_KEYS, keyList);
         } else {
           savedKeys.add(key);
+        }
+        
+        if (!BaseUtils.isEmpty(fKeys)) {
+          final List<ForeignKey> savedFKeys = (List<ForeignKey>)metadata.get(METADATA_KEY_FOREIGN_KEYS);
+          if (savedFKeys == null) {
+            metadata.put(METADATA_KEY_FOREIGN_KEYS, fKeys);
+          } else {
+            savedFKeys.addAll(fKeys);
+          }
         }
       }
     }

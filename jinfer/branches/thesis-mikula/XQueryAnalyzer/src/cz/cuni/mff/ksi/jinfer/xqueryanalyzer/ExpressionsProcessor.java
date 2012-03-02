@@ -155,6 +155,8 @@ public class ExpressionsProcessor {
         final Map<StepExprNode, PathType> substeps = new HashMap<StepExprNode, PathType>();
         substeps.put(step, (PathType)varType);
         return new PathType(new PathExprNode(steps, InitialStep.CONTEXT), substeps, false);
+      } else {
+        return varType;
       }
     } else if (FLWORExprNode.class.isInstance(expressionNode)) {
       return TypeFactory.createForUnboundType(((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType());
@@ -174,6 +176,9 @@ public class ExpressionsProcessor {
         // TODO rio Toto nie je presne, pravidla budu zlozitejsie.
         return new UnknownType();
       }
+    } else if (IfExprNode.class.isInstance(expressionNode)) {
+      final IfExprNode ifExprNode = (IfExprNode)expressionNode;
+      return ifExprNode.getThenExpressionNode().getExprNode().getType();
     }
     assert (false); // TODO rio dorobit pre ostatne typy
     return null;

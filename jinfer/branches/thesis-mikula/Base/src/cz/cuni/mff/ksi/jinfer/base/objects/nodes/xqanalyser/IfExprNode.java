@@ -63,4 +63,17 @@ public class IfExprNode extends ExprNode {
     
     return subnodes;
   }
+
+  public ElseExpressionNode getElseExpressionNode() {
+    return elseExpressionNode;
+  }
+
+  public TestExpressionNode getTestExpressionNode() {
+    return testExpressionNode;
+  }
+
+  public ThenExpressionNode getThenExpressionNode() {
+    return thenExpressionNode;
+  }
+  
 }

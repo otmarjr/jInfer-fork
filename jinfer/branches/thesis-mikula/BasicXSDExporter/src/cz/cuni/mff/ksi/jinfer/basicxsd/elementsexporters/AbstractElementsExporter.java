@@ -35,9 +35,12 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.PathTypeParser;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 
@@ -54,6 +57,7 @@ public abstract class AbstractElementsExporter {
   protected final String typenamePrefix;
   protected final String typenamePostfix;
   private int keyNumber = 1;
+  private final Map<Key, String> keyNames = new HashMap<Key, String>();
 
   /**
    * Constructor.
@@ -152,6 +156,7 @@ public abstract class AbstractElementsExporter {
     }
     
     processElementKeys(element);
+    processElementForeignKeys(element);
 
     indentator.decreaseIndentation();
 
@@ -186,6 +191,8 @@ public abstract class AbstractElementsExporter {
       final PathType keyPath = TypeFactory.createPathType(key.getKeyPath());
       final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
       final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
+      
+      keyNames.put(key, "key" + new Integer(keyNumber).toString());
 
       indentator.indent("<xs:key name=\"key" + new Integer(keyNumber).toString() + "\">\n");
       ++keyNumber;
@@ -194,6 +201,31 @@ public abstract class AbstractElementsExporter {
       indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPathParser) + "\"/>\n");
       indentator.decreaseIndentation();
       indentator.indent("</xs:key>\n");
+    }
+  }
+  
+  protected void processElementForeignKeys(final Element element) {
+    final List<ForeignKey> fKeys = (List<ForeignKey>)element.getMetadata().get("xquery_analyzer_foreign_keys");
+    
+    if (fKeys == null) {
+      return;
+    }
+    
+    for (final ForeignKey fKey : fKeys) {
+      final PathType targetPath = TypeFactory.createPathType(fKey.getForeignTargetPath());
+      final PathType keyPath = TypeFactory.createPathType(fKey.getForeignKeyPath());
+      final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
+      final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
+      
+      final String keyName = keyNames.get(fKey.getKey());
+      assert(keyName != null);
+
+      indentator.indent("<xs:keyref name=\"" + keyName + "Ref\">\n");
+      indentator.increaseIndentation();
+      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPathParser) + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPathParser) + "\"/>\n");
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:keyref>\n");
     }
   }
   

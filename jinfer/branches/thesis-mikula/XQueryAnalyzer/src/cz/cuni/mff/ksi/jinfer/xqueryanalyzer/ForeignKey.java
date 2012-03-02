@@ -33,4 +33,18 @@ public class ForeignKey {
     this.foreignTargetPath = foreignTargetPath;
     this.foreignKeyPath = foreignKeyPath;
   }
+  
+  public Key getKey() {
+    return key;
+  }
+
+  public PathExprNode getForeignKeyPath() {
+    return foreignKeyPath;
+  }
+
+  public PathExprNode getForeignTargetPath() {
+    return foreignTargetPath;
+  }
+  
+  
 }

@@ -51,7 +51,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private static final String DISPLAY_NAME = "XQuery analyzer";
   
   private static final String METADATA_KEY_TYPE = "xquery_analyzer_type";
-  private static final String METADATA_KEY_HAS_PREDICATES = "xquery_analyzer_type";
+  private static final String METADATA_KEY_HAS_PREDICATES = "xquery_analyzer_type_has_predicates";
   private static final String METADATA_KEY_KEYS = "xquery_analyzer_keys";
   private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_analyzer_foreign_keys";
   
@@ -73,7 +73,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     callback.finished(idh);
   }
   
-  private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) {
+  private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) throws InterruptedException {
+    final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
+    
+    if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
+      return;
+    }
+    
+    final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
+    
     for (final PathType pathType : inferredTypes.keySet()) {
       final Type inferredType = inferredTypes.get(pathType);
       if (inferredType.getCategory() != Type.Category.BUILT_IN) {
@@ -84,13 +92,34 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       final boolean hasPredicates = ptp.isHasPredicates();      
       
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
-      contextSet.addNode(grammar.get(0));
+      contextSet.addNode(root);
       for (final StepExprNode step : ptp.getSteps()) {
         contextSet = evaluateStep(contextSet, step, grammar);
       }
 
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
+        final XSDType type = (XSDType)metadata.get(METADATA_KEY_TYPE);
+        if (type == null) {
+          metadata.put(METADATA_KEY_TYPE, inferredType);
+          metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
+        } else {
+          final XSDType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific((XSDType)inferredType, type);
+          if (moreSpecificType != null) {
+            metadata.put(METADATA_KEY_TYPE, moreSpecificType);
+            metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
+          } else {
+            final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
+            if (!hasPredicates && oldHasPredicates) {
+              metadata.put(METADATA_KEY_TYPE, inferredType);
+              metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
+            }
+          }
+        }
+      }
+      
+      for (final Attribute attribute : contextSet.getAttributes()) {
+        final Map<String, Object> metadata = attribute.getMetadata();
         final XSDType type = (XSDType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredType);
@@ -218,6 +247,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
           assert(false); // Mozno dokoncit, v pripade potreby
       }
     } else {
+      final ExprNode detailNode = step.getDetailNode();
+      
+      if (FunctionCallNode.class.isInstance(detailNode)) {
+        final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(((FunctionCallNode)detailNode).getFuncName());
+        if ("doc".equals(builtinFuncName)) {
+          return contextSet;
+        }
+      } 
+      
       assert(false); // Mozno dokoncit, v pripade potreby
     }
     

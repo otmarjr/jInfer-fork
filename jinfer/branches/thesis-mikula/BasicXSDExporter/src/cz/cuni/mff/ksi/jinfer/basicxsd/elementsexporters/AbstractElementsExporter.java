@@ -29,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
 import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
@@ -98,8 +99,15 @@ public abstract class AbstractElementsExporter {
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
       final String type = TypeUtils.getBuiltinType(element);
-
-      indentator.append(" type=\"" + type + '"');
+      final XSDType xqueryType = (XSDType)element.getMetadata().get("xquery_analyzer_type");
+      
+      if (xqueryType == null) {
+        indentator.append(" type=\"" + type + '"');
+      } else {
+        LOG.info("Built-in type of element inferred by the simplifier: " + type);
+        LOG.info("Built-in type of element inferred by the xquery analyzer: " + xqueryType.getAtomicType().toString());
+        indentator.append(" type=\"" + xqueryType.getAtomicType().toString() + '"');
+      }
       indentator.append(OccurencesProcessor.processOccurrences(interval));
       indentator.append("/>\n");
       return;
@@ -287,7 +295,15 @@ public abstract class AbstractElementsExporter {
         indentator.append(attribute.getName());
 
         final String type = TypeUtils.getBuiltinAttributeType(attribute);
-        indentator.append("\" type=\"" + type + '"');
+        final XSDType xqueryType = (XSDType)attribute.getMetadata().get("xquery_analyzer_type");
+      
+        if (xqueryType == null) {
+          indentator.append("\" type=\"" + type + '"');
+        } else {
+          LOG.info("Built-in type of attribute inferred by the simplifier: " + type);
+          LOG.info("Built-in type of attribute inferred by the xquery analyzer: " + xqueryType.getAtomicType().toString());
+          indentator.append("\" type=\"" + xqueryType.getAtomicType().toString() + '"');
+        }
 
         if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) {
           indentator.append(" use=\"required\"");

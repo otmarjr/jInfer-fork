@@ -68,10 +68,11 @@ public class FileAddAction extends AbstractAction {
 
     if (FolderType.QUERY.equals(type)) {
       fileChooserBuilder = fileChooserBuilder.addFileFilter(new FileNameExtensionFilter(
-              "XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter(
+              "XPath files (*.xpath)", "xpath")).addFileFilter(new FileNameExtensionFilter("XQuery files (*.xq)", "xq")).
+              addFileFilter(new FileNameExtensionFilter(
               "Text files (*.txt)", "txt")).addFileFilter(new FileNameExtensionFilter(
-              "Text and XPath files (*.txt, *.xpath)",
-              "txt", "xpath"));
+              "Text, XPath, and XQuery files (*.txt, *.xpath, *.xq)",
+              "txt", "xpath", "xq"));
     } else {
       final ArrayList<String> extensions = new ArrayList<String>();
       for (Processor processor : processors) {

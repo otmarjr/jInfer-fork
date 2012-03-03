@@ -214,7 +214,6 @@ public class KeysInferrer {
 
     rejectionOfUniqueness_aggregationFunctions(node);
     rejectionOfUniqueness_comparisonWithAConstant(node);
-    // TODO rio zlucovanie vah
   }
 
   public Map<String, ForClauseNode> processFLWORExpr(final FLWORExprNode flworExpr, Map<String, ForClauseNode> forVariables) {
@@ -349,7 +348,7 @@ public class KeysInferrer {
             if (functionName.equals("min")
                     || functionName.equals("max")
                     || functionName.equals("avg")
-                    || functionName.equals("sum")) { // TODO rio pozor na nazvy funkcii, mozu byt aj prefixovane.
+                    || functionName.equals("sum")) {
               classifiedJoinPatterns.add(new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 100));
               cont = false;
               break;
@@ -450,16 +449,14 @@ public class KeysInferrer {
     } else if (VarRefNode.class.isInstance(node)) {
       final VarRefNode varRefNode = (VarRefNode)node;
       if (varRefNode.getVarName().equals(varName)) {
-        // TODO rio Toto dopisat do DP. Je to kvoli tomu, aby vo FLWORoch bola premenna obsahujuca cestu sama cesta zacinajuce touto premennou, aby bolo mozne ju povazovat za target return path.
+        // Toto je to kvoli tomu, aby vo FLWORoch bola premenna obsahujuca cestu sama cesta zacinajuce touto premennou, aby bolo mozne ju povazovat za target return path.
         assert(varRefNode.getType().getCategory() == Type.Category.PATH);
-        final List<StepExprNode> steps = new ArrayList<StepExprNode>();
-        final StepExprNode step = new StepExprNode(varRefNode, null);
-        steps.add(step);
-        final Map<StepExprNode, PathType> substeps = new HashMap<StepExprNode, PathType>();
-        substeps.put(step, (PathType)varRefNode.getType());
-        final PathExprNode path = new PathExprNode(steps, InitialStep.CONTEXT);
-        path.setParentNode(varRefNode.getParentNode());
-        paths.add(path);
+        final PathType pathType = (PathType)varRefNode.getType();
+        if (isTargetPath(pathType, varName)) {
+          final PathExprNode path = pathType.getPathExprNode();
+          path.setParentNode(varRefNode.getParentNode());
+          paths.add(path);
+        }
       }
     }
 
@@ -514,7 +511,7 @@ public class KeysInferrer {
       final String funcName = funcCallNode.getFuncName();
       final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(funcName);
       if (builtinFuncName != null
-              && builtinFuncName.equals("distinct-values") // TODO rio do DP dopisat, ze bereme len distinct-values, kedze min, max a sum sa uz zapocitavaju v ramci hladania join patterns.
+              && builtinFuncName.equals("distinct-values") // Bereme len distinct-values, kedze min, max a sum sa uz zapocitavaju v ramci hladania join patterns.
               //|| builtinFuncName.equals("min")
               //|| builtinFuncName.equals("max")
               //|| builtinFuncName.equals("sum")

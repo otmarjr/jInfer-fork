@@ -36,7 +36,7 @@ import java.util.Map;
  * vyrazy v tele dotazu.
  * 
  * TODO rio Treba dorobit analyzu volani funkcii s tym, ze sa bude zistovat typ tak, ze sa vyuzije tele funkcie.
- * TODO rio Porozmyslat, ci nie je porebne zlucit zistovanie typov user-defined funkcii a globalnych premennych, kedze glob. premenna moze pouzivat funkcie a opacne.
+ * TODO rio Porozmyslat, ci nie je potrebne zlucit zistovanie typov user-defined funkcii a globalnych premennych, kedze glob. premenna moze pouzivat funkcie a opacne.
  * 
  * @author rio
  */
@@ -146,7 +146,7 @@ public class ExpressionsProcessor {
     } else if (OperatorNode.class.isInstance(expressionNode)) {
       return determineOperatorType((OperatorNode) expressionNode);
     } else if (VarRefNode.class.isInstance(expressionNode)) {
-      // TODO rio Toto dopisat do DP. Je to kvoli tomu, aby vo FLWORoch bola premenna obsahujuca cestu sama cesta zacinajuce touto premennou, aby bolo mozne ju povazovat za target return path.
+      // Je to kvoli tomu, aby vo FLWORoch bola premenna obsahujuca cestu sama cesta zacinajuce touto premennou, aby bolo mozne ju povazovat za target return path.
       final Type varType = contextVarTypes.get(((VarRefNode) expressionNode).getVarName());
       if (varType.getCategory() == Type.Category.PATH) {
         final List<StepExprNode> steps = new ArrayList<StepExprNode>();

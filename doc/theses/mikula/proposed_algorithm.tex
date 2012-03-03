@@ -146,7 +146,7 @@ But firstly, we describe types of expressions we want to capture and their featu
 \end{itemize}
 
 \subsection{PathType}
-$PathType$ contains additional information. The represented path is contained by a list of its steps, in particular instances of $StepExprNode$. If a step is a reference to a variable which type is $PathType$, we also want to include this information. Therefore, $PathType$ contain association between the steps and other $PathTypes$ and this association is defined for the $PathType$ variable steps.
+$PathType$ contains additional information. The represented path is contained by an instance of $PathExprNode$ containing list of its steps, in particular instances of $StepExprNode$. If a step is a reference to a variable which type is $PathType$, we also want to include this information. Therefore, $PathType$ contain association between the steps and other $PathTypes$ and this association is defined for the $PathType$ variable steps.
 
 To differ between a common $PathType$ selecting a set of nodes and a $PathType$ bound to a for variable in a FLWOR expression, $PathType$ structure contains a flag $isForBound$.
 
@@ -154,8 +154,8 @@ Additionaly, $PathType$ contains a list of special functions that were called wi
 
 In summary, we represent $PathType$ as a structure with the following member variables. \todo{Radsej UML?}
 \begin{itemize}
-\item $stepNodes$ - A list of references to $StepExprNode$ instances.
-\item $forBoundSubsteps$ - An association between references from $stepNodes$ and instances of $PathType$ type.
+\item $pathExprNode$ - An instance of $PathExprNode$.
+\item $substeps$ - An association between references from $stepNodes$ and instances of $PathType$ type.
 \item $isForBound$ - Boolean flag determining if the type was bound to a for variable in a for clause.
 \item $specialFunctionCalls$ - List of special functions called with this instance as an argument.
 \end{itemize}
@@ -212,7 +212,7 @@ Instead, the syntax tree can be searched just once, before the analysis of expre
 
 A simple algorithm is presented in Algorithm \ref{ALG_processing_of_functions}. It uses \texttt{getFunction\-DeclarationNodes()} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
-Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyze them.
+Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyze them. Also, since a determination of a prefix for built-in functions is a technical issue, we assume that built-in functions are either prefixed by $fn$ or not prefixed.
 
 \begin{algorithm}
 \caption{Processing of Functions}
@@ -284,6 +284,13 @@ A similar approach as in the case of functions can be applied to determine types
      \STATE $type = getFunctionReturnType(exprNode.fncName)$
 \ELSIF{$is(exprNode, VarRefNode)$}
      \STATE $type = getVariableType(contextVarTypes, exprNode.varName)$
+     \IF{$type$ is $PathType$}
+         \STATE $step$ = a path step (new instance of $StepExprNode$) representing the variable reference
+		 \STATE $substeps$ = empty associative array         
+         \STATE $substeps[step]$ = $type$
+         \STATE $pathExprNode$ = new instance of $PathExprNode$ containing one step $step$
+         \STATE $type$ = $PathType$ containing $pathExprNode$ and $substeps$
+     \ENDIF
 \ELSIF{$is(exprNode, PathExprNode)$}
      \STATE $type = createPathType(exprNode)$
 \ELSIF{$is(exprNode, OperatorNode)$}
@@ -372,7 +379,11 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_1}), its type can be either determined directly or it depends on its subexpressions. A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_1}), its type can be either determined directly or it depends on its subexpressions.
+
+The meaning of the code at lines 6-14 is the following. If a variable is bound to an expression which type is $PathType$, we want to assign the variable reference expression with $PathType$ which represents path containing exactly one step, the variable reference. Some algorithm in later sections search for paths starting with a certain variable and we want them to include also that types of expressions.	
+
+A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
 Function $determineExpressionType$ is called within function $analysis\-Of\-Expression\-Types$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
@@ -744,6 +755,13 @@ To ilustrate this difference, we introduce the following example. Assuming $P$ i
 	\IF{$type$ is $PathType$ AND $isTargetPath(type, varName)$}
 		\STATE add $type$ to $paths$
 	\ENDIF
+\ELSIF{$is(node, VarRefNode)$}
+	\IF{$node.varName$ == $varName$}
+		\STATE $type$ = $getType(node)$
+		\IF {$type$ is $PathType$ AND $isTargetPath(type, varName)$}
+			\STATE add $type$ to $paths$
+		\ENDIF
+	\ENDIF
 \ENDIF
 \FORALL{$child \in node.getChildren()$}
 	\STATE $getTargetReturnPathsRecursive(child, varName, paths)$
@@ -969,7 +987,9 @@ While the previous steps of the key discovery produce positive statements about 
 \todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
 When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
-The first group of XQuery constructs utilized by this step is a group of $distinct-values$ function and aggregation functions $min$, $max$, $sum$ as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
+The first XQuery construct utilized by this step is a function call of $distinct-values$ function as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
+
+Aggregation functions $min$, $max$, $sum$ are not utilized by the function because they were utilized by the search for join patterns, and in the process of classification of found join patterns, they were included in the computation of the key weights.
 
 Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates in their lasts steps. Predicates in a path's last step restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates.
 
@@ -980,7 +1000,7 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 \REQUIRE $node$: A node of the syntax tree.
 
 \IF{$is(node, FunctionCallNode)$}
-    \IF{$node.fncName$ is one of $distinct-values$, $min$, $max$, $sum$}
+    \IF{$node.fncName$ == $distinct-values$}
         \STATE $argument = node.getChild(0)$
         \STATE $type = getType(argument)$
         \IF{$type$ is $PathType$ AND $usesOnlyChildAndDescendantAxes(type)$ AND $isWithoutPredicatesExceptLastStep(type)$}

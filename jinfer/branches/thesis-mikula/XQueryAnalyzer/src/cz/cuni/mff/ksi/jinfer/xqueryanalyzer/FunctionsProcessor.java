@@ -86,7 +86,6 @@ public class FunctionsProcessor {
     return fTypes;
   }
   
-  // TODO rio Dopisat do DP, ze pocitame s tym, ze builtin funkcie su bud bez prefixu alebo s prefixom fn:
   public ParamListNode getParamListNode(final String functionName) {
     final String builtinFunctionName = BuiltinFunctions.isBuiltinFunction(functionName);
             

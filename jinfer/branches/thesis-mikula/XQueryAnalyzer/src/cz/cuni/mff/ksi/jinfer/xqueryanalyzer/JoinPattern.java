@@ -35,8 +35,6 @@ public class JoinPattern {
   private final JoinPatternType type;
   private final VariableBindingNode firstVariableBindingNode;
   private final VariableBindingNode secondVariableBindingNode;
-  private final PathType pathType1;
-  private final PathType pathType2;
   private final PathExprNode P1;
   private final PathExprNode P2;
   private final PathExprNode L1;
@@ -47,8 +45,6 @@ public class JoinPattern {
     this.type = type;
     this.firstVariableBindingNode = firstVariableBindingNode;
     this.secondVariableBindingNode = secondVariableBindingNode;
-    pathType1 = (PathType)firstVariableBindingNode.getBindingSequenceNode().getExprNode().getType();
-    pathType2 = (PathType)secondVariableBindingNode.getBindingSequenceNode().getExprNode().getType();
     this.P1 = P1;
     this.P2 = P2;
     this.L1 = L1;

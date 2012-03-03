@@ -89,7 +89,6 @@ public class IGGeneratorImpl implements IGGenerator {
     documentRules.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));
     verifySimpleGrammar(documentRules);
     schemaQueryRules.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
-    // TODO rio XPath processor invokes an error that .xq files do not have defined a suitable processor
     schemaQueryRules.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
     
     // the XQuery processor differs from the other processors by creating syntax trees of supplied queries
@@ -174,7 +173,11 @@ public class IGGeneratorImpl implements IGGenerator {
           ret.addAll(rules);
         }
         else {
-          LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
+          // TODO rio This is a hack to not print errors that XQuery files do not
+          // have defined mapping.
+          if (!FileUtils.getExtension(f.getAbsolutePath()).equals("xq")){
+            LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
+          }
         }
       } catch (final FileNotFoundException e) {
         throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);

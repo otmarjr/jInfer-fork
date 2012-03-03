@@ -40,6 +40,9 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("min", new UnknownType());
     builtinFunctionTypes.put("distinct-values", new UnknownType());
     builtinFunctionTypes.put("count", new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE));
+    builtinFunctionTypes.put("exists", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("not", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("concat", new XSDType(XSDType.XSDAtomicType.STRING, Cardinality.ONE));
   }
   
   private final static List<String> DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES = new ArrayList<String>();
@@ -105,8 +108,8 @@ public class BuiltinFunctions {
     
     final XQNodeList<ParamNode> paramNodes = new XQNodeList<ParamNode>();
     
-    if (functionName.equals("data") || functionName.equals("count")) {
-      final ParamNode paramNode = new ParamNode("arg", new TypeNode( Cardinality.ZERO_OR_MORE));
+    if (functionName.equals("data") || functionName.equals("count") || functionName.equals("exists") || functionName.equals("not")) {
+      final ParamNode paramNode = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_MORE));
       paramNodes.add(paramNode);
     } else if (functionName.equals("doc")) {
       final ItemTypeNode itemTypeNode = new AtomicTypeNode("xs:string");
@@ -118,6 +121,11 @@ public class BuiltinFunctions {
       final ParamNode paramNode2 = new ParamNode("collation", new TypeNode(Cardinality.ONE, itemTypeNode2));
       paramNodes.add(paramNode1);
       paramNodes.add(paramNode2);
+    } else if (functionName.equals("concat")) {
+      final ParamNode paramNode = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_ONE));
+      for (int i = 0; i < 5; ++i) {
+        paramNodes.add(paramNode);
+      }
     } else {
       assert(false); // TODO rio Doplnit dalsie vstavane funckie podla potreby.
     }

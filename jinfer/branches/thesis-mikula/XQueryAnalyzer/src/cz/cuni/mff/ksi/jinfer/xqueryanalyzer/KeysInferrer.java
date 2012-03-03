@@ -618,11 +618,21 @@ public class KeysInferrer {
       final JoinPattern jp = cjp.getJoinPattern();
       final ClassifiedJoinPattern.Type type = cjp.getType();
       final int weight = cjp.getWeight();
+      
+      PathType P1 = TypeFactory.createPathType(jp.getP1());
+      PathType P2 = TypeFactory.createPathType(jp.getP2());
+      PathType C = null;
+      final ContextPathFinder cpf = new ContextPathFinder(P1, P2);
+      if (cpf.haveCommonContext()) {
+        C = cpf.getContextPath();
+        P1 = cpf.getNewPath1();
+        P2 = cpf.getNewPath2();
+      }
 
-      if (cjp.getType() == ClassifiedJoinPattern.Type.O1) {
-        final Key key = new Key(jp.getP1(), jp.getL1());
-        final Key notKey = new NegativeKey(jp.getP2(), jp.getL2());
-        final ForeignKey foreignKey = new ForeignKey(key, jp.getP2(), jp.getL2());
+      if (type == ClassifiedJoinPattern.Type.O1) {
+        final Key key = new Key(C, P1, TypeFactory.createPathType(jp.getL1()));
+        final Key notKey = new NegativeKey(C, P2, TypeFactory.createPathType(jp.getL2()));
+        final ForeignKey foreignKey = new ForeignKey(key, P2, TypeFactory.createPathType(jp.getL2()));
 
         final WeightedKey wKey = new WeightedKey(key, weight);
         final WeightedKey wNotKey = new WeightedKey(notKey, weight);
@@ -632,8 +642,8 @@ public class KeysInferrer {
         keys.add(wNotKey);
         foreignKeys.add(wForeignKey);
       } else {
-        final Key key = new Key(jp.getP2(), jp.getL2());
-        final ForeignKey foreignKey = new ForeignKey(key, jp.getP1(), jp.getL1());
+        final Key key = new Key(C, P2, TypeFactory.createPathType(jp.getL2()));
+        final ForeignKey foreignKey = new ForeignKey(key, P1, TypeFactory.createPathType(jp.getL1()));
 
         final WeightedKey wKey = new WeightedKey(key, weight);
         final WeightedForeignKey wForeignKey = new WeightedForeignKey(foreignKey, weight);
@@ -643,7 +653,7 @@ public class KeysInferrer {
       }
     }
   }
-
+  
   private static Map<Key, KeySummarizer.SummarizedInfo> summarizeKeys(List<WeightedKey> wKeys, List<NegativeUniquenessStatement> nuss) {
     final KeySummarizer ks = new KeySummarizer();
     for (final WeightedKey wk : wKeys) {

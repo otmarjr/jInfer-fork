@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,14 @@ public class KeySummarizer {
       return weight;
     }
 
+    public void setCount(int count) {
+      this.count = count;
+    }
+
+    public void setWeight(int weight) {
+      this.weight = weight;
+    }
+
     public int getNormalizedWeight() {
       return normalizedWeight;
     }
@@ -78,8 +87,8 @@ public class KeySummarizer {
     int weight = key.getWeight();
     
     for (final NegativeUniquenessStatement nus : nuss) {
-      if (nus.getContextPath().equals(TypeFactory.createPathType(key.getKey().getContextPath()))
-              && nus.getKeyPath().equals(TypeFactory.createPathType(key.getKey().getKeyPath()))) {
+      if (nus.getContextPath().equals(key.getKey().getContextPath())
+              && nus.getKeyPath().equals(key.getKey().getKeyPath())) {
         weight -= nus.getWeight();
       }
     }
@@ -88,12 +97,20 @@ public class KeySummarizer {
     
     keysTotalCount += 1;
     final int count = si.getCount();
+    checkMaxCount(count);
+    final int sWeight = si.getWeight();
+    checkMaxWeight(sWeight);
+  }
+  
+  private void checkMaxCount(final int count) {
     if (keysMaxCount < count) {
       keysMaxCount = count;
     }
-    final int sWeight = si.getWeight();
-    if (keysMaxWeight < Math.abs(sWeight)) {
-      keysMaxWeight = Math.abs(sWeight);
+  }
+  
+  private void checkMaxWeight(final int weight) {
+    if (keysMaxWeight < Math.abs(weight)) {
+      keysMaxWeight = Math.abs(weight);
     }
   }
   
@@ -104,9 +121,83 @@ public class KeySummarizer {
   }*/
   
   public Map<Key, SummarizedInfo> getSummarizedKeys() {
+    computeKeyCoverage();
+    
     for (final SummarizedInfo si : keys.values()) {
       si.normalize(keysMaxCount, keysMaxWeight, keysTotalCount);
     }
     return keys;
+  }
+  
+  private void computeKeyCoverage() {
+    for (final Key key1 : keys.keySet()) {
+      for (final Key key2 : keys.keySet()) {
+        if (key1 == key2) {
+          continue;
+        }
+        
+        if (!key1.getTargetPath().equals(key2.getTargetPath())
+                || !key1.getKeyPath().equals(key2.getKeyPath())) {
+          continue;
+        }
+        
+        assert(!key1.getContextPath().equals(key2.getContextPath()));
+        
+        if (covers(key1.getContextPath(), key2.getContextPath())) {
+          final SummarizedInfo si1 = keys.get(key1);
+          final SummarizedInfo si2 = keys.get(key2);
+          
+          final int weight1 = si1.getWeight();
+          final int count1 = si1.getCount();
+          final int weight2 = si2.getWeight();
+          final int count2 = si2.getCount();
+          
+          if (weight1 > 0) {
+            si2.setCount(count2 + count1);
+            si2.setWeight(weight2 + weight1);
+            keysTotalCount += count1;
+            checkMaxCount(si2.getCount());
+            checkMaxWeight(si2.getWeight());
+          }
+          
+          if (weight2 < 0) {
+            si1.setCount(count1 + count2);
+            si1.setWeight(weight1 + weight2);
+            keysTotalCount += count2;
+            checkMaxCount(si1.getCount());
+            checkMaxWeight(si1.getWeight());
+          }
+        }
+      }
+    }
+  }
+  
+  private boolean covers(final PathType path1, final PathType path2) {
+    final PathTypeParser parser1 = new PathTypeParser(path1);
+    final PathTypeParser parser2 = new PathTypeParser(path2);
+    
+    if (parser1.getInitialStep() != parser2.getInitialStep()) {
+      return false;
+    }
+    
+    int i = 0;
+    final List<StepExprNode> steps1 = parser1.getSteps();
+    final List<StepExprNode> steps2 = parser2.getSteps();
+    final int size1 = steps1.size();
+    final int size2 = steps2.size();
+    
+    while (i < size1 && i < size2 && steps1.get(i).equals(steps2.get(i))) {
+      ++i;
+    }
+    
+    if (i < size1 && i < size2) {
+      return false;
+    }
+    
+    if (i < size1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

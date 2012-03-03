@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 
 /**
  * TODO rio comment
@@ -24,17 +24,17 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
  */
 public class Key {
   
-  private final PathExprNode contextPath;
-  private final PathExprNode targetPath;
-  private final PathExprNode keyPath;
+  private final PathType contextPath;
+  private final PathType targetPath;
+  private final PathType keyPath;
   
-  public Key(final PathExprNode contextPath, final PathExprNode targetPath, final PathExprNode keyPath) {
+  public Key(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
     this.contextPath = contextPath;
     this.targetPath = targetPath;
     this.keyPath = keyPath;
   }
   
-  public Key(final PathExprNode targetPath, final PathExprNode keyPath) {
+  public Key(final PathType targetPath, final PathType keyPath) {
     this.contextPath = null;
     this.targetPath = targetPath;
     this.keyPath = keyPath;
@@ -44,15 +44,15 @@ public class Key {
     return true;
   }
 
-  public PathExprNode getContextPath() {
+  public PathType getContextPath() {
     return contextPath;
   }
 
-  public PathExprNode getKeyPath() {
+  public PathType getKeyPath() {
     return keyPath;
   }
 
-  public PathExprNode getTargetPath() {
+  public PathType getTargetPath() {
     return targetPath;
   }
   

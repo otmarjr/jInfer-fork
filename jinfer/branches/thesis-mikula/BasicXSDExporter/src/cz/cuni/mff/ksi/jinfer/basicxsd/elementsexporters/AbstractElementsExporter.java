@@ -195,8 +195,8 @@ public abstract class AbstractElementsExporter {
     }
     
     for (final Key key : keys) {
-      final PathType targetPath = TypeFactory.createPathType(key.getTargetPath());
-      final PathType keyPath = TypeFactory.createPathType(key.getKeyPath());
+      final PathType targetPath = key.getTargetPath();
+      final PathType keyPath = key.getKeyPath();
       final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
       final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
       
@@ -220,8 +220,8 @@ public abstract class AbstractElementsExporter {
     }
     
     for (final ForeignKey fKey : fKeys) {
-      final PathType targetPath = TypeFactory.createPathType(fKey.getForeignTargetPath());
-      final PathType keyPath = TypeFactory.createPathType(fKey.getForeignKeyPath());
+      final PathType targetPath = fKey.getForeignTargetPath();
+      final PathType keyPath = fKey.getForeignKeyPath();
       final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
       final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
       

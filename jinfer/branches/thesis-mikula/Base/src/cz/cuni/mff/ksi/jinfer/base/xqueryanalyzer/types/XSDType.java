@@ -64,6 +64,8 @@ public class XSDType extends CardinalityType {
     POSITIVE_INTEGER ("positiveIntegeer"),
     UNSIGNED_LONG ("unsignedLong"),
     UNSIGNED_BYTE ("unsignedByte"),
+    UNSIGNED_INT ("unsignedInt"),
+    UNSIGNED_SHORT ("unsignedShort"),
     BOOLEAN ("boolean");
     
     private final String name;

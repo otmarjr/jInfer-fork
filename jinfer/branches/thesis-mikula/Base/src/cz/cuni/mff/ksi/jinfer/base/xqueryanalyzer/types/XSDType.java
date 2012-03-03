@@ -26,45 +26,57 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.LiteralType;
 public class XSDType extends CardinalityType {
   
   public enum XSDAtomicType {
-    DURATION,
-    DATE_TIME,
-    TIME,
-    DATE,
-    G_YEAR_MONTH,
-    G_YEAR,
-    G_MONTH_DAY,
-    G_DAY,
-    G_MONTH,
-    BASE64_BINARY,
-    HEX_BINARY,
-    ANY_URL,
-    Q_NAME,
-    NOTATION,
-    STRING,
-    NORMALIZED_STRING,
-    TOKEN,
-    LANGUAGE,
-    NAME,
-    NMTOKEN,
-    NCNAME,
-    ID,
-    IDREF,
-    ENTITY,    
-    FLOAT,
-    DOUBLE,
-    DECIMAL,
-    INTEGER,
-    LONG,
-    INT,
-    SHORT,
-    BYTE,
-    NON_POSITIVE_INTEGER,
-    NEGATIVE_INTEGER,
-    NON_NEGATIVE_INTEGER,
-    POSITIVE_INTEGER,
-    UNSIGNED_LONG,
-    UNSIGNED_BYTE,
-    BOOLEAN,
+    DURATION ("duration"),
+    DATE_TIME ("dateTime"),
+    TIME ("time"),
+    DATE ("date"),
+    G_YEAR_MONTH ("gYearMonth"),
+    G_YEAR ("gYear"),
+    G_MONTH_DAY ("gMonthDay"),
+    G_DAY ("gDay"),
+    G_MONTH ("gMonth"),
+    BASE64_BINARY ("base64Binary"),
+    HEX_BINARY ("hexBinary"),
+    ANY_URI ("anyURI"),
+    Q_NAME ("QName"),
+    NOTATION ("NOTATION"),
+    STRING ("string"),
+    NORMALIZED_STRING ("normalizedString"),
+    TOKEN ("token"),
+    LANGUAGE ("language"),
+    NAME ("Name"),
+    NMTOKEN ("NMTOKEN"),
+    NCNAME ("NCName"),
+    ID ("ID"),
+    IDREF ("IDREF"),
+    ENTITY ("ENTITY"),    
+    FLOAT ("float"),
+    DOUBLE ("double"),
+    DECIMAL ("decimal"),
+    INTEGER ("integer"),
+    LONG ("long"),
+    INT ("int"),
+    SHORT ("short"),
+    BYTE ("byte"),
+    NON_POSITIVE_INTEGER ("nonPositiveInteger"),
+    NEGATIVE_INTEGER ("negativeInteger"),
+    NON_NEGATIVE_INTEGER ("nonNegativeInteger"),
+    POSITIVE_INTEGER ("positiveIntegeer"),
+    UNSIGNED_LONG ("unsignedLong"),
+    UNSIGNED_BYTE ("unsignedByte"),
+    BOOLEAN ("boolean");
+    
+    private final String name;
+    
+    private XSDAtomicType(final String name) {
+      this.name = name;
+    }
+
+    @Override
+    public String toString() {
+      return name;
+    }
+
   }
   
   private final XSDAtomicType atomicType;
@@ -162,7 +174,7 @@ public class XSDType extends CardinalityType {
     } else if (trimmedAtomicTypeName.equalsIgnoreCase("hexBinary")) {
       return XSDAtomicType.HEX_BINARY;
     } else if (trimmedAtomicTypeName.equalsIgnoreCase("anyURL")) {
-      return XSDAtomicType.ANY_URL;
+      return XSDAtomicType.ANY_URI;
     } else if (trimmedAtomicTypeName.equalsIgnoreCase("QName")) {
       return XSDAtomicType.Q_NAME;
     } else if (trimmedAtomicTypeName.equalsIgnoreCase("NOTATION")) {

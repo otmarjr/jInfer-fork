@@ -99,14 +99,14 @@ public abstract class AbstractElementsExporter {
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
       final String type = TypeUtils.getBuiltinType(element);
-      final XSDType xqueryType = (XSDType)element.getMetadata().get("xquery_analyzer_type");
+      final XSDType.XSDAtomicType xqueryType = (XSDType.XSDAtomicType)element.getMetadata().get("xquery_analyzer_type");
       
       if (xqueryType == null) {
         indentator.append(" type=\"" + type + '"');
       } else {
         LOG.info("Built-in type of element inferred by the simplifier: " + type);
-        LOG.info("Built-in type of element inferred by the xquery analyzer: xs:" + xqueryType.getAtomicType());
-        indentator.append(" type=\"xs:" + xqueryType.getAtomicType() + '"');
+        LOG.info("Built-in type of element inferred by the xquery analyzer: xs:" + xqueryType);
+        indentator.append(" type=\"xs:" + xqueryType + '"');
       }
       indentator.append(OccurencesProcessor.processOccurrences(interval));
       indentator.append("/>\n");
@@ -295,14 +295,14 @@ public abstract class AbstractElementsExporter {
         indentator.append(attribute.getName());
 
         final String type = TypeUtils.getBuiltinAttributeType(attribute);
-        final XSDType xqueryType = (XSDType)attribute.getMetadata().get("xquery_analyzer_type");
+        final XSDType.XSDAtomicType xqueryType = (XSDType.XSDAtomicType)attribute.getMetadata().get("xquery_analyzer_type");
       
         if (xqueryType == null) {
           indentator.append("\" type=\"" + type + '"');
         } else {
           LOG.info("Built-in type of attribute inferred by the simplifier: " + type);
-          LOG.info("Built-in type of attribute inferred by the xquery analyzer: xs:" + xqueryType.getAtomicType());
-          indentator.append("\" type=\"xs:" + xqueryType.getAtomicType() + '"');
+          LOG.info("Built-in type of attribute inferred by the xquery analyzer: xs:" + xqueryType);
+          indentator.append("\" type=\"xs:" + xqueryType + '"');
         }
 
         if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) {

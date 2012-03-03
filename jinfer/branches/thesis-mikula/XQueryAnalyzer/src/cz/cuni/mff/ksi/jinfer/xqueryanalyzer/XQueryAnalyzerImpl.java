@@ -88,6 +88,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         continue;
       }
       
+      XSDType.XSDAtomicType inferredAtomicType = ((XSDType)inferredType).getAtomicType();
+      
       final PathTypeParser ptp = new PathTypeParser(pathType);
       final boolean hasPredicates = ptp.isHasPredicates();      
       
@@ -99,19 +101,19 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
 
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
-        final XSDType type = (XSDType)metadata.get(METADATA_KEY_TYPE);
+        final XSDType.XSDAtomicType type = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
-          metadata.put(METADATA_KEY_TYPE, inferredType);
+          metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {
-          final XSDType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific((XSDType)inferredType, type);
+          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, type);
           if (moreSpecificType != null) {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
           } else {
             final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
             if (!hasPredicates && oldHasPredicates) {
-              metadata.put(METADATA_KEY_TYPE, inferredType);
+              metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
               metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
             }
           }
@@ -120,19 +122,19 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       
       for (final Attribute attribute : contextSet.getAttributes()) {
         final Map<String, Object> metadata = attribute.getMetadata();
-        final XSDType type = (XSDType)metadata.get(METADATA_KEY_TYPE);
+        final XSDType.XSDAtomicType type = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
-          metadata.put(METADATA_KEY_TYPE, inferredType);
+          metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {
-          final XSDType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific((XSDType)inferredType, type);
+          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, type);
           if (moreSpecificType != null) {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
           } else {
             final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
             if (!hasPredicates && oldHasPredicates) {
-              metadata.put(METADATA_KEY_TYPE, inferredType);
+              metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
               metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
             }
           }

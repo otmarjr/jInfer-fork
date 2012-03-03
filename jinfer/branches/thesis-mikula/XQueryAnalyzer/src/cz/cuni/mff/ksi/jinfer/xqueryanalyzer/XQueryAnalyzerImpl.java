@@ -157,7 +157,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         continue;
       }
 
-      final PathType contextPath = key.getContextPath() != null ? TypeFactory.createPathType(key.getContextPath()) : null;
+      final PathType contextPath = key.getContextPath();
       
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);

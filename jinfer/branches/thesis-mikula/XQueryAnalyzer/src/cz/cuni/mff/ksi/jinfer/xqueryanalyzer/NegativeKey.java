@@ -16,7 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
+import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
 
 /**
  *
@@ -24,11 +24,11 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.PathExprNode;
  */
 public class NegativeKey extends Key {
   
-  public NegativeKey(final PathExprNode contextPath, final PathExprNode targetPath, final PathExprNode keyPath) {
+  public NegativeKey(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
     super(contextPath, targetPath, keyPath);
   }
   
-  public NegativeKey(final PathExprNode targetPath, final PathExprNode keyPath) {
+  public NegativeKey(final PathType targetPath, final PathType keyPath) {
     super(targetPath, keyPath);
   }
   

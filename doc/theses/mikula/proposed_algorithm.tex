@@ -982,8 +982,12 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Inferrence of Keys from Join Pattern Occurrences}
+Now, when the join patterns occurrences are classified into (O1) and (O2) cases, we infer the key statements according to the original method \cite{Necasky:2009:DXK:1529282.1529414}.
+\todo[inline]{Popisat? To by som musel asi jedine skopirovat z clanku, to vlastnymi slovami nepopisem.}
+
 \subsection{Rejection of Uniqueness}
-While the previous steps of the key discovery produce positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys.
+While the previous steps of the key discovery produce mostly positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys.
 \todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
 When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
@@ -1064,3 +1068,6 @@ As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to 
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
+
+\subsection{Normalization of Key Statements}
+\todo[inline]{Znovu pouzitie originalnej metody. Popisat?}

@@ -1,0 +1,75 @@
+\chapter{Combination with Existing Methods of Inference}
+In this chapter, we describe how to incorporate the inferred statements with existing methods of XML schema inference. We focus on a class of methods which are based on a creation and subsequent simlification of the initial grammar (as discussed in Chapter \ref{chapter_analysis_of_recent_approaches}).
+
+The initial grammar contains rules of form $e \rightarrow e_1e_2\dots e_k$, where $e$ is an element and $e_1, \dots , e_k$ are its subelements. After the simplification, the simplified grammar contain rules of form $e \rightarrow E$, where $E$ is a regular expression composed of subelements of element $e$, describing its content.
+
+Attributes of elements are not contained in the grammar directly, but every element carries an information on its attributes.
+
+The combination with such methods of inference is straightforward. The rules of the grammar describe a XML structure using the most general aspect of elements and their subelements. Since the statements inferred by our method do not involve the XML structure by defining a subelement structure of elements, there are no conflicts between the grammar rules and our statements that need to be resolved.
+
+Our statements are of the three following forms. The first one is $p \rightarrow t$, where $p$ is a $PathType$ representing an XQuery path selecting a set of elements or attributes \todo{plati nejake obmedzenie na tuto cestu?}
+, and $t$ is an XSD built-in atomic type.
+
+The second and third forms are $k = (C,P,\{L\})$ and $fk = (C(P_1,\{L_1\}) \rightarrow (P_2,\{L_2\}))$, representing a key and a foreign key, where $C,P,P_1,P_2,L,L_1,L_2$ are $PathTypes$ without predicates using only child and descendant axes.
+
+In all tree cases, we want to determine elements from the grammar (or their attributes), targeted by the respective paths ($p$ from the first form and $C$ from the second and third form). This is done in two steps. The first one is normalization of a particular $PathType$ and the second one is selection of the targeted elements.
+
+A path represented by $PathType$ can contain variable references and association of these references with other paths. That is the reason why the normalization is convenient. It simply finds the variable references in the path and replaces them with steps from the associated paths, which are normalized recursively.
+
+The selection of elements is a simplified XPath evaluation. The simplification involves the aspects; the evaluation is not performed upon XML data, but the simplified grammar containing rules with a regular expression on their right side, and, partially related, predicates in path steps are not evaluated, they are ignored.
+
+It iterate through steps of a path, maintaining a so-called context set, which is a set of elements to evaluate the current step upon. The evaluation of one step is shown in Algorithm \ref{FUNC_evaluate_step}. For the retaining of readability of the code, we present an evaluation of self or descendant, child, and attribute axes, and nodes specified by name.
+
+At first, the algorithm determine the axis of the step. If it is self or descendant axis, it returns the result of $evaluateStep\_selfOrDescendant$ function. This function returns the given context set extended by all descendants of the elements from the context set in the given grammar.
+
+If the axis is child axis, for each element in the context set, the algorithm determines its subelement using the grammar, and, if those with the name equal to the name specified by to step are added to the resulting context set. Function $getTokens$ at line 10 retrieves all elements from a regular expression. A specific form of the regular expression is not important, because we only need to know which elements are possible subelements of the particular element.
+
+And, at last, if the axis is attribute axis, elements from the context set are searched to contain an attribute with the specified name and those found attributes are added to the result.
+
+\begin{algorithm}
+\caption{Function evaluateStep}
+\label{FUNC_evaluate_step}
+\begin{algorithmic}[1]
+\REQUIRE{\ \\
+	$step$: An instance of $StepExprNode$ representing a step of the path to evaluate.
+	$contextSet$: A set of elements and attributes to evaluate $step$ upon.
+	$grammar$: The grammar.
+}
+
+\ENSURE A context set after the step evaluation.
+
+\IF{$is(step, SelfOrDescendantStep)$}
+	\RETURN $evaluateStep\_selfOrDescendant(contextSet, grammar)$
+\ENDIF
+
+\STATE $newContextSet$ = empty set
+
+\STATE $axisKind$ = $step.getChild(axisNode).axisKind$
+\STATE $nodeName$ = $step.getChild(axisNode).getChild(nameTestNode).name$
+\IF{$axisKind$ == $CHILD$}
+	\FORALL{$node \in contextSet$}
+		\IF{$node$ is element}
+			\STATE $subelements$ = $getTokens(grammar[node])$
+			\FORALL{$subelement \in subelements$}
+				\IF{$subelement.name$ == $nodeName$}
+					\STATE add $subelement$ to $newContextSet$
+				\ENDIF
+			\ENDFOR
+		\ENDIF
+	\ENDFOR
+\ELSIF{$axisKind$ == $ATTRIBUTE$}
+	\FORALL{$node \in contextSet$}
+		\IF{$node$ is element}
+			\STATE $attributes$ = $node.attributes$
+			\FORALL{$attribute \in attributes$}
+				\IF{$attribute.name$ == $nodeName$}
+					\STATE add $attribute$ to $newContextSet$
+				\ENDIF
+			\ENDFOR
+		\ENDIF
+	\ENDFOR
+\ENDIF
+
+\RETURN $newContextSet$
+\end{algorithmic}
+\end{algorithm}

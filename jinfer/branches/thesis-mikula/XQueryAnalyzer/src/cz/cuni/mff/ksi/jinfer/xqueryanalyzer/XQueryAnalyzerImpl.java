@@ -200,6 +200,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     assert(contextSet != null);
     
     if (SelfOrDescendantStepNode.class.isInstance(step)) {
+      // TODO rio Toto nestaci, treba aj vsetkych potomkov.
       return contextSet;
     }
     

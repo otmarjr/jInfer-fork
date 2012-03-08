@@ -1,7 +1,5 @@
 \chapter{Used Technologies and Definitions}
 
-\todo[inline]{Zvyraznovanie pojmov}
-
 \section{XML Schema}
 An XML schema refers to a description of an XML document in terms of its structure and various constraints. Commonly, the XML schema describes element and attribute names, their parent-child relations, their order and a type of their content. Other constraints often expressed in the XML schema are restrictions on numbers of occurrences of elements, specification of (non-)obligatory attributes, uniqueness and specification of keys.
 
@@ -84,8 +82,6 @@ An example of DTD describing the book element from the XML example in Figure \re
 <!ELEMENT isbn #PCDATA>
 \end{verbatim}
 
-\todo[inline]{overit, zvalidovat}
-
 \subsection{XSD}
 Since the XSD language, containing many constructs and features, is quite comprehensive, we will describe just its basic principles. An important fact is that each XSD instance is a valid XML document. Its root element is always \texttt{<schema>} and the XSD instance begins with the following two lines.
 
@@ -159,8 +155,6 @@ The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_ex
 </xs:element>
 \end{alltt}
 
-\todo[inline]{overit, zvalidovat}
-
 \section{XPath}
 XML Path Language (XPath, version 1.0) \cite{xpath} is a language to select fractions of XML documents using so-called path expressions. XPath considers an XML document as a tree of nodes. It recognizes seven types of nodes: document node, element node, attribute node, text node, namespace node, processing instruction node, and comment node. The root of the tree is the document node representing the entire XML document.
 
@@ -217,10 +211,8 @@ A path returning the titles of the books written by more than one author:
 /bookstore/book[count(authors/author) > 1]/title/text()
 \end{alltt}
 
-\todo[inline]{overit, otestovat}
-
 \section{XQuery}
-An XML Query Language (XQuery, version 1.0) \todo{ref} is a language designed to query XML data. It is based on XPath 2.0. XPath 2.0 is an extension of XPath 1.0 (but not entirely compatible), adding ordered sequences, their iterations, set operations, conditional expressions, quantified expressions, and XML Schema types.
+An XML Query Language (XQuery, version 1.0) \cite{w3c_xquery} is a language designed to query XML data. It is based on XPath 2.0. XPath 2.0 is an extension of XPath 1.0 (but not entirely compatible), adding ordered sequences, their iterations, set operations, conditional expressions, quantified expressions, and XML Schema types.
 
 In the remainder of this section, basic features of the XQuery languages are briefly described. Many query samples can be found in Chapter \ref{CHAPTER_analysis_of_xquery}.
 
@@ -293,12 +285,8 @@ where $name$ is the function's name, $parameters$ is a list of parameters (with 
 
 %And the $node$ comparison expressions use operators \texttt{is}, \texttt{<<}, and \texttt{>>} and they compare %nodes, their identities and order.
 
-\todo[inline]{TODO XQuery Core?}
-
 %\section{Other Technologies}
 
 %\begin{description}
 %\item[XSLT] e\textbf{X}tensible \textbf{S}tylesheet \textbf{L}anguage \textbf{T}ransformations %\cite{Clark:99:XTV} is a language to transform input XML document(s) into other (not necessarily XML) document(s).
 %\end{description}
-
-\todo[inline]{možná ňejaký automat apod. Prostě co budete dále v textu potřebovat. Skratky: XSD, XSLT, ...}

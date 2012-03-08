@@ -7,7 +7,7 @@ The first step of the algorithm involves lexical and syntax analyses known from 
 
 The syntactic analysis needs to be slightly modified to suit our case. It writes its result into a file in an XML representation. Instead, we need to keep the result in the main memory and pass it to consecutive steps of our algorithm. Though this requirement concerns modifications of implementation, the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
-\subsection{Definition of the Syntax Tree}
+\section{Definition of the Syntax Tree}
 Firstly, we formally define the syntax tree.
 
 \begin{define}[Syntax tree]
@@ -22,10 +22,10 @@ Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, o)$ where
 \end{itemize}
 \end{define}
 
-Regarding the additional properties, two constructs in $Q$ represented by two nodes of the same class from $C$ may differ in certain ways, and therefore, it is needed to distinguish them. For instance, two different literal values in $Q$ are represented by nodes $l_1, l_2 \in V$ and $c(l_1) = c(l_2) = LiteralNode$ but each has a different value and type. Therefore $\mathcal{P}$ contains functions \\
+Regarding the additional properties, two constructs in $Q$ represented by two nodes of the same class from $C$ may differ in certain ways, and therefore, it is needed to distinguish them. For instance, two different literal values in $Q$ are represented by nodes $l_1, l_2 \in V$ and $c(l_1) = c(l_2) =$ \texttt{LiteralNode} but each has a different value and type. Therefore $\mathcal{P}$ contains functions \\
 $type_{LiteralNode}: V_{LiteralNode} \rightarrow Types_{literal}$ \\
 $value_{LiteralNode}: V_{LiteralNode} \rightarrow Values_{literal}$ \\
-where $V_{LiteralNode}$ is set $\{v | v \in V, c(v) = LiteralNode\}$, $Types_{literal}$ is set of all types of literal values $\{DECIMAL, INTEGER, DOUBLE, STRING\}$, and $Values_{literal}$ is a set of all literal values (all valid XQuery decimal numbers, integers, double numbers and strings).
+where $V_{LiteralNode}$ is set $\{v | v \in V, c(v) =$ \texttt{LiteralNode}$\}$, $Types_{literal}$ is set of all types of literal values \{\texttt{DECIMAL}, \texttt{INTEGER}, \texttt{DOUBLE}, \texttt{STRING}\}, and $Values_{literal}$ is a set of all literal values (all valid XQuery decimal numbers, integers, double numbers and strings).
 
 Set $\mathcal{P}$ contains other similar functions but due to their large number, we do not define them formally.
 \todo[inline]{Q: Moze takto ostat, alebo definovat aspon tie co pouzivame? Alebo ich aspon vypisat? A: aspoň příklad, lépe vypsat ty, co použijeme}
@@ -49,11 +49,11 @@ For every $v \in V$, abbreviation
 \subsection{Closer Look at the Nodes of the Syntax Tree}
 The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in tables in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}. The tables are composed of classes in italic and their subclasses. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining non-bold nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
 
-For example, an instance of the syntax tree cannot directly contain nodes of $Node$ and $ExprNode$ classes (for every $v \in V, c(v) \neq Node, c(v) \neq ExprNode$), but it can contain nodes of $AttributeNode$ and $LiteralNode$ classes. Regarding the multiplicity of types, a node of $LiteralNode$ class is also considered to be of two indirect types: $ExprNode$ and $Node$.
+For example, an instance of the syntax tree cannot directly contain nodes of \texttt{Node} and \texttt{ExprNode} classes (for every $v \in V, c(v) \neq$ \texttt{Node}$, c(v) \neq$ \texttt{ExprNode}), but it can contain nodes of \texttt{AttributeNode} and \texttt{LiteralNode} classes. Regarding the multiplicity of types, a node of \texttt{LiteralNode} class is also considered to be of two indirect types: \texttt{ExprNode} and \texttt{Node}.
 
 \todo[inline]{Q: Asi bude potrebne nakreslit pre kazdy node, co presne obsahuje. Alebo staci pre tie, ktore budeme my pouzivat? A: Určitě všude stačí popsat jen to, co použijeme, s poznámkou, že zbytek je např. v diplomce, ze které vycházíte.}
 
-The node classes can be classified into three groups: inner node classes, leaf node classes and node classes that can be both inner and leaf. Inner node classes (marked $I$) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such class is $FLWORExprNode$ which is composed of $TupleStreamNode$, $WhereClauseNode$, $OrderByClauseNode$ and $ReturnClauseNode$ classes. Leaf node classes (marked $L$) represent elements of XQuery language that cannot be further divided. For example, $LiteralNode$. Node $FunctionCallNode$ is an example of the third group (marked $IL$). Function call of a function without arguments is represented by a leaf node while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
+The node classes can be classified into three groups: inner node classes, leaf node classes and node classes that can be both inner and leaf. Inner node classes (marked \texttt{I}) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such class is \texttt{FLWORExprNode} which is composed of \texttt{TupleStreamNode}, \texttt{WhereClauseNode}, \texttt{OrderByClauseNode} and \texttt{ReturnClauseNode} classes. Leaf node classes (marked \texttt{L}) represent elements of XQuery language that cannot be further divided. For example, \texttt{LiteralNode}. Node \texttt{FunctionCallNode} is an example of the third group (marked \texttt{IL}). Function call of a function without arguments is represented by a leaf node while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
 
 \begin{figure}
 \caption{Syntax tree node types part 1.}
@@ -61,23 +61,23 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \begin{tabular}{l l | l}
 \multicolumn{2}{l|}{\textbf{\emph{Node}}} & \textbf{\emph{ExprNode}} \\
 \hline
-AttributeNode (I) & ModuleNode (I) & CommaOperatorNode (I) \\
-AttrListNode (IL) & NameNode (IL) & ConstructorNode (I) \\
-AxisNode (I) & OrderByClauseNode (I) & ContextItemExprNode (L) \\
-CaseClauseNode (I) & OrderSpecNode (I) & EmptySequenceNode (L) \\
-CaseClausesNode (I) & ParamListNode (I) & ExtensionExprNode (I) \\
-CDataSectionNode (L) & ParamNode (I) & FLWORExprNode (I) \\
-ContentNode (IL) & PITargetNode (IL) & FunctionCallNode (IL) \\
-DefaultCaseNode (I) & PragmaListNode (I) & IfExprNode (I) \\
-EntityRefNode (L) & PragmaNode (L) & LiteralNode (L) \\
-\textbf{ExprHolderNode} & PredicateListNode (I) & OperatorNode (I) \\
-\textbf{ExprNode} & \textbf{PrologChildNode} & OrderedExprNode (I) \\
-FunctionBodyNode (IL) & StepExprNode (I) & PathExprNode (I) \\
-CharRefNode (L) & StringNode (L) & QuantifiedExprNode (I) \\
-InClausesNode (I) & TupleStreamNode (I) & TypeswitchExprNode (I) \\
-\textbf{ItemTypeNode} & TypeNode (L) & UnorderedExprNode (I) \\
-LocationHintNode (L) & \textbf{VariableBindingNode} & ValidateExprNode (I) \\
-LocationHintsNode (IL) & VarValueNode (IL) & VarRefNode (L) \\
+\texttt{AttributeNode (I)} & \texttt{ModuleNode (I)} & \texttt{CommaOperatorNode (I)} \\
+\texttt{AttrListNode (IL)} & \texttt{NameNode (IL)} & \texttt{ConstructorNode (I)} \\
+\texttt{AxisNode (I)} & \texttt{OrderByClauseNode (I)} & \texttt{ContextItemExprNode (L)} \\
+\texttt{CaseClauseNode (I)} & \texttt{OrderSpecNode (I)} & \texttt{EmptySequenceNode (L)} \\
+\texttt{CaseClausesNode (I)} & \texttt{ParamListNode (I)} & \texttt{ExtensionExprNode (I)} \\
+\texttt{CDataSectionNode (L)} & \texttt{ParamNode (I)} & \texttt{FLWORExprNode (I)} \\
+\texttt{ContentNode (IL)} & \texttt{PITargetNode (IL)} & \texttt{FunctionCallNode (IL)} \\
+\texttt{DefaultCaseNode (I)} & \texttt{PragmaListNode (I)} & \texttt{IfExprNode (I)} \\
+\texttt{EntityRefNode (L)} & \texttt{PragmaNode (L)} & \texttt{LiteralNode (L)} \\
+\textbf{ExprHolderNode} & \texttt{PredicateListNode (I)} & \texttt{OperatorNode (I)} \\
+\textbf{ExprNode} & \textbf{PrologChildNode} & \texttt{OrderedExprNode (I)} \\
+\texttt{FunctionBodyNode (IL)} & \texttt{StepExprNode (I)} & \texttt{PathExprNode (I)} \\
+\texttt{CharRefNode (L)} & \texttt{StringNode (L)} & \texttt{QuantifiedExprNode (I)} \\
+\texttt{InClausesNode (I)} & \texttt{TupleStreamNode (I)} & \texttt{TypeswitchExprNode (I)} \\
+\textbf{ItemTypeNode} & \texttt{TypeNode (L)} & \texttt{UnorderedExprNode (I)} \\
+\texttt{LocationHintNode (L)} & \textbf{VariableBindingNode} & \texttt{ValidateExprNode (I)} \\
+\texttt{LocationHintsNode (IL)} & \texttt{VarValueNode (IL)} & \texttt{VarRefNode (L)} \\
 \textbf{ModuleChildNode} & & \\
 \end{tabular}
 \end{figure}
@@ -88,40 +88,40 @@ LocationHintsNode (IL) & VarValueNode (IL) & VarRefNode (L) \\
 \begin{tabular}{l | l}
 \textbf{\emph{PrologChildNode}} & \textbf{\emph{ExprHolderNode}} \\
 \hline
-BaseURIDeclNode (L) & BindingSequenceNode (I) \\
-BoundarySpaceDeclNode (L) & DefaultValueNode (I) \\
-ConstructionDeclNode (L) & ElseExpressionNode (I) \\
-CopyNamespacesDeclNode (L) & OperandExpressionNode (I) \\
-DefaultCollationDeclNode (L) & ReturnClauseNode (I) \\
-DefaultNamespaceDeclNode (L) & TestExpressionNode (I) \\
-EmptyOrderDeclNode (L) & ThenExpressionNode (I) \\
-FunctionDeclNode (I) & WhereClauseNode (I) \\
+\texttt{BaseURIDeclNode (L)} & \texttt{BindingSequenceNode (I)} \\
+\texttt{BoundarySpaceDeclNode (L)} & \texttt{DefaultValueNode (I)} \\
+\texttt{ConstructionDeclNode (L)} & \texttt{ElseExpressionNode (I)} \\
+\texttt{CopyNamespacesDeclNode (L)} & \texttt{OperandExpressionNode (I)} \\
+\texttt{DefaultCollationDeclNode (L)} & \texttt{ReturnClauseNode (I)} \\
+\texttt{DefaultNamespaceDeclNode (L)} & \texttt{TestExpressionNode (I)} \\
+\texttt{EmptyOrderDeclNode (L)} & \texttt{ThenExpressionNode (I)} \\
+\texttt{FunctionDeclNode (I)} & \texttt{WhereClauseNode (I)} \\
 \cline{2-2} \textbf{ImportNode} & \textbf{\emph{ItemTypeNode}} \\
-\cline{2-2} NamespaceDeclNode (L) & AnyItemNode (L) \\
-OptionDeclNode (L) & AtomicTypeNode (L) \\
-OrderingModeDeclNode (L) & KindTestNode (IL) \\
-VarDeclNode (I) & NameTestNode (L) \\
+\cline{2-2} \texttt{NamespaceDeclNode (L)} & \texttt{AnyItemNode (L)} \\
+\texttt{OptionDeclNode (L)} & \texttt{AtomicTypeNode (L)} \\
+\texttt{OrderingModeDeclNode (L)} & \texttt{KindTestNode (IL)} \\
+\texttt{VarDeclNode (I)} & \texttt{NameTestNode (L)} \\
 \cline{1-2} \textbf{\emph{ImportNode}} & \textbf{\emph{VariableBindingNode}} \\
-\cline{1-2} ModuleImportNode (I) & ForClauseNode (I) \\
-SchemaImportNode (I) & InClauseNode (I) \\
-\cline{1-1} \textbf{\emph{ModuleChildNode}} & LetClauseNode (I) \\
-\cline{1-2} ModuleDeclNode (L) & \emph{StepExprNode} (I) \\
-\cline{2-2}PrologNode (IL) & SelfOrDescendantStepNode (L) \\
-QueryBodyNode (I) & 
+\cline{1-2} \texttt{ModuleImportNode (I)} & \texttt{ForClauseNode (I)} \\
+\texttt{SchemaImportNode (I)} & \texttt{InClauseNode (I)} \\
+\cline{1-1} \textbf{\emph{ModuleChildNode}} & \texttt{LetClauseNode (I)} \\
+\cline{1-2} \texttt{ModuleDeclNode (L)} & \texttt{\emph{StepExprNode} (I)} \\
+\cline{2-2} \texttt{PrologNode (IL)} & \texttt{SelfOrDescendantStepNode (L)} \\
+\texttt{QueryBodyNode (I)} & 
 \end{tabular}
 \end{figure}
 
 Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function.
 
-\begin{define}[Function is(v, class)]For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
+\begin{define}[Function $is(v, class)$]For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
 \end{define}
 
-For instance, assuming $v \in V, c(v) = LiteralNode$, calls $is(v, LiteralNode)$, $is(v, ExprNode)$ returns $true$, while call $is(v, ContentNode)$ returns $false$.
+For instance, assuming $v \in V, c(v) =$ \texttt{LiteralNode}, calls $is(v,$ \texttt{LiteralNode}$)$ and $is(v,$ \texttt{ExprNode}$)$ return $true$, while call $is(v,$ \texttt{ContentNode}$)$ returns $false$.
 
 \subsection{Characteristics of the Syntax Tree}
-An important characteristic of the syntax tree is related to a definition of local variables and their scope in the XQuery language. The representation of a definition of a local variable in the syntax tree is a node of $VariableBinding$ class. Nodes of that class have only two children; a node representing the type of the variable and a node representing the binding expression (expression defining the value of the variable, and thus, it cannot use the variable). Hence, the entire subtree does not contain any expressions that use the variable. Therefore the scope of the new variable is not the subtree of the $VariableBinding$ class node. It depends on the type of XQuery construct that the variable binding is a (indirect) component of.
+An important characteristic of the syntax tree is related to a definition of local variables and their scope in the XQuery language. The representation of a definition of a local variable in the syntax tree is a node of \texttt{VariableBindingNode} class. Nodes of that class have only two children; a node representing the type of the variable and a node representing the binding expression (expression defining the value of the variable, and thus, it cannot use the variable). Hence, the entire subtree does not contain any expressions that use the variable. Therefore the scope of the new variable is not the subtree of the \texttt{VariableBindingNode} class node. It depends on the type of XQuery construct that the variable binding is a (indirect) component of.
 
-For example, a node of $FLWORExpr$ class contains four subnodes of\linebreak $TupleStream$, $WhereClause$, $OrderByClause$ and $ReturnClause$ classes. The $TupleStream$ class node contains a list of node of $variableBinding$ class which define variables valid in all other three subnodes of the FLWOR node.
+For example, a node of \texttt{FLWORExprNode} class contains four subnodes of\linebreak \texttt{TupleStreamNode}, \texttt{WhereClauseNode}, \texttt{OrderByClauseNode} and\linebreak \texttt{ReturnClauseNode} classes. The \texttt{TupleStreamNode} class node contains a list of nodes of \texttt{VariableBindingNode} class which define variables valid in all other three subnodes of the FLWOR node.
 
 \todo[inline]{Nejak sa z tohoto vytratilo to, preco to je pre nas dolezita charakteristika}
 
@@ -140,39 +140,39 @@ But firstly, we describe types of expressions we want to capture and their featu
 
 \begin{itemize}
 \item XML Schema built-in atomic types \todo{link do appendixu}.
-\item Types $ElementType$, $AttributeType$, $NodeType$, $TextNodeType$,\linebreak $CommentType$, $ProcessingInstructionType$, $DocumentType$ representing an element, attribute, node, text node, comment, processing instruction, document node.
-\item Type representing a node or a set of nodes selected by a certain path expression. The path expression is included in this type. Let this type be identified as $PathType$.
-\item $UnknownType$ representing a type without known details, which does not suit one of the three previous types. An example is XSD type $anyType$.
+\item Types \texttt{ElementType}, \texttt{AttributeType}, \texttt{NodeType}, \texttt{TextNodeType},\linebreak \texttt{CommentType}, \texttt{ProcessingInstructionType}, \texttt{DocumentType} representing an element, attribute, node, text node, comment, processing instruction, document node.
+\item Type representing a node or a set of nodes selected by a certain path expression. The path expression is included in this type. Let this type be identified as \texttt{PathType}.
+\item \texttt{UnknownType} representing a type without known details, which does not suit one of the three previous types. An example is XSD type \texttt{anyType}.
 \end{itemize}
 
 \subsection{PathType}
-$PathType$ contains additional information. The represented path is contained by an instance of $PathExprNode$ containing list of its steps, in particular instances of $StepExprNode$. If a step is a reference to a variable which type is $PathType$, we also want to include this information. Therefore, $PathType$ contain association between the steps and other $PathTypes$ and this association is defined for the $PathType$ variable steps.
+\texttt{PathType} contains additional information. The represented path is contained by an instance of \texttt{PathExprNode} containing list of its steps, in particular instances of \texttt{StepExprNode}. If a step is a reference to a variable which type is \texttt{PathType}, we also want to include this information. Therefore, \texttt{PathType} contain association between the steps and other \texttt{PathType}s and this association is defined for the \texttt{PathType} variable steps.
 
-To differ between a common $PathType$ selecting a set of nodes and a $PathType$ bound to a for variable in a FLWOR expression, $PathType$ structure contains a flag $isForBound$.
+To differ between a common \texttt{PathType} selecting a set of nodes and a \texttt{PathType} bound to a for variable in a FLWOR expression, \texttt{PathType} structure contains a flag \texttt{isForBound}.
 
-Additionaly, $PathType$ contains a list of special functions that were called with an argument of $PathType$ type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of $PathType$ because then, we can determine a type of the function call more precisely. Those special functions are built-in functions $data$, $min$, $max$ \todo{Doplnit}.
+Additionally, \texttt{PathType} contains a list of special functions that were called with an argument of \texttt{PathType} type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of \texttt{PathType} because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max} \todo{Doplnit}.
 
-In summary, we represent $PathType$ as a structure with the following member variables. \todo{Radsej UML?}
+In summary, we represent \texttt{PathType} as a structure with the following member variables.
 \begin{itemize}
-\item $pathExprNode$ - An instance of $PathExprNode$.
-\item $substeps$ - An association between references from $stepNodes$ and instances of $PathType$ type.
-\item $isForBound$ - Boolean flag determining if the type was bound to a for variable in a for clause.
-\item $specialFunctionCalls$ - List of special functions called with this instance as an argument.
+\item \texttt{pathExprNode} - An instance of \texttt{PathExprNode}.
+\item \texttt{substeps} - An association between steps from \texttt{pathExprNode} and instances of \texttt{PathType} type.
+\item \texttt{isForBound} - Boolean flag determining if the type was bound to a for variable in a for clause.
+\item \texttt{specialFunctionCalls} - List of special functions called with this instance as an argument.
 \end{itemize}
 
 \subsection{Cardinality of Types}
 
-To capture sequences, we assign the first two categories of types (all types except of $PathType$ and $UnknownType$) with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
+To capture sequences, we assign the first two categories of types (all types except of \texttt{PathType} and \texttt{UnknownType}) with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
 \begin{itemize}
 \item An empty sequence.
 \item A sequence of exactly one item.
-\item A sequence containing zero or one item (modifier $?$).
-\item A sequence containing zero or more items (modifier $*$).
-\item A sequence containing one or more items (modifier $+$).
+\item A sequence containing zero or one item (modifier \texttt{?}).
+\item A sequence containing zero or more items (modifier \texttt{*}).
+\item A sequence containing one or more items (modifier \texttt{+}).
 \end{itemize}
 
-$PathType$ is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, $UnknownType$ is neither assigned with the cardinality. Expressions of $UnknownType$ are not utilized it the inference, therefore, their cardinality is not needed.
+\texttt{PathType} is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, \texttt{UnknownType} is neither assigned with the cardinality. Expressions of \texttt{UnknownType} are not utilized it the inference, therefore, their cardinality is not needed.
 
 \todo[inline]{Este by sa dala urobit analyza volania funkcii, do ktorych su predavane nejake elementy/atributy o ktorych vieme ich path expression. Vysledkom tejto funkcie by totiz zas mohli byt elementy/atributy o ktorych vieme (pozmenenu) path expression a nie len nezname elementy/atributy.
 A: Přesně tak. A jak říkám - není třeba vše co navrhnete implementovat.
@@ -184,128 +184,128 @@ Determination of return types of functions is needed because function calls can 
 Instead, the syntax tree can be searched just once, before the analysis of expressions, and return types of all functions found are stored.
 
 \begin{algorithm}
-\caption{Retrieval of Function Declaration Nodes $getFunctionDeclarationNodes(syntaxTree)$}
+\caption{Function \texttt{getFunctionDeclarationNodes}: Retrieval of Function Declaration Nodes}
 \label{ALG_retrieval_of_function_declaration_nodes}
 \begin{algorithmic}[1]
-\REQUIRE $syntaxTree$: A reference to the root node of a syntax tree.
+\REQUIRE syntaxTree: A reference to the root node of a syntax tree.
 \ENSURE A list of syntax tree nodes representing function declarations.
 
-\STATE $prologNode = null$
-\FORALL{$moduleChildNode \in syntaxTree.getChildren()$}
-    \IF{$is(moduleChildNode, PrologNode)$}
-        \STATE $prologNode = moduleChildNode$
+\STATE prologNode $=$ null
+\FORALL{moduleChildNode $\in$ syntaxTree.getChildren()}
+    \IF{is(moduleChildNode, PrologNode)}
+        \STATE prologNode $=$ moduleChildNode
     \ENDIF
 \ENDFOR
 
-\STATE $functionDeclarationNodes =$ an empty list
-\IF{$prologNode \neq null$}
-    \FORALL{$prologChildNode \in prologNode.getChildren()$}
-        \IF{$is(prologChildNode, FunctionDeclNode)$}
-            \STATE add $prologChildNode$ to $functionDeclarationNodes$
+\STATE functionDeclarationNodes $=$ an empty list
+\IF{prologNode $\neq$ null}
+    \FORALL{prologChildNode $\in$ prologNode.getChildren()}
+        \IF{is(prologChildNode, FunctionDeclNode)}
+            \STATE add prologChildNode to functionDeclarationNodes
         \ENDIF
     \ENDFOR
 \ENDIF
 
-\RETURN $functionDeclarationNodes$
+\RETURN functionDeclarationNodes
 \end{algorithmic}
 \end{algorithm}
 
-A simple algorithm is presented in Algorithm \ref{ALG_processing_of_functions}. It uses \texttt{getFunction\-DeclarationNodes()} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
+A simple algorithm is presented in Algorithm \ref{ALG_processing_of_functions}. It uses\linebreak \texttt{getFunctionDeclarationNodes} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
-Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyze them. Also, since a determination of a prefix for built-in functions is a technical issue, we assume that built-in functions are either prefixed by $fn$ or not prefixed.
+Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyse them. Also, since a determination of a prefix for built-in functions is a technical issue, we assume that built-in functions are either prefixed by $fn$ or not prefixed.
 
 \begin{algorithm}
 \caption{Processing of Functions}
 \label{ALG_processing_of_functions}
 \begin{algorithmic}[1]
-\REQUIRE $syntaxTree$: A reference to the root node of a syntax tree.
+\REQUIRE syntaxTree: A reference to the root node of a syntax tree.
 \ENSURE An associative array of function names with their types and references to the their declaration nodes.
 
-\STATE $functionArray$ = an empty associative array
-\FORALL{$functionDeclarationNode \in$ \\ $getFunctionDeclarationNodes(syntaxTree)$}
-    \STATE $functionName = functionDeclarationNode.funcName$
-    \STATE $typeNode = functionDeclarationNode.getChild(TypeNode)$
-    \STATE $functionArray[functionName] =$ \\ $(getTypeTN(typeNode), functionDeclarationNode)$
+\STATE functionArray $=$ an empty associative array
+\FORALL{functionDeclarationNode $\in$ \\ getFunctionDeclarationNodes(syntaxTree)}
+    \STATE functionName $=$ functionDeclarationNode.funcName
+    \STATE typeNode $=$ functionDeclarationNode.getChild(TypeNode)
+    \STATE functionArray[functionName] $=$ \\ (getTypeTN(typeNode), functionDeclarationNode)
 \ENDFOR
-\RETURN $functionArray$
+\RETURN functionArray
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Extraction of a Type from TypeNode getTypeTN()}
+\caption{Function \texttt{getTypeTN}: Extraction of a Type from TypeNode}
 \label{ALG_extraction_of_a_type_from_typenode}
 \begin{algorithmic}[1]
-\REQUIRE $typeNode$: Syntax tree node of TypeNode class.
-\ENSURE Type extracted from $typeNode$.
+\REQUIRE typeNode: Syntax tree node of TypeNode class.
+\ENSURE Type extracted from typeNode.
 
-\STATE $type = null$
-\STATE $cardinality = typeNode.cardinality$
-\STATE $itemTypeNode = typeNode.getChild(ItemTypeNode)$
-\IF{$is(itemTypeNode, AtomicTypeNode)$}
-    \STATE $type = itemTypeNode.typeName$
-\ELSIF{$is(itemTypeNode, KindTestNode)$}
-    \STATE $type = itemTypeNode.nodeKind$
+\STATE type = null
+\STATE cardinality = typeNode.cardinality
+\STATE itemTypeNode = typeNode.getChild(ItemTypeNode)
+\IF{is(itemTypeNode, AtomicTypeNode)}
+    \STATE type = itemTypeNode.typeName
+\ELSIF{is(itemTypeNode, KindTestNode)}
+    \STATE type = itemTypeNode.nodeKind
 \ENDIF
 
-\RETURN $type$, $cardinality$
+\RETURN type, cardinality
 \end{algorithmic}
 \end{algorithm}
 
 \todo[inline]{ALG Extraction of a Type from TypeNode nie uplne sedi s definiciou typov. DP JS ma nieco navyse. A tento alg je nedokonceny!!}
 
-For the rest of the thesis, we assume function $getFunctionReturnType()$ which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
+For the rest of the thesis, we assume function \texttt{getFunctionReturnType} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
-Later phases of the algorithm need to process the declarations of certain functions. Therefore, we also store references to the entire function declaration nodes, accessible using function $getFunctionDeclNode()$.
+Later phases of the algorithm need to process the declarations of certain functions. Therefore, we also store references to the entire function declaration nodes, accessible using function \texttt{getFunctionDeclNode}.
 
 \subsection{Auxiliary Functions}
 Before proceeding to the next phase of the algorithm, we introduce auxiliary functions used in pseudo algorithms.
 
-Function $memorizeType()$ takes two arguments $node$ and $type$ and it memorizes the given type of the specified expression node. This information can be then retrieved by function $getType()$, specifying the particular node as its argument.
+Function \texttt{memorizeType} takes two arguments \texttt{node} and \texttt{type} and it memorizes the given type of the specified expression node. This information can be then retrieved by function \texttt{getType}, specifying the particular node as its argument.
 
-Another group consists of functions $set()$, $add()$, and $get()$. Function $set()$ memorizes a given value of a specified property of a specified node. It is used to assign a node with a named value, for example, $set(someNode, color, 'red')$ will assign $someNode$ with string value $'red'$ wich can be then retrieved by function $get()$, specifying the node and the property name. For example,\linebreak $get(someNode, color)$ returns $'red'$. A subsequent call of $set()$ assigning a node with a value of already assigned property will overwrite it, leaving the property with the newer value. However, a property can have several values and this can be achieved using function $add()$ with the same syntax as function $set()$ but instead of overwriting the existing property, $add()$ will append the new value to the existing ones. Then, a call of $get()$ on this node and property returns a list of all its values, preserving the order of their addition.
+Another group consists of functions \texttt{set}, \texttt{add}, and \texttt{get}. Function \texttt{set} memorizes a given value of a specified property of a specified node. It is used to assign a node with a named value, for example, \texttt{set(someNode, color, "red")} will assign \texttt{someNode} with string value \texttt{"red"} which can be then retrieved by function \texttt{get}, specifying the node and the property name. For example,\linebreak \texttt{get(someNode, color)} returns \texttt{"red"}. A subsequent call of \texttt{set} assigning a node with a value of already assigned property will overwrite it, leaving the property with the newer value. However, a property can have several values and this can be achieved using function \texttt{add} with the same syntax as function \texttt{set} but instead of overwriting the existing property, \texttt{add} will append the new value to the existing ones. Then, a call of \texttt{get} on this node and property returns a list of all its values, preserving the order of their addition.
 
 \subsection{Determination of Global Variable Types}
 A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
 
 \begin{algorithm}
-\caption{Function determineExpressionType()}
+\caption{Function \texttt{determineExpressionType}}
 \label{ALG_func_determineExpressionType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    $exprNode$: An expression node in the syntax tree. \\
-    $contextVarTypes$: Types of local variables valid in the current subtree.
+    exprNode: An expression node in the syntax tree. \\
+    contextVarTypes: Types of local variables valid in the current subtree.
 }
 \ENSURE The expression type.
 
-\STATE $type = UnknownType$
-\IF{$is(exprNode, LiteralNode)$}
-     \STATE $type =$ XSD atomic type $exprNode.type$, exactly-once cardinality
-\ELSIF{$is(exprNode, FunctionCallNode)$}
-     \STATE $type = getFunctionReturnType(exprNode.fncName)$
-\ELSIF{$is(exprNode, VarRefNode)$}
-     \STATE $type = getVariableType(contextVarTypes, exprNode.varName)$
-     \IF{$type$ is $PathType$}
-         \STATE $step$ = a path step (new instance of $StepExprNode$) representing the variable reference
-		 \STATE $substeps$ = empty associative array         
-         \STATE $substeps[step]$ = $type$
-         \STATE $pathExprNode$ = new instance of $PathExprNode$ containing one step $step$
-         \STATE $type$ = $PathType$ containing $pathExprNode$ and $substeps$
+\STATE type $=$ UnknownType
+\IF{is(exprNode, LiteralNode)}
+     \STATE type $=$ XSD atomic type exprNode.type, exactly-once cardinality
+\ELSIF{is(exprNode, FunctionCallNode)}
+     \STATE type $=$ getFunctionReturnType(exprNode.fncName)
+\ELSIF{is(exprNode, VarRefNode)}
+     \STATE type = getVariableType(contextVarTypes, exprNode.varName)
+     \IF{type is PathType}
+         \STATE step $=$ a path step (new instance of StepExprNode) representing the variable reference
+		 \STATE substeps = empty associative array         
+         \STATE substeps[step] $=$ type
+         \STATE pathExprNode $=$ new instance of PathExprNode containing one step step
+         \STATE type $=$ PathType containing pathExprNode and substeps
      \ENDIF
-\ELSIF{$is(exprNode, PathExprNode)$}
-     \STATE $type = createPathType(exprNode)$
-\ELSIF{$is(exprNode, OperatorNode)$}
-     \STATE $type = determineOperatorType(exprNode, contextVarTypes)$
-\ELSIF{$is(exprNode, FLWORExprNode)$}
-     \STATE $returnClauseNode = exprNode.getChild(ReturnClauseNode)$
-     \STATE $type = createForUnboundType(getType(returnClauseNode))$
+\ELSIF{is(exprNode, PathExprNode)}
+     \STATE type $=$ createPathType(exprNode)
+\ELSIF{is(exprNode, OperatorNode)}
+     \STATE type $=$ determineOperatorType(exprNode, contextVarTypes)
+\ELSIF{is(exprNode, FLWORExprNode)}
+     \STATE returnClauseNode $=$ exprNode.getChild(ReturnClauseNode)
+     \STATE type $=$ createForUnboundType(getType(returnClauseNode))
 \ENDIF
 
-\RETURN $type$
+\RETURN type
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function determineOperatorType()}
+\caption{Function \texttt{determineOperatorType}}
 \label{ALG_func_determineOperatorType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\ 
@@ -314,37 +314,37 @@ A similar approach as in the case of functions can be applied to determine types
 }
 \ENSURE The operator expression type.
 
-\STATE $type = UnknownType$
-\STATE $operator = operatorNode.operator$
-\IF{$isOperatorClassComparison(operator)$}
-    \STATE $type = xs:boolean$, exactly-one cardinality
-\ELSIF{$isOperatorClassAddition(operator)$}
-    \STATE $leftOperandType = getType(exprNode.leftSide)$
-    \STATE $rightOperandType = getType(exprNode.rightSide)$
-    \IF{$isNumericType(leftOperandType)$ $AND$ $isNumericType(rightOperandType)$}
-        \STATE $type = selectMoreGeneralNumericType(leftOperandType,$ $rightOperandType)$
-    \ELSIF{$isNumericType(leftOperandType)$}
+\STATE $type =$ UnknownType
+\STATE $operator =$ $operatorNode.operator$
+\IF{isOperatorClassComparison($operator$)}
+    \STATE $type =$ boolean, exactly-one cardinality
+\ELSIF{isOperatorClassAddition($operator$)}
+    \STATE $leftOperandType =$ getType($exprNode.leftSide$)
+    \STATE $rightOperandType =$ getType($exprNode.rightSide$)
+    \IF{isNumericType($leftOperandType$) $\wedge$ isNumericType($rightOperandType$)}
+        \STATE $type =$ selectMoreGeneralNumericType($leftOperandType$, $rightOperandType$)
+    \ELSIF{isNumericType($leftOperandType$)}
         \STATE $type = leftOperandType$
-    \ELSIF{$isNumericType(rightOperandType)$}
+    \ELSIF{isNumericType($rightOperandType$)}
         \STATE $type = rightOperandType$
     \ENDIF
 \ENDIF
 
-\RETURN $type$
+\RETURN type
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function isOperatorClassComparison()}
+\caption{Function \texttt{isOperatorClassComparison}}
 \label{ALG_func_isOperatorClassComparison}
 \begin{algorithmic}[1]
 \REQUIRE $operator$: Representation of a XQuery operator.
-\ENSURE $true$ if $operator$ is a comparison operator, $false$ otherwise.
+\ENSURE true if operator is a comparison operator, false otherwise.
 
-\IF{$operator$ equals one of $GEN\_EQUALS$, $GEN\_GREATER\_THAN$, $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_LESS\_THAN$, $GEN\_LESS_THAN\_EQUALS$, $GEN\_NOT\_EQUALS$, $VAL\_EQUALS$, $VAL\_GREATER\_THAN$, $VAL\_GREATER\_THAN\_EQUALS$, $VAL\_LESS\_THAN$, $VAL\_LESS\_THAN\_EQUALS$, $VAL\_NOT\_EQUALS$}
-    \RETURN $true$
+\IF{$operator$ equals one of GEN\_EQUALS, GEN\_GREATER\_THAN, GEN\_GREATER\_THAN\_EQUALS, GEN\_LESS\_THAN, GEN\_LESS\_THAN\_EQUALS, GEN\_NOT\_EQUALS, VAL\_EQUALS, VAL\_GREATER\_THAN, VAL\_GREATER\_THAN\_EQUALS, VAL\_LESS\_THAN, VAL\_LESS\_THAN\_EQUALS, VAL\_NOT\_EQUALS}
+    \RETURN true
 \ELSE
-    \RETURN $false$
+    \RETURN false
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -991,7 +991,7 @@ While the previous steps of the key discovery produce mostly positive statements
 \todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
 When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
-The first XQuery construct utilized by this step is a function call of $distinct-values$ function as discussed in Section \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
+The first XQuery construct utilized by this step is a function call of $distinct-values$ function as discussed in Chapter \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
 
 Aggregation functions $min$, $max$, $sum$ are not utilized by the function because they were utilized by the search for join patterns, and in the process of classification of found join patterns, they were included in the computation of the key weights.
 
@@ -1017,7 +1017,7 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 
 Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (lieral constant, reference of a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
 
-As discussed in Section \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the count of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys.
+As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the count of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys.
 
 \begin{algorithm}
 \caption{Rejection of uniqueness - comparison with a constant}

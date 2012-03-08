@@ -98,20 +98,18 @@ These three occurrences are not sufficient enough to determine the accurate type
 If a value of an element or attribute is used in an expression, then this expression could be often exploited to determine a type of the value. Comparing the value to another value of a known type and supplying the value to a function call as an argument of a particular type are examples of these expressions as shown below.
 
 \begin{verbatim}
-\\event\date = current-date()
+//event/date = current-date()
 
-\catalog\product\price < 24.5
+/catalog/product/price < 24.5
 
 declare function local:byteFunction($arg as xs:byte) as xs:byte
 {...};
-\catalog\product\local:byteFunction(@id)
+/catalog/product/local:byteFunction(@id)
 \end{verbatim}
-\todo[inline]{overit, ci su priklady OK}
 
 The determined types are \texttt{xs:date} for element \texttt{date}, \texttt{xs:decimal} for element \texttt{price} and \texttt{xs:byte} for attribute \texttt{id}.
 
-Alongside common expressions, there are other XQuery constructs indicating types, such as \emph{type casting}, \emph{constructors} and so called \emph{type declarations}.
-\todo[inline]{\^ Nevíme co to je. Chce to vysvětlit. Buď v kapitole 2 nebo tady + odkaz do specifikace.}
+Alongside common expressions, there are other XQuery constructs indicating types, such as \emph{type casting}, \emph{type constructors} and so called \emph{type declarations} (see \cite{w3c_xquery} for specification), demonstrated in the following examples.
 
 Assuming variable \texttt{\$var} bound to a value of some element or attribute, the following two fractions of queries indicate its type to be \emph{xs:integer}.
 
@@ -132,8 +130,8 @@ declare variable $firstNumber as xs:integer
 := data(//product/number[1]); 
 \end{verbatim}
 
-Although determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and further research would be needed.
-\todo[inline]{Tady by to chtělo příklad. nebo to budeme řešit dál v navrženém algoritmu a toto je pouze diskuse případů?}
+%Although determining built-in types of elements and attributes in simple queries may seem quite straightforward, reliable method would face some issues. More complex queries are commonly branched by \emph{if-then-else} construct. These branches can contain several contradictionary fragments from the view of type inference. Therefore, the reliable method would take the query structure into consideration and further research would be needed.
+%\todo[inline]{Tady by to chtělo příklad. nebo to budeme řešit dál v navrženém algoritmu a toto je pouze diskuse případů?}
 
 \subsection{Enumeration}
 In several cases, XQuery \emph{if-then-else} construct may be used to branch the execution of query by all possible values of a certain variable. This is equivalent to \emph{switch} construct from other programming languages. When the control variable is bound to some element or attribute, type of this node can be inferred as enumeration and its individual values can be determined as well.
@@ -213,7 +211,7 @@ return <item num="{$item/@num}"
          price="{$price/price}"/>
 \end{verbatim}
 
-A common three-way join. \todo{Tady asi něco chybí.}
+A common three-way join can be also utilize to infer keys and foreign keys, however, the respective XML data and their analysis would be needed to tell what is a key and what is a foreign key.
 
 \subsection{Join of Self-referencing Data}
 By the term ``self-referencing data'' are meant XML elements that somehow reference items from the same set. Example of a query that operates upon such data follows.
@@ -291,11 +289,11 @@ Also, many other types of queries could be exploited to obtain negative uniquene
 \begin{verbatim}
 let $prods := doc("catalog.xml")//product 
 for $prod in $prods 
-where $prod << $prods[@dept = $prod/@dept][last( )] 
+where $prod << $prods[@dept = $prod/@dept][last()] 
 return $prod 
 \end{verbatim}
 
-\todo[inline]{Tady to chce ějaký komentář.}
+Usage of predicate \texttt{[last()]} indicates that \texttt{\$prod} is a sequence of elements. 
 
 \subsection{Uniqueness}
 Contrary to non-uniqueness discovery, some XQuery constructs can indicate uniqueness of elements or attributes; however, it seems to be more difficult. One of the approaches of uniqueness discovery could be an investigation of what the query does return. Consider the following query.

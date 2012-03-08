@@ -1,7 +1,7 @@
 \chapter{Combination with Existing Methods of Inference}
 \todo[inline]{Kontrola pomocou dat.}
 
-In this chapter, we describe how to incorporate the inferred statements with existing methods of XML schema inference. We focus on a class of methods which are based on a creation and subsequent simlification of the initial grammar (as discussed in Chapter \ref{chapter_analysis_of_recent_approaches}).
+In this chapter, we describe how to incorporate the inferred statements with existing methods of XML schema inference. We focus on a class of methods which are based on a creation and subsequent simplification of the initial grammar (as discussed in Chapter \ref{chapter_analysis_of_recent_approaches}).
 
 The initial grammar contains rules of form $e \rightarrow e_1e_2\dots e_k$, where $e$ is an element and $e_1, \dots , e_k$ are its subelements. After the simplification, the simplified grammar contain rules of form $e \rightarrow E$, where $E$ is a regular expression composed of subelements of element $e$, describing its content.
 
@@ -9,8 +9,7 @@ Attributes of elements are not contained in the grammar directly, but every elem
 
 The combination with such methods of inference is straightforward. The rules of the grammar describe a XML structure using the most general aspect of elements and their subelements. Since the statements inferred by our method do not involve the XML structure by defining a subelement structure of elements, there are no conflicts between the grammar rules and our statements that need to be resolved.
 
-Our statements are of the three following forms. The first one is $p \rightarrow t$, where $p$ is a $PathType$ representing an XQuery path selecting a set of elements or attributes \todo{plati nejake obmedzenie na tuto cestu?}
-, and $t$ is an XSD built-in atomic type.
+Our statements are of the three following forms. The first one is $p \rightarrow t$, where $p$ is a $PathType$ representing an XQuery path selecting a set of elements or attributes, and $t$ is an XSD built-in atomic type.
 
 The second and third forms are $k = (C,P,\{L\})$ and $fk = (C(P_1,\{L_1\}) \rightarrow (P_2,\{L_2\}))$, representing a key and a foreign key, where $C,P,P_1,P_2,L,L_1,L_2$ are $PathTypes$ without predicates using only child and descendant axes.
 
@@ -80,13 +79,21 @@ And, at last, if the axis is attribute axis, elements from the context set are s
 \section{Saving the Inferred Statements}
 In the case of keys, the algorithm iterates through the inferred key statements. A key's context path $C$ is evaluated and the key is assigned to the target elements selected by the context path, one element can be assigned with multiple keys. Additionally, each key is assigned with a list of foreign keys that are referencing it.
 
-In the case of inferred types, the situation is not that simple, because there can occur conflicting statements. In particular, two kinds of conflicts can emerge between two statements.
+In the case of inferred types, the situation is slightly less simple, because there can occur conflicting statements. The examples of such conflicts for path $p$ without predicates are $p_1 \rightarrow date$, $p_2 \rightarrow string$, and, $p_1 \rightarrow byte$, $p_2 \rightarrow int$, where $p_1$, $p_2$ are paths that when stripped of predicates, they equal $p$.
 
-\begin{enumerate}
-\item The two types do not equal, but one is castable to the other.
-\item The two types do not equal and none od them is castable to the other.
-\end{enumerate}
+Note that, in both examples, one type is castable to the other (date to string, and byte to int). Both types are inferred correctly for nodes targeted by $p$, but one of them was inferred from a more convenient expression and is more precise.
 
-The example of conflict 1 for path $p$ without predicates is $p_1 \rightarrow date$, $p_2 \rightarrow string$. And another one is $p_1 \rightarrow byte$, $p_2 \rightarrow int$, where $p_1$, $p_2$ are paths that when stripped of predicates, they equal $p$. There are two reasons of this kind of conflicts.
+Consider these two expressions; $PathType$ $p$ is compared to an integer literal constant, and, $PathType$ $p$ is an argument of function where a formal type of the argument is byte. The first expression is utilized to infer statement $p \rightarrow integer$, and the second one to infer statement $p \rightarrow byte$. Both of the types are correct, but the second one is more accurate.
 
-The first reason is that both types are inferred correctly for nodes targeted by $p$, but one of them was inferred from a more convenient expression and is more precise. Consider these two expressions; $PathType$ $p$ is compared to an integer literal constant, and, $PathType$ $p$ is an argument of function where a formal type of the argument is byte. The first expression is utilized to infer statement $p \rightarrow integer$, and the second one to infer statement $p \rightarrow byte$. Both of the types are correct, but the second one is more accurate.
+%In the case of inferred types, the situation is not that simple, because there can occur conflicting statements. In %particular, two kinds of conflicts can emerge between two statements.
+%
+%\begin{enumerate}
+%\item The two types do not equal, but one is castable to the other.
+%\item The two types do not equal and none of them is castable to the other.
+%\end{enumerate}
+%
+%The example of conflict of the first kind for path $p$ without predicates is $p_1 \rightarrow date$, $p_2 \rightarrow %string$. And another one is $p_1 \rightarrow byte$, $p_2 \rightarrow int$, where $p_1$, $p_2$ are paths that when %stripped of predicates, they equal $p$. There are two reasons of this kind of conflicts.
+%
+%The first reason is that both types are inferred correctly for nodes targeted by $p$, but one of them was inferred from a %more convenient expression and is more precise. Consider these two expressions; $PathType$ $p$ is compared to an integer %literal constant, and, $PathType$ $p$ is an argument of function where a formal type of the argument is byte. The first %expression is utilized to infer statement $p \rightarrow integer$, and the second one to infer statement $p \rightarrow %byte$. Both of the types are correct, but the second one is more accurate.
+
+From all inferred types for a particular path, the most specific (the most accurate) is selected and assigned to respective nodes from the grammar targeted by the path.

@@ -1,5 +1,4 @@
 \chapter{Analysis of XQuery} \label{CHAPTER_analysis_of_xquery}
-\todo[inline]{Někde by se mělo říct, kterou verzi uvažujeme, jaké obecně jsou, co je třeba XQuery Core apod.}
 This chapter discusses selected constructs of XQuery language and denotes how they could be exploited in the XML schema inference process. It is divided into sections by particular domains of the inference.
 
 Most of sample queries in this chapter are taken from \cite{Walmsley:2007:XQU:1205865} and \cite{Marchiori:07:XQU}, with or without modifications, as these were the main sources for this XQuery analysis.
@@ -163,7 +162,7 @@ Finding such patterns in queries could be useful in combination with analysis of
 \section{Keys}
 
 \subsection{Approach from \cite{Necasky:2009:DXK:1529282.1529414}}
-Paper \cite{Necasky:2009:DXK:1529282.1529414} introduces a method of discovering keys and foreign keys by investigation of joins in queries. The basis of this discovery is a search for particular forms of joins, so called \emph{join patterns} \todo{uviest ich sem?}, but the joins are processed only if they are found in a particular syntactic form. Therefore joins with the same semantics written in different syntax are not taken into consideration.
+Paper \cite{Necasky:2009:DXK:1529282.1529414} introduces a method of discovering keys and foreign keys by investigation of joins in queries. The basis of this discovery is a search for particular forms of joins, so called \emph{join patterns}, but the joins are processed only if they are found in a particular syntactic form. Therefore joins with the same semantics written in different syntax are not taken into consideration.
 
 The following examples are queries that could be processed by a similar method, but the actual method will not use them.
 
@@ -263,7 +262,7 @@ Basic representant is a common \emph{FLWOR} query.
 </bib>
 \end{verbatim}
 
-Usage of \texttt{for} construct indicates that a sequence of \texttt{book} elements which satisfy the condition in \emph{where} \todo{tady se nám nějak změnil styl} clause is expected. It is a condition composed of two single conditions joined by \emph{and} logical operator. Therefore, in order to satisfy the whole condition, both single conditions must be satisfied as well. Thus, it is expected that several elements satisfy each of the single conditions.
+Usage of \texttt{for} construct indicates that a sequence of \texttt{book} elements which satisfy the condition in \texttt{where} clause is expected. It is a condition composed of two single conditions joined by \texttt{and} logical operator. Therefore, in order to satisfy the whole condition, both single conditions must be satisfied as well. Thus, it is expected that several elements satisfy each of the single conditions.
 
 The first of them is a test of equality of book's subelement \texttt{publisher} to a string literal. Based on the expectation, element \texttt{publisher} cannot be unique. However, the second condition is greater-than comparison of \texttt{year} attribute to an integer literal, it cannot be inferred whether this attribute is unique or not. The reason is that even if it was unique, there still might be more than one \texttt{book} element meeting this condition. Also, any statement, positive nor negative, cannot be inferred about \texttt{title} subelement.
 
@@ -285,7 +284,7 @@ Other simple examples are passing a result of basic path expression to a call of
 
 According to the use of \texttt{distinct-values()} function, it can be easily seen that the author of this query assumes possible occurrence of more than one \texttt{book} elements with the same value of their \texttt{title} subelement. Thus, \texttt{title} element is not unique.
 
-Alike, variable \texttt{\$p} is bound to a price of each title and then passed to \texttt{min()} function call. That indicates that one book title is supposed to have several prices, however, it cannot be said if a certain occurrence of element \emph{book} can contain more than one \texttt{price} subelement.
+Alike, variable \texttt{\$p} is bound to a price of each title and then passed to \texttt{min()} function call. That indicates that one book title is supposed to have several prices, however, it cannot be said if a certain occurrence of element \texttt{book} can contain more than one \texttt{price} subelement.
 
 Also, many other types of queries could be exploited to obtain negative uniqueness statements like occurrence of element or attribute in \texttt{stable order by} clause or selection of an element set based on a value of particular attribute and consecutive treatment of this set as a sequence of elements.
 

@@ -3,7 +3,7 @@
 \todo[inline]{Predpoklad korektnosti dotazov}
 
 \section{Step 1: Construction of a Syntax Tree}
-The first step of the algorithm involves lexical and syntax analyses known from the construction of compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \todo{ref}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
+The first step of the algorithm involves lexical and syntax analyses known from the construction of compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \cite{thesis_schejbal}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
 
 The syntactic analysis needs to be slightly modified to suit our case. It writes its result into a file in an XML representation. Instead, we need to keep the result in the main memory and pass it to consecutive steps of our algorithm. Though this requirement concerns modifications of implementation, the core of the processing remains untouched. Therefore, we also do not describe these modifications.
 
@@ -27,8 +27,7 @@ $type_{LiteralNode}: V_{LiteralNode} \rightarrow Types_{literal}$ \\
 $value_{LiteralNode}: V_{LiteralNode} \rightarrow Values_{literal}$ \\
 where $V_{LiteralNode}$ is set $\{v | v \in V, c(v) =$ \texttt{LiteralNode}$\}$, $Types_{literal}$ is set of all types of literal values \{\texttt{DECIMAL}, \texttt{INTEGER}, \texttt{DOUBLE}, \texttt{STRING}\}, and $Values_{literal}$ is a set of all literal values (all valid XQuery decimal numbers, integers, double numbers and strings).
 
-Set $\mathcal{P}$ contains other similar functions but due to their large number, we do not define them formally.
-\todo[inline]{Q: Moze takto ostat, alebo definovat aspon tie co pouzivame? Alebo ich aspon vypisat? A: aspoň příklad, lépe vypsat ty, co použijeme}
+Set $\mathcal{P}$ contains other similar functions but due to their large number, we do not define them formally. Functions $varName_{VarRefNode}$, $axisKind_{AxisNode}$, $operator_{OperatorNode}$ are examples of commonly used functions from $\mathcal{P}$. Their meaning will be explained in a place of their use. For detail, see \cite{thesis_schejbal}.
 
 \todo[inline]{Hodil by se příklad stromu - jeslti nebude dál.}
 
@@ -37,26 +36,22 @@ Since we need to use the syntax tree in pseudo-algorithms, we define the followi
 
 For every $v \in V$, abbreviation
 \begin{itemize}
-\item $v.p$ stands for $p_{c(v)}(v)$ if $p_{c(v)} \in \mathcal{P}$.
+\item $v.p$ stands for $p_{c(v)}(v)$ if $p_{c(v)} \in \mathcal{P}$. This is a shortened syntax for functions from $\mathcal{P}$. Assuming $v \in V$, $c(v) =$ \texttt{VarRefNode}, and $varName_{VarRefNode} \in \mathcal{P}$; expression $varName_{VarRefNode}(v)$ can be abbreviated to $v.varName$. 
 \item $v.getChildren()$ stands for $\{w | w \in V, (v,w) \in E\}$ which is a set of all children of $v$.
-\item $v.getChild(i)$, $i \in \mathbb{N} \cup \{0\}$, stands for $w \in V$ so that $o(v)(v,w) = i + 1$.
-\item $v.getChild(class), class \in C$, stands for $w \in V$ so that $(v,w) \in E$ and $c(w) = class$, if $\Bigl | \{u | u \in V, (v,u) \in E, c(u) = class\}\Bigr | = 1$.
-\item If exists $u \in V$ so that $(u,v) \in E$, $v.getParent()$ stands for that $u$.
+\item $v.getChild(i)$, $i \in \mathbb{N} \cup \{0\}$, stands for $w \in V$ so that $o(v)(v,w) = i + 1$. In other words, it is a child of $v$ with sequential number $i$ in order specified by $o$, starting with 0.
+\item $v.getChild(class), class \in C$, stands for $w \in V$ so that $(v,w) \in E$ and $c(w) = class$, if $\Bigl | \{u | u \in V, (v,u) \in E, c(u) = class\}\Bigr | = 1$. It is a node satisfying two conditions; it is a child of $v$ and its class is $class$. The function is defined when there is exactly one child of $v$ of $class$ class.
+\item If exists $u \in V$ so that $(u,v) \in E$, $v.getParent()$ stands for that $u$, which is a parent of $v$.
 \end{itemize}
-
-\todo[inline]{Q: Je nutne presnejsie popisat kedy a preco tieto skratky maju zmysel? V pseudo-kodoch budu samozrejme pouzivane len v pripadoch, ked su dobre definovane a maju zmysel. A: Ne, ale hodilo by se slovně popsat co znamenají.}
 
 \subsection{Closer Look at the Nodes of the Syntax Tree}
 The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in tables in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}. The tables are composed of classes in italic and their subclasses. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining non-bold nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
 
 For example, an instance of the syntax tree cannot directly contain nodes of \texttt{Node} and \texttt{ExprNode} classes (for every $v \in V, c(v) \neq$ \texttt{Node}$, c(v) \neq$ \texttt{ExprNode}), but it can contain nodes of \texttt{AttributeNode} and \texttt{LiteralNode} classes. Regarding the multiplicity of types, a node of \texttt{LiteralNode} class is also considered to be of two indirect types: \texttt{ExprNode} and \texttt{Node}.
 
-\todo[inline]{Q: Asi bude potrebne nakreslit pre kazdy node, co presne obsahuje. Alebo staci pre tie, ktore budeme my pouzivat? A: Určitě všude stačí popsat jen to, co použijeme, s poznámkou, že zbytek je např. v diplomce, ze které vycházíte.}
-
 The node classes can be classified into three groups: inner node classes, leaf node classes and node classes that can be both inner and leaf. Inner node classes (marked \texttt{I}) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such class is \texttt{FLWORExprNode} which is composed of \texttt{TupleStreamNode}, \texttt{WhereClauseNode}, \texttt{OrderByClauseNode} and \texttt{ReturnClauseNode} classes. Leaf node classes (marked \texttt{L}) represent elements of XQuery language that cannot be further divided. For example, \texttt{LiteralNode}. Node \texttt{FunctionCallNode} is an example of the third group (marked \texttt{IL}). Function call of a function without arguments is represented by a leaf node while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
 
 \begin{figure}
-\caption{Syntax tree node types part 1.}
+\caption{Syntax tree node types part 1. For details, see \cite{thesis_schejbal}.}
 \label{FIG_syntax_tree_node_types_part_1}
 \begin{tabular}{l l | l}
 \multicolumn{2}{l|}{\textbf{\emph{Node}}} & \textbf{\emph{ExprNode}} \\
@@ -83,7 +78,7 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \end{figure}
 
 \begin{figure}
-\caption{Syntax tree node types part 2.}
+\caption{Syntax tree node types part 2. For details, see \cite{thesis_schejbal}.}
 \label{FIG_syntax_tree_node_types_part_2}
 \begin{tabular}{l | l}
 \textbf{\emph{PrologChildNode}} & \textbf{\emph{ExprHolderNode}} \\
@@ -123,7 +118,7 @@ An important characteristic of the syntax tree is related to a definition of loc
 
 For example, a node of \texttt{FLWORExprNode} class contains four subnodes of\linebreak \texttt{TupleStreamNode}, \texttt{WhereClauseNode}, \texttt{OrderByClauseNode} and\linebreak \texttt{ReturnClauseNode} classes. The \texttt{TupleStreamNode} class node contains a list of nodes of \texttt{VariableBindingNode} class which define variables valid in all other three subnodes of the FLWOR node.
 
-\todo[inline]{Nejak sa z tohoto vytratilo to, preco to je pre nas dolezita charakteristika}
+This characteristic is explicitly described, because several algorithms later in this chapter rely on it.
 
 \todo[inline]{priklad stromu}
 
@@ -137,9 +132,8 @@ The analysis of expression types can be divided into three substeps. Determinati
 But firstly, we describe types of expressions we want to capture and their features.
 
 \subsection{Expression Types}
-
 \begin{itemize}
-\item XML Schema built-in atomic types \todo{link do appendixu}.
+\item XML Schema built-in atomic types. See Attachment \ref{FIG_xsd_built_in_atomic_types}.
 \item Types \texttt{ElementType}, \texttt{AttributeType}, \texttt{NodeType}, \texttt{TextNodeType},\linebreak \texttt{CommentType}, \texttt{ProcessingInstructionType}, \texttt{DocumentType} representing an element, attribute, node, text node, comment, processing instruction, document node.
 \item Type representing a node or a set of nodes selected by a certain path expression. The path expression is included in this type. Let this type be identified as \texttt{PathType}.
 \item \texttt{UnknownType} representing a type without known details, which does not suit one of the three previous types. An example is XSD type \texttt{anyType}.
@@ -162,7 +156,7 @@ In summary, we represent \texttt{PathType} as a structure with the following mem
 
 \subsection{Cardinality of Types}
 
-To capture sequences, we assign the first two categories of types (all types except of \texttt{PathType} and \texttt{UnknownType}) with its cardinality as proposed in \todo{ref na Schajbalovu diplomku}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
+To capture sequences, we assign the first two categories of types (all types except of \texttt{PathType} and \texttt{UnknownType}) with its cardinality as proposed in \cite{thesis_schejbal}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
 \begin{itemize}
 \item An empty sequence.
@@ -722,7 +716,7 @@ Function $getTargetReturnPathTypes$ in Algorithm \ref{ALG_function_get_target_re
 
 A similar couple of functions is function $getTargetReturnPaths$ and function $getTargetReturnPathsRecursive$. Only difference between those two couples of functions is that the former one searches for all expressions which are of $PathType$ representing a target return path, while the later one searches only for instances of $PathExprNode$.
 
-To ilustrate this difference, we introduce the following example. Assuming $P$ is a return target path expression for variable $var$ and $flwor$ is a FLWOR expression with return clause $data(P)$, function call $getTargetReturnPathTypes(flwor, var)$ returns two $PathTypes$. One is the type of expression $P$ and the other is the type of the function call $data(P)$ which is also $PathType$. On the other hand, function call $getTargetReturnPaths(flwor, var)$ returns just one $PathType$ representing $P$. 
+To illustrate this difference, we introduce the following example. Assuming $P$ is a return target path expression for variable $var$ and $flwor$ is a FLWOR expression with return clause $data(P)$, function call $getTargetReturnPathTypes(flwor, var)$ returns two $PathTypes$. One is the type of expression $P$ and the other is the type of the function call $data(P)$ which is also $PathType$. On the other hand, function call $getTargetReturnPaths(flwor, var)$ returns just one $PathType$ representing $P$. 
 
 \begin{algorithm}
 \caption{Function getTargetReturnPaths}

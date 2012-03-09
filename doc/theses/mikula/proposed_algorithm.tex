@@ -144,7 +144,7 @@ But firstly, we describe types of expressions we want to capture and their featu
 
 To differ between a common \texttt{PathType} selecting a set of nodes and a \texttt{PathType} bound to a for variable in a FLWOR expression, \texttt{PathType} structure contains a flag \texttt{isForBound}.
 
-Additionally, \texttt{PathType} contains a list of special functions that were called with an argument of \texttt{PathType} type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of \texttt{PathType} because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max} \todo{Doplnit}.
+Additionally, \texttt{PathType} contains a list of special functions that were called with an argument of \texttt{PathType} type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of \texttt{PathType} because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}.
 
 In summary, we represent \texttt{PathType} as a structure with the following member variables.
 \begin{itemize}
@@ -259,7 +259,7 @@ Function \texttt{memorizeType} takes two arguments \texttt{node} and \texttt{typ
 Another group consists of functions \texttt{set}, \texttt{add}, and \texttt{get}. Function \texttt{set} memorizes a given value of a specified property of a specified node. It is used to assign a node with a named value, for example, \texttt{set(someNode, color, "red")} will assign \texttt{someNode} with string value \texttt{"red"} which can be then retrieved by function \texttt{get}, specifying the node and the property name. For example,\linebreak \texttt{get(someNode, color)} returns \texttt{"red"}. A subsequent call of \texttt{set} assigning a node with a value of already assigned property will overwrite it, leaving the property with the newer value. However, a property can have several values and this can be achieved using function \texttt{add} with the same syntax as function \texttt{set} but instead of overwriting the existing property, \texttt{add} will append the new value to the existing ones. Then, a call of \texttt{get} on this node and property returns a list of all its values, preserving the order of their addition.
 
 \subsection{Determination of Global Variable Types}
-A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition \todo{je to tak? priklad}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
+A similar approach as in the case of functions can be applied to determine types of global variables. Alike the functions, the global variables are defined in the prolog section. A type of a variable can be explicitly specified in its definition, for instance \texttt{declare variable \$x as xs:byte := 12;}. If it is not, it may often be deducible from the binding expression. Again, we do not analyse external variables for the same reason as in case of external functions.
 
 \begin{algorithm}
 \caption{Function \texttt{determineExpressionType}}
@@ -423,10 +423,6 @@ The handling of new variable definitions relies on the fact that the definitions
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Overit si, ci ALG \ref{ALG_func_analysisOfExpressionTypes} pokryva vsetky pripady, co sa tyka definovania novych premennych a ich propagacie vyssim uzlom.}
-
-\todo[inline]{Pozor na to přetékání textu - na spoustě míst.}
-
 \begin{algorithm}
 \caption{Function mergeContextVarTypes}
 \label{ALG_function_mergeContextVarTypes}
@@ -545,10 +541,7 @@ In this step, the algorithm goes through the syntax tree to infer types of eleme
 
 How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $PathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation \todo{Q: Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky. A: ak to jen popište. To je naprosto OK.}.
 
-The output of this step is a set of couples ($pathType$, XML Schema built-in type).
-
-\todo[inline]{Zlucovanie odvodenych tvrdeni.}
-\todo[inline]{Path expressions s predikatmi.}
+The output of this step is a set of statements of form \\ an instance of \texttt{PathType} $\rightarrow$ XML Schema built-in atomic type.
 
 \subsection{Function Calls}
 This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a known set of elements of attributes (subexpression $E$ representing $S$). To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.

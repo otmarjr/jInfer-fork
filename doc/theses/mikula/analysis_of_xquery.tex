@@ -68,7 +68,7 @@ Contrary to the multiple occurrence, numerous XQuery constructs limit number of 
 /catalog/product[1]/number lt 10
 \end{verbatim}
 
-\texttt{lt} is a representant of so called \emph{value comparison operators} \todo{referencia na def} which operate two sequences of zero or one item. If an operand of a value comparison operator is a sequence of more than one item, then a \emph{type error} \todo{referencia na def} is raised.
+\texttt{lt} is a representant of so called \emph{value comparison operators} (\texttt{eq}, \texttt{ne}, \texttt{lt}, \texttt{le}, \texttt{gt}, \texttt{ge}, see \cite{w3c_xquery}) which operate two sequences of zero or one item. If an operand of a value comparison operator is a sequence of more than one item, then a \emph{type error} (see \cite{w3c_xquery}) is raised.
 
 \begin{verbatim}
 for $item in //item 

@@ -539,7 +539,7 @@ We can also determine expression types in functions. To do this for a certain fu
 \section{Step 3: Inference of Built-in Types}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
-How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $PathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation \todo{Q: Nejake ine ako napr type constructor, cast as? Princip je stale rovnaky. A: ak to jen popište. To je naprosto OK.}.
+How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $PathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
 
 The output of this step is a set of statements of form \\ an instance of \texttt{PathType} $\rightarrow$ XML Schema built-in atomic type.
 
@@ -549,14 +549,14 @@ This case is quite straightforward. The algorithm encounters a function call and
 If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression node is $Operator$ and it represents one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ \todo{Niekam napisat mozne triedy operatora}), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
+If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression node is $Operator$ and it represents one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ (for all operators, see Attachment \ref{FIG_operators})), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
 
 If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, \linebreak $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$,\linebreak $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$,\linebreak $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
 
 \todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme. -- To urobim pocas implementacie pre nejaky vzorovy dotaz.}
 
 \section{Step 4: Key Discovery}
-In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain costructs are used to support or degrade the evidence of inferred statements in a final summarization.
+In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.
 
 \subsection{Auxiliary Functions} \label{step_4_auxiliary_functions}
 Firstly, we define some auxiliary functions used by algorithms in this chapter.
@@ -756,6 +756,17 @@ To illustrate this difference, we introduce the following example. Assuming $P$ 
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Definition of Keys}
+To define a key and a foreign key, we adopt the definitions introduced in the original approach \cite{Necasky:2009:DXK:1529282.1529414} with a modification that XPath paths are replaced by \texttt{PathType} instances.
+
+\begin{define}[Key]
+A key is a construct $(C, P, \{L\})$ where $C$, $P$ and $L$ are \texttt{PathType} instances without predicates and without special function calls that use only child and descendant axes. $C$ is called \emph{context path}, $P$ \emph{target path} and $L$ \emph{key path}. $C$ can be omitted, i.e. we can write $(P, \{L\})$. This is equivalent to $(/, P, \{L\})$. If $C$ is omitted we call the key \emph{global key}. Otherwise, it is called \emph{relative key}.
+\end{define}
+
+\begin{define}[Foreign key]
+A foreign key is a construct $(C, (P_1, \{L_1\}) \rightarrow (P_2, \{L_2\}))$ where $(C, P_2, \{L_2\})$ is a key and $P_1$ and $L_1$ are \texttt{PathType} instances without predicates and without special function calls that use only child and descendant axes. $C$ can be omitted as in the case of keys.
+\end{define}
+
 \subsection{Join Patterns}
 
 \begin{lstlisting}[mathescape, float, caption=Other form of the for join pattern., frame=single, label=listing_other_for_join_pattern]
@@ -783,7 +794,7 @@ The two join patterns from the original approach are shown in Listings \ref{list
 
 Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of $PathType$ without predicates, using only child and descendant axes.
 
-As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inferrence of keys from occurrences of the join patterns, and rules (R1 - R5) to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5. \todo{Popisat dovod nizsej vahy (nie je take jasne, ze je to par key-foreign key), pripadne zmenit vahu.}
+As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inference of keys from occurrences of the join patterns, and rules (R1 - R5) to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5.  The lesser weight is chosen because there is a lower probability that join of the join pattern 3 type is done via a key/foreign key pair.
 
 \begin{algorithm}
 \caption{Processing of FLWOR expressions}
@@ -969,13 +980,28 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Inferrence of Keys from Join Pattern Occurrences}
-Now, when the join patterns occurrences are classified into (O1) and (O2) cases, we infer the key statements according to the original method \cite{Necasky:2009:DXK:1529282.1529414}.
-\todo[inline]{Popisat? To by som musel asi jedine skopirovat z clanku, to vlastnymi slovami nepopisem.}
+\subsection{Inference of Keys from Join Pattern Occurrences}
+Now, when the join patterns occurrences are classified into (O1) and (O2) cases, we infer the key statements according to the original approach \cite{Necasky:2009:DXK:1529282.1529414}.
+
+
+Let $w$ be the weight assigned to a pattern occurrence $\pi$. If $\pi$ is marked as (O1), the following statements with weight $w$ are inferred:
+\begin{itemize}
+\item $(P_2, \{L_2\})$ is not satisfied
+\item $(P_1, \{L_1\})$ is satisfied
+\item $(P_2, \{L_2\}) \rightarrow (P_1, \{L_1\})$ is satisfied
+\end{itemize}
+
+If $\pi$ is marked as (O2), the following statements with weight $w$ are inferred:
+\begin{itemize}
+\item $(P_2, \{L_2\})$ is satisfied
+\item $(P_1, \{L_1\}) \rightarrow (P_2, \{L_2\})$ is satisfied
+\end{itemize}
+
+The original approach \cite{Necasky:2009:DXK:1529282.1529414} describes also inference of relative keys. Refer to it for details.
 
 \subsection{Rejection of Uniqueness}
-While the previous steps of the key discovery produce mostly positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys.
-\todo[inline]{Napisat niekam, ze odvodzovanie kludov predpoklada, ze kazdy element/element join je robeny cez key-foreign key pair.}
+While the previous steps of the key discovery produce mostly positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys. A key can be inferred falsely when the assumption that every join is done via a key/foreign key pair is not correct for a particular join.
+
 When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
 The first XQuery construct utilized by this step is a function call of $distinct-values$ function as discussed in Chapter \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
@@ -1057,4 +1083,9 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
 \end{algorithm}
 
 \subsection{Normalization of Key Statements}
-\todo[inline]{Znovu pouzitie originalnej metody. Popisat?}
+The original approach \cite{Necasky:2009:DXK:1529282.1529414} employs the following normalization which we adopt. Is also incorporates a heuristic for precision enhancement. For details, refer to it.
+
+Let $K_1, \dots, K_n$ be the inferred keys. Let $S_i$ be the score of $K_i$ and $N_i$ be the number of the inferred statements about $K_i$. Let $S^{max}$ be the maximum from $|S_1|, \dots , |S_n|$ and $N^{max}$ be the maximum norm
+from $N_1, \dots , N_n$. The normalized score $S_i$ of $K_i$ is computed as $S^{norm}_i = \frac{S_i}{S^{max}} * (1 - \frac{N^{max} - N_i}{\sum_{i=1}^{n}N_i})$
+
+

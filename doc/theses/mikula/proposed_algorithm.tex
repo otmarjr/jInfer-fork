@@ -1,6 +1,16 @@
 \chapter{Proposed Algorithm}
-\todo[inline]{Nejaky uvod a zkratke hrnutie}
-\todo[inline]{Predpoklad korektnosti dotazov}
+In this thesis we are developing an approach dealing with inference of XML schema, which input consists of two components; a set of XML documents and a set of XQuery queries related to the documents. The proposed algorithm introduced in this chapter describes the processing of XQuery queries only and a combination of its output with an existing method of XML schema inference (to produce a complete XML schema) is discussed in the next chapter.
+
+There is an important assumption placed upon the input XQuery queries saying that each query must be syntactically and semantically correct. That means that if a query was evaluated (using a XQuery processor meeting the XQuery specification), the evaluation would not raise any error, neither static nor dynamic. In other words, each query is syntactically correct and it correctly queries the data in the XML documents.
+
+The proposed algorithm consists of the following four main steps, described in detail in the rest of the chapter.
+
+\begin{enumerate}
+\item Construction of a syntax tree. We use lexical and syntax analyses proposed in \cite{thesis_schejbal} and for each XQuery on input, we construct a data structure defined in \ref{DEF_syntax_tree}.
+\item Static Analysis of expression types. The algorithm searches for expressions in the syntax trees and statically (without evaluation) determines their types.
+\item Inference of built-in types. When the types of expressions are determined, selected forms of expression are utilized to infer types of elements and attributes.
+\item Key discovery. The final step is an extension of approach \cite{Necasky:2009:DXK:1529282.1529414} inferring keys and foreign keys.
+\end{enumerate}
 
 \section{Step 1: Construction of a Syntax Tree}
 The first step of the algorithm involves lexical and syntax analyses known from the construction of compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \cite{thesis_schejbal}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.
@@ -125,8 +135,6 @@ This characteristic is explicitly described, because several algorithms later in
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we statically (i.e. without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will not use the determined types of all expressions, however this step may be useful in a future extending.
 
-\todo[inline]{Niektore typy mozu byt take, ze pri prvom prechode ich nevieme zistit, ale ked uz mame zistene ine typy, tak dokazeme zistit aj tie, co sme pred tym nevedeli. Takze by bolo treba robit viac priechodov, ale skor nieco ako dopologicke triedenie, co zavisi na com, a potom typy zistovat v tomto poradi (mozno aj v druhom kole).}
-
 The analysis of expression types can be divided into three substeps. Determination of return types of functions, determination of types of global variables, and finally determination of types of expressions.
 
 But firstly, we describe types of expressions we want to capture and their features.
@@ -167,10 +175,6 @@ To capture sequences, we assign the first two categories of types (all types exc
 \end{itemize}
 
 \texttt{PathType} is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, \texttt{UnknownType} is neither assigned with the cardinality. Expressions of \texttt{UnknownType} are not utilized it the inference, therefore, their cardinality is not needed.
-
-\todo[inline]{Este by sa dala urobit analyza volania funkcii, do ktorych su predavane nejake elementy/atributy o ktorych vieme ich path expression. Vysledkom tejto funkcie by totiz zas mohli byt elementy/atributy o ktorych vieme (pozmenenu) path expression a nie len nezname elementy/atributy.
-A: Přesně tak. A jak říkám - není třeba vše co navrhnete implementovat.
-A2: Stačí to popsat a v kapitole Implementace říct, které ásti algoritmu implementujeme. Stačí takové, které už ukáží zajímavé chování a dokážou přínosy návrhu. Přesně k tomu implmentace je.}
 
 \subsection{Determination of Function Return Types}
 Determination of return types of functions is needed because function calls can appear in expressions. A return type of a function can be determined at the moment the analysis of expressions encounters a call of the function; however, it involves multiple transitions of the syntax tree in a search for a definition of a particular function.
@@ -383,7 +387,7 @@ Function $determineExpressionType$ is called within function $analysis\-Of\-Expr
 
 The order of the recursion is to firstly process children of a node and then the node itself. The order of child processing is specified by function $o$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
 
-The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' wheather or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' whether or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
 \caption{Function analysisOfExpressionTypes}
@@ -552,6 +556,13 @@ If the type $T$ of the formal argument is a built-in type or its sequence, then 
 If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression node is $Operator$ and it represents one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ (for all operators, see Attachment \ref{FIG_operators})), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
 
 If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, \linebreak $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$,\linebreak $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$,\linebreak $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
+
+\subsection{Possible Extensions}
+As mentioned, the proposed algorithm utilizes only a small portion of XQuery constructs which can be be possibly utilized. Also, the algorithm does not perform the inference of types inside user-defined functions (it just uses the return types determined in earlier phases). That can be easily done as we know the definitions of functions and types of their real arguments. An algorithm performing the analysis in the user-defined functions can works as follows.
+
+If a currently processed expression is a function call of an user-defined function and at least one of its real arguments is an instance of \texttt{PathType}, get the function declaration node. In the function body, replace the formal arguments by the real arguments and set them as the local variables, so the proposed algorithms can be applied to process the function's body. Analyse the types of expressions in the body with the new information on the types of arguments by incorporating of the proposed algorithms and replace the function's return type by the one currently determined.
+
+A little complication is a recursion. A simple algorithm of that kind may never end because of the infinite analysis of the same recursive function(s). Therefore, we shall keep track of the currently analysed functions (e.g. in a stack of function calls) and do not process the recursive calls. 
 
 \todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme. -- To urobim pocas implementacie pre nejaky vzorovy dotaz.}
 

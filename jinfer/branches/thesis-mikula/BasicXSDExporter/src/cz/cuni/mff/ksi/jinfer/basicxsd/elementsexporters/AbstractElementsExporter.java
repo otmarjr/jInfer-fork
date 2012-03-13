@@ -17,19 +17,22 @@
 
 package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.SelfOrDescendantStepNode;
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.AxisNode;
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.NameTestNode;
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ItemTypeNode;
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.*;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
-import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.PathType;
-import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.TypeFactory;
-import cz.cuni.mff.ksi.jinfer.base.xqueryanalyzer.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
 import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;

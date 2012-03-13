@@ -1,0 +1,25 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	input_xml [label = "XML data"];
+	input_queries [label = "XQuery queries"];
+	input_xml -> IGG;
+	input_queries -> XQAnalyser;
+	IGG [label = "Initial Grammar Generator" style = "filled" fillcolor = "grey"];
+	XQAnalyser [label = "XQAnalyser" style = "filled" fillcolor = "grey"];
+	IGG -> Simplifier [label = "Initial grammar"];
+	user_input [label = "User input"];
+	user_input -> Simplifier;
+	Simplifier [label = "Simplifier" style = "filled" fillcolor = "grey"];
+	XQueryProcessor [label = "XQuery Processor" style = "filled" fillcolor = "grey"];
+	XQAnalyser -> XQueryProcessor [label = "Syntax trees of the queries"];
+	Merger [label = "Merger" style = "filled" fillcolor = "grey"];
+	Simplifier -> Merger [label = "Simplified grammar"];
+	XQueryProcessor -> Merger [label = "Statements inferred from the queries"];
+	Merger -> Exporter [label = "Simplified grammar combined with the statements from the queries"];
+	Exporter [label = "Schema Generator" style = "filled" fillcolor = "grey"];
+	output_xml [label = "XML schema"];
+	Exporter -> output_xml;
+}

@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.basicigg.xquery;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.xqanalyser.ModuleNode;
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQConverter;
 import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQParseException;
 import java.io.InputStream;

@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
@@ -30,7 +31,6 @@ import cz.cuni.mff.ksi.jinfer.iss.utils.Utils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
@@ -207,10 +207,10 @@ public class Experiment {
     igg.start(input, new IGGeneratorCallback() {
 
       @Override
-      public void finished(final InferenceDataHolder idh) {
+      public void finished(final List<Element> grammar) {
         grammarTime = delta(grammarStartTime);
         final long modelStartTime = time();
-        model = new AMModel(idh.getGrammar());
+        model = new AMModel(grammar);
         // this triggers all the lazy operations in model to see how long it takes to build it fully
         model.getFlat();
         model.getTree();

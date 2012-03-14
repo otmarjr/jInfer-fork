@@ -27,4 +27,4 @@
  * and offers interface for queerying the created XML via XPath to gain the
  * statistics about the observed language constructions.
  */
-package cz.cuni.mff.ksi.jinfer.xqanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;

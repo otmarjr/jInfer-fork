@@ -16,20 +16,28 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.*;
+import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.Type;
 import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.XSDType;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -57,18 +65,67 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private Map<PathType, Type> inferredTypes;
 
   @Override
-  public void start(InferenceDataHolder idh, XQueryAnalyzerCallback callback) throws InterruptedException {
-    for (final ModuleNode mn : idh.getXQuerySyntaxTrees()) {
+  public void start(final Input input, final List<Element> grammar, final XQueryAnalyzerCallback callback) throws InterruptedException {
+    List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
+    
+    for (final ModuleNode mn : xquerySyntaxTrees) {
       processSyntaxTree(mn);
-      saveInferredTypes(idh.getGrammar(), inferredTypes);
+      saveInferredTypes(grammar, inferredTypes);
     }
     
     keysInferrer.summarize();
     final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
     final Map<Key, List<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
-    saveInferredKeys(idh.getGrammar(), keys, foreignKeys);
+    saveInferredKeys(grammar, keys, foreignKeys);
     
-    callback.finished(idh);
+    callback.finished(grammar);
+  }
+  
+  /**
+   * Returns a processor handling XQuery queries. Suitable processor is found
+   * by matching return type and handled extension.
+   */
+  private Processor<ModuleNode> getXQueryProcessor() {
+    for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
+      if (p.getResultType().equals(ModuleNode.class) && p.getExtension().equals("xq")) {
+        return p;
+      }
+    }
+    
+    return null;
+  }
+  
+  /**
+   * Processes files with XQuery queries by supplying them to the specified
+   * processor. Result is a list of respective syntax trees.
+   */
+  private List<ModuleNode> processXQueries(final Collection<File> files,
+          final Processor<ModuleNode> xqueryProcessor) throws InterruptedException {
+    if (BaseUtils.isEmpty(files) || xqueryProcessor == null) {
+      return new ArrayList<ModuleNode>(0);
+    }
+
+    final List<ModuleNode> ret = new ArrayList<ModuleNode>();
+
+    for (final File f : files) {
+      if (Thread.interrupted()) {
+        throw new InterruptedException();
+      }
+      try {
+        if (FileUtils.getExtension(f.getAbsolutePath()).equals(xqueryProcessor.getExtension())) {
+          // TODO rio Toto je hack, kedze nam vyleze len jeden syntax tree ale kvoli rozhraniu processoru musi byt vysledok list.
+          final List<ModuleNode> syntaxTree = xqueryProcessor.process(new FileInputStream(f));
+          if (syntaxTree.size() > 0) {
+            assert(syntaxTree.size() == 1);
+            ret.add(syntaxTree.get(0));
+          } 
+        }
+      } catch (final FileNotFoundException e) {
+        throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);
+      }
+    }
+
+    return ret;
   }
   
   private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) throws InterruptedException {

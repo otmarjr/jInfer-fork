@@ -19,13 +19,14 @@ package cz.cuni.mff.ksi.jinfer.projecttype.actions;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.AsynchronousUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IDSetSearchHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.runner.properties.ModuleSelectionPropertiesPanel;
 import java.io.File;
+import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.netbeans.api.project.Project;
@@ -96,8 +97,8 @@ public final class IDSetSearchAction extends NodeAction {
                   new IGGeneratorCallback() {
 
                     @Override
-                    public void finished(final InferenceDataHolder idh) {
-                      IDSetSearchHelper.showISSPanelAsync("ID Set Search", idh.getGrammar());
+                    public void finished(final List<Element> grammar) {
+                      IDSetSearchHelper.showISSPanelAsync("ID Set Search", grammar);
                     }
                   });
         } catch (final InterruptedException e) {

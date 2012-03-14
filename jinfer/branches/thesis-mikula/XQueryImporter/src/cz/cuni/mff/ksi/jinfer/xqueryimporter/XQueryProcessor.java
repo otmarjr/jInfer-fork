@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.basicigg.xquery;
+package cz.cuni.mff.ksi.jinfer.xqueryimporter;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ModuleNode;
-import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQConverter;
-import cz.cuni.mff.ksi.jinfer.xqanalyzer.XQParseException;
+import cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer.XQConverter;
+import cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer.XQParseException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;

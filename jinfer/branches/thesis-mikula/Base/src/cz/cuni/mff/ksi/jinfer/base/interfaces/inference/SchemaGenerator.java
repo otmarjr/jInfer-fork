@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
@@ -39,13 +38,12 @@ public interface SchemaGenerator extends NamedModule, Capabilities {
    * Start the schema export process. This method is called by the Runner module
    * as the last stage of inference.
    * 
-   * @param idh Inference data holder object containing at least simplified
-   *  grammar to be exported as XML schema.
+   * @param grammar Simplified grammar to be exported as XML schema.
    * @param callback A callback object. After the schema is created, it must be
    *  returned to the caller by invoking the <code>finished()</code>
    *  method on this object.
    * @throws InterruptedException 
    */
-  void start(final InferenceDataHolder idh,
+  void start(final List<Element> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException;
 }

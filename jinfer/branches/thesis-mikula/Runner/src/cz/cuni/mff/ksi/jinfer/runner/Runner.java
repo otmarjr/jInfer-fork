@@ -16,9 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.*;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -59,22 +60,22 @@ public class Runner {
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
     @Override
-    public void finished(final InferenceDataHolder idh) {
-      Runner.this.finishedIGGenerator(idh);
+    public void finished(final List<Element> grammar) {
+      Runner.this.finishedIGGenerator(grammar);
     }
   };
   private final SimplifierCallback simplCallback = new SimplifierCallback() {
 
     @Override
-    public void finished(final InferenceDataHolder idh) {
-      Runner.this.finishedSimplifier(idh);
+    public void finished(final List<Element> grammar) {
+      Runner.this.finishedSimplifier(grammar);
     }
   };
   private final XQueryAnalyzerCallback xqaCallback = new XQueryAnalyzerCallback() {
 
     @Override
-    public void finished(InferenceDataHolder idh) {
-      Runner.this.finishedXQueryAnalyzer(idh);
+    public void finished(final List<Element> grammar) {
+      Runner.this.finishedXQueryAnalyzer(grammar);
     }
   };
   private final SchemaGeneratorCallback sgCallback = new SchemaGeneratorCallback() {
@@ -124,8 +125,8 @@ public class Runner {
     }, "Retrieving IG");
   }
 
-  private void finishedIGGenerator(final InferenceDataHolder idh) {
-    LOG.info("Runner: initial grammar contains " + idh.getGrammar().size()
+  private void finishedIGGenerator(final List<Element> grammar) {
+    LOG.info("Runner: initial grammar contains " + grammar.size()
             + " rules.");
 
     runAsync(new Runnable() {
@@ -134,7 +135,7 @@ public class Runner {
       public void run() {
         try {
           RunningProject.setNextModuleCaps(schemaGenerator);
-          simplifier.start(idh, simplCallback);
+          simplifier.start(grammar, simplCallback);
         } catch (final InterruptedException e) {
           interrupted();
         } catch (final Throwable t) {
@@ -144,8 +145,8 @@ public class Runner {
     }, "Inferring the schema");
   }
 
-  private void finishedSimplifier(final InferenceDataHolder idh) {
-    LOG.info("Runner: simplified grammar contains " + idh.getGrammar().size()
+  private void finishedSimplifier(final List<Element> grammar) {
+    LOG.info("Runner: simplified grammar contains " + grammar.size()
             + " rules.");
 
     runAsync(new Runnable() {
@@ -154,7 +155,7 @@ public class Runner {
       public void run() {
         try {
           RunningProject.setNextModuleCaps(null);
-          xqueryAnalyzer.start(idh, xqaCallback);
+          xqueryAnalyzer.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), grammar, xqaCallback);
         } catch (final InterruptedException e) {
           interrupted();
         } catch (final Throwable t) {
@@ -164,7 +165,7 @@ public class Runner {
     }, "Generating result schema");
   }
   
-  private void finishedXQueryAnalyzer(final InferenceDataHolder idh) {
+  private void finishedXQueryAnalyzer(final List<Element> grammar) {
     // TODO rio any log print?
     //LOG.info("Runner: simplified grammar contains " + idh.getGrammar().size()
     //        + " rules.");
@@ -175,7 +176,7 @@ public class Runner {
       public void run() {
         try {
           RunningProject.setNextModuleCaps(null);
-          schemaGenerator.start(idh, sgCallback);
+          schemaGenerator.start(grammar, sgCallback);
         } catch (final InterruptedException e) {
           interrupted();
         } catch (final Throwable t) {

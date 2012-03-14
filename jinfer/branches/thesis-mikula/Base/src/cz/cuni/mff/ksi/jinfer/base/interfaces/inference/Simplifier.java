@@ -18,7 +18,8 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
 
 /**
  * Interface of a Simplifier module.
@@ -37,12 +38,11 @@ public interface Simplifier extends NamedModule, Capabilities {
    * Start the grammar simplification process. This method is called by the
    * Runner module as the second stage of inference.
    * 
-   * @param idh Inference data holder object containing initial Grammar
-   *  to be simplified.
+   * @param initialGrammar Initial Grammar to be simplified.
    * @param callback A callback object. When the initial grammar is simplified,
    *  the resulting list of rules must be sent to the last stage by calling
    *  the <code>finished()</code> method of this object.
    */
-  void start(final InferenceDataHolder idh,
+  void start(final List<Element> initialGrammar,
           final SimplifierCallback callback) throws InterruptedException;
 }

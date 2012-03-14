@@ -19,7 +19,7 @@
  * With his approval, we use his code in jInfer and we slightly modify it to
  * suit our cause.
  */
-package cz.cuni.mff.ksi.jinfer.xqanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;
 
 /**
  * This exception is raised when some problem occurs during scanning or parsing

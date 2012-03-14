@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.basicdtd;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -71,10 +70,10 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
   }
 
   @Override
-  public void start(final InferenceDataHolder idh,
+  public void start(final List<Element> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
 
-    LOG.info("DTD Exporter: got " + idh.getGrammar().size()
+    LOG.info("DTD Exporter: got " + grammar.size()
             + " rules.");
 
     // load settings
@@ -87,7 +86,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
             DTDExportPropertiesPanel.MIN_DEFAULT_RATIO_DEFAULT)));
 
     // sort elements topologically
-    final TopologicalSort s = new TopologicalSort(idh.getGrammar());
+    final TopologicalSort s = new TopologicalSort(grammar);
     final List<Element> toposorted = s.sort();
 
     // generate DTD schema

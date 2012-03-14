@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
 
 /**
  * TODO rio
@@ -24,5 +25,5 @@ import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
  */
 public interface XQueryAnalyzerCallback {
   
-  void finished(final InferenceDataHolder idh);
+  void finished(final List<Element> grammar);
 }

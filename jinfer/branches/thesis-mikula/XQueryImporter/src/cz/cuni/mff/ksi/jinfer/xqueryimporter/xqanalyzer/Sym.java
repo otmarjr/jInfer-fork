@@ -4,7 +4,7 @@
 // Tue Apr 13 16:55:23 CEST 2010
 //----------------------------------------------------
 
-package cz.cuni.mff.ksi.jinfer.xqanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;
 
 /** CUP generated class containing symbol constants. */
 public class Sym {

@@ -16,7 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
 
 /**
  * Interface defining a response to Simplifier finishing its work.
@@ -29,7 +30,7 @@ public interface SimplifierCallback {
    * This method is called by a Simplifier implementation, after it has
    * finished its work.
    *
-   * @param idh Inference data holder object holding simplified grammar.
+   * @param grammar Simplified grammar.
    */
-  void finished(final InferenceDataHolder idh);
+  void finished(final List<Element> grammar);
 }

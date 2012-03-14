@@ -18,7 +18,6 @@ package cz.cuni.mff.ksi.jinfer.twostep;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
@@ -69,10 +68,8 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
   }
 
   @Override
-  public void start(final InferenceDataHolder idh,
+  public void start(final List<Element> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
-    final List<Element> grammar = idh.getGrammar();
-    
     LOG.info("got " + grammar.size() + " rules.");
 
     // sort elements topologically

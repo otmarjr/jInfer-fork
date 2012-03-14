@@ -25,7 +25,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.base.objects.InferenceDataHolder;
 import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
@@ -90,26 +89,17 @@ public class IGGeneratorImpl implements IGGenerator {
     verifySimpleGrammar(documentRules);
     schemaQueryRules.addAll(getRulesFromInput(input.getSchemas(), registeredProcessors.get(FolderType.SCHEMA)));
     schemaQueryRules.addAll(getRulesFromInput(input.getQueries(), registeredProcessors.get(FolderType.QUERY)));
-    
-    // the XQuery processor differs from the other processors by creating syntax trees of supplied queries
-    // instead of IG rules, and thus, it has to be handled separately
-    xquerySyntaxTrees.addAll(processXQueries(input.getQueries(), getXQueryProcessor()));
-    
-    final InferenceDataHolder idh = new InferenceDataHolder(documentRules, xquerySyntaxTrees);
 
     // if there are no schema/query rules, or the next module can handle simple
     // grammar, just output all of it without expansion
     if (BaseUtils.isEmpty(schemaQueryRules)
             || RunningProject.getNextModuleCaps().getCapabilities().contains("can.handle.complex.regexps")) {
-      //documentRules.addAll(schemaQueryRules);
-      idh.addToGrammar(schemaQueryRules);
+      documentRules.addAll(schemaQueryRules);
 
       // show the rules
-      //RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
-      RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(idh.getGrammar()), true);
+      RuleDisplayerHelper.showRulesAsync("IG", new CloneHelper().cloneGrammar(documentRules), true);
 
-      //callback.finished(documentRules);
-      callback.finished(idh);
+      callback.finished(documentRules);
       return;
     }
 
@@ -124,17 +114,15 @@ public class IGGeneratorImpl implements IGGenerator {
     final Expander expander = Lookup.getDefault().lookup(Expander.class);
     final List<Element> expanded = expander.expand(schemaQueryRules);
 
-    //final List<Element> ret = new ArrayList<Element>();
-    //ret.addAll(documentRules);
-    //ret.addAll(expanded);
-    idh.addToGrammar(expanded);
+    final List<Element> ret = new ArrayList<Element>();
+    ret.addAll(documentRules);
+    ret.addAll(expanded);
 
     // show the rules after expansion
-    //RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
-    RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(idh.getGrammar()), true);
+    RuleDisplayerHelper.showRulesAsync("Expanded", new CloneHelper().cloneGrammar(ret), true);
 
     // return expanded
-    callback.finished(idh);
+    callback.finished(ret);
   }
 
   /**
@@ -217,53 +205,6 @@ public class IGGeneratorImpl implements IGGenerator {
           ret.get(p.getFolder()).put("*", p);
         }
         ret.get(p.getFolder()).put(p.getExtension(), p);
-      }
-    }
-
-    return ret;
-  }
-  
-  /**
-   * Returns a processor handling XQuery queries. Suitable processor is found
-   * by matching return type and handled extension.
-   */
-  private Processor<ModuleNode> getXQueryProcessor() {
-    for (final Processor p : Lookup.getDefault().lookupAll(Processor.class)) {
-      if (p.getResultType().equals(ModuleNode.class) && p.getExtension().equals("xq")) {
-        return p;
-      }
-    }
-    
-    return null;
-  }
-  
-  /**
-   * Processes files with XQuery queries by supplying them to the specified
-   * processor. Result is a list of respective syntax trees.
-   */
-  private List<ModuleNode> processXQueries(final Collection<File> files,
-          final Processor<ModuleNode> xqueryProcessor) throws InterruptedException {
-    if (BaseUtils.isEmpty(files) || xqueryProcessor == null) {
-      return new ArrayList<ModuleNode>(0);
-    }
-
-    final List<ModuleNode> ret = new ArrayList<ModuleNode>();
-
-    for (final File f : files) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
-      try {
-        if (FileUtils.getExtension(f.getAbsolutePath()).equals(xqueryProcessor.getExtension())) {
-          // TODO rio Toto je hack, kedze nam vyleze len jeden syntax tree ale kvoli rozhraniu processoru musi byt vysledok list.
-          final List<ModuleNode> syntaxTree = xqueryProcessor.process(new FileInputStream(f));
-          if (syntaxTree.size() > 0) {
-            assert(syntaxTree.size() == 1);
-            ret.add(syntaxTree.get(0));
-          } 
-        }
-      } catch (final FileNotFoundException e) {
-        throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);
       }
     }
 

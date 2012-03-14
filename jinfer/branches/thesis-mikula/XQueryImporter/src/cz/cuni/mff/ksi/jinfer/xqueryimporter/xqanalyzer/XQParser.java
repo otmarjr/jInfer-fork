@@ -4,7 +4,7 @@
 // Fri Feb 24 18:33:08 CET 2012
 //----------------------------------------------------
 
-package cz.cuni.mff.ksi.jinfer.xqanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ValidationMode;
 import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.PrologNode;

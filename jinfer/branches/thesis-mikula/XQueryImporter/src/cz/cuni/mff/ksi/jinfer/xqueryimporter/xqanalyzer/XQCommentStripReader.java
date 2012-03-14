@@ -19,7 +19,7 @@
  * With his approval, we use his code in jInfer and we slightly modify it to
  * suit our cause.
  */
-package cz.cuni.mff.ksi.jinfer.xqanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;
 
 import java.io.FilterReader;
 import java.io.IOException;

@@ -16,11 +16,11 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.ExprNode;
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.InitialStep;
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.StepExprNode;
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.VarRefNode;
-import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;

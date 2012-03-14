@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.StepExprNode;
-import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

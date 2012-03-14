@@ -4,7 +4,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;
 
 import java_cup.runtime.*;
 import java.util.Stack;
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.StringLiteral;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StringLiteral;
 
 
 /**

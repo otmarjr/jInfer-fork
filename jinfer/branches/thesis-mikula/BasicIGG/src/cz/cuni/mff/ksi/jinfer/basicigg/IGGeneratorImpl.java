@@ -82,7 +82,6 @@ public class IGGeneratorImpl implements IGGenerator {
 
     final List<Element> documentRules = new ArrayList<Element>();
     final List<Element> schemaQueryRules = new ArrayList<Element>();
-    final List<ModuleNode> xquerySyntaxTrees = new ArrayList<ModuleNode>();
 
     // run processors on input, gather IG rules
     documentRules.addAll(getRulesFromInput(input.getDocuments(), registeredProcessors.get(FolderType.DOCUMENT)));

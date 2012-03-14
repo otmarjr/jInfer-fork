@@ -14,38 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 
 /**
  *
  * @author rio
  */
-public class ClassifiedJoinPattern {
+public class NegativeUniquenessStatement {
   
-  public enum Type {
-    O1,
-    O2
-  }
-  
-  private final JoinPattern joinPattern;
-  private final int weight; // Multiplied by 100.
-  private final Type type;
-  
-  public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {
-    this.joinPattern = joinPattern;
-    this.type = type;
+  private final PathType contextPath;
+  private final PathType keyPath;
+  private final int weight;
+
+  public NegativeUniquenessStatement(final PathType contextPath, final PathType keyPath, final int weight) {
+    this.contextPath = contextPath;
+    this.keyPath = keyPath;
     this.weight = weight;
   }
   
-  public Type getType() {
-    return type;
+  public NegativeUniquenessStatement(final PathType keyPath, final int weight) {
+    this(null, keyPath, weight);
   }
-  
+
+  public PathType getContextPath() {
+    return contextPath;
+  }
+
+  public PathType getKeyPath() {
+    return keyPath;
+  }
+
   public int getWeight() {
     return weight;
   }
   
-  public JoinPattern getJoinPattern() {
-    return joinPattern;
-  }
 }

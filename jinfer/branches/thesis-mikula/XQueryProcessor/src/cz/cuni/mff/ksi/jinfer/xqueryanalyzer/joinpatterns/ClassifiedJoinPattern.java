@@ -14,32 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns;
 
 /**
  *
  * @author rio
  */
-public class WeightedKey {
+public class ClassifiedJoinPattern {
   
-  private final Key key;
-  private final int weight;
+  public enum Type {
+    O1,
+    O2
+  }
   
-  public WeightedKey(final Key key, final int weight) {
-    this.key = key;
-    if (key.isPossitive()) {
-      this.weight = weight;
-    } else {
-      this.weight = 0 - weight;
-    }
+  private final JoinPattern joinPattern;
+  private final int weight; // Multiplied by 100.
+  private final Type type;
+  
+  public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {
+    this.joinPattern = joinPattern;
+    this.type = type;
+    this.weight = weight;
+  }
+  
+  public Type getType() {
+    return type;
   }
   
   public int getWeight() {
     return weight;
   }
-
-  public Key getKey() {
-    return key;
-  }
   
+  public JoinPattern getJoinPattern() {
+    return joinPattern;
+  }
 }

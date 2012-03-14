@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import java.util.HashMap;

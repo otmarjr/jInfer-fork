@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 
@@ -22,32 +22,29 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType
  *
  * @author rio
  */
-public class NegativeUniquenessStatement {
+public class ForeignKey {
+
+  private final Key key;
+  private final PathType foreignTargetPath;
+  private final PathType foreignKeyPath;
   
-  private final PathType contextPath;
-  private final PathType keyPath;
-  private final int weight;
-
-  public NegativeUniquenessStatement(final PathType contextPath, final PathType keyPath, final int weight) {
-    this.contextPath = contextPath;
-    this.keyPath = keyPath;
-    this.weight = weight;
+  public ForeignKey(final Key key, final PathType foreignTargetPath, final PathType foreignKeyPath) {
+    this.key = key;
+    this.foreignTargetPath = foreignTargetPath;
+    this.foreignKeyPath = foreignKeyPath;
   }
   
-  public NegativeUniquenessStatement(final PathType keyPath, final int weight) {
-    this(null, keyPath, weight);
+  public Key getKey() {
+    return key;
   }
 
-  public PathType getContextPath() {
-    return contextPath;
+  public PathType getForeignKeyPath() {
+    return foreignKeyPath;
   }
 
-  public PathType getKeyPath() {
-    return keyPath;
+  public PathType getForeignTargetPath() {
+    return foreignTargetPath;
   }
-
-  public int getWeight() {
-    return weight;
-  }
+  
   
 }

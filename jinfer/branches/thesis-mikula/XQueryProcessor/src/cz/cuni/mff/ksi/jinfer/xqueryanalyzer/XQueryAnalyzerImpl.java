@@ -16,6 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.XSDAtomicTypesUtils;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.Key;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.ForeignKey;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeEvaluationContextNodesSet;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;

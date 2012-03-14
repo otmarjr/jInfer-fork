@@ -16,9 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.*;
-import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.Type;
-import cz.cuni.mff.ksi.jinfer.base.xqueryprocessor.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.TypeFactory;
 import java.util.HashMap;
 import java.util.Map;
 

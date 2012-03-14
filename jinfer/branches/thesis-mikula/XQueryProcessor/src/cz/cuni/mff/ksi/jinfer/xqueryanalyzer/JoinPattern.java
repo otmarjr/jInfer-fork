@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.PathExprNode;
-import cz.cuni.mff.ksi.jinfer.base.xqanalyser.nodes.VariableBindingNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VariableBindingNode;
 
 /**
  *

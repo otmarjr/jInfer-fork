@@ -3,7 +3,7 @@ Existing approaches to XML schema inference can be classified using several crit
 
 According to \cite{Mlynkova:2008:AAX:1494650.1495496}, the type of the inference method can be divided into \emph{heuristic} and \emph{grammar-inferring}. Heuristic methods \cite{Chidlovskii:2002:SEX:544220.544288, Garofalakis:2000:XSE:342009.335409, Moh:2000:RSW:336597.336638, Wong03onstructural, Vosta:2008:EAC:1802514.1802522} are based on experience with manual construction of schemas, motivated by real-world usages of XML schema, and their result commonly does not belong to any class of grammar. Two of these approaches are described in Chapter \ref{section_xtract} and Chapter \ref{section_even_an_ant_can_create_an_xsd}. The former one incorporates so-called MDL principle to create the (sub)optimal result. The latter one combines several verified methods together to improve the quality of the result.
 
-On the contrary, the grammar-inferring methods \cite{Ahonen1996GeneratingGrammars, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475, Fernau:2001:LXG:645744.667236} are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
+On the contrary, the grammar-inferring methods \cite{ahonen, Bex:2006:ICD:1182635.1164139, Bex:2007:IXS:1325851.1325964, Hegewald:2006:XES:1129755.1130124, Min:2003:EES:639473.639475, Fernau:2001:LXG:645744.667236} are based on theoretical knowledge of automata and their results belong to a particular class of languages. Thus, these methods guarantee specific characteristics of the results.
 
 Another important criterion is the type of input data. Most of the approaches process XML documents as the input of the inference process and the documents are supposed to be valid against the resulting schema. Besides approaches exploiting XML data, approaches that utilize other or additional sources may be developed. An approach utilizing XML data along with an obsolete XML schema is described in \cite{Mlynkova:2009:IXS:1862681.1862693}. However, the most significant approaches in terms of this work are those utilizing operations over XML data. According to our best knowledge at the time of writing, there is just one approach of this category, described in \cite{Necasky:2009:DXK:1529282.1529414}. It utilizes a set of XQuery queries to discover keys and foreign keys.
 
@@ -55,7 +55,7 @@ For each cluster, a trivial schema is created, which is then generalized to achi
 
 One of the improvements of this heuristic is an inclusion of a negative feedback after each step of an ant, visible only in a current iteration. Due to this improvement, a larger subspace of solutions is searched.
 
-Another improvement lies in a way how an ant decides for a particular step to perform. To achieve better results, the authors propose a combination of several verified approaches. A set of all possible steps is created using \emph{k,h-context} \cite{Ahonen1996GeneratingGrammars} and \emph{s,k-string} \cite{Raman97thesk-strings, Wong03onstructural} methods. The optimal step is then selected employing the MDL principle \cite{Grünwald05atutorial, Garofalakis:2000:XSE:342009.335409}.
+Another improvement lies in a way how an ant decides for a particular step to perform. To achieve better results, the authors propose a combination of several verified approaches. A set of all possible steps is created using \emph{k,h-context} \cite{ahonen} and \emph{s,k-string} \cite{Raman97thesk-strings, Wong03onstructural} methods. The optimal step is then selected employing the MDL principle \cite{Grünwald05atutorial, Garofalakis:2000:XSE:342009.335409}.
 
 \subsection{Result in XSD}
 Unlike the majority of recent approaches, this methods creates its result in XML Schema. The authors of this method focused on inferring elements with the same name but different context and the unordered sequences which can be in XSD expressed by \texttt{xs:all} construct. Elements with the same name but different context cannot be expressed in DTD and, although, the unordered sequence can be also expressed in DTD as alternations of ordered sequences, such expression in not practical nor well human-readable.
@@ -139,7 +139,7 @@ Since the method is based on intuition of how XQuery constructs are commonly app
   \footnotesize \begin{tabular}{|c|c|c|c|}
     \hline
     Method name and/or paper & Input & Output & Year \\ \hline \hline
-    \cite{Ahonen1996GeneratingGrammars} & XML documents & DTD & 1996 \\ \hline
+    \cite{ahonen} & XML documents & DTD & 1996 \\ \hline
     XTRACT \cite{Garofalakis:2000:XSE:342009.335409} & XML documents & DTD & 2000 \\ \hline
     DTD-miner \cite{Moh:2000:RSW:336597.336638} & XML documents & DTD & 2000 \\ \hline
     \cite{Fernau:2001:LXG:645744.667236} & XML documents & DTD & 2001 \\ \hline

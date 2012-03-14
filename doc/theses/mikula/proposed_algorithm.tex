@@ -185,21 +185,21 @@ Instead, the syntax tree can be searched just once, before the analysis of expre
 \caption{Function \texttt{getFunctionDeclarationNodes}: Retrieval of Function Declaration Nodes}
 \label{ALG_retrieval_of_function_declaration_nodes}
 \begin{algorithmic}[1]
-\REQUIRE syntaxTree: A reference to the root node of a syntax tree.
+\REQUIRE $syntaxTree$: A reference to the root node of a syntax tree.
 \ENSURE A list of syntax tree nodes representing function declarations.
 
-\STATE prologNode $=$ null
-\FORALL{moduleChildNode $\in$ syntaxTree.getChildren()}
-    \IF{is(moduleChildNode, PrologNode)}
-        \STATE prologNode $=$ moduleChildNode
+\STATE $prologNode :=$ null
+\FORALL{$moduleChildNode \in syntaxTree.getChildren()$}
+    \IF{$is(moduleChildNode,$ PrologNode$)$}
+        \STATE $prologNode := moduleChildNode$
     \ENDIF
 \ENDFOR
 
-\STATE functionDeclarationNodes $=$ an empty list
-\IF{prologNode $\neq$ null}
-    \FORALL{prologChildNode $\in$ prologNode.getChildren()}
-        \IF{is(prologChildNode, FunctionDeclNode)}
-            \STATE add prologChildNode to functionDeclarationNodes
+\STATE $functionDeclarationNodes :=$ an empty list
+\IF{$prologNode \neq$ null}
+    \FORALL{$prologChildNode \in prologNode.getChildren()$}
+        \IF{$is(prologChildNode,$ FunctionDeclNode$)$}
+            \STATE add $prologChildNode$ to $functionDeclarationNodes$
         \ENDIF
     \ENDFOR
 \ENDIF
@@ -216,16 +216,16 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \caption{Processing of Functions}
 \label{ALG_processing_of_functions}
 \begin{algorithmic}[1]
-\REQUIRE syntaxTree: A reference to the root node of a syntax tree.
+\REQUIRE $syntaxTree$: A reference to the root node of a syntax tree.
 \ENSURE An associative array of function names with their types and references to the their declaration nodes.
 
-\STATE functionArray $=$ an empty associative array
-\FORALL{functionDeclarationNode $\in$ \\ getFunctionDeclarationNodes(syntaxTree)}
-    \STATE functionName $=$ functionDeclarationNode.funcName
-    \STATE typeNode $=$ functionDeclarationNode.getChild(TypeNode)
-    \STATE functionArray[functionName] $=$ \\ (getTypeTN(typeNode), functionDeclarationNode)
+\STATE $functionArray :=$ an empty associative array
+\FORALL{$functionDeclarationNode \in$ \\ $getFunctionDeclarationNodes(syntaxTree)$}
+    \STATE $functionName := functionDeclarationNode.funcName$
+    \STATE $typeNode := functionDeclarationNode.getChild(TypeNode)$
+    \STATE $functionArray[functionName] :=$ \\ $(getTypeTN(typeNode), functionDeclarationNode)$
 \ENDFOR
-\RETURN functionArray
+\RETURN $functionArray$
 \end{algorithmic}
 \end{algorithm}
 
@@ -233,19 +233,19 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \caption{Function \texttt{getTypeTN}: Extraction of a Type from TypeNode}
 \label{ALG_extraction_of_a_type_from_typenode}
 \begin{algorithmic}[1]
-\REQUIRE typeNode: Syntax tree node of TypeNode class.
-\ENSURE Type extracted from typeNode.
+\REQUIRE $typeNode$: Syntax tree node of TypeNode class.
+\ENSURE Type extracted from $typeNode$.
 
-\STATE type = null
-\STATE cardinality = typeNode.cardinality
-\STATE itemTypeNode = typeNode.getChild(ItemTypeNode)
-\IF{is(itemTypeNode, AtomicTypeNode)}
-    \STATE type = itemTypeNode.typeName
-\ELSIF{is(itemTypeNode, KindTestNode)}
-    \STATE type = itemTypeNode.nodeKind
+\STATE $type :=$ null
+\STATE $cardinality := typeNode.cardinality$
+\STATE $itemTypeNode := typeNode.getChild(ItemTypeNode)$
+\IF{$is(itemTypeNode,$ AtomicTypeNode$)$}
+    \STATE $type := itemTypeNode.typeName$
+\ELSIF{$is(itemTypeNode,$ KindTestNode$)$}
+    \STATE $type := itemTypeNode.nodeKind$
 \ENDIF
 
-\RETURN type, cardinality
+\RETURN $type, cardinality$
 \end{algorithmic}
 \end{algorithm}
 
@@ -270,32 +270,32 @@ A similar approach as in the case of functions can be applied to determine types
 \label{ALG_func_determineExpressionType}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    exprNode: An expression node in the syntax tree. \\
-    contextVarTypes: Types of local variables valid in the current subtree.
+    $exprNode$: An expression node in the syntax tree. \\
+    $contextVarTypes$: Types of local variables valid in the current subtree.
 }
 \ENSURE The expression type.
 
-\STATE type $=$ UnknownType
-\IF{is(exprNode, LiteralNode)}
-     \STATE type $=$ XSD atomic type exprNode.type, exactly-once cardinality
-\ELSIF{is(exprNode, FunctionCallNode)}
-     \STATE type $=$ getFunctionReturnType(exprNode.fncName)
-\ELSIF{is(exprNode, VarRefNode)}
-     \STATE type = getVariableType(contextVarTypes, exprNode.varName)
-     \IF{type is PathType}
-         \STATE step $=$ a path step (new instance of StepExprNode) representing the variable reference
-		 \STATE substeps = empty associative array         
-         \STATE substeps[step] $=$ type
-         \STATE pathExprNode $=$ new instance of PathExprNode containing one step step
-         \STATE type $=$ PathType containing pathExprNode and substeps
+\STATE $type :=$ UnknownType
+\IF{$is(exprNode,$ LiteralNode$)$}
+     \STATE $type :=$ XSD atomic type $exprNode.type$, exactly-once cardinality
+\ELSIF{$is(exprNode,$ FunctionCallNode$)$}
+     \STATE $type := getFunctionReturnType(exprNode.fncName)$
+\ELSIF{$is(exprNode,$ VarRefNode$)$}
+     \STATE $type := getVariableType(contextVarTypes, exprNode.varName)$
+     \IF{$type$ is PathType}
+         \STATE $step :=$ a path step (new instance of StepExprNode) representing the variable reference
+		 \STATE $substeps :=$ an empty associative array         
+         \STATE $substeps[step] := type$
+         \STATE $pathExprNode :=$ new instance of PathExprNode containing one step step
+         \STATE $type :=$ PathType containing $pathExprNode$ and $substeps$
      \ENDIF
-\ELSIF{is(exprNode, PathExprNode)}
-     \STATE type $=$ createPathType(exprNode)
-\ELSIF{is(exprNode, OperatorNode)}
-     \STATE type $=$ determineOperatorType(exprNode, contextVarTypes)
-\ELSIF{is(exprNode, FLWORExprNode)}
-     \STATE returnClauseNode $=$ exprNode.getChild(ReturnClauseNode)
-     \STATE type $=$ createForUnboundType(getType(returnClauseNode))
+\ELSIF{$is(exprNode,$ PathExprNode$)$}
+     \STATE $type := createPathType(exprNode)$
+\ELSIF{$is(exprNode,$ OperatorNode$)$}
+     \STATE $type := determineOperatorType(exprNode, contextVarTypes)$
+\ELSIF{$is(exprNode,$ FLWORExprNode$)$}
+     \STATE $returnClauseNode := exprNode.getChild(ReturnClauseNode)$
+     \STATE $type := createForUnboundType(getType(returnClauseNode))$
 \ENDIF
 
 \RETURN type
@@ -312,19 +312,19 @@ A similar approach as in the case of functions can be applied to determine types
 }
 \ENSURE The operator expression type.
 
-\STATE $type =$ UnknownType
-\STATE $operator =$ $operatorNode.operator$
-\IF{isOperatorClassComparison($operator$)}
-    \STATE $type =$ boolean, exactly-one cardinality
-\ELSIF{isOperatorClassAddition($operator$)}
-    \STATE $leftOperandType =$ getType($exprNode.leftSide$)
-    \STATE $rightOperandType =$ getType($exprNode.rightSide$)
-    \IF{isNumericType($leftOperandType$) $\wedge$ isNumericType($rightOperandType$)}
-        \STATE $type =$ selectMoreGeneralNumericType($leftOperandType$, $rightOperandType$)
-    \ELSIF{isNumericType($leftOperandType$)}
-        \STATE $type = leftOperandType$
-    \ELSIF{isNumericType($rightOperandType$)}
-        \STATE $type = rightOperandType$
+\STATE $type :=$ UnknownType
+\STATE $operator := operatorNode.operator$
+\IF{$isOperatorClassComparison(operator)$}
+    \STATE $type :=$ boolean, exactly-one cardinality
+\ELSIF{$isOperatorClassAddition(operator)$}
+    \STATE $leftOperandType := getType(exprNode.leftSide)$
+    \STATE $rightOperandType := getType(exprNode.rightSide)$
+    \IF{$isNumericType(leftOperandType)$ \\ $\wedge$ $isNumericType(rightOperandType)$}
+        \STATE $type := selectMoreGeneralNumericType(leftOperandType,$ $rightOperandType)$
+    \ELSIF{$isNumericType(leftOperandType)$}
+        \STATE $type := leftOperandType$
+    \ELSIF{$isNumericType(rightOperandType)$}
+        \STATE $type := rightOperandType$
     \ENDIF
 \ENDIF
 
@@ -336,8 +336,8 @@ A similar approach as in the case of functions can be applied to determine types
 \caption{Function \texttt{isOperatorClassComparison}}
 \label{ALG_func_isOperatorClassComparison}
 \begin{algorithmic}[1]
-\REQUIRE $operator$: Representation of a XQuery operator.
-\ENSURE true if operator is a comparison operator, false otherwise.
+\REQUIRE $operator$: A representation of a XQuery operator.
+\ENSURE true if $operator$ is a comparison operator, false otherwise.
 
 \IF{$operator$ equals one of GEN\_EQUALS, GEN\_GREATER\_THAN, GEN\_GREATER\_THAN\_EQUALS, GEN\_LESS\_THAN, GEN\_LESS\_THAN\_EQUALS, GEN\_NOT\_EQUALS, VAL\_EQUALS, VAL\_GREATER\_THAN, VAL\_GREATER\_THAN\_EQUALS, VAL\_LESS\_THAN, VAL\_LESS\_THAN\_EQUALS, VAL\_NOT\_EQUALS}
     \RETURN true
@@ -348,31 +348,31 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function isOperatorClassAddition()}
+\caption{Function \texttt{isOperatorClassAddition}}
 \label{ALG_func_isOperatorClassAddition}
 \begin{algorithmic}[1]
-\REQUIRE $operator$: Representation of a XQuery operator.
-\ENSURE $true$ if $operator$ is an addition operator, $false$ otherwise.
+\REQUIRE $operator$: A representation of a XQuery operator.
+\ENSURE true if $operator$ is an addition operator, false otherwise.
 
-\IF{$operator$ equals one of $PLUS$, $MINUS$, $UNARY\_PLUS$, $UNARY\_MINUS$}
-    \RETURN $true$
+\IF{$operator$ equals one of PLUS, MINUS, UNARY\_PLUS, UNARY\_MINUS}
+    \RETURN true
 \ELSE
-    \RETURN $false$
+    \RETURN false
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function isNumericType()}
+\caption{Function \texttt{isNumericType}}
 \label{ALG_func_isNumericType}
 \begin{algorithmic}[1]
-\REQUIRE $type$: Representation of a type.
-\ENSURE $true$ if $type$ represents one of the XSD atomic built-in numeric types, $false$ otherwise.
+\REQUIRE $type$: A representation of a type.
+\ENSURE true if $type$ represents one of the XSD atomic built-in numeric types, false otherwise.
 
-\IF{$type$ represents one of $float$, $double$, $decimal$, $integer$, $long$, $int$, $short$, $byte$, $nonPositiveInteger$, $negativeInteger$, $nonNegativeInteger$, $positiveInteger$, $unsignedLong$, $unsignedInt$, $unsignedShort$, $unsignedByte$}
-    \RETURN $true$
+\IF{$type$ represents one of float, double, decimal, integer, long, int, short, byte, nonPositiveInteger, negativeInteger, nonNegativeInteger, positiveInteger, unsignedLong, unsignedInt, unsignedShort, unsignedByte}
+    \RETURN true
 \ELSE
-    \RETURN $false$
+    \RETURN false
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -390,7 +390,7 @@ The order of the recursion is to firstly process children of a node and then the
 The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' whether or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
-\caption{Function analysisOfExpressionTypes}
+\caption{Function \texttt{analysisOfExpressionTypes}}
 \label{ALG_func_analysisOfExpressionTypes}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -399,27 +399,27 @@ The handling of new variable definitions relies on the fact that the definitions
 }
 
 \FORALL{$i \in \{1, \dots, |startingNode.getChildren()|\}$ ordered from the lowest to the highest}
-    \STATE $subnode = startingNode.getChild(i)$
+    \STATE $subnode := startingNode.getChild(i)$
     \STATE $analysisOfExpressionTypes(subnode, contextVarTypes)$ \COMMENT{recursion}
-    \STATE $newVars = get(subnode, newVars)$    
-    \STATE $contextVarTypes = mergeContextVarTypes(contextVarTypes, newVars)$
+    \STATE $newVars := get(subnode, newVars)$    
+    \STATE $contextVarTypes := mergeContextVarTypes(contextVarTypes, newVars)$
 \ENDFOR
-\IF{$is(startingNode, ExprNode)$}
+\IF{$is(startingNode,$ ExprNode$)$}
     \STATE $memorizeType(startingNode, determineExpressionType(startingNode))$
 \ENDIF
-\IF{$is(startingNode, VariableBindingNode)$}
-    \STATE $type = null$
-    \STATE $typeNode = startingNode.getChild(TypeNode)$
+\IF{$is(startingNode,$ VariableBindingNode$)$}
+    \STATE $type :=$ null
+    \STATE $typeNode := startingNode.getChild(TypeNode)$
     \IF{$typeNode \neq null$}
-        \STATE $type = getTypeTN(typeNode)$
+        \STATE $type := getTypeTN(typeNode)$
     \ELSE
-        \STATE $type = determineExpressionType(startingNode.$ $getChild(BindingSequenceNode).getChild(ExprNode),$ $contextVarTypes)$
-        \IF{$is(startingNode, ForClauseNode)$}
-            \STATE $type = createForBoundType(type)$
+        \STATE $type := determineExpressionType(startingNode.$ $getChild(BindingSequenceNode).getChild(ExprNode),$ $contextVarTypes)$
+        \IF{$is(startingNode,$ ForClauseNode$)$}
+            \STATE $type := createForBoundType(type)$
         \ENDIF
     \ENDIF
     \STATE $set(startingNode, newVars, (startingNode.varName, type))$
-\ELSIF{$is(startingNode, TupleStreamNode)$}
+\ELSIF{$is(startingNode,$ TupleStreamNode$)$}
     \FORALL{$varBindingNode \in startingNode.getChildren()$}
         \STATE $add(startingNode, newVars, get(varBindingNode, newVars))$
     \ENDFOR
@@ -428,18 +428,17 @@ The handling of new variable definitions relies on the fact that the definitions
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function mergeContextVarTypes}
+\caption{Function \texttt{mergeContextVarTypes}}
 \label{ALG_function_mergeContextVarTypes}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-    $keys()$: Function retrieving index values of an indexed structure. \\
     $contextVarTypes$: Types of local variables valid in current context. \\    
     $extendingVarTypes$: New variables in the same structure as the first argument.
 }
 \ENSURE The context variable types extended with the variable types from the second argument.
 
 \FORALL{$varName \in keys(extendingVarTypes)$}
-    \STATE $contextVarTypes[varName] = extendingVarTypes[varName]$
+    \STATE $contextVarTypes[varName] := extendingVarTypes[varName]$
 \ENDFOR
 \RETURN $contextVarTypes$
 \end{algorithmic}
@@ -448,7 +447,7 @@ The handling of new variable definitions relies on the fact that the definitions
 Function $analysisOfExpressionTypes$ called upon a binding expression of a global variable determines the type of the binding expression, and hence, the type of the variable. In case of global variables, the argument $contextVarTypes$ is empty, because there are no local variables valid in the prolog section.
 
 \begin{algorithm}
-\caption{Function getVariableType}
+\caption{Function \texttt{getVariableType}}
 \label{ALG_function_get_variable_type}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -468,21 +467,21 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 The types of processed global variables are available trough function \linebreak $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in Algorithm \ref{ALG_func_determineExpressionType} is defined in Algorithm \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
 
 \begin{algorithm}
-\caption{Function createPathType}
+\caption{Function \texttt{createPathType}}
 \label{ALG_function_create_path_type}
 \begin{algorithmic}[1]
 \REQUIRE $pathExprNode$: A reference to a PathExprNode to create the PathType from.
 \ENSURE The PathType of $pathExprNode$ expression.
 
-\STATE $stepNodes =$ an empty array
-\STATE $forBoundSubsteps =$ an empty associative array
+\STATE $stepNodes :=$ an empty array
+\STATE $forBoundSubsteps :=$ an empty associative array
 \FORALL{$stepNode \in pathExprNode.getChildren()$}
-	\STATE $detailNode = stepNode.getChild(ExprNode)$
-	\IF{$detailNode != null$}
-		\IF{$is(detailNode, VarRefNode)$}
-			\STATE $type = getType(detailNode)$ // $PathType$
+	\STATE $detailNode := stepNode.getChild(ExprNode)$
+	\IF{$detailNode \neq$ null}
+		\IF{$is(detailNode,$ VarRefNode$)$}
+			\STATE $type := getType(detailNode)$ \COMMENT{PathType}
 			\IF{$type.isForBound$}
-				\STATE $forBoundSubsteps[stepNode] = type$
+				\STATE $forBoundSubsteps[stepNode] := type$
 				\STATE add $stepNode$ to $stepNodes$
 			\ELSE
 				\STATE add all $type.stepNodes$ to $stepNodes$
@@ -495,7 +494,7 @@ The types of processed global variables are available trough function \linebreak
 	\ENDIF
 \ENDFOR
 
-\RETURN $PathType$ with $stepNodes$, $forBoundSubsteps$, and $isForBound$ set to $false$
+\RETURN $PathType$ with $stepNodes$, $forBoundSubsteps$, and $isForBound$ set to false
 \end{algorithmic}
 \end{algorithm}
 
@@ -503,19 +502,19 @@ The types of processed global variables are available trough function \linebreak
 To determine types of expressions, we use already introduced function \linebreak $analysisOfExpressionTypes$. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
 
 \begin{algorithm}
-\caption{Function createForBoundType}
+\caption{Function \texttt{createForBoundType}}
 \label{ALG_function_create_for_bound_type}
 \begin{algorithmic}[1]
 \REQUIRE $type$: A type to create the for bound type from.
 \ENSURE The for bound type from $type$.
 
-\IF{$type$ is $UnknownType$}
-	\RETURN $UnknownType$
-\ELSIF{$type$ is $NodeType$ or XSD atomic type}
+\IF{$type$ is UnknownType}
+	\RETURN UnknownType
+\ELSIF{$type$ is NodeType or XSD atomic type}
 	\RETURN $type$ with cardinality set to exactly-one
 \ELSE
-	\STATE // $PathType$
-	\RETURN $type$ with $isForBound$ flag set to $true$
+	\STATE \COMMENT {It is PathType}
+	\RETURN $type$ with $isForBound$ flag set to true
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -523,19 +522,19 @@ To determine types of expressions, we use already introduced function \linebreak
 We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
 
 \begin{algorithm}
-\caption{Function createForUnboundType}
+\caption{Function \texttt{createForUnboundType}}
 \label{ALG_function_create_for_unbound_type}
 \begin{algorithmic}[1]
 \REQUIRE $type$: A type to create the for unbound type from.
 \ENSURE The for unbound type from $type$.
 
-\IF{$type$ is $UnknownType$}
-	\RETURN $UnknownType$
-\ELSIF{$type$ is $NodeType$ or XSD atomic type}
+\IF{$type$ is UnknownType}
+	\RETURN UnknownType
+\ELSIF{$type$ is NodeType or XSD atomic type}
 	\RETURN $type$ with cardinality set to zero-or-more
 \ELSE
-	\STATE // $PathType$
-	\RETURN $type$ with $isForBound$ flag set to $false$
+	\STATE \COMMENT {It is PathType}
+	\RETURN $type$ with $isForBound$ flag set to false
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -575,25 +574,25 @@ Firstly, we define some auxiliary functions used by algorithms in this chapter.
 Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of $PathType$ as its arguments and returns true if the path uses only child and descendant axes. Otherwise, it returns false.
 
 \begin{algorithm}
-\caption{Function usesOnlyChildAndDescendantAxes}
+\caption{Function \texttt{usesOnlyChildAndDescendantAxes}}
 \label{ALG_function_uses_only_child_and_descendant_axes}
 \begin{algorithmic}[1]
-\REQUIRE $pathType$: A $PathType$ instance.
+\REQUIRE $pathType$: A PathType instance.
 \ENSURE A boolean result.
 
 \FORALL{$stepNode \in pathType.stepNodes$}
 	\IF{$stepNode.isAxisStep$}
-		\STATE $axisKind$ = $stepNode.axisNode.getAxisKind()$
-		\IF{$axisKind$ $\neq$ $CHILD$ AND $axisKind$ $\neq$ $DESCENDANT$}
+		\STATE $axisKind := stepNode.axisNode.getAxisKind()$
+		\IF{$axisKind \neq$ CHILD $\wedge$ $axisKind \neq$ DESCENDANT}
 			\RETURN false
 		\ENDIF
 	\ENDIF
 \ENDFOR
 
-\STATE $detailNode$ = $stepNode.getChild(ExprNode)$
+\STATE $detailNode := stepNode.getChild(ExprNode)$
 \IF{$detailNode \neq$ null}
-	\IF{$is(detailNode, VarRefNode)$}
-		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode])$ == false}
+	\IF{$is(detailNode,$ VarRefNode$)$}
+		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode]) =$ false}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -606,18 +605,18 @@ Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_on
 Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predicates} checks whether a path represented by a given $PathType$ instance does not contain predicates. A Similar function is  $isWithoutPredicatesExceptLastStep$. This function is not explicitly defined, because its definition is the same as the definition of function $isWithoutPredicates$, except it does not check the last step of the path. So the last step may contain predicates and the function will return true.
 
 \begin{algorithm}
-\caption{Function isWithoutPredicates}
+\caption{Function \texttt{isWithoutPredicates}}
 \label{ALG_function_is_without_predicates}
 \begin{algorithmic}[1]
-\REQUIRE $pathType$: A $PathType$ instance.
-\ENSURE A boolean result.getTargetReturnPathTypesRecursive
+\REQUIRE $pathType$: A PathType instance.
+\ENSURE A boolean result.
 
 \FORALL{$stepNode \in pathType.stepNodes$}
-	\IF{$stepNode.hasPredicates()$}
+	\IF{$stepNode.hasPredicates$}
 		\RETURN false
 	\ENDIF
-	\IF{$pathType.forBoundSubsteps[stepNode]$ $\neq$ null}
-		\IF{$isWithoutPredicates(pathType.forBoundSubsteps[stepNode]$ == false}
+	\IF{$pathType.forBoundSubsteps[stepNode] \neq$ null}
+		\IF{$isWithoutPredicates(pathType.forBoundSubsteps[stepNode] =$ false}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -630,17 +629,17 @@ Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predica
 Function $endsWithExactlyOnePredicate$ in Algorithm \ref{ALG_function_ends_with_exactly_one_predicate} checks if a path represented by a given $PathType$ instance contains exactly one predicate in its last step and if so, the predicate is returned. Otherwise, it returns false.
 
 \begin{algorithm}
-\caption{Function endsWithExactlyOnePredicate}
+\caption{Function \texttt{endsWithExactlyOnePredicate}}
 \label{ALG_function_ends_with_exactly_one_predicate}
 \begin{algorithmic}[1]
-\REQUIRE $pathType$: A $PathType$ instance.
+\REQUIRE $pathType$: A PathType instance.
 \ENSURE If $pathType$ ends with exactly one predicate, return value is the predicate, otherwise return value is false.
 
-\STATE $lastStepNode$ = last item from $pathType.stepNodes$
-\IF{$lastStepNode.hasPredicates()$ $==$ false}
+\STATE $lastStepNode :=$ the last item from $pathType.stepNodes$
+\IF{$lastStepNode.hasPredicates() =$ false}
 	\RETURN false
 \ENDIF
-\IF{number of item in list $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$ is higher than 1}
+\IF{number of items in list $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$ is higher than 1}
 	\RETURN false
 \ENDIF
 
@@ -651,26 +650,24 @@ Function $endsWithExactlyOnePredicate$ in Algorithm \ref{ALG_function_ends_with_
 Function $isTargetPath$ in Algorithm \ref{ALG_function_is_target_path} checks if a path represented by a given $PathType$ instance is so-called target path for the specified variable. A target path for a variable is a path where its first step is a reference to the variable.
 
 \begin{algorithm}
-\caption{Function isTargetPath}
+\caption{Function \texttt{isTargetPath}}
 \label{ALG_function_is_target_path}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-  $pathType$: A $PathType$ instance. \\
+  $pathType$: A PathType instance. \\
   $varName$: A variable name.
 }
-\ENSURE Returns true, if the first step of path represented by the $PathType$ instance is a reference to the specified variable.
+\ENSURE Returns true, if the first step of path represented by the PathType instance is a reference to the specified variable.
 
-\todo[inline]{Upravit styl vsetkych algoritmov (null, ==, !=, true/false, ...) tak ako je tu.}
-
-\STATE $firstStep$ = first item from  $pathType.stepNodes$
-\STATE $detailNode$ = $firstStep.detailNode$
-\IF{$detailNode$ == null}
+\STATE $firstStep :=$ first item from  $pathType.stepNodes$
+\STATE $detailNode := firstStep.detailNode$
+\IF{$detailNode =$ null}
 	\RETURN false
 \ENDIF
-\IF{$is(detailNode, VarRefNode)$ == false}
+\IF{$is(detailNode, VarRefNode) =$ false}
 	\RETURN false
 \ENDIF
-\IF{$detailNode.varName$ == $varName$}
+\IF{$detailNode.varName = varName$}
 	\RETURN true
 \ELSE
 	\RETURN false
@@ -681,23 +678,23 @@ Function $isTargetPath$ in Algorithm \ref{ALG_function_is_target_path} checks if
 Function $getTargetReturnPathTypes$ in Algorithm \ref{ALG_function_get_target_return_path_types} searches the given FLWOR for $PathTypes$ representing so-called target return paths. A target return path is a return path in a where clause of a FLWOR. The FLWOR is processed recursively using function $getTargetReturnPathTypesRecursive$ in Algorithm \ref{ALG_function_get_target_return_path_types_recursive}.
 
 \begin{algorithm}
-\caption{Function getTargetReturnPathTypes}
+\caption{Function \texttt{getTargetReturnPathTypes}}
 \label{ALG_function_get_target_return_path_types}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-  $flworNode$: A $FLWORExprNode$ instance to search for target return paths. \\
+  $flworNode$: A FLWORExprNode instance to search for target return paths. \\
   $varName$: A variable name.
 }
-\ENSURE A list of target return paths for the specified variable, in the given FLWOR, represented by $PathType$ instances.
+\ENSURE A list of target return paths for the specified variable, in the given FLWOR, represented by PathType instances.
 
-\STATE $pathTypes$ = an empty array
+\STATE $pathTypes :=$ an empty array
 \STATE $getTargetReturnPathTypesRecursive(flworNode.$ $getChild(ReturnClauseNode), varName, pathTypes)$
 \RETURN $pathTypes$
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function getTargetReturnPathTypesRecursive}
+\caption{Function \texttt{getTargetReturnPathTypesRecursive}}
 \label{ALG_function_get_target_return_path_types_recursive}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -706,9 +703,9 @@ Function $getTargetReturnPathTypes$ in Algorithm \ref{ALG_function_get_target_re
   $pathTypes$ An output list to add found target return path types to.
 }
 
-\IF{$is(node, ExprNode)$}
-	\STATE $type$ = $getType(node)$
-	\IF{$type$ is $PathType$ AND $isTargetPath(type, varName)$}
+\IF{$is(node,$ ExprNode$)$}
+	\STATE $type := getType(node)$
+	\IF{$type$ is $PathType$ $\wedge$ $isTargetPath(type, varName)$}
 		\STATE add $type$ to $pathTypes$
 	\ENDIF
 \ENDIF
@@ -723,23 +720,23 @@ A similar couple of functions is function $getTargetReturnPaths$ and function $g
 To illustrate this difference, we introduce the following example. Assuming $P$ is a return target path expression for variable $var$ and $flwor$ is a FLWOR expression with return clause $data(P)$, function call $getTargetReturnPathTypes(flwor, var)$ returns two $PathTypes$. One is the type of expression $P$ and the other is the type of the function call $data(P)$ which is also $PathType$. On the other hand, function call $getTargetReturnPaths(flwor, var)$ returns just one $PathType$ representing $P$. 
 
 \begin{algorithm}
-\caption{Function getTargetReturnPaths}
+\caption{Function \texttt{getTargetReturnPaths}}
 \label{ALG_function_get_target_return_paths}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-  $flworNode$: A $FLWORExprNode$ instance to search for target return paths. \\
+  $flworNode$: A FLWORExprNode instance to search for target return paths. \\
   $varName$: A variable name.
 }
-\ENSURE A list of target return paths for the specified variable, in the given FLWOR, represented by $PartExprNode$ instances.
+\ENSURE A list of target return paths for the specified variable, in the given FLWOR, represented by PathExprNode instances.
 
-\STATE $paths$ = an empty array
+\STATE $paths :=$ an empty array
 \STATE $getTargetReturnPathsRecursive(flworNode.$ $getChild(ReturnClauseNode), varName, paths)$
 \RETURN $paths$
 \end{algorithmic}
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function getTargetReturnPathsRecursive}
+\caption{Function \texttt{getTargetReturnPathsRecursive}}
 \label{ALG_function_get_target_return_paths_recursive}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -748,15 +745,15 @@ To illustrate this difference, we introduce the following example. Assuming $P$ 
   $paths$ An output list to add found target return path types to.
 }
 
-\IF{$is(node, PathExprNode)$}
-	\STATE $type$ = $getType(node)$
-	\IF{$type$ is $PathType$ AND $isTargetPath(type, varName)$}
+\IF{$is(node,$ PathExprNode$)$}
+	\STATE $type := getType(node)$
+	\IF{$type$ is PathType $\wedge$ $isTargetPath(type, varName)$}
 		\STATE add $type$ to $paths$
 	\ENDIF
-\ELSIF{$is(node, VarRefNode)$}
-	\IF{$node.varName$ == $varName$}
-		\STATE $type$ = $getType(node)$
-		\IF {$type$ is $PathType$ AND $isTargetPath(type, varName)$}
+\ELSIF{$is(node,$ VarRefNode$)$}
+	\IF{$node.varName = varName$}
+		\STATE $type := getType(node)$
+		\IF {$type$ is PathType $\wedge$ $isTargetPath(type, varName)$}
 			\STATE add $type$ to $paths$
 		\ENDIF
 	\ENDIF
@@ -818,31 +815,31 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 
 \ENSURE Updated variable $forVars$.
 
-\STATE $bindingNodes = bindingNode \in flworNode.getChild(TupleStreamNode).$ $getChildren()$
+\STATE $bindingNodes := bindingNode \in flworNode.getChild(TupleStreamNode).$ $getChildren()$
 
-\STATE $whereClause = flworNode.getChild(WhereClauseNode)$
-\STATE $checkJoinPattern3 = false$
-\STATE $whereExpr = null$
-\IF{$whereClause != null$}
-    \STATE $whereExpr = whereClause.getChild(ExprNode)$
-    \IF{$is(whereExpr, OperatorNode)$ AND $whereExpr.operator == GEN\_EQUALS$}
-        \STATE $checkJoinPattern3 = true$
+\STATE $whereClause := flworNode.getChild(WhereClauseNode)$
+\STATE $checkJoinPattern3 :=$ false
+\STATE $whereExpr :=$ null
+\IF{$whereClause \neq$ null}
+    \STATE $whereExpr := whereClause.getChild(ExprNode)$
+    \IF{$is(whereExpr,$ OperatorNode$)$ $\wedge$ $whereExpr.operator =$ GEN\_EQUALS}
+        \STATE $checkJoinPattern3 :=$ true
     \ENDIF
 \ENDIF
 
 \FORALL{$bindingNode \in bindingNodes$}
-    \STATE $bindingExpr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-    \STATE $type = getType(bindingExpr)$
-    \IF{$type$ is $PathType$ $AND$ $usesOnlyChildAndDescendantAxes(type)$ $AND$ $isWithoutPredicatesExceptLastStep(type)$}
-    	\STATE $P = endsWithExactlyOnePredicate(type)$
+    \STATE $bindingExpr := bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
+    \STATE $type := getType(bindingExpr)$
+    \IF{$type$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes(type)$ $\wedge$ $isWithoutPredicatesExceptLastStep(type)$}
+    	\STATE $P := endsWithExactlyOnePredicate(type)$
     	\IF{$P$}
         	\FORALL{$(var, node) \in forVars$}
-            	\STATE $forVars = determinateJoinPatterns(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
+            	\STATE $forVars := determinateJoinPatterns(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
         	\ENDFOR
         \ELSIF{$isWithoutPredicates(type)$}
-        	\IF{$is(bindingNode, ForClauseNode$}
-            	\STATE add $(bindingNode.varName, bindingNode)$ to forVars
-        	\ENDIF
+        	\IF{$is(bindingNode,$ ForClauseNode$)$}
+            	\STATE add $(bindingNode.varName, bindingNode)$ to $forVars$
+  	       	\ENDIF
         \ENDIF
     \ENDIF
 \ENDFOR
@@ -852,7 +849,7 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function determinateJoinPatterns}
+\caption{Function \texttt{determinateJoinPatterns}}
 \label{ALG_func_determinateJoinPatterns}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -868,14 +865,14 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 \ENSURE Updated variable $forVars$.
 
 \IF{$P$ is of form $curBindingNode.varName/L_1 = var/L_2$}
-    \IF{$is(curBindingNode, ForClauseNode)$}
+    \IF{$is(curBindingNode,$ ForClauseNode$)$}
         \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the for join pattern
         \STATE remove $(forVar, forBindingNode)$ from $forVars$
-    \ELSIF{$is(curBindingNode, LetClauseNode)$}
+    \ELSIF{$is(curBindingNode,$ LetClauseNode$)$}
         \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the for let pattern                
         \STATE remove $(forVar, forBindingNode)$ from $forVars$
     \ENDIF
-\ELSIF{$checkJoinPattern3$ AND $is(curBindingNode, ForClauseNode)$}
+\ELSIF{$checkJoinPattern3$ AND $is(curBindingNode,$ ForClauseNode$)$}
     \IF{$whereExpr$ is of form $bindingNode.varName/L_1 = var/L_2$}
         \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the join pattern 3
         \STATE remove $(forVar, forBindingNode)$ from $forVars$
@@ -909,17 +906,17 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
     \ELSIF{$jpOccurrence$ is the join pattern 3}
         \STATE mark $jpOccurrence$ as case (O1), weight 0.5
     \ELSE
-        \STATE $secondBindingNode =$ the second binding node from $jpOccurrence$
-        \STATE $flworNode = secondBindingNode.getParent().getParent()$
-        \STATE $secondVarName = secondBindingNode.varName$
-        \STATE $returnPathTypes = getReturnPathTypes(flworNode,$ $secondVarName)$
+        \STATE $secondBindingNode :=$ the second binding node from $jpOccurrence$
+        \STATE $flworNode := secondBindingNode.getParent().getParent()$
+        \STATE $secondVarName := secondBindingNode.varName$
+        \STATE $returnPathTypes := getReturnPathTypes(flworNode,$ $secondVarName)$
 		\IF{$checkR2(returnPathTypes, jpOccurrence)$}
 			\STATE continue
 		\ENDIF
 		\IF{$checkR3(returnPathTypes, jpOccurrence)$}
 			\STATE continue
 		\ENDIF
-		\STATE $targetReturnPaths = getTargetReturnPaths(flworNode,$ $secontVarName)$
+		\STATE $targetReturnPaths := getTargetReturnPaths(flworNode,$ $secontVarName)$
 		\STATE $useR4R5(returnPaths, jpOccurrence)$
     \ENDIF
     \STATE update $jpOccurrence$ in $\mathcal{O}$
@@ -930,7 +927,7 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function checkR2}
+\caption{Function \texttt{checkR2}}
 \label{ALG_function_check_r2}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -941,8 +938,8 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \ENSURE True if the $jpOccurrence$ was classified as case (O1) using the R2 rule. False otherwise.
 
 \FORALL{$returnPathType \in returnPathTypes$}
-	\IF{$returnPathType.specialFunctionCalls$ contains one of $min$, $max$, $sum$, $avg$}
-    	\STATE mark $jpOccurrence$ as case (O1), weight 1 // R2
+	\IF{$returnPathType.specialFunctionCalls$ contains one of 'min', 'max', 'sum', 'avg'}
+    	\STATE mark $jpOccurrence$ as case (O1), weight 1 \COMMENT {R2}
   		\RETURN true
   	\ENDIF
 \ENDFOR
@@ -952,7 +949,7 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function checkR3}
+\caption{Function \texttt{checkR3}}
 \label{ALG_function_check_r3}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -964,7 +961,7 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 
 \FORALL{$returnPathType \in returnPathTypes$}
     \IF{$returnPathType.specialFunctionCalls$ contains $count$}
-        \STATE mark $jpOccurrence$ as case (O1), weight 0.75 // R3
+        \STATE mark $jpOccurrence$ as case (O1), weight 0.75 \COMMENT {R3}
         \RETURN true
     \ENDIF
 \ENDFOR
@@ -974,7 +971,7 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function useR4R5}
+\caption{Function \texttt{useR4R5}}
 \label{ALG_function_use_r4_r5}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
@@ -982,11 +979,11 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
   $jpOccurrence$: An occurrence of a join pattern to classify.
 }
 
-\STATE $retPathsNumber = $ number of paths in $targetReturnPaths$
+\STATE $retPathsNumber :=$ a number of paths in $targetReturnPaths$
 \IF{$retPathsNumber > 1$}
-	\STATE mark $jpOccurrence$ as case (O2), weight 1 // R4
+	\STATE mark $jpOccurrence$ as case (O2), weight 1 \COMMENT {R4}
 \ELSE
-	\STATE mark $jpOccurrence$ as case (O2), weight 0.5 // R5
+	\STATE mark $jpOccurrence$ as case (O2), weight 0.5 // \COMMENT {R5}
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -1027,11 +1024,11 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 \begin{algorithmic}[1]
 \REQUIRE $node$: A node of the syntax tree.
 
-\IF{$is(node, FunctionCallNode)$}
-    \IF{$node.fncName$ == $distinct-values$}
-        \STATE $argument = node.getChild(0)$
-        \STATE $type = getType(argument)$
-        \IF{$type$ is $PathType$ AND $usesOnlyChildAndDescendantAxes(type)$ AND $isWithoutPredicatesExceptLastStep(type)$}
+\IF{$is(node$, FunctionCallNode$)$}
+    \IF{$node.fncName =$ 'distinct-values'}
+        \STATE $argument := node.getChild(0)$
+        \STATE $type := getType(argument)$
+        \IF{$type$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes(type)$ $\wedge$ $isWithoutPredicatesExceptLastStep(type)$}
             \STATE memorize $argument$ as the negative key statement, weight 1
         \ENDIF
     \ENDIF
@@ -1049,20 +1046,20 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
 \begin{algorithmic}[1]
 \REQUIRE $node$: A node of the syntax tree.
 
-\IF{$is(node, FLWORExprNode)$}
-	\STATE $forVars =$ an empty array
+\IF{$is(node,$ FLWORExprNode$)$}
+	\STATE $forVars :=$ an empty array
 
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
-        \IF{$is(bindingNode, ForClauseNode)$}
-            \STATE $expr = bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-            \IF{$getType(expr)$ is $PathType$ AND $usesOnlyChildAndDescendantAxes(getType(expr))$}
+        \IF{$is(bindingNode,$ ForClauseNode$)$}
+            \STATE $expr := bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
+            \IF{$getType(expr)$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes(getType(expr))$}
                 \STATE add $bindingNode.varName$ to $forVars$
             \ENDIF
         \ENDIF
     \ENDFOR
     
-    \STATE $whereClause = node.getChild(WhereClauseNode)$
-	\IF{$whereClause != null$}
+    \STATE $whereClause := node.getChild(WhereClauseNode)$
+	\IF{$whereClause \neq$ null}
     	\STATE $processWhere(forVars, whereClause.getChild(ExprNode))$
 	\ENDIF
 \ENDIF
@@ -1078,14 +1075,14 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
 	$exprNode$: The where expression node.
 }
 
-\IF{$is(exprNode, OperatorNode$)}
-    \IF{$exprNode.operator == GEN\_EQUALS$}
+\IF{$is(exprNode,$ OperatorNode$)$}
+    \IF{$exprNode.operator =$ GEN\_EQUALS}
         \FORALL{$var \in forVars$}
-            \IF{$exprNode$ is of a form $var/L = C$ where $getType(var/L)$ is $PathType$ AND $isWithoutPredicatesExceptLastStep(getType(var/L))$ AND $usesOnlyChildAndDescendantAxes(getType(var/L))$ AND $C$ is a literal constant}
+            \IF{$exprNode$ is of a form $var/L = C$ where $getType(var/L)$ is PathType $\wedge$ $isWithoutPredicatesExceptLastStep(getType(var/L))$ $\wedge$ $usesOnlyChildAndDescendantAxes(getType(var/L))$ $\wedge$ $C$ is a literal constant}
                 \STATE memorize $var/L$ as the negative key statement, weight 0.9
             \ENDIF
         \ENDFOR
-    \ELSIF{$exprNode.operator == AND$}
+    \ELSIF{$exprNode.operator =$ AND}
         \STATE $processWhere(forVars, exprNode.leftSide)$
         \STATE $processWhere(forVars, exprNode.rightSide)$
     \ENDIF

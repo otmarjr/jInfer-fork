@@ -25,7 +25,8 @@
                 </dependency>
             </module-dependencies>
             <public-packages>
-                <package>cz.cuni.mff.ksi.jinfer.xqueryanalyzer</package>
+                <package>cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys</package>
+                <package>cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils</package>
             </public-packages>
         </data>
     </configuration>

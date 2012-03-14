@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 
@@ -22,29 +22,18 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType
  *
  * @author rio
  */
-public class ForeignKey {
-
-  private final Key key;
-  private final PathType foreignTargetPath;
-  private final PathType foreignKeyPath;
+public class NegativeKey extends Key {
   
-  public ForeignKey(final Key key, final PathType foreignTargetPath, final PathType foreignKeyPath) {
-    this.key = key;
-    this.foreignTargetPath = foreignTargetPath;
-    this.foreignKeyPath = foreignKeyPath;
+  public NegativeKey(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
+    super(contextPath, targetPath, keyPath);
   }
   
-  public Key getKey() {
-    return key;
-  }
-
-  public PathType getForeignKeyPath() {
-    return foreignKeyPath;
-  }
-
-  public PathType getForeignTargetPath() {
-    return foreignTargetPath;
+  public NegativeKey(final PathType targetPath, final PathType keyPath) {
+    super(targetPath, keyPath);
   }
   
-  
+  @Override
+  public boolean isPossitive() {
+    return false;
+  }
 }

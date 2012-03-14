@@ -25,38 +25,38 @@ It iterate through steps of a path, maintaining a so-called context set, which i
 \label{FUNC_evaluate_step}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
-	$step$: An instance of $StepExprNode$ representing a step of the path to evaluate.
+	$step$: An instance of StepExprNode representing a step of the path to evaluate.
 	$contextSet$: A set of elements and attributes to evaluate $step$ upon.
 	$grammar$: The grammar.
 }
 
 \ENSURE A context set after the step evaluation.
 
-\IF{$is(step, SelfOrDescendantStep)$}
+\IF{$is(step,$ SelfOrDescendantStep$)$}
 	\RETURN $evaluateStep\_selfOrDescendant(contextSet, grammar)$
 \ENDIF
 
-\STATE $newContextSet$ = empty set
+\STATE $newContextSet :=$ an empty set
 
-\STATE $axisKind$ = $step.getChild(axisNode).axisKind$
-\STATE $nodeName$ = $step.getChild(axisNode).getChild(nameTestNode).name$
-\IF{$axisKind$ == $CHILD$}
+\STATE $axisKind := step.getChild(axisNode).axisKind$
+\STATE $nodeName := step.getChild(axisNode).getChild(nameTestNode).name$
+\IF{$axisKind =$ CHILD}
 	\FORALL{$node \in contextSet$}
 		\IF{$node$ is element}
-			\STATE $subelements$ = $getTokens(grammar[node])$
+			\STATE $subelements := getTokens(grammar[node])$
 			\FORALL{$subelement \in subelements$}
-				\IF{$subelement.name$ == $nodeName$}
+				\IF{$subelement.name = nodeName$}
 					\STATE add $subelement$ to $newContextSet$
 				\ENDIF
 			\ENDFOR
 		\ENDIF
 	\ENDFOR
-\ELSIF{$axisKind$ == $ATTRIBUTE$}
+\ELSIF{$axisKind =$ ATTRIBUTE}
 	\FORALL{$node \in contextSet$}
 		\IF{$node$ is element}
-			\STATE $attributes$ = $node.attributes$
+			\STATE $attributes := node.attributes$
 			\FORALL{$attribute \in attributes$}
-				\IF{$attribute.name$ == $nodeName$}
+				\IF{$attribute.name = nodeName$}
 					\STATE add $attribute$ to $newContextSet$
 				\ENDIF
 			\ENDFOR

@@ -14,11 +14,11 @@ digraph inference_process {
 	user_input -> Simplifier;
 	Simplifier [label = "Simplifier" style = "filled" fillcolor = "grey"];
 	XQueryProcessor [label = "XQuery Processor" style = "filled" fillcolor = "grey"];
-	XQAnalyzer -> XQueryProcessor [label = "Syntax trees of the queries"];
+	XQAnalyzer -> XQueryProcessor [label = <Syntax trees<br/>of the queries>];
 	Merger [label = "Merger" style = "filled" fillcolor = "grey"];
 	Simplifier -> Merger [label = "Simplified grammar"];
-	XQueryProcessor -> Merger [label = "Statements inferred from the queries"];
-	Merger -> Exporter [label = "Simplified grammar combined with the statements from the queries"];
+	XQueryProcessor -> Merger [label = <Statements inferred<br/>from the queries>];
+	Merger -> Exporter [label = <Simplified grammar<br/>combined with the statements<br/>from the queries>];
 	Exporter [label = "Schema Generator" style = "filled" fillcolor = "grey"];
 	output_xml [label = "XML schema"];
 	Exporter -> output_xml;

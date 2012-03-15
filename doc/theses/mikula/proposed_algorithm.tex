@@ -118,10 +118,10 @@ The node classes can be classified into three groups: inner node classes, leaf n
 
 Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function.
 
-\begin{define}[Function $is(v, class)$]For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value $true$ if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns $false$.
+\begin{define}[Function $is(v, class)$]For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value \texttt{true} if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns \texttt{false}.
 \end{define}
 
-For instance, assuming $v \in V, c(v) =$ \texttt{LiteralNode}, calls $is(v,$ \texttt{LiteralNode}$)$ and $is(v,$ \texttt{ExprNode}$)$ return $true$, while call $is(v,$ \texttt{ContentNode}$)$ returns $false$.
+For instance, assuming $v \in V, c(v) =$ \texttt{LiteralNode}, calls $is(v,$ \texttt{LiteralNode}$)$ and $is(v,$ \texttt{ExprNode}$)$ return \texttt{true}, while call $is(v,$ \texttt{ContentNode}$)$ returns \texttt{false}.
 
 \subsection{Characteristics of the Syntax Tree}
 An important characteristic of the syntax tree is related to a definition of local variables and their scope in the XQuery language. The representation of a definition of a local variable in the syntax tree is a node of \texttt{VariableBindingNode} class. Nodes of that class have only two children; a node representing the type of the variable and a node representing the binding expression (expression defining the value of the variable, and thus, it cannot use the variable). Hence, the entire subtree does not contain any expressions that use the variable. Therefore the scope of the new variable is not the subtree of the \texttt{VariableBindingNode} class node. It depends on the type of XQuery construct that the variable binding is a (indirect) component of.
@@ -210,7 +210,7 @@ Instead, the syntax tree can be searched just once, before the analysis of expre
 
 A simple algorithm is presented in Algorithm \ref{ALG_processing_of_functions}. It uses\linebreak \texttt{getFunctionDeclarationNodes} function, defined in Algorithm \ref{ALG_retrieval_of_function_declaration_nodes}, which returns a list of all function declaration nodes in the syntax three. Actually, it does not have to search the whole syntax tree as the function declaration nodes can be present only in the query prolog section. 
 
-Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyse them. Also, since a determination of a prefix for built-in functions is a technical issue, we assume that built-in functions are either prefixed by $fn$ or not prefixed.
+Without loss of generality, we will focus on locally defined functions. We will not determine types of functions defined in other modules since the principle is similar but it is needed to look up the definitions in syntax trees of other queries. Return types of built-in functions are fixed and, thus, there is no need to analyse them. Also, since a determination of a prefix for built-in functions is a technical issue, we assume that built-in functions are either prefixed by \texttt{fn} or not prefixed.
 
 \begin{algorithm}
 \caption{Processing of Functions}
@@ -379,15 +379,15 @@ A similar approach as in the case of functions can be applied to determine types
 
 The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_1}), its type can be either determined directly or it depends on its subexpressions.
 
-The meaning of the code at lines 6-14 is the following. If a variable is bound to an expression which type is $PathType$, we want to assign the variable reference expression with $PathType$ which represents path containing exactly one step, the variable reference. Some algorithm in later sections search for paths starting with a certain variable and we want them to include also that types of expressions.	
+The meaning of the code at lines 6-14 is the following. If a variable is bound to an expression which type is PathType, we want to assign the variable reference expression with PathType which represents path containing exactly one step, the variable reference. Some algorithm in later sections search for paths starting with a certain variable and we want them to include also that types of expressions.	
 
 A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
-Function $determineExpressionType$ is called within function $analysis\-Of\-Expression\-Types$ presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
+Function \texttt{determineExpressionType} is called within function \texttt{analysis\-Of\-Expression\-Types} presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
 The order of the recursion is to firstly process children of a node and then the node itself. The order of child processing is specified by function $o$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
 
-The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' whether or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function $mergeContextVarTypes$ presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
+The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' whether or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function \texttt{mergeContextVarTypes} presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
 \begin{algorithm}
 \caption{Function \texttt{analysisOfExpressionTypes}}
@@ -444,7 +444,7 @@ The handling of new variable definitions relies on the fact that the definitions
 \end{algorithmic}
 \end{algorithm}
 
-Function $analysisOfExpressionTypes$ called upon a binding expression of a global variable determines the type of the binding expression, and hence, the type of the variable. In case of global variables, the argument $contextVarTypes$ is empty, because there are no local variables valid in the prolog section.
+Function \texttt{analysisOfExpressionTypes} called upon a binding expression of a global variable determines the type of the binding expression, and hence, the type of the variable. In case of global variables, the argument \texttt{contextVarTypes} is empty, because there are no local variables valid in the prolog section.
 
 \begin{algorithm}
 \caption{Function \texttt{getVariableType}}
@@ -464,7 +464,7 @@ Function $analysisOfExpressionTypes$ called upon a binding expression of a globa
 \end{algorithmic}
 \end{algorithm}
 
-The types of processed global variables are available trough function \linebreak $getGlobalVariableType()$. If the function gets a variable that is not a global one, it returns $null$. Function $getVariableType()$ called in Algorithm \ref{ALG_func_determineExpressionType} is defined in Algorithm \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is $null$.
+The types of processed global variables are available trough function \linebreak \texttt{getGlobalVariableType}. If the function gets a variable that is not a global one, it returns \texttt{null}. Function \texttt{getVariableType} called in Algorithm \ref{ALG_func_determineExpressionType} is defined in Algorithm \ref{ALG_function_get_variable_type}. It checks if the specified variable is amongst the given local variables. If so, it returns its type, else it handles the variable as a global one and if such global variable does not exist the result is \texttt{null}.
 
 \begin{algorithm}
 \caption{Function \texttt{createPathType}}
@@ -499,7 +499,7 @@ The types of processed global variables are available trough function \linebreak
 \end{algorithm}
 
 \subsection{Determination of Expression Types}
-To determine types of expressions, we use already introduced function \linebreak $analysisOfExpressionTypes$. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
+To determine types of expressions, we use already introduced function \\ \texttt{analysisOfExpressionTypes}. The starting node (its first argument) is the node representing the query body and the variable context is empty as there cannot be any local variable valid in the body node.
 
 \begin{algorithm}
 \caption{Function \texttt{createForBoundType}}
@@ -519,7 +519,7 @@ To determine types of expressions, we use already introduced function \linebreak
 \end{algorithmic}
 \end{algorithm}
 
-We can also determine expression types in functions. To do this for a certain function, $analysisOfExpressionTypes$ function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
+We can also determine expression types in functions. To do this for a certain function, \texttt{analysisOfExpressionTypes} function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
 
 \begin{algorithm}
 \caption{Function \texttt{createForUnboundType}}
@@ -542,24 +542,26 @@ We can also determine expression types in functions. To do this for a certain fu
 \section{Step 3: Inference of Built-in Types}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
-How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of $PathType$ type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
+How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of PathType type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
 
-The output of this step is a set of statements of form \\ an instance of \texttt{PathType} $\rightarrow$ XML Schema built-in atomic type.
+The output of this step is a set of statements of form $P \rightarrow T$, where $P$ is an instance of PathType and $T$ is an XML Schema built-in atomic type.
 
 \subsection{Function Calls}
-This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a known set of elements of attributes (subexpression $E$ representing $S$). To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
+This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a set of elements of attributes (subexpression $E$ representing $S$) represented by PathType $P$. To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
 
-If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. Otherwise, no statement is inferred.
+If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. The inferred statement is $P \rightarrow T$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator is one of $+$, $-$, $*$, $div$, $mod$ (the class of the expression node is $Operator$ and it represents one of $PLUS$, $MINUS$, $MUL$, $DIV$, $MOD$ (for all operators, see Attachment \ref{FIG_operators})), one operand is $E$ and the type $T$ of the other operand is one of numeric built-in types, then $T$ is also the inferred type of $S$.
+If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{*}, \texttt{div}, \texttt{mod} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{MUL}, \texttt{DIV}, \texttt{MOD} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
 
-If the operator is one of $<$, $>$, $<=$, $>=$, $=$, $!=$ (the class of the expression node is $Operator$ and it represents one of $GEN\_LESS\_THAN$, \linebreak $GEN\_GREATER\_THAN$, $GEN\_LESS\_THAN\_EQUALS$,\linebreak $GEN\_GREATER\_THAN\_EQUALS$, $GEN\_EQUALS$,\linebreak $GEN\_NOT\_EQUALS$), one operand is $E$ and the type $T$ of the other operand is one of built-in types, then $T$ is also the inferred type of $S$.
+\todo[inline]{Toto je zlozitejsie.}
+
+If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $P$ and the type $T$ of the other operand is one of built-in types, then the inferred statement is $P \rightarrow T$.
 
 \subsection{Possible Extensions}
 As mentioned, the proposed algorithm utilizes only a small portion of XQuery constructs which can be be possibly utilized. Also, the algorithm does not perform the inference of types inside user-defined functions (it just uses the return types determined in earlier phases). That can be easily done as we know the definitions of functions and types of their real arguments. An algorithm performing the analysis in the user-defined functions can works as follows.
 
-If a currently processed expression is a function call of an user-defined function and at least one of its real arguments is an instance of \texttt{PathType}, get the function declaration node. In the function body, replace the formal arguments by the real arguments and set them as the local variables, so the proposed algorithms can be applied to process the function's body. Analyse the types of expressions in the body with the new information on the types of arguments by incorporating of the proposed algorithms and replace the function's return type by the one currently determined.
+If a currently processed expression is a function call of an user-defined function and at least one of its real arguments is an instance of PathType, get the function declaration node. In the function body, replace the formal arguments by the real arguments and set them as the local variables, so the proposed algorithms can be applied to process the function's body. Analyse the types of expressions in the body with the new information on the types of arguments by incorporating of the proposed algorithms and replace the function's return type by the one currently determined.
 
 A little complication is a recursion. A simple algorithm of that kind may never end because of the infinite analysis of the same recursive function(s). Therefore, we shall keep track of the currently analysed functions (e.g. in a stack of function calls) and do not process the recursive calls. 
 
@@ -571,7 +573,7 @@ In this step, the algorithm discovers keys of elements, incorporating the approa
 \subsection{Auxiliary Functions} \label{step_4_auxiliary_functions}
 Firstly, we define some auxiliary functions used by algorithms in this chapter.
 
-Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of $PathType$ as its arguments and returns true if the path uses only child and descendant axes. Otherwise, it returns false.
+Function \texttt{usesOnlyChildAndDescendantAxes} in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of PathType as its arguments and returns true if the path uses only child and descendant axes. Otherwise, it returns false.
 
 \begin{algorithm}
 \caption{Function \texttt{usesOnlyChildAndDescendantAxes}}
@@ -602,7 +604,7 @@ Function $usesOnlyChildAndDescendantAxes$ in Algorithm \ref{ALG_function_uses_on
 \end{algorithmic}
 \end{algorithm}
 
-Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predicates} checks whether a path represented by a given $PathType$ instance does not contain predicates. A Similar function is  $isWithoutPredicatesExceptLastStep$. This function is not explicitly defined, because its definition is the same as the definition of function $isWithoutPredicates$, except it does not check the last step of the path. So the last step may contain predicates and the function will return true.
+Function \texttt{isWithoutPredicates} in Algorithm \ref{ALG_function_is_without_predicates} checks whether a path represented by a given PathType instance does not contain predicates. A Similar function is  \texttt{isWithoutPredicatesExceptLastStep}. This function is not explicitly defined, because its definition is the same as the definition of function \texttt{isWithoutPredicates}, except it does not check the last step of the path. So the last step may contain predicates and the function will return true.
 
 \begin{algorithm}
 \caption{Function \texttt{isWithoutPredicates}}
@@ -626,7 +628,7 @@ Function $isWithoutPredicates$ in Algorithm \ref{ALG_function_is_without_predica
 \end{algorithmic}
 \end{algorithm}
 
-Function $endsWithExactlyOnePredicate$ in Algorithm \ref{ALG_function_ends_with_exactly_one_predicate} checks if a path represented by a given $PathType$ instance contains exactly one predicate in its last step and if so, the predicate is returned. Otherwise, it returns false.
+Function \texttt{endsWithExactlyOnePredicate} in Algorithm \ref{ALG_function_ends_with_exactly_one_predicate} checks if a path represented by a given PathType instance contains exactly one predicate in its last step and if so, the predicate is returned. Otherwise, it returns false.
 
 \begin{algorithm}
 \caption{Function \texttt{endsWithExactlyOnePredicate}}
@@ -647,7 +649,7 @@ Function $endsWithExactlyOnePredicate$ in Algorithm \ref{ALG_function_ends_with_
 \end{algorithmic}
 \end{algorithm}
 
-Function $isTargetPath$ in Algorithm \ref{ALG_function_is_target_path} checks if a path represented by a given $PathType$ instance is so-called target path for the specified variable. A target path for a variable is a path where its first step is a reference to the variable.
+Function \texttt{isTargetPath} in Algorithm \ref{ALG_function_is_target_path} checks if a path represented by a given PathType instance is so-called target path for the specified variable. A target path for a variable is a path where its first step is a reference to the variable.
 
 \begin{algorithm}
 \caption{Function \texttt{isTargetPath}}
@@ -664,7 +666,7 @@ Function $isTargetPath$ in Algorithm \ref{ALG_function_is_target_path} checks if
 \IF{$detailNode =$ null}
 	\RETURN false
 \ENDIF
-\IF{$is(detailNode, VarRefNode) =$ false}
+\IF{$is(detailNode,$ VarRefNode$) =$ false}
 	\RETURN false
 \ENDIF
 \IF{$detailNode.varName = varName$}
@@ -675,7 +677,7 @@ Function $isTargetPath$ in Algorithm \ref{ALG_function_is_target_path} checks if
 \end{algorithmic}
 \end{algorithm}
 
-Function $getTargetReturnPathTypes$ in Algorithm \ref{ALG_function_get_target_return_path_types} searches the given FLWOR for $PathTypes$ representing so-called target return paths. A target return path is a return path in a where clause of a FLWOR. The FLWOR is processed recursively using function $getTargetReturnPathTypesRecursive$ in Algorithm \ref{ALG_function_get_target_return_path_types_recursive}.
+Function \texttt{getTargetReturnPathTypes} in Algorithm \ref{ALG_function_get_target_return_path_types} searches the given FLWOR for PathTypes representing so-called target return paths. A target return path is a return path in a where clause of a FLWOR. The FLWOR is processed recursively using function \texttt{getTargetReturnPathTypesRecursive} in Algorithm \ref{ALG_function_get_target_return_path_types_recursive}.
 
 \begin{algorithm}
 \caption{Function \texttt{getTargetReturnPathTypes}}
@@ -715,9 +717,9 @@ Function $getTargetReturnPathTypes$ in Algorithm \ref{ALG_function_get_target_re
 \end{algorithmic}
 \end{algorithm}
 
-A similar couple of functions is function $getTargetReturnPaths$ and function $getTargetReturnPathsRecursive$. Only difference between those two couples of functions is that the former one searches for all expressions which are of $PathType$ representing a target return path, while the later one searches only for instances of $PathExprNode$.
+A similar couple of functions is function \texttt{getTargetReturnPaths} and function \texttt{getTargetReturnPathsRecursive}. Only difference between those two couples of functions is that the former one searches for all expressions which are of PathType representing a target return path, while the later one searches only for instances of \texttt{PathExprNode}.
 
-To illustrate this difference, we introduce the following example. Assuming $P$ is a return target path expression for variable $var$ and $flwor$ is a FLWOR expression with return clause $data(P)$, function call $getTargetReturnPathTypes(flwor, var)$ returns two $PathTypes$. One is the type of expression $P$ and the other is the type of the function call $data(P)$ which is also $PathType$. On the other hand, function call $getTargetReturnPaths(flwor, var)$ returns just one $PathType$ representing $P$. 
+To illustrate this difference, we introduce the following example. Assuming $P$ is a return target path expression for variable $var$ and $flwor$ is a FLWOR expression with return clause \texttt{data(}$P$\texttt{)}, function call \texttt{getTargetReturnPathTypes(} $flwor$, $var$\texttt{)} returns two PathTypes. One is the type of expression $P$ and the other is the type of the function call \texttt{data(}$P$\texttt{)} which is also PathType. On the other hand, function call \texttt{getTargetReturnPaths(}$flwor$, $var$\texttt{)} returns just one PathType representing $P$. 
 
 \begin{algorithm}
 \caption{Function \texttt{getTargetReturnPaths}}
@@ -765,14 +767,14 @@ To illustrate this difference, we introduce the following example. Assuming $P$ 
 \end{algorithm}
 
 \subsection{Definition of Keys}
-To define a key and a foreign key, we adopt the definitions introduced in the original approach \cite{Necasky:2009:DXK:1529282.1529414} with a modification that XPath paths are replaced by \texttt{PathType} instances.
+To define a key and a foreign key, we adopt the definitions introduced in the original approach \cite{Necasky:2009:DXK:1529282.1529414} with a modification that XPath paths are replaced by PathType instances.
 
 \begin{define}[Key]
-A key is a construct $(C, P, \{L\})$ where $C$, $P$ and $L$ are \texttt{PathType} instances without predicates and without special function calls that use only child and descendant axes. $C$ is called \emph{context path}, $P$ \emph{target path} and $L$ \emph{key path}. $C$ can be omitted, i.e. we can write $(P, \{L\})$. This is equivalent to $(/, P, \{L\})$. If $C$ is omitted we call the key \emph{global key}. Otherwise, it is called \emph{relative key}.
+A key is a construct $(C, P, \{L\})$ where $C$, $P$ and $L$ are PathType instances without predicates and without special function calls that use only child and descendant axes. $C$ is called \emph{context path}, $P$ \emph{target path} and $L$ \emph{key path}. $C$ can be omitted, i.e. we can write $(P, \{L\})$. This is equivalent to $(/, P, \{L\})$. If $C$ is omitted we call the key \emph{global key}. Otherwise, it is called \emph{relative key}.
 \end{define}
 
 \begin{define}[Foreign key]
-A foreign key is a construct $(C, (P_1, \{L_1\}) \rightarrow (P_2, \{L_2\}))$ where $(C, P_2, \{L_2\})$ is a key and $P_1$ and $L_1$ are \texttt{PathType} instances without predicates and without special function calls that use only child and descendant axes. $C$ can be omitted as in the case of keys.
+A foreign key is a construct $(C, (P_1, \{L_1\}) \rightarrow (P_2, \{L_2\}))$ where $(C, P_2, \{L_2\})$ is a key and $P_1$ and $L_1$ are PathType instances without predicates and without special function calls that use only child and descendant axes. $C$ can be omitted as in the case of keys.
 \end{define}
 
 \subsection{Join Patterns}
@@ -800,7 +802,7 @@ return $C_R$
 
 The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_other_for_join_pattern}, \ref{listing_other_let_join_pattern} and \ref{listing_join_pattern_3}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes. Actually, the join patterns from Listings \ref{listing_other_for_join_pattern} and \ref{listing_other_let_join_pattern} are covered by the for and let join pattern in the original approach, but we introduce them explicitly because their structure in the syntax tree is different.
 
-Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of $PathType$ without predicates, using only child and descendant axes.
+Since, in this step, we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of PathType without predicates, using only child and descendant axes.
 
 As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inference of keys from occurrences of the join patterns, and rules (R1 - R5) to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5.  The lesser weight is chosen because there is a lower probability that join of the join pattern 3 type is done via a key/foreign key pair.
 
@@ -885,12 +887,12 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 
 To find the occurrences of the join patterns, the algorithm recursively, in pre-order, searches the syntax tree and every node representing a FLWOR expression is processed. The FLWOR processing is shown in Algorithm \ref{ALG_processing_of_flwor_expressions}. Its input is an array of couples containing names of variables which has been bound in for clauses in FLWOR expressions represented by ancestor nodes, and references to those respective for clause nodes. The processing iterates through subnodes of a current node and the iteration consists of two logical parts.
 
-In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. The responsible code is partially moved to function $determineJoinPatterns()$ in Algorithm \ref{ALG_func_determinateJoinPatterns}. If the subnode does not form an occurrence, and if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the currect FLWOR node or in its descendant FLWOR nodes, later in the recursion.
+In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. The responsible code is partially moved to function \texttt{determineJoinPatterns} in Algorithm \ref{ALG_func_determinateJoinPatterns}. If the subnode does not form an occurrence, and if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the current FLWOR node or in its descendant FLWOR nodes, later in the recursion.
 
 \subsection{Analysis of the Join Pattern Occurrences}
 For each found join pattern occurrence, the algorithm displayed in Algorithm \ref{ALG_classification_of_join_pattern_occurrences} and Algorithms \ref{ALG_function_check_r2}, \ref{ALG_function_check_r3}, \ref{ALG_function_use_r4_r5} decides whether it is (O1) or (O2) case, using the rules from the original method and the rule for the join pattern 3 considering it of case (O1) and assigning it with weight of 0.5.
 
-As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrences}, rules R2 and R3 are applied using instances of $PathType$ while, rules R4 and R5 use instances of $PathExprNode$. This difference is partially explained in definition of the auxiliary functions in Chapter \ref{step_4_auxiliary_functions}. Rules R4 and R5 count target return paths. If they use instances of $PathType$, they can count one path more times (as is described in the mentioned chapter), and thus, give a wrong result.
+As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrences}, rules R2 and R3 are applied using instances of PathType while, rules R4 and R5 use instances of \texttt{PathExprNode}. This difference is partially explained in definition of the auxiliary functions in Chapter \ref{step_4_auxiliary_functions}. Rules R4 and R5 count target return paths. If they use instances of PathType, they can count one path more times (as is described in the mentioned chapter), and thus, give a wrong result.
 
 \begin{algorithm}
 \caption{Classification of join pattern occurrences}
@@ -1012,11 +1014,11 @@ While the previous steps of the key discovery produce mostly positive statements
 
 When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
 
-The first XQuery construct utilized by this step is a function call of $distinct-values$ function as discussed in Chapter \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a $PathType$ on their input. Elements and attributes selected by those $PathTypes$ are then considered to be not unique, and consequently, they cannot be keys.
+The first XQuery construct utilized by this step is a function call of \\ \texttt{distinct-values} function as discussed in Chapter \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a PathType on their input. Elements and attributes selected by those PathTypes are then considered to be not unique, and consequently, they cannot be keys.
 
-Aggregation functions $min$, $max$, $sum$ are not utilized by the function because they were utilized by the search for join patterns, and in the process of classification of found join patterns, they were included in the computation of the key weights.
+Aggregation functions \texttt{min}, \texttt{max}, \texttt{sum} are not utilized by the function because they were utilized by the search for join patterns, and in the process of classification of found join patterns, they were included in the computation of the key weights.
 
-Contrary the key discovery, $PathTypes$ utilized in this step may contain predicates in their lasts steps. Predicates in a path's last step restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates.
+Contrary the key discovery, PathTypes utilized in this step may contain predicates in their lasts steps. Predicates in a path's last step restrict its result, and therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is a set of elements or attributes selected by the same path stripped of the predicates.
 
 \begin{algorithm}
 \caption{Rejection of uniqueness - aggregation functions}
@@ -1036,7 +1038,7 @@ Contrary the key discovery, $PathTypes$ utilized in this step may contain predic
 \end{algorithmic}
 \end{algorithm}
 
-Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (lieral constant, reference of a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
+Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (literal constant, reference of a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
 
 As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the count of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys.
 
@@ -1052,7 +1054,7 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
     \FORALL{$bindingNode \in node.getChild(TupleStreamNode).getChildren()$}
         \IF{$is(bindingNode,$ ForClauseNode$)$}
             \STATE $expr := bindingNode.getChild(BindingSequenceNode).$ $getChild(ExprNode)$
-            \IF{$getType(expr)$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes(getType(expr))$}
+            \IF{$getType(expr)$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes($ $getType(expr))$}
                 \STATE add $bindingNode.varName$ to $forVars$
             \ENDIF
         \ENDIF
@@ -1095,5 +1097,3 @@ The original approach \cite{Necasky:2009:DXK:1529282.1529414} employs the follow
 
 Let $K_1, \dots, K_n$ be the inferred keys. Let $S_i$ be the score of $K_i$ and $N_i$ be the number of the inferred statements about $K_i$. Let $S^{max}$ be the maximum from $|S_1|, \dots , |S_n|$ and $N^{max}$ be the maximum norm
 from $N_1, \dots , N_n$. The normalized score $S_i$ of $K_i$ is computed as $S^{norm}_i = \frac{S_i}{S^{max}} * (1 - \frac{N^{max} - N_i}{\sum_{i=1}^{n}N_i})$
-
-

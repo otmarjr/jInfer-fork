@@ -1,0 +1,35 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	input_xml [label = "XML data"];
+	input_schema [label = "XML schema"];
+	input_xpaths [label = "XPath paths"];
+	input_xml -> IGG;
+	input_schema -> IGG;
+	input_xpaths -> IGG;
+	IGG [label = "Initial Grammar Generator" style = "filled" fillcolor = "lightblue"];
+	XMLImporter [ label = "XML Importer" style = "filled" fillcolor = "grey"];
+	SchemaImporter [ label = "..." style = "filled" fillcolor = "grey"];
+	IGG -> XMLImporter;
+	XMLImporter -> IGG;
+	IGG -> SchemaImporter;
+	SchemaImporter -> IGG;
+	Base [ label = "Base" style = "filled" fillcolor = "grey"];
+	input_queries [label = "XQuery queries"];
+	input_queries -> XQueryProcessor;
+	XQueryImporter [label = "XQuery Importer" style = "filled" fillcolor = "lightyellow"];
+	IGG -> Simplifier [label = "Initial grammar"];
+	user_input [label = "User input"];
+	user_input -> Simplifier;
+	Simplifier [label = "Simplifier" style = "filled" fillcolor = "lightblue"];
+	XQueryProcessor [label = "XQuery Processor" style = "filled" fillcolor = "lightyellow"];
+	XQueryProcessor -> XQueryImporter;
+	XQueryImporter -> XQueryProcessor [label = <Syntax trees<br/>of the queries>];
+	Simplifier -> XQueryProcessor [label = "Simplified grammar"];
+	XQueryProcessor -> Exporter [label = <Simplified grammar<br/>combined with the statements<br/>from the queries>];
+	Exporter [label = "Schema Generator" style = "filled" fillcolor = "lightblue"];
+	output_xml [label = "XML schema"];
+	Exporter -> output_xml;
+}

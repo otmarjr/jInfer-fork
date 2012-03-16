@@ -1,1 +1,14 @@
 \chapter{Conclusion}
+The aim of this thesis was to employ XML operations in the XML schema inference. We analysed several existing methods of the XML schema inference and we searched for methods that utilize some XML operations, only to found one, which infers keys from XQuery queries.
+
+Since the notion XML operations is very general and the range of XML technologies is very large, for purpose of this work, we decided to focus on XQuery technology. We made the overview of possible utilization of XQuery queries in the process of XML schema inference.
+
+Before a creation of the algorithm itself, we had to take several decisions in questions that emerged. Since there is a lack of the methods dealing with the utilisation of XML operation, there is also a lack of practically proven solutions that can help in such decision making.
+
+In the proposed solution, we decided to incorporate lexical and syntax analyses of XQuery queries, because it is more general and more extensible than a pattern searching. To achieve that, we adopted the algorithm from a recent master thesis dealing with an analysis of XQuery queries.
+
+We also implemented several ideas from the overview to infer XSD built-in types of elements and attributes. And we slightly extended the one existing method dealing with the inference of keys. \todo{Ako dopadli testy.}
+
+At last, we proposed a simple way how to combine the inferred statements with existing grammar inferring methods of the XML schema inference and we implemented it using jInfer framework. Thus, we created the first complete, ready-to-use, and extensible implementation of the XML xchema inference exploiting XQuery queries besides XML data.
+
+\section{Future Work}

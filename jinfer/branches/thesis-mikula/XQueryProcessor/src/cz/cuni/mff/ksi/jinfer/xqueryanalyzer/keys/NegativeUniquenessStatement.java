@@ -16,7 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
 /**
  *
@@ -25,25 +27,35 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType
 public class NegativeUniquenessStatement {
   
   private final PathType contextPath;
-  private final PathType keyPath;
+  private final PathType targetPath;
   private final int weight;
 
-  public NegativeUniquenessStatement(final PathType contextPath, final PathType keyPath, final int weight) {
-    this.contextPath = contextPath;
-    this.keyPath = keyPath;
+  public NegativeUniquenessStatement(final PathType contextPath, final PathType targetPath, final int weight) {
+    if (contextPath != null) {
+      final PathTypeParser contextPathParser = new PathTypeParser(contextPath);
+      final PathExprNode contextPathExprNode = new PathExprNode(contextPathParser.getSteps(), contextPath.getPathExprNode().getInitialStep());
+      this.contextPath = new PathType(contextPathExprNode, null, false);
+    } else {
+      this.contextPath = null;
+    }
+    
+    final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
+    final PathExprNode targetPathExprNode = new PathExprNode(targetPathParser.getSteps(), targetPath.getPathExprNode().getInitialStep());
+    this.targetPath = new PathType(targetPathExprNode, null, false);
+    
     this.weight = weight;
   }
   
-  public NegativeUniquenessStatement(final PathType keyPath, final int weight) {
-    this(null, keyPath, weight);
+  public NegativeUniquenessStatement(final PathType targetPath, final int weight) {
+    this(null, targetPath, weight);
   }
 
   public PathType getContextPath() {
     return contextPath;
   }
 
-  public PathType getKeyPath() {
-    return keyPath;
+  public PathType getTargetPath() {
+    return targetPath;
   }
 
   public int getWeight() {

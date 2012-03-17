@@ -340,7 +340,7 @@ public class KeysInferrer {
       final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getPathExprNode().getSteps());
       newSteps.set(P2WithPredicate.getPathExprNode().getSteps().size() - 1, newLastStep);
 
-      final PathType P2 = TypeFactory.createPathType(new PathExprNode(newSteps, InitialStep.CONTEXT)); // TODO rio do DP!!
+      final PathType P2 = TypeFactory.createPathType(new PathExprNode(newSteps, P2WithPredicate.getPathExprNode().getInitialStep())); // TODO rio do DP!!
       if (ForClauseNode.class.isInstance(bindingNode)) {
         joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, jefp.getL1(), jefp.getL2()));
       } else if (LetClauseNode.class.isInstance(bindingNode)) {

@@ -25,33 +25,33 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType
  */
 public class NegativeUniquenessStatement {
   
-  private final PathType contextPath;
-  private final PathType targetPath;
+  private final NormalizedPathType contextPath;
+  private final NormalizedPathType targetPath;
   private final int weight;
+  
+  public NegativeUniquenessStatement(final NormalizedPathType contextPath, final NormalizedPathType targetPath, final int weight) {
+    this.contextPath = contextPath;
+    this.targetPath = targetPath;
+    this.weight = weight;
+  }
+  
+  public NegativeUniquenessStatement(final NormalizedPathType targetPath, final int weight) {
+    this(null, targetPath, weight);
+  }
 
   public NegativeUniquenessStatement(final PathType contextPath, final PathType targetPath, final int weight) {
-    if (contextPath != null) {
-      final NormalizedPathType contextPathParser = new NormalizedPathType(contextPath);
-      this.contextPath = new PathType(contextPathParser.getSteps(), contextPath.getInitialStep(), null, false);
-    } else {
-      this.contextPath = null;
-    }
-    
-    final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
-    this.targetPath = new PathType(targetPathParser.getSteps(), targetPath.getInitialStep(), null, false);
-    
-    this.weight = weight;
+    this(contextPath != null ? new NormalizedPathType(contextPath) : null, new NormalizedPathType(targetPath), weight);
   }
   
   public NegativeUniquenessStatement(final PathType targetPath, final int weight) {
     this(null, targetPath, weight);
   }
 
-  public PathType getContextPath() {
+  public NormalizedPathType getContextPath() {
     return contextPath;
   }
 
-  public PathType getTargetPath() {
+  public NormalizedPathType getTargetPath() {
     return targetPath;
   }
 

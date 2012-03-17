@@ -144,7 +144,7 @@ public class KeySummarizer {
         
         assert(!key1.getContextPath().equals(key2.getContextPath()));
         
-        if (covers(key1.getContextPath(), key2.getContextPath())) {
+        if (key1.getContextPath().covers(key2.getContextPath())) {
           final SummarizedInfo si1 = keys.get(key1);
           final SummarizedInfo si2 = keys.get(key2);
           
@@ -172,33 +172,5 @@ public class KeySummarizer {
       }
     }
   }
-  
-  private boolean covers(final PathType path1, final PathType path2) {
-    final NormalizedPathType parser1 = new NormalizedPathType(path1);
-    final NormalizedPathType parser2 = new NormalizedPathType(path2);
-    
-    if (parser1.getInitialStep() != parser2.getInitialStep()) {
-      return false;
-    }
-    
-    int i = 0;
-    final List<StepExprNode> steps1 = parser1.getSteps();
-    final List<StepExprNode> steps2 = parser2.getSteps();
-    final int size1 = steps1.size();
-    final int size2 = steps2.size();
-    
-    while (i < size1 && i < size2 && steps1.get(i).equals(steps2.get(i))) {
-      ++i;
-    }
-    
-    if (i < size1 && i < size2) {
-      return false;
-    }
-    
-    if (i < size1) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+
 }

@@ -25,23 +25,30 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType
  */
 public class Key {
   
-  private final PathType contextPath;
-  private final PathType targetPath;
-  private final PathType keyPath;
+  private final NormalizedPathType contextPath;
+  private final NormalizedPathType targetPath;
+  private final NormalizedPathType keyPath;
+  
+  public Key(final NormalizedPathType contextPath, final NormalizedPathType targetPath, final NormalizedPathType keyPath) {
+    this.contextPath = contextPath;
+    this.targetPath = targetPath;
+    this.keyPath = keyPath;
+  }
+  
+  public Key(final NormalizedPathType targetPath, final NormalizedPathType keyPath) {
+    this(null, targetPath, keyPath);
+  }
   
   public Key(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
     if (contextPath != null) {
-      final NormalizedPathType contextPathParser = new NormalizedPathType(contextPath);
-      this.contextPath = new PathType(contextPathParser.getSteps(), contextPath.getInitialStep(), null, false);
+      this.contextPath = new NormalizedPathType(contextPath);
     } else {
       this.contextPath = null;
     }
     
-    final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
-    this.targetPath = new PathType(targetPathParser.getSteps(), targetPath.getInitialStep(), null, false);
+    this.targetPath = new NormalizedPathType(targetPath);
     
-    final NormalizedPathType keyPathParser = new NormalizedPathType(keyPath);
-    this.keyPath = new PathType(keyPathParser.getSteps(), keyPath.getInitialStep(), null, false);
+    this.keyPath = new NormalizedPathType(keyPath);
   }
   
   public Key(final PathType targetPath, final PathType keyPath) {
@@ -52,15 +59,15 @@ public class Key {
     return true;
   }
 
-  public PathType getContextPath() {
+  public NormalizedPathType getContextPath() {
     return contextPath;
   }
 
-  public PathType getKeyPath() {
+  public NormalizedPathType getKeyPath() {
     return keyPath;
   }
 
-  public PathType getTargetPath() {
+  public NormalizedPathType getTargetPath() {
     return targetPath;
   }
 
@@ -73,45 +80,24 @@ public class Key {
       return false;
     }
     final Key other = (Key) obj;
-
-    
-    if (contextPath != null && other.contextPath != null) {
-      final NormalizedPathType ptp1 = new NormalizedPathType(contextPath);
-      final NormalizedPathType ptp2 = new NormalizedPathType(other.contextPath);
-      if (!ptp1.getSteps().equals(ptp2.getSteps())) {
-        return false;
-      }
-    } else if (contextPath != null || other.contextPath != null) {
+    if (this.contextPath != other.contextPath && (this.contextPath == null || !this.contextPath.equals(other.contextPath))) {
       return false;
     }
-    
-    final NormalizedPathType ptpTarget1 = new NormalizedPathType(targetPath);
-    final NormalizedPathType ptpTarget2 = new NormalizedPathType(other.targetPath);
-    if (!ptpTarget1.getSteps().equals(ptpTarget2.getSteps())) {
+    if (this.targetPath != other.targetPath && (this.targetPath == null || !this.targetPath.equals(other.targetPath))) {
       return false;
     }
-    
-    final NormalizedPathType ptpKey1 = new NormalizedPathType(keyPath);
-    final NormalizedPathType ptpKey2 = new NormalizedPathType(other.keyPath);
-    if (!ptpKey1.getSteps().equals(ptpKey2.getSteps())) {
+    if (this.keyPath != other.keyPath && (this.keyPath == null || !this.keyPath.equals(other.keyPath))) {
       return false;
     }
-    
     return true;
   }
 
   @Override
   public int hashCode() {
-    int hash = 3;
-    NormalizedPathType ptpContext = null;
-    if (contextPath != null) {
-      ptpContext = new NormalizedPathType(contextPath);
-    }
-    final NormalizedPathType ptpTarget = new NormalizedPathType(targetPath);
-    final NormalizedPathType ptpKey = new NormalizedPathType(keyPath);
-    hash = 17 * hash + (this.contextPath != null ? ptpContext.getSteps().hashCode() : 0);
-    hash = 17 * hash + (this.targetPath != null ? ptpTarget.getSteps().hashCode() : 0);
-    hash = 17 * hash + (this.keyPath != null ? ptpKey.getSteps().hashCode() : 0);
+    int hash = 7;
+    hash = 23 * hash + (this.contextPath != null ? this.contextPath.hashCode() : 0);
+    hash = 23 * hash + (this.targetPath != null ? this.targetPath.hashCode() : 0);
+    hash = 23 * hash + (this.keyPath != null ? this.keyPath.hashCode() : 0);
     return hash;
   }
   

@@ -228,7 +228,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         continue;
       }
 
-      final PathType contextPath = key.getContextPath();
+      final NormalizedPathType contextPath = key.getContextPath();
       
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);
@@ -236,15 +236,14 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       Set<ForeignKey> fKeys = foreignKeys.get(key);
       
       if (contextPath != null) {
-        final NormalizedPathType ptp = new NormalizedPathType(contextPath);
-        for (final StepExprNode step : ptp.getSteps()) {
+        for (final StepExprNode step : contextPath.getSteps()) {
           contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
         }
       } else {
-        key = new Key(removeFirstPathItemTypeNode(key.getTargetPath()), key.getKeyPath());
+        key = new Key(key.getTargetPath().copyAndRemoveFirstItemTypeNode(), key.getKeyPath());
         Set<ForeignKey> modifiedFKeys = new LinkedHashSet<ForeignKey>();
         for (final ForeignKey fKey : fKeys) {
-          modifiedFKeys.add(new ForeignKey(key, removeFirstPathItemTypeNode(fKey.getForeignTargetPath()), fKey.getForeignKeyPath()));
+          modifiedFKeys.add(new ForeignKey(key, fKey.getForeignTargetPath().copyAndRemoveFirstItemTypeNode(), fKey.getForeignKeyPath()));
         }
         fKeys = modifiedFKeys;
       }
@@ -270,23 +269,6 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         }
       }
     }
-  }
-  
-  private static PathType removeFirstPathItemTypeNode(final PathType pathType) {
-    final StepExprNode step = pathType.getSteps().get(0);
-    if (step.isAxisStep()) {
-      final AxisNode axisNode = step.getAxisNode();
-      if (axisNode != null) {
-        final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
-        if (itemTypeNode != null) {
-          List<StepExprNode> newSteps = new ArrayList<StepExprNode>(pathType.getSteps());
-          newSteps.remove(0);
-          return new PathType(newSteps, InitialStep.CONTEXT, pathType.getSubpaths(), pathType.isForBound());
-        }
-      }
-    }
-    
-    return pathType;
   }
   
   private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {

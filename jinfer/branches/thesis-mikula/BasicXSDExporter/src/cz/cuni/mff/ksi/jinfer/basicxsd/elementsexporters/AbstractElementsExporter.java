@@ -199,18 +199,16 @@ public abstract class AbstractElementsExporter {
     }
     
     for (final Key key : keys) {
-      final PathType targetPath = key.getTargetPath();
-      final PathType keyPath = key.getKeyPath();
-      final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
-      final NormalizedPathType keyPathParser = new NormalizedPathType(keyPath);
+      final NormalizedPathType targetPath = key.getTargetPath();
+      final NormalizedPathType keyPath = key.getKeyPath();
       
       keyNames.put(key, "key" + new Integer(keyNumber).toString());
 
       indentator.indent("<xs:key name=\"key" + new Integer(keyNumber).toString() + "\">\n");
       ++keyNumber;
       indentator.increaseIndentation();
-      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPathParser) + "\"/>\n");
-      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPathParser) + "\"/>\n");
+      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPath) + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPath) + "\"/>\n");
       indentator.decreaseIndentation();
       indentator.indent("</xs:key>\n");
     }
@@ -224,18 +222,16 @@ public abstract class AbstractElementsExporter {
     }
     
     for (final ForeignKey fKey : fKeys) {
-      final PathType targetPath = fKey.getForeignTargetPath();
-      final PathType keyPath = fKey.getForeignKeyPath();
-      final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
-      final NormalizedPathType keyPathParser = new NormalizedPathType(keyPath);
+      final NormalizedPathType targetPath = fKey.getForeignTargetPath();
+      final NormalizedPathType keyPath = fKey.getForeignKeyPath();
       
       final String keyName = keyNames.get(fKey.getKey());
       assert(keyName != null);
 
       indentator.indent("<xs:keyref name=\"" + keyName + "Ref\">\n");
       indentator.increaseIndentation();
-      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPathParser) + "\"/>\n");
-      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPathParser) + "\"/>\n");
+      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPath) + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPath) + "\"/>\n");
       indentator.decreaseIndentation();
       indentator.indent("</xs:keyref>\n");
     }

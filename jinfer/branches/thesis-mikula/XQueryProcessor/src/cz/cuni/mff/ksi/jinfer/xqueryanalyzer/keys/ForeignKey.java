@@ -26,28 +26,28 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType
 public class ForeignKey {
 
   private final Key key;
-  private final PathType foreignTargetPath;
-  private final PathType foreignKeyPath;
+  private final NormalizedPathType foreignTargetPath;
+  private final NormalizedPathType foreignKeyPath;
+  
+  public ForeignKey(final Key key, final NormalizedPathType foreignTargetPath, final NormalizedPathType foreignKeyPath) {
+    this.key = key;
+    this.foreignTargetPath = foreignTargetPath;
+    this.foreignKeyPath = foreignKeyPath;
+  }
   
   public ForeignKey(final Key key, final PathType foreignTargetPath, final PathType foreignKeyPath) {
-    this.key = key;
-   
-    final NormalizedPathType targetPathParser = new NormalizedPathType(foreignTargetPath);
-    this.foreignTargetPath = new PathType(targetPathParser.getSteps(), foreignTargetPath.getInitialStep(), null, false);
-    
-    final NormalizedPathType keyPathParser = new NormalizedPathType(foreignKeyPath);
-    this.foreignKeyPath = new PathType(keyPathParser.getSteps(), foreignKeyPath.getInitialStep(), null, false);
+    this(key, new NormalizedPathType(foreignTargetPath), new NormalizedPathType(foreignKeyPath));
   }
   
   public Key getKey() {
     return key;
   }
 
-  public PathType getForeignKeyPath() {
+  public NormalizedPathType getForeignKeyPath() {
     return foreignKeyPath;
   }
 
-  public PathType getForeignTargetPath() {
+  public NormalizedPathType getForeignTargetPath() {
     return foreignTargetPath;
   }
 
@@ -60,36 +60,25 @@ public class ForeignKey {
       return false;
     }
     final ForeignKey other = (ForeignKey) obj;
-    
-    if (!key.equals(other.key)) {
+    if (this.key != other.key && (this.key == null || !this.key.equals(other.key))) {
       return false;
     }
-    
-    final NormalizedPathType ptpTarget1 = new NormalizedPathType(foreignTargetPath);
-    final NormalizedPathType ptpTarget2 = new NormalizedPathType(other.foreignTargetPath);
-    if (!ptpTarget1.getSteps().equals(ptpTarget2.getSteps())) {
+    if (this.foreignTargetPath != other.foreignTargetPath && (this.foreignTargetPath == null || !this.foreignTargetPath.equals(other.foreignTargetPath))) {
       return false;
     }
-    
-    final NormalizedPathType ptpKey1 = new NormalizedPathType(foreignKeyPath);
-    final NormalizedPathType ptpKey2 = new NormalizedPathType(other.foreignKeyPath);
-    if (!ptpKey1.getSteps().equals(ptpKey2.getSteps())) {
+    if (this.foreignKeyPath != other.foreignKeyPath && (this.foreignKeyPath == null || !this.foreignKeyPath.equals(other.foreignKeyPath))) {
       return false;
     }
-    
     return true;
   }
 
   @Override
   public int hashCode() {
-    int hash = 7;
-    final NormalizedPathType ptp1 = new NormalizedPathType(foreignTargetPath);
-    final NormalizedPathType ptp2 = new NormalizedPathType(foreignKeyPath);
-    hash = 37 * hash + (this.key != null ? this.key.hashCode() : 0);
-    hash = 37 * hash + (this.foreignTargetPath != null ? ptp1.getSteps().hashCode() : 0);
-    hash = 37 * hash + (this.foreignKeyPath != null ? ptp2.getSteps().hashCode() : 0);
+    int hash = 3;
+    hash = 43 * hash + (this.key != null ? this.key.hashCode() : 0);
+    hash = 43 * hash + (this.foreignTargetPath != null ? this.foreignTargetPath.hashCode() : 0);
+    hash = 43 * hash + (this.foreignKeyPath != null ? this.foreignKeyPath.hashCode() : 0);
     return hash;
   }
-  
-  
+ 
 }

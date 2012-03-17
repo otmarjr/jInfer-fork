@@ -16,89 +16,78 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AxisNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
- *
+ * A representation of a path type in a normalized form. It means that all
+ * variable references are resolved, so the path does not contains subpaths.
+ * 
+ * This class does not extend {@link AbstractType} nor implements {@link Type},
+ * because it does not represent a type in the processing of syntax tree as do
+ * the other types. This class is used to make a work (especially comparing)
+ * with PathType more simple.
+ * 
+ * Two instances of this class are equal if they begin with the same initial step,
+ * if they have the same special function calls (and in the same order), if
+ * they have the same for bound status and if their steps are the same (semantically
+ * same, not the same instances).
+ * 
  * @author rio
  */
 public class NormalizedPathType {
 
-  private final List<StepExprNode> steps = new ArrayList<StepExprNode>();
+  private final List<StepExprNode> steps;
   private InitialStep initialStep;
   private final List<String> specialFunctionCalls; // TODO rio Does this make sense in this context?
-  private boolean isForBound; // TODO rio Does this make sense in this context?
+  private final boolean isForBound; // TODO rio Does this make sense in this context?
   
-  private final Stack<Integer> stepsIndices = new Stack<Integer>(); // Zasobnik indexov, kde sa prave nachadzame v kazdom liste v zasobniku listov krokov. Hodnota udava ktory je dalsi v poradi (0 -> ideme prave na nulu).
-  private final Stack<List<StepExprNode>> stepsStack = new Stack<List<StepExprNode>>();
-  private final Stack<PathType> pathTypesStack = new Stack<PathType>();
-  private StepExprNode actualStep;
   private boolean isFirstStep = true;
   private boolean hasPredicates = false;
   
+  private NormalizedPathType(final List<StepExprNode> steps, final InitialStep initialStep, final List<String> specialFunctionCalls, final boolean isForBound) {
+    this.steps = steps;
+    this.initialStep = initialStep;
+    this.specialFunctionCalls = specialFunctionCalls;
+    this.isForBound = isForBound;
+  }
+  
   public NormalizedPathType(final PathType pathType) {
-    stepsIndices.push(0);
-    stepsStack.push(pathType.getSteps());
-    pathTypesStack.push(pathType);
-    
-    while(goNextStep()) {
-      steps.add(actualStep);
-    }
-    
+    steps = getSteps(pathType);
     specialFunctionCalls = pathType.getSpecialFunctionCalls();
     isForBound = pathType.isForBound();
   }
   
-  private boolean goNextStep() {
-    int index = stepsIndices.pop();
-    final List<StepExprNode> actualSteps = stepsStack.peek();
-    final PathType actualPathType = pathTypesStack.peek();
+  private List<StepExprNode> getSteps(final PathType pathType) {
+    final List<StepExprNode> newSteps = new ArrayList<StepExprNode>();
     
-    if (actualSteps.size() > index) {
-      actualStep = actualSteps.get(index);
-      ++index;
-      stepsIndices.push(index);
-      
-      if (actualStep.hasPredicates()) {
-        hasPredicates = true;
+    for (final StepExprNode step : pathType.getSteps()) {
+      final ExprNode detailNode = step.getDetailNode();
+      if (detailNode != null && detailNode instanceof VarRefNode) {
+        newSteps.addAll(getSteps(pathType.getSubpaths().get(step)));
+      } else {
+        newSteps.add(step);
+        if (step.hasPredicates()) {
+          hasPredicates = true;
+        }
       }
-      
-      final ExprNode detailNode = actualStep.getDetailNode();
-      if (VarRefNode.class.isInstance(detailNode)) {
-        final PathType referredPathType = actualPathType.getSubpaths().get(actualStep);
-        stepsIndices.push(0);
-        stepsStack.push(referredPathType.getSteps());
-        pathTypesStack.push(referredPathType);
-        return goNextStep();
-      }
-      
-      if (isFirstStep) {
-        initialStep = actualPathType.getInitialStep();
-        isFirstStep = false;
-      }
-      
-      return true;
-    } else {
-      // Ak je index vacsi ako aktualny list krokov...
-      // Ak toto je najvyssia uroven stacku (stack indexov je prazdny), znamena to, ze koncime.
-      if (stepsIndices.empty()) {
-        return false;
-      }
-      
-      // Inak vyhodime aktualny list krokov, ktory sme uz presli a zavolame rekurzivne.
-      stepsStack.pop();
-      pathTypesStack.pop();
-      return goNextStep();
     }
+    
+    if (isFirstStep) {
+      initialStep = pathType.getInitialStep();
+      isFirstStep = false;
+    }
+    
+    return newSteps;
   }
   
-  // Platne az po prvom volani goNextStep.
   public InitialStep getInitialStep() {
     return initialStep;
   }
@@ -111,11 +100,99 @@ public class NormalizedPathType {
     return steps;
   }
   
-  public static boolean arePathTypesSame(final PathType pathType1, final PathType pathType2) {
-    final NormalizedPathType npt1 = new NormalizedPathType(pathType1);
-    final NormalizedPathType npt2 = new NormalizedPathType(pathType2);
+  /**
+   * Determines if this instance "covers" the specified other instance.
+   * The coverage means that this instance has the same beginning as the
+   * other one, or in other words, the other one is more specific.
+   * 
+   * For example /document/aaa covers /documents/aaa/bbb.
+   * 
+   * @param covered The other instance to determine if it is covered by this instance.
+   * @return True if this instance covers the other instance.
+   */
+  public boolean covers(final NormalizedPathType covered) {
+    if (getInitialStep() != covered.getInitialStep()) {
+      return false;
+    }
     
-    return npt1.getSteps().equals(npt2.getSteps());
+    int i = 0;
+    final List<StepExprNode> coveredSteps = covered.getSteps();
+    final int size1 = steps.size();
+    final int size2 = coveredSteps.size();
+    
+    while (i < size1 && i < size2 && steps.get(i).equals(coveredSteps.get(i))) {
+      ++i;
+    }
+    
+    if (i < size1 && i < size2) {
+      return false;
+    }
+    
+    if (i < size1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+  private NormalizedPathType copy() {
+    return new NormalizedPathType(new ArrayList<StepExprNode>(steps), initialStep, new ArrayList<String>(specialFunctionCalls), isForBound);
+  }
+  
+  /**
+   * Creates a copy of this instance (new lists, their items are the same instances!)
+   * and removes the first step if it is an instance of {@link ItemTypeNode}.
+   */
+  public NormalizedPathType copyAndRemoveFirstItemTypeNode() {
+    final NormalizedPathType newNormalizedPathType = copy();
+    
+    final StepExprNode step = newNormalizedPathType.steps.get(0);
+    if (step.isAxisStep()) {
+      final AxisNode axisNode = step.getAxisNode();
+      if (axisNode != null) {
+        final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
+        if (itemTypeNode != null) {
+          newNormalizedPathType.steps.remove(0);
+          newNormalizedPathType.initialStep = InitialStep.CONTEXT;
+        }
+      }
+    }
+    
+    return newNormalizedPathType;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final NormalizedPathType other = (NormalizedPathType) obj;
+    if (this.steps != other.steps && (this.steps == null || !this.steps.equals(other.steps))) {
+      return false;
+    }
+    if (this.initialStep != other.initialStep) {
+      return false;
+    }
+    if (this.specialFunctionCalls != other.specialFunctionCalls && (this.specialFunctionCalls == null || !this.specialFunctionCalls.equals(other.specialFunctionCalls))) {
+      return false;
+    }
+    if (this.isForBound != other.isForBound) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 73 * hash + (this.steps != null ? this.steps.hashCode() : 0);
+    hash = 73 * hash + (this.initialStep != null ? this.initialStep.hashCode() : 0);
+    hash = 73 * hash + (this.specialFunctionCalls != null ? this.specialFunctionCalls.hashCode() : 0);
+    hash = 73 * hash + (this.isForBound ? 1 : 0);
+    return hash;
   }
   
 }

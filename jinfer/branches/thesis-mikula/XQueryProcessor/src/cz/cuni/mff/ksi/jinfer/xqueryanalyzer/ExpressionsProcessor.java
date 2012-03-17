@@ -73,7 +73,7 @@ public class ExpressionsProcessor {
         // If the variable definition declares its type, use it.
         // Otherwise, determine its type from the expression.
         if (typeNode != null) {
-          globalVarTypes.put(varName, TypeFactory.createType(typeNode));
+          globalVarTypes.put(varName, AbstractType.createType(typeNode));
         } else {
           // External variables are not processed.
           if (varDeclNode.getVarValueNode().isExternal()) {
@@ -116,12 +116,12 @@ public class ExpressionsProcessor {
     if (VariableBindingNode.class.isInstance(root)) {
       final VariableBindingNode variableBindingNode = (VariableBindingNode) root;
       if (variableBindingNode.getTypeNode() != null) {
-        newVars.put(variableBindingNode.getVarName(), TypeFactory.createType(variableBindingNode.getTypeNode()));
+        newVars.put(variableBindingNode.getVarName(), AbstractType.createType(variableBindingNode.getTypeNode()));
       } else {
         final Type type = determineExpressionType(fp, variableBindingNode.getBindingSequenceNode().getExprNode(), localContextVarTypes);
         if (ForClauseNode.class.isInstance(variableBindingNode)) {
           // If the binding is for binding, we make a for bound type.
-          newVars.put(variableBindingNode.getVarName(), TypeFactory.createForBoundType(type));
+          newVars.put(variableBindingNode.getVarName(), AbstractType.createForBoundType(type));
         } else {
           newVars.put(variableBindingNode.getVarName(), type);
         }
@@ -158,9 +158,9 @@ public class ExpressionsProcessor {
         return varType;
       }
     } else if (FLWORExprNode.class.isInstance(expressionNode)) {
-      return TypeFactory.createForUnboundType(((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType());
+      return AbstractType.createForUnboundType(((FLWORExprNode) expressionNode).getReturnClauseNode().getExprNode().getType());
     } else if (PathExprNode.class.isInstance(expressionNode)) {
-      return TypeFactory.createPathType((PathExprNode)expressionNode);
+      return new PathType((PathExprNode)expressionNode);
     } else if (ConstructorNode.class.isInstance(expressionNode)) {
       //final ConstructorNode constructorNode = (ConstructorNode)expressionNode;
       // TODO rio Aky typ ma constructor?
@@ -187,7 +187,7 @@ public class ExpressionsProcessor {
 
   private static Type determineOperatorType(final OperatorNode operatorNode) {
     if (operatorNode.getTypeNode() != null) {
-      return TypeFactory.createType(operatorNode.getTypeNode());
+      return AbstractType.createType(operatorNode.getTypeNode());
     }
 
     final Operator operator = operatorNode.getOperator();

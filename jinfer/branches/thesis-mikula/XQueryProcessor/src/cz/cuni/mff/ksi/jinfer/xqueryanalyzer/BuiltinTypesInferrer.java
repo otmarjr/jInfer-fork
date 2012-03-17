@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.TypeFactory;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.AbstractType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +78,7 @@ public class BuiltinTypesInferrer {
         if (paramTypeDeclarationNode == null) {
           continue;
         }
-        final Type formalParamType = TypeFactory.createType(paramTypeDeclarationNode); // TODO rio do diplomky!
+        final Type formalParamType = AbstractType.createType(paramTypeDeclarationNode); // TODO rio do diplomky!
         if (formalParamType.getCategory() != Type.Category.UNKNOWN) {
           inferredTypes.add(new InferredType((PathType)paramType, formalParamType));
         }
@@ -107,12 +107,12 @@ public class BuiltinTypesInferrer {
         final Type leftType = leftOperand.getType();
         final Type rightType = rightOperand.getType();
         if (leftType.getCategory() == Type.Category.PATH) {
-          if (rightType.isNumeric() && rightType.getCategory() == Type.Category.BUILT_IN) {
+          if (rightType.isNumeric() && rightType.getCategory() == Type.Category.XSD_BUILT_IN) {
             pathType = (PathType)leftType;
             type = rightType;
           }
         } else if (rightType.getCategory() == Type.Category.PATH) {
-          if (leftType.isNumeric() && leftType.getCategory() == Type.Category.BUILT_IN) {
+          if (leftType.isNumeric() && leftType.getCategory() == Type.Category.XSD_BUILT_IN) {
             pathType = (PathType)rightType;
             type = leftType;
           }
@@ -132,12 +132,12 @@ public class BuiltinTypesInferrer {
         final Type leftType = leftOperand.getType();
         final Type rightType = rightOperand.getType();
         if (leftType.getCategory() == Type.Category.PATH) {
-          if (rightType.getCategory() == Type.Category.BUILT_IN) {
+          if (rightType.getCategory() == Type.Category.XSD_BUILT_IN) {
             pathType = (PathType)leftType;
             type = rightType;
           }
         } else if (rightType.getCategory() == Type.Category.PATH) {
-          if (leftType.getCategory() == Type.Category.BUILT_IN) {
+          if (leftType.getCategory() == Type.Category.XSD_BUILT_IN) {
             pathType = (PathType)rightType;
             type = leftType;
           }

@@ -20,7 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.LiteralType;
 
 /**
- *
+ * A representation of XSD built-in atomic types.
  * @author rio
  */
 public class XSDType extends CardinalityType {
@@ -83,16 +83,28 @@ public class XSDType extends CardinalityType {
   
   private final XSDAtomicType atomicType;
 
+  /**
+   * A basic constructor.
+   */
   public XSDType(final XSDAtomicType atomicType, final Cardinality cardinality) {
     super(cardinality);
     this.atomicType = atomicType;
   }
   
+  /**
+   * A constructor from a name of a type.
+   * @param atomicTypeName
+   * @param cardinality 
+   */
   public XSDType(final String atomicTypeName, final Cardinality cardinality) {
     super(cardinality);
     this.atomicType = atomicNameToType(atomicTypeName);
   }
   
+  /**
+   * A constructor from an instance of {@link LiteralType}.
+   * @param literalType 
+   */
   public XSDType(final LiteralType literalType) {
     super(Cardinality.ONE);
     switch(literalType) {
@@ -115,7 +127,7 @@ public class XSDType extends CardinalityType {
   
   @Override
   public Category getCategory() {
-    return Category.BUILT_IN;
+    return Category.XSD_BUILT_IN;
   }
   
   public XSDAtomicType getAtomicType() {
@@ -123,7 +135,7 @@ public class XSDType extends CardinalityType {
   }
   
   @Override
-  public boolean isNumeric() { // TODO rio vsetky kardinality?
+  public boolean isNumeric() {
     switch (atomicType) {
       case FLOAT:
       case DOUBLE:
@@ -233,6 +245,11 @@ public class XSDType extends CardinalityType {
     
     assert(false);
     return null;
+  }
+
+  @Override
+  public boolean isXsdBuiltinType() {
+    return true;
   }
   
 }

@@ -16,14 +16,14 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
 
 /**
- *
+ * An abstract class representing types assigned with a cardinality.
+ * @see Cardinality
  * @author rio
  */
-public abstract class CardinalityType implements Type {
+public abstract class CardinalityType extends AbstractType {
   
   private final Cardinality cardinality;
   
@@ -31,6 +31,10 @@ public abstract class CardinalityType implements Type {
     this.cardinality = cardinality;
   }
   
+  /**
+   * Returns the cardinality of this type.
+   * @return 
+   */
   public Cardinality getCardinality() {
     return cardinality;
   }

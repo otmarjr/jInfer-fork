@@ -153,7 +153,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     for (final InferredType inferredType : inferredTypes) {
       final PathType pathType = inferredType.getPathType();
       final Type type = inferredType.getType();
-      if (type.getCategory() != Type.Category.BUILT_IN) {
+      if (type.getCategory() != Type.Category.XSD_BUILT_IN) {
         continue;
       }
       

@@ -17,18 +17,46 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * TODO rio poriadne spracovavat, napr zlucovat cesty v ktorych su premenne, ktore su tiez cesty a podobne
+ * A representation of type of XQuery paths. This is the most important type
+ * in our XQuery processing.
+ * 
+ * How is a path represented?
+ *  - An instance of {@link PathExprNode} holds steps of the paths and information
+ *    on whether is the path relative or absolute. However, this instance does
+ *    not have to be a node in a syntax tree. Thus, it does not have to contain
+ *    a reference to it parent, as well.
+ *  - The <code>substeps</code> variable is a mapping from instances of {@link StepExprNode}
+ *    from the <code>pathExprNode</code> to instances of PathType. This mapping allows us
+ *    to represent paths containing variables referring to other paths.
+ *    So, the instances of {@link StepExprNode} are only steps containing variable
+ *    references.
+ *  - The <code>specialFunctionCalls</code> variable holds a list of special
+ *    functions which was this instance passed to. In other words, if the list
+ *    contains a function <em>f</em>, this instance is not a representation of
+ *    plain path, but it is a result of a call to function <em>f</em> supplied
+ *    with the path as its argument.
+ *  - If the instance of this class is for bound is determined by <code>isForBound</code>
+ *    variable
+ * 
  * @author rio
  */
-public class PathType implements Type {
+public class PathType extends AbstractType {
   
+  /**
+   * A definition of special functions to mark if they are called with an instance
+   * of this class.
+   */
   public final static List<String> SPECIAL_FUNCTION_NAMES = new ArrayList<String>();
   static {
     SPECIAL_FUNCTION_NAMES.add("data");
@@ -46,10 +74,41 @@ public class PathType implements Type {
   private final List<String> specialFunctionCalls = new ArrayList<String>(); // An ordered list of functions that have been applied to this path.
   private final boolean isForBound;
   
-  public PathType(final PathExprNode pathExprNode, final Map<StepExprNode, PathType> forBoundSubsteps, final boolean isForBound) {
+  /**
+   * A basic constructor.
+   */
+  public PathType(final PathExprNode pathExprNode, final Map<StepExprNode, PathType> substeps, final boolean isForBound) {
     this.pathExprNode = pathExprNode;
-    this.substeps = forBoundSubsteps;
+    this.substeps = substeps;
     this.isForBound = isForBound;
+  }
+  
+  /**
+   * A constructor from an instance of {@link PathExprNode}. Note that the
+   * changed made to the instance of PathExprNode affect also the instance of
+   * this classes created by this constructor and can lead to inconsistency.
+   * @param pathExprNode 
+   */
+  public PathType(final PathExprNode pathExprNode) {
+    this.pathExprNode = pathExprNode;
+    substeps = new HashMap<StepExprNode, PathType>();
+    
+    for (final StepExprNode stepNode : pathExprNode.getSteps()) {
+      final ExprNode detailNode = stepNode.getDetailNode();
+      if (detailNode != null) {
+        if (VarRefNode.class.isInstance(detailNode)) {
+          final VarRefNode varRefNode = (VarRefNode)detailNode;
+          final Type type = varRefNode.getType();
+          if (!type.isPathType()) {
+            assert(false);
+          }
+          final PathType pathType = (PathType)type;
+          substeps.put(stepNode, pathType);
+        }
+      }
+    }
+    
+    isForBound = false;
   }
   
   @Override
@@ -57,14 +116,6 @@ public class PathType implements Type {
     return Category.PATH;
   }
   
-  @Override
-  public boolean isNumeric() {
-    return false;
-  }
-  
-  /*public List<StepExprNode> getStepNodes() {
-    return pathExprNode.getSteps();
-  }*/
   public PathExprNode getPathExprNode() {
     return pathExprNode;
   }
@@ -126,6 +177,10 @@ public class PathType implements Type {
     hash = 37 * hash + (this.isForBound ? 1 : 0);
     return hash;
   }
-  
-  
+
+  @Override
+  public boolean isPathType() {
+    return true;
+  }
+
 }

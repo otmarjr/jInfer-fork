@@ -20,7 +20,6 @@ import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.TypeFactory;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.ClassifiedJoinPattern;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.ContextPathFinder;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.JoinPattern;
@@ -340,7 +339,7 @@ public class KeysInferrer {
       final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getPathExprNode().getSteps());
       newSteps.set(P2WithPredicate.getPathExprNode().getSteps().size() - 1, newLastStep);
 
-      final PathType P2 = TypeFactory.createPathType(new PathExprNode(newSteps, P2WithPredicate.getPathExprNode().getInitialStep())); // TODO rio do DP!!
+      final PathType P2 = new PathType(new PathExprNode(newSteps, P2WithPredicate.getPathExprNode().getInitialStep())); // TODO rio do DP!!
       if (ForClauseNode.class.isInstance(bindingNode)) {
         joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, jefp.getL1(), jefp.getL2()));
       } else if (LetClauseNode.class.isInstance(bindingNode)) {
@@ -461,7 +460,7 @@ public class KeysInferrer {
 
   private static void getTargetReturnPathsRecursive(final XQNode node, final String varName, final List<PathExprNode> paths) {
     if (PathExprNode.class.isInstance(node)) {
-      final PathType type = TypeFactory.createPathType((PathExprNode) node);
+      final PathType type = new PathType((PathExprNode) node);
       if (isTargetPath(type, varName)) {
         paths.add((PathExprNode) node);
       }
@@ -646,9 +645,9 @@ public class KeysInferrer {
       }
 
       if (type == ClassifiedJoinPattern.Type.O1) {
-        final Key key = new Key(C, P1, TypeFactory.createPathType(jp.getL1()));
-        final Key notKey = new NegativeKey(C, P2, TypeFactory.createPathType(jp.getL2()));
-        final ForeignKey foreignKey = new ForeignKey(key, P2, TypeFactory.createPathType(jp.getL2()));
+        final Key key = new Key(C, P1, new PathType(jp.getL1()));
+        final Key notKey = new NegativeKey(C, P2, new PathType(jp.getL2()));
+        final ForeignKey foreignKey = new ForeignKey(key, P2, new PathType(jp.getL2()));
 
         final WeightedKey wKey = new WeightedKey(key, weight);
         final WeightedKey wNotKey = new WeightedKey(notKey, weight);
@@ -658,8 +657,8 @@ public class KeysInferrer {
         keys.add(wNotKey);
         foreignKeys.add(wForeignKey);
       } else {
-        final Key key = new Key(C, P2, TypeFactory.createPathType(jp.getL2()));
-        final ForeignKey foreignKey = new ForeignKey(key, P1, TypeFactory.createPathType(jp.getL1()));
+        final Key key = new Key(C, P2, new PathType(jp.getL2()));
+        final ForeignKey foreignKey = new ForeignKey(key, P1, new PathType(jp.getL1()));
 
         final WeightedKey wKey = new WeightedKey(key, weight);
         final WeightedForeignKey wForeignKey = new WeightedForeignKey(foreignKey, weight);

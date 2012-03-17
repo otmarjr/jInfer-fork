@@ -33,7 +33,7 @@ public class BuiltinFunctions {
   private final static Map<String, Type> builtinFunctionTypes = new HashMap<String, Type>();
   static {
     builtinFunctionTypes.put("data", new UnknownType());
-    builtinFunctionTypes.put("doc", new NodeType(NodeType.NType.DOCUMENT, Cardinality.ONE));
+    builtinFunctionTypes.put("doc", new NodeType(NodeType.NodeTypeCategory.DOCUMENT, Cardinality.ONE));
     builtinFunctionTypes.put("min", new UnknownType());
     builtinFunctionTypes.put("distinct-values", new UnknownType());
     builtinFunctionTypes.put("count", new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE));

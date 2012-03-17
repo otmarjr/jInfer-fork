@@ -16,13 +16,12 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-
 /**
- *
+ * A representation of a rest of types that we do not particularly represent.
+ * This type does not have any role in the process of inference.
  * @author rio
  */
-public class UnknownType implements Type {
+public class UnknownType extends AbstractType {
 
   @Override
   public Category getCategory() {
@@ -30,8 +29,8 @@ public class UnknownType implements Type {
   }
 
   @Override
-  public boolean isNumeric() {
-    return false;
+  public boolean isUnknownType() {
+    return true;
   }
-  
+
 }

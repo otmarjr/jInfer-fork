@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
  *

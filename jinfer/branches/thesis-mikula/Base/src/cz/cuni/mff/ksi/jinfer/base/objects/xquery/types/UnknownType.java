@@ -14,26 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
+package cz.cuni.mff.ksi.jinfer.base.objects.xquery.types;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
 
 /**
- *
+ * A representation of a rest of types that we do not particularly represent.
+ * This type does not have any role in the process of inference.
  * @author rio
  */
-public class NegativeKey extends Key {
-  
-  public NegativeKey(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
-    super(contextPath, targetPath, keyPath);
-  }
-  
-  public NegativeKey(final PathType targetPath, final PathType keyPath) {
-    super(targetPath, keyPath);
-  }
-  
+public class UnknownType extends AbstractType {
+
   @Override
-  public boolean isPossitive() {
-    return false;
+  public Category getCategory() {
+    return Category.UNKNOWN;
   }
+
+  @Override
+  public boolean isUnknownType() {
+    return true;
+  }
+
 }

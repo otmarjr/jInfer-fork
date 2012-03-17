@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
+package cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
  * TODO rio comment

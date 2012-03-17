@@ -16,9 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.UnknownType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NodeType;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.*;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,13 +40,13 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("doc", new NodeType(NodeType.NodeTypeCategory.DOCUMENT, Cardinality.ONE));
     builtinFunctionTypes.put("min", new UnknownType());
     builtinFunctionTypes.put("distinct-values", new UnknownType());
-    builtinFunctionTypes.put("count", new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE));
-    builtinFunctionTypes.put("exists", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
-    builtinFunctionTypes.put("contains", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
-    builtinFunctionTypes.put("empty", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
-    builtinFunctionTypes.put("not", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
-    builtinFunctionTypes.put("concat", new XSDType(XSDType.XSDAtomicType.STRING, Cardinality.ONE));
-    builtinFunctionTypes.put("string", new XSDType(XSDType.XSDAtomicType.STRING, Cardinality.ONE));
+    builtinFunctionTypes.put("count", new XSDType(XSDBuiltinAtomicType.INTEGER, Cardinality.ONE));
+    builtinFunctionTypes.put("exists", new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("contains", new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("empty", new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("not", new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("concat", new XSDType(XSDBuiltinAtomicType.STRING, Cardinality.ONE));
+    builtinFunctionTypes.put("string", new XSDType(XSDBuiltinAtomicType.STRING, Cardinality.ONE));
     builtinFunctionTypes.put("zero-or-one", new UnknownType());
     builtinFunctionTypes.put("exactly-one", new UnknownType());
     builtinFunctionTypes.put("last", new UnknownType());

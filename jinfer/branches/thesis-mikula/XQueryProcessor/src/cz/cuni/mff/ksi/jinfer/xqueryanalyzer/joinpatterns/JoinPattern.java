@@ -18,7 +18,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VariableBindingNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
  *

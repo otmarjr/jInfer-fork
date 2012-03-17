@@ -21,7 +21,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 
 /**
  * The node representing an expression.

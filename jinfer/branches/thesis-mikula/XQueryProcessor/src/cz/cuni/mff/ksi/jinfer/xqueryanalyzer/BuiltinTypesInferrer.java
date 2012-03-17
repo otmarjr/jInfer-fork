@@ -17,9 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.AbstractType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.util.ArrayList;
 import java.util.List;

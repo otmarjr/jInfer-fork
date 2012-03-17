@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
+package cz.cuni.mff.ksi.jinfer.base.objects.xquery.types;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;

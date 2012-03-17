@@ -17,9 +17,9 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.XSDAtomicTypesUtils;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.Key;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.ForeignKey;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeEvaluationContextNodesSet;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
@@ -34,10 +34,11 @@ import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.io.File;
 import java.io.FileInputStream;
@@ -157,7 +158,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         continue;
       }
       
-      XSDType.XSDAtomicType inferredAtomicType = ((XSDType)type).getAtomicType();
+      XSDBuiltinAtomicType inferredAtomicType = ((XSDType)type).getAtomicType();
       
       final NormalizedPathType ptp = new NormalizedPathType(pathType);
       final boolean hasPredicates = ptp.hasPredicates();      
@@ -170,12 +171,12 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
 
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
-        final XSDType.XSDAtomicType xsdType = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
+        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {
-          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
+          final XSDBuiltinAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
           if (moreSpecificType != null) {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
@@ -191,12 +192,12 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       
       for (final Attribute attribute : contextSet.getAttributes()) {
         final Map<String, Object> metadata = attribute.getMetadata();
-        final XSDType.XSDAtomicType xsdType = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
+        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {
-          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
+          final XSDBuiltinAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
           if (moreSpecificType != null) {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);

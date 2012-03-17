@@ -128,6 +128,8 @@ public class ExpressionsProcessor {
       }
     } else if (TupleStreamNode.class.isInstance(root)) {
       newVars = newContextVarTypes;
+    } else if (InClausesNode.class.isInstance(root)) { // TODO rio do diplomky!!
+      newVars = newContextVarTypes;
     }
 
     return newVars;
@@ -176,6 +178,8 @@ public class ExpressionsProcessor {
     } else if (IfExprNode.class.isInstance(expressionNode)) {
       final IfExprNode ifExprNode = (IfExprNode)expressionNode;
       return ifExprNode.getThenExpressionNode().getExprNode().getType();
+    } else if (QuantifiedExprNode.class.isInstance(expressionNode)) { // TODO rio do diplomky!!
+      return new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE);
     }
     assert (false); // TODO rio dorobit pre ostatne typy
     return null;

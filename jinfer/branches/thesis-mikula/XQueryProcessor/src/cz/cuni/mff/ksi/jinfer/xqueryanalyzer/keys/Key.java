@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
@@ -34,19 +33,16 @@ public class Key {
   public Key(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
     if (contextPath != null) {
       final PathTypeParser contextPathParser = new PathTypeParser(contextPath);
-      final PathExprNode contextPathExprNode = new PathExprNode(contextPathParser.getSteps(), contextPath.getPathExprNode().getInitialStep());
-      this.contextPath = new PathType(contextPathExprNode, null, false);
+      this.contextPath = new PathType(contextPathParser.getSteps(), contextPath.getInitialStep(), null, false);
     } else {
       this.contextPath = null;
     }
     
     final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
-    final PathExprNode targetPathExprNode = new PathExprNode(targetPathParser.getSteps(), targetPath.getPathExprNode().getInitialStep());
-    this.targetPath = new PathType(targetPathExprNode, null, false);
+    this.targetPath = new PathType(targetPathParser.getSteps(), targetPath.getInitialStep(), null, false);
     
     final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
-    final PathExprNode keyPathExprNode = new PathExprNode(keyPathParser.getSteps(), keyPath.getPathExprNode().getInitialStep());
-    this.keyPath = new PathType(keyPathExprNode, null, false);
+    this.keyPath = new PathType(keyPathParser.getSteps(), keyPath.getInitialStep(), null, false);
   }
   
   public Key(final PathType targetPath, final PathType keyPath) {

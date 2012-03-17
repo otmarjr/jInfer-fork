@@ -273,16 +273,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   }
   
   private static PathType removeFirstPathItemTypeNode(final PathType pathType) {
-    final StepExprNode step = pathType.getPathExprNode().getSteps().get(0);
+    final StepExprNode step = pathType.getSteps().get(0);
     if (step.isAxisStep()) {
       final AxisNode axisNode = step.getAxisNode();
       if (axisNode != null) {
         final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
         if (itemTypeNode != null) {
-          List<StepExprNode> newSteps = new ArrayList<StepExprNode>(pathType.getPathExprNode().getSteps());
+          List<StepExprNode> newSteps = new ArrayList<StepExprNode>(pathType.getSteps());
           newSteps.remove(0);
-          final PathExprNode newPathExprNode = new PathExprNode(newSteps, InitialStep.CONTEXT);
-          return new PathType(newPathExprNode, pathType.getSubsteps(), pathType.isForBound());
+          return new PathType(newSteps, InitialStep.CONTEXT, pathType.getSubpaths(), pathType.isForBound());
         }
       }
     }

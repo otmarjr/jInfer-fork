@@ -42,7 +42,7 @@ public final class PathTypeParser {
   
   public PathTypeParser(final PathType pathType) {
     stepsIndices.push(0);
-    stepsStack.push(pathType.getPathExprNode().getSteps());
+    stepsStack.push(pathType.getSteps());
     pathTypesStack.push(pathType);
     
     while(goNextStep()) {
@@ -66,15 +66,15 @@ public final class PathTypeParser {
       
       final ExprNode detailNode = actualStep.getDetailNode();
       if (VarRefNode.class.isInstance(detailNode)) {
-        final PathType referredPathType = actualPathType.getSubsteps().get(actualStep);
+        final PathType referredPathType = actualPathType.getSubpaths().get(actualStep);
         stepsIndices.push(0);
-        stepsStack.push(referredPathType.getPathExprNode().getSteps());
+        stepsStack.push(referredPathType.getSteps());
         pathTypesStack.push(referredPathType);
         return goNextStep();
       }
       
       if (isFirstStep) {
-        initialStep = actualPathType.getPathExprNode().getInitialStep();
+        initialStep = actualPathType.getInitialStep();
         isFirstStep = false;
       }
       

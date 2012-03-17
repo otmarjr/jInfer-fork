@@ -103,7 +103,7 @@ public abstract class AbstractType implements Type {
         
       case PATH: {
         final PathType pathType = (PathType)forBindingExprType;
-        return new PathType(pathType.getPathExprNode(), pathType.getSubsteps(), true);
+        return new PathType(pathType.getSteps(), pathType.getInitialStep(), pathType.getSubpaths(), true);
       }
       
       case XSD_BUILT_IN: {
@@ -136,7 +136,7 @@ public abstract class AbstractType implements Type {
         
       case PATH: {
         final PathType pathType = (PathType)returnClauseType;
-        return new PathType(pathType.getPathExprNode(), pathType.getSubsteps(), false);
+        return new PathType(pathType.getSteps(), pathType.getInitialStep(), pathType.getSubpaths(), false);
       }
         
       case XSD_BUILT_IN: {

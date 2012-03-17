@@ -153,7 +153,7 @@ public class ExpressionsProcessor {
         steps.add(step);
         final Map<StepExprNode, PathType> substeps = new HashMap<StepExprNode, PathType>();
         substeps.put(step, (PathType)varType);
-        return new PathType(new PathExprNode(steps, ((PathType)varType).getPathExprNode().getInitialStep()), substeps, false);
+        return new PathType(steps, ((PathType)varType).getInitialStep(), substeps, false);
       } else {
         return varType;
       }

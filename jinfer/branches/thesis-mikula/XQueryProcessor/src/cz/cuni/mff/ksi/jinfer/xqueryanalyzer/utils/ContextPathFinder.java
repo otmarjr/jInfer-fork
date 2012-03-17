@@ -57,8 +57,8 @@ public final class ContextPathFinder {
   }
   
   private void process() {
-    final StepExprNode firstStep1 = origPath1.getPathExprNode().getSteps().get(0);
-    final StepExprNode firstStep2 = origPath2.getPathExprNode().getSteps().get(0);
+    final StepExprNode firstStep1 = origPath1.getSteps().get(0);
+    final StepExprNode firstStep2 = origPath2.getSteps().get(0);
     final ExprNode detailNode1 = firstStep1.getDetailNode();
     final ExprNode detailNode2 = firstStep2.getDetailNode();
     
@@ -76,40 +76,36 @@ public final class ContextPathFinder {
     final String varName2 = ((VarRefNode)detailNode2).getVarName();
     
     if (varName1.equals(varName2)) {
-      contextPath = origPath1.getSubsteps().get(firstStep1);
+      contextPath = origPath1.getSubpaths().get(firstStep1);
       
-      final PathExprNode pathExprNode1 = new PathExprNode(origPath1.getPathExprNode().getSteps().subList(1, origPath1.getPathExprNode().getSteps().size()), InitialStep.CONTEXT);
-      final Map<StepExprNode, PathType> substeps1 = new HashMap(origPath1.getSubsteps());
+      final Map<StepExprNode, PathType> substeps1 = new HashMap(origPath1.getSubpaths());
       substeps1.remove(firstStep1);
-      newPath1 = new PathType(pathExprNode1, substeps1, false);
+      newPath1 = new PathType(origPath1.getSteps().subList(1, origPath1.getSteps().size()), InitialStep.CONTEXT, substeps1, false);
       
-      final PathExprNode pathExprNode2 = new PathExprNode(origPath2.getPathExprNode().getSteps().subList(1, origPath2.getPathExprNode().getSteps().size()), InitialStep.CONTEXT);
-      final Map<StepExprNode, PathType> substeps2 = new HashMap(origPath2.getSubsteps());
+      final Map<StepExprNode, PathType> substeps2 = new HashMap(origPath2.getSubpaths());
       substeps2.remove(firstStep2);
-      newPath2 = new PathType(pathExprNode2, substeps2, false);
+      newPath2 = new PathType(origPath2.getSteps().subList(1, origPath2.getSteps().size()), InitialStep.CONTEXT, substeps2, false);
       
       return;
     }
     
-    final ContextPathFinder cpf = new ContextPathFinder(origPath1.getSubsteps().get(firstStep1), origPath2.getSubsteps().get(firstStep2));
+    final ContextPathFinder cpf = new ContextPathFinder(origPath1.getSubpaths().get(firstStep1), origPath2.getSubpaths().get(firstStep2));
     if (cpf.haveCommonContext()) {
       contextPath = cpf.getContextPath();
       
-      final List<StepExprNode> steps1 = cpf.getNewPath1().getPathExprNode().getSteps();
-      steps1.addAll(origPath1.getPathExprNode().getSteps().subList(1 , origPath1.getPathExprNode().getSteps().size()));
-      final Map<StepExprNode, PathType> substeps1 = cpf.getNewPath1().getSubsteps();
-      substeps1.putAll(origPath1.getSubsteps());
+      final List<StepExprNode> steps1 = cpf.getNewPath1().getSteps();
+      steps1.addAll(origPath1.getSteps().subList(1 , origPath1.getSteps().size()));
+      final Map<StepExprNode, PathType> substeps1 = cpf.getNewPath1().getSubpaths();
+      substeps1.putAll(origPath1.getSubpaths());
       substeps1.remove(firstStep1);
-      final PathExprNode pathExprNode1 = new PathExprNode(steps1, InitialStep.CONTEXT);
-      newPath1 = new PathType(pathExprNode1, substeps1, false);
+      newPath1 = new PathType(steps1, InitialStep.CONTEXT, substeps1, false);
       
-      final List<StepExprNode> steps2 = cpf.getNewPath2().getPathExprNode().getSteps();
-      steps2.addAll(origPath2.getPathExprNode().getSteps().subList(1 , origPath2.getPathExprNode().getSteps().size()));
-      final Map<StepExprNode, PathType> substeps2 = cpf.getNewPath2().getSubsteps();
-      substeps2.putAll(origPath2.getSubsteps());
+      final List<StepExprNode> steps2 = cpf.getNewPath2().getSteps();
+      steps2.addAll(origPath2.getSteps().subList(1 , origPath2.getSteps().size()));
+      final Map<StepExprNode, PathType> substeps2 = cpf.getNewPath2().getSubpaths();
+      substeps2.putAll(origPath2.getSubpaths());
       substeps2.remove(firstStep2);
-      final PathExprNode pathExprNode2 = new PathExprNode(steps2, InitialStep.CONTEXT);
-      newPath1 = new PathType(pathExprNode2, substeps2, false);
+      newPath1 = new PathType(steps2, InitialStep.CONTEXT, substeps2, false);
     }
   }
 }

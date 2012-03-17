@@ -289,21 +289,36 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         }
           
         case CHILD: {
-          assert(NameTestNode.class.isInstance(itemTypeNode)); // Mozno dokoncit, v pripade potreby
-          final NameTestNode ntn = (NameTestNode)itemTypeNode;
-          final String nodeName = ntn.getName();
-          for (final AbstractStructuralNode node : contextSet.getNodes()) {
-            if (node.isElement()) {
-              for (final AbstractStructuralNode subnode : ((Element)node).getSubnodes().getTokens()) {
-                if (subnode.isElement()) {
-                  for (final Element element : grammar) {
-                    if (element.getName().equals(nodeName)) {
-                      result.addNode(element);
+          if (NameTestNode.class.isInstance(itemTypeNode)) {
+            final NameTestNode ntn = (NameTestNode)itemTypeNode;
+            final String nodeName = ntn.getName();
+            for (final AbstractStructuralNode node : contextSet.getNodes()) {
+              if (node.isElement()) {
+                for (final AbstractStructuralNode subnode : ((Element)node).getSubnodes().getTokens()) {
+                  if (subnode.isElement()) {
+                    for (final Element element : grammar) {
+                      if (element.getName().equals(nodeName)) {
+                        result.addNode(element);
+                      }
                     }
                   }
                 }
               }
             }
+          } else if (KindTestNode.class.isInstance(itemTypeNode)) { // TODO rio do diplomky!!
+            final KindTestNode ktn = (KindTestNode)itemTypeNode;
+            final NodeKind nk = ktn.getNodeKind();
+            if (nk == NodeKind.TEXT) {
+              for (final AbstractStructuralNode node : contextSet.getNodes()) {
+                if (node.isElement()) {
+                  result.addNode(node);
+                }
+              }
+            } else {
+              assert(false);
+            }
+          } else {
+              assert(false); // Mozno dokoncit, v pripade potreby
           }
           break;
         }

@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VariableBindingNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 
 /**
  *
@@ -34,13 +35,13 @@ public class JoinPattern {
   private final JoinPatternType type;
   private final VariableBindingNode firstVariableBindingNode;
   private final VariableBindingNode secondVariableBindingNode;
-  private final PathExprNode P1;
-  private final PathExprNode P2;
+  private final PathType P1;
+  private final PathType P2;
   private final PathExprNode L1;
   private final PathExprNode L2;
   
   public JoinPattern(final JoinPatternType type, final VariableBindingNode firstVariableBindingNode, final VariableBindingNode secondVariableBindingNode,
-          final PathExprNode P1, final PathExprNode P2, final PathExprNode L1, final PathExprNode L2) {
+          final PathType P1, final PathType P2, final PathExprNode L1, final PathExprNode L2) {
     this.type = type;
     this.firstVariableBindingNode = firstVariableBindingNode;
     this.secondVariableBindingNode = secondVariableBindingNode;
@@ -70,11 +71,11 @@ public class JoinPattern {
     return L2;
   }
 
-  public PathExprNode getP1() {
+  public PathType getP1() {
     return P1;
   }
 
-  public PathExprNode getP2() {
+  public PathType getP2() {
     return P2;
   }
   

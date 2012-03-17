@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
@@ -216,7 +217,7 @@ public abstract class AbstractElementsExporter {
   }
   
   protected void processElementForeignKeys(final Element element) {
-    final List<ForeignKey> fKeys = (List<ForeignKey>)element.getMetadata().get("xquery_analyzer_foreign_keys");
+    final Set<ForeignKey> fKeys = (Set<ForeignKey>)element.getMetadata().get("xquery_analyzer_foreign_keys");
     
     if (fKeys == null) {
       return;
@@ -261,6 +262,9 @@ public abstract class AbstractElementsExporter {
 
         switch (axisNode.getAxisKind()) {
           case ATTRIBUTE:
+            if (!isFirstNode && printChildAxis) {
+              stringBuilder.append("/");
+            }
             stringBuilder.append("@");
             break;
             

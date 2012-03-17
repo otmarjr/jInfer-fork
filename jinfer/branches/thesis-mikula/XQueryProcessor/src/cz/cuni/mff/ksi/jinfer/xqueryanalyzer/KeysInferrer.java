@@ -33,9 +33,11 @@ import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.WeightedForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.WeightedKey;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  *
@@ -171,7 +173,7 @@ public class KeysInferrer {
   private final JoinExprFormParser jefp = new JoinExprFormParser();
   
   private Map<Key, KeySummarizer.SummarizedInfo> summarizedKeys;
-  private Map<Key, List<ForeignKey>> keysToForeignKeys;
+  private Map<Key, Set<ForeignKey>> keysToForeignKeys;
 
   public void process(final XQNode root) {
     Map<String, ForClauseNode> forVariables = new HashMap<String, ForClauseNode>();
@@ -183,7 +185,7 @@ public class KeysInferrer {
     classifiedJoinPatternsToKeys();
     summarizedKeys = summarizeKeys(keys, negativeUniquenessStatements);
     
-    keysToForeignKeys = new HashMap<Key, List<ForeignKey>>();
+    keysToForeignKeys = new HashMap<Key, Set<ForeignKey>>();
     for (final WeightedForeignKey wfk : foreignKeys) {
       final ForeignKey fk = wfk.getKey();
       final Key k = fk.getKey();
@@ -193,7 +195,7 @@ public class KeysInferrer {
       if (keysToForeignKeys.containsKey(k)) {
         keysToForeignKeys.get(k).add(fk);
       } else {
-        final List<ForeignKey> fkList = new ArrayList<ForeignKey>();
+        final Set<ForeignKey> fkList = new LinkedHashSet<ForeignKey>();
         fkList.add(fk);
         keysToForeignKeys.put(k, fkList);
       }
@@ -204,7 +206,7 @@ public class KeysInferrer {
     return summarizedKeys;
   }
   
-  public Map<Key, List<ForeignKey>> getForeignKeys() {
+  public Map<Key, Set<ForeignKey>> getForeignKeys() {
     return keysToForeignKeys;
   }
 
@@ -250,6 +252,10 @@ public class KeysInferrer {
         if (usesOnlyChildAndDescendantAxes((PathType) bindingExprType)) {
           final ExprNode predicate = endsWithExactlyOnePredicate((PathType) bindingExprType);
           if (predicate != null && isWithoutPredicatesExceptLastStep((PathType) bindingExprType)) {
+            for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
+              determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), forVariables, checkJoinPattern3, whereExpr);
+            }
+          } else if (checkJoinPattern3 && isWithoutPredicates((PathType) bindingExprType)) { // TODO rio do diplomky!!
             for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
               determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), forVariables, checkJoinPattern3, whereExpr);
             }
@@ -306,9 +312,9 @@ public class KeysInferrer {
     if (checkJoinPattern3) {
       if (ForClauseNode.class.isInstance((bindingNode))) {
         //if (isExprJoinFormWhereClause(whereExpr, bindingNode.getVarName(), forVar, L1, L2)) {
-        if (jefp.isExprJoinFormWhereClause(whereExpr, bindingNode.getVarName(), forVar)) {
-          final PathExprNode P1 = (PathExprNode) forClauseNode.getBindingSequenceNode().getExprNode(); // TODO rio Su tieto dva riadky OK? Je exprNode vzdy naozaj PathExprNode?
-          final PathExprNode P2 = (PathExprNode) bindingNode.getBindingSequenceNode().getExprNode();
+        if (jefp.isExprJoinFormWhereClause(whereExpr, forVar, bindingNode.getVarName())) {
+          final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio Su tieto dva riadky OK? Je exprNode vzdy naozaj typu PathType?
+          final PathType P2 = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
           joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode, P1, P2, jefp.getL1(), jefp.getL2()));
         }
       }
@@ -318,9 +324,9 @@ public class KeysInferrer {
     // Check for and let join patterns.
     //if (isExprJoinFormPredicate(predicate, forVar, L1, L2)) {
     if (jefp.isExprJoinFormPredicate(predicate, forVar)) {
-      final PathExprNode P1 = (PathExprNode) forClauseNode.getBindingSequenceNode().getExprNode(); // TODO rio Su tieto dva riadky OK? Je exprNode vzdy naozaj PathExprNode?
-      final PathExprNode P2WithPredicate = (PathExprNode) bindingNode.getBindingSequenceNode().getExprNode();
-      final StepExprNode lastStep = P2WithPredicate.getSteps().get(P2WithPredicate.getSteps().size() - 1);
+      final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio OK? Je exprNode vzdy naozaj typu PathType?
+      final PathType P2WithPredicate = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
+      final StepExprNode lastStep = P2WithPredicate.getPathExprNode().getSteps().get(P2WithPredicate.getPathExprNode().getSteps().size() - 1);
       StepExprNode newLastStep;
 
       if (lastStep.isAxisStep()) {
@@ -329,10 +335,10 @@ public class KeysInferrer {
         newLastStep = new StepExprNode(lastStep.getDetailNode(), null);
       }
 
-      final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getSteps());
-      newSteps.set(P2WithPredicate.getSteps().size() - 1, newLastStep);
+      final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getPathExprNode().getSteps());
+      newSteps.set(P2WithPredicate.getPathExprNode().getSteps().size() - 1, newLastStep);
 
-      final PathExprNode P2 = new PathExprNode(newSteps, InitialStep.CONTEXT);
+      final PathType P2 = TypeFactory.createPathType(new PathExprNode(newSteps, InitialStep.CONTEXT)); // TODO rio do DP!!
       if (ForClauseNode.class.isInstance(bindingNode)) {
         joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, jefp.getL1(), jefp.getL2()));
       } else if (LetClauseNode.class.isInstance(bindingNode)) {
@@ -627,8 +633,8 @@ public class KeysInferrer {
       final ClassifiedJoinPattern.Type type = cjp.getType();
       final int weight = cjp.getWeight();
       
-      PathType P1 = TypeFactory.createPathType(jp.getP1());
-      PathType P2 = TypeFactory.createPathType(jp.getP2());
+      PathType P1 = jp.getP1();
+      PathType P2 = jp.getP2();
       PathType C = null;
       final ContextPathFinder cpf = new ContextPathFinder(P1, P2);
       if (cpf.haveCommonContext()) {

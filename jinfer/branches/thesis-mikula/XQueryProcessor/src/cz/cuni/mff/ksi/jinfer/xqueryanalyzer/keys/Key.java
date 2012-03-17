@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
 /**
  * TODO rio comment
@@ -55,36 +56,37 @@ public class Key {
   public PathType getTargetPath() {
     return targetPath;
   }
-  
-  
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
+    if (obj == null) {
+      return false;
     }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final Key other = (Key) obj;
+
     
-    if (!(obj instanceof Key)) { 
+    if (contextPath != null && other.contextPath != null) {
+      final PathTypeParser ptp1 = new PathTypeParser(contextPath);
+      final PathTypeParser ptp2 = new PathTypeParser(other.contextPath);
+      if (!ptp1.getSteps().equals(ptp2.getSteps())) {
+        return false;
+      }
+    } else if (contextPath != null || other.contextPath != null) {
       return false;
     }
     
-    final Key k = (Key)obj;
-    
-    if (contextPath == null) {
-      if (k.contextPath != null) {
-        return false;
-      }
-    } else {
-      if (!contextPath.equals(k.contextPath)) {
-        return false;
-      }
-    }
-    
-    if (!targetPath.equals(k.targetPath)) {
+    final PathTypeParser ptpTarget1 = new PathTypeParser(targetPath);
+    final PathTypeParser ptpTarget2 = new PathTypeParser(other.targetPath);
+    if (!ptpTarget1.getSteps().equals(ptpTarget2.getSteps())) {
       return false;
     }
     
-    if (!keyPath.equals(k.keyPath)) {
+    final PathTypeParser ptpKey1 = new PathTypeParser(keyPath);
+    final PathTypeParser ptpKey2 = new PathTypeParser(other.keyPath);
+    if (!ptpKey1.getSteps().equals(ptpKey2.getSteps())) {
       return false;
     }
     
@@ -93,12 +95,19 @@ public class Key {
 
   @Override
   public int hashCode() {
-    int hash = 7;
-    hash = 37 * hash + (this.contextPath != null ? this.contextPath.hashCode() : 0);
-    hash = 37 * hash + (this.targetPath != null ? this.targetPath.hashCode() : 0);
-    hash = 37 * hash + (this.keyPath != null ? this.keyPath.hashCode() : 0);
+    int hash = 3;
+    PathTypeParser ptpContext = null;
+    if (contextPath != null) {
+      ptpContext = new PathTypeParser(contextPath);
+    }
+    final PathTypeParser ptpTarget = new PathTypeParser(targetPath);
+    final PathTypeParser ptpKey = new PathTypeParser(keyPath);
+    hash = 17 * hash + (this.contextPath != null ? ptpContext.getSteps().hashCode() : 0);
+    hash = 17 * hash + (this.targetPath != null ? ptpTarget.getSteps().hashCode() : 0);
+    hash = 17 * hash + (this.keyPath != null ? ptpKey.getSteps().hashCode() : 0);
     return hash;
   }
+  
   
   
 }

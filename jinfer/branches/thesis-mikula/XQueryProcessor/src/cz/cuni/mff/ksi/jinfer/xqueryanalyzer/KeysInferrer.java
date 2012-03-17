@@ -259,7 +259,9 @@ public class KeysInferrer {
             for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
               determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), forVariables, checkJoinPattern3, whereExpr);
             }
-          } else if (isWithoutPredicates((PathType) bindingExprType)) {
+          }
+          
+          if (isWithoutPredicates((PathType) bindingExprType)) {
             if (ForClauseNode.class.isInstance(bindingNode)) {
               forVariables.put(bindingNode.getVarName(), (ForClauseNode) bindingNode);
             }

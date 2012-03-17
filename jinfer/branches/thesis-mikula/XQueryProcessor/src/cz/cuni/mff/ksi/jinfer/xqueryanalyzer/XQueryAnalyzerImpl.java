@@ -21,7 +21,6 @@ import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeEvaluationContextNodesSet;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
@@ -37,6 +36,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.io.File;
@@ -159,8 +159,8 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       
       XSDType.XSDAtomicType inferredAtomicType = ((XSDType)type).getAtomicType();
       
-      final PathTypeParser ptp = new PathTypeParser(pathType);
-      final boolean hasPredicates = ptp.isHasPredicates();      
+      final NormalizedPathType ptp = new NormalizedPathType(pathType);
+      final boolean hasPredicates = ptp.hasPredicates();      
       
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);
@@ -236,7 +236,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       Set<ForeignKey> fKeys = foreignKeys.get(key);
       
       if (contextPath != null) {
-        final PathTypeParser ptp = new PathTypeParser(contextPath);
+        final NormalizedPathType ptp = new NormalizedPathType(contextPath);
         for (final StepExprNode step : ptp.getSteps()) {
           contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
         }

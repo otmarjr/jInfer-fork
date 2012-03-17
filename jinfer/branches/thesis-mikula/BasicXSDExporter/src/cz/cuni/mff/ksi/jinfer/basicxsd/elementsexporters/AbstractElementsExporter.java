@@ -26,6 +26,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.NameTestNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.SelfOrDescendantStepNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -41,7 +42,6 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.Key;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -201,8 +201,8 @@ public abstract class AbstractElementsExporter {
     for (final Key key : keys) {
       final PathType targetPath = key.getTargetPath();
       final PathType keyPath = key.getKeyPath();
-      final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
-      final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
+      final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
+      final NormalizedPathType keyPathParser = new NormalizedPathType(keyPath);
       
       keyNames.put(key, "key" + new Integer(keyNumber).toString());
 
@@ -226,8 +226,8 @@ public abstract class AbstractElementsExporter {
     for (final ForeignKey fKey : fKeys) {
       final PathType targetPath = fKey.getForeignTargetPath();
       final PathType keyPath = fKey.getForeignKeyPath();
-      final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
-      final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
+      final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
+      final NormalizedPathType keyPathParser = new NormalizedPathType(keyPath);
       
       final String keyName = keyNames.get(fKey.getKey());
       assert(keyName != null);
@@ -242,7 +242,7 @@ public abstract class AbstractElementsExporter {
   }
   
   // TODO rio refactor
-  private String pathTypeParserToString(final PathTypeParser parser) {
+  private String pathTypeParserToString(final NormalizedPathType parser) {
     final StringBuilder stringBuilder = new StringBuilder();
     boolean isFirstNode = true;
     boolean printChildAxis = true;

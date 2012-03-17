@@ -221,7 +221,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     
     final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
     
-    for (final Key key : keys.keySet()) {
+    for (Key key : keys.keySet()) {
       final KeySummarizer.SummarizedInfo keyInfo = keys.get(key);
       
       if (keyInfo.getNormalizedWeight() < 0.3) {
@@ -233,7 +233,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);
       
-      final Set<ForeignKey> fKeys = foreignKeys.get(key);
+      Set<ForeignKey> fKeys = foreignKeys.get(key);
       
       if (contextPath != null) {
         final PathTypeParser ptp = new PathTypeParser(contextPath);
@@ -241,10 +241,12 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
           contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
         }
       } else {
-        removeFirstPathItemTypeNode(key.getTargetPath());
+        key = new Key(removeFirstPathItemTypeNode(key.getTargetPath()), key.getKeyPath());
+        Set<ForeignKey> modifiedFKeys = new LinkedHashSet<ForeignKey>();
         for (final ForeignKey fKey : fKeys) {
-          removeFirstPathItemTypeNode(fKey.getForeignTargetPath());
+          modifiedFKeys.add(new ForeignKey(key, removeFirstPathItemTypeNode(fKey.getForeignTargetPath()), fKey.getForeignKeyPath()));
         }
+        fKeys = modifiedFKeys;
       }
       
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
@@ -270,17 +272,22 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     }
   }
   
-  private static void removeFirstPathItemTypeNode(final PathType pathType) {
+  private static PathType removeFirstPathItemTypeNode(final PathType pathType) {
     final StepExprNode step = pathType.getPathExprNode().getSteps().get(0);
     if (step.isAxisStep()) {
       final AxisNode axisNode = step.getAxisNode();
       if (axisNode != null) {
         final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
         if (itemTypeNode != null) {
-          pathType.getPathExprNode().getSteps().remove(0);
+          List<StepExprNode> newSteps = new ArrayList<StepExprNode>(pathType.getPathExprNode().getSteps());
+          newSteps.remove(0);
+          final PathExprNode newPathExprNode = new PathExprNode(newSteps, InitialStep.CONTEXT);
+          return new PathType(newPathExprNode, pathType.getSubsteps(), pathType.isForBound());
         }
       }
     }
+    
+    return pathType;
   }
   
   private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {

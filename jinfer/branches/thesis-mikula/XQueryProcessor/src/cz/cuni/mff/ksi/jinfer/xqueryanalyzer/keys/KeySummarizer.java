@@ -40,7 +40,7 @@ public class KeySummarizer {
     
     private int count;
     private int weight;
-    private int normalizedWeight = 0;
+    private double normalizedWeight = 0;
     
     public SummarizedInfo() {
       count = 0;
@@ -53,7 +53,7 @@ public class KeySummarizer {
     }
     
     public void normalize(final int maxCount, final int maxWeight, final int totalCount) {
-      normalizedWeight = weight / maxWeight * (1 - (maxCount - count) / totalCount);
+      normalizedWeight = (double)weight / maxWeight * (1 - (maxCount - count) / totalCount);
     }
 
     public int getCount() {
@@ -72,7 +72,7 @@ public class KeySummarizer {
       this.weight = weight;
     }
 
-    public int getNormalizedWeight() {
+    public double getNormalizedWeight() {
       return normalizedWeight;
     }
     

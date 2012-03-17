@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
@@ -31,8 +32,14 @@ public class ForeignKey {
   
   public ForeignKey(final Key key, final PathType foreignTargetPath, final PathType foreignKeyPath) {
     this.key = key;
-    this.foreignTargetPath = foreignTargetPath;
-    this.foreignKeyPath = foreignKeyPath;
+   
+    final PathTypeParser targetPathParser = new PathTypeParser(foreignTargetPath);
+    final PathExprNode targetPathExprNode = new PathExprNode(targetPathParser.getSteps(), foreignTargetPath.getPathExprNode().getInitialStep());
+    this.foreignTargetPath = new PathType(targetPathExprNode, null, false);
+    
+    final PathTypeParser keyPathParser = new PathTypeParser(foreignKeyPath);
+    final PathExprNode keyPathExprNode = new PathExprNode(keyPathParser.getSteps(), foreignKeyPath.getPathExprNode().getInitialStep());
+    this.foreignKeyPath = new PathType(keyPathExprNode, null, false);
   }
   
   public Key getKey() {

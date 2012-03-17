@@ -34,12 +34,10 @@ public class ForeignKey {
     this.key = key;
    
     final PathTypeParser targetPathParser = new PathTypeParser(foreignTargetPath);
-    final PathExprNode targetPathExprNode = new PathExprNode(targetPathParser.getSteps(), foreignTargetPath.getPathExprNode().getInitialStep());
-    this.foreignTargetPath = new PathType(targetPathExprNode, null, false);
+    this.foreignTargetPath = new PathType(targetPathParser.getSteps(), foreignTargetPath.getInitialStep(), null, false);
     
     final PathTypeParser keyPathParser = new PathTypeParser(foreignKeyPath);
-    final PathExprNode keyPathExprNode = new PathExprNode(keyPathParser.getSteps(), foreignKeyPath.getPathExprNode().getInitialStep());
-    this.foreignKeyPath = new PathType(keyPathExprNode, null, false);
+    this.foreignKeyPath = new PathType(keyPathParser.getSteps(), foreignKeyPath.getInitialStep(), null, false);
   }
   
   public Key getKey() {

@@ -18,26 +18,27 @@ package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * TODO rio poriadne spracovavat, napr zlucovat cesty v ktorych su premenne, ktore su tiez cesty a podobne
  * A representation of type of XQuery paths. This is the most important type
  * in our XQuery processing.
  * 
  * How is a path represented?
- *  - An instance of {@link PathExprNode} holds steps of the paths and information
- *    on whether is the path relative or absolute. However, this instance does
- *    not have to be a node in a syntax tree. Thus, it does not have to contain
- *    a reference to it parent, as well.
- *  - The <code>substeps</code> variable is a mapping from instances of {@link StepExprNode}
- *    from the <code>pathExprNode</code> to instances of PathType. This mapping allows us
+ *  - The <code>steps</code> variable represents steps of the paths as instances
+ *    of {@link StepExprNode}.
+ *  - If a path is relative or absolute is determined by the <code>initialStep</code>
+ *    variable.
+ *  - The <code>subpaths</code> variable is a mapping from instances of {@link StepExprNode}
+ *    from the <code>steps</code> to instances of PathType. This mapping allows us
  *    to represent paths containing variables referring to other paths.
  *    So, the instances of {@link StepExprNode} are only steps containing variable
  *    references.
@@ -48,6 +49,12 @@ import java.util.Map;
  *    with the path as its argument.
  *  - If the instance of this class is for bound is determined by <code>isForBound</code>
  *    variable
+ * 
+ * <strong>IMPORTANT:</strong> Note that instances of this class are created
+ * by using the references supplied to the constructors and so, changes made
+ * to those references (after the construction of this class) affect also
+ * this class instances and can lead to inconsistency. Also the getters should
+ * not be used to change the provided data.
  * 
  * @author rio
  */
@@ -69,17 +76,19 @@ public class PathType extends AbstractType {
     SPECIAL_FUNCTION_NAMES.add("exactly-one");
   }
   
-  private final PathExprNode pathExprNode;
-  private final Map<StepExprNode, PathType> substeps; // StepExprNode -> PathType
+  private final List<StepExprNode> steps;
+  private final InitialStep initialStep;
+  private final Map<StepExprNode, PathType> subpaths; // StepExprNode -> PathType
   private final List<String> specialFunctionCalls = new ArrayList<String>(); // An ordered list of functions that have been applied to this path.
   private final boolean isForBound;
   
   /**
    * A basic constructor.
    */
-  public PathType(final PathExprNode pathExprNode, final Map<StepExprNode, PathType> substeps, final boolean isForBound) {
-    this.pathExprNode = pathExprNode;
-    this.substeps = substeps;
+  public PathType(final List<StepExprNode> steps, final InitialStep initialStep, final Map<StepExprNode, PathType> subpaths, final boolean isForBound) {
+    this.steps = steps;
+    this.initialStep = initialStep;
+    this.subpaths = subpaths;
     this.isForBound = isForBound;
   }
   
@@ -90,8 +99,10 @@ public class PathType extends AbstractType {
    * @param pathExprNode 
    */
   public PathType(final PathExprNode pathExprNode) {
-    this.pathExprNode = pathExprNode;
-    substeps = new HashMap<StepExprNode, PathType>();
+    this.steps = pathExprNode.getSteps();
+    this.initialStep = pathExprNode.getInitialStep();
+    
+    subpaths = new HashMap<StepExprNode, PathType>();
     
     for (final StepExprNode stepNode : pathExprNode.getSteps()) {
       final ExprNode detailNode = stepNode.getDetailNode();
@@ -103,7 +114,7 @@ public class PathType extends AbstractType {
             assert(false);
           }
           final PathType pathType = (PathType)type;
-          substeps.put(stepNode, pathType);
+          subpaths.put(stepNode, pathType);
         }
       }
     }
@@ -115,17 +126,21 @@ public class PathType extends AbstractType {
   public Category getCategory() {
     return Category.PATH;
   }
-  
-  public PathExprNode getPathExprNode() {
-    return pathExprNode;
+
+  public InitialStep getInitialStep() {
+    return initialStep;
+  }
+
+  public List<StepExprNode> getSteps() {
+    return steps;
   }
   
   public void addSpecialFunctionCall(final String specialFunctionName) {
     specialFunctionCalls.add(specialFunctionName);
   }  
   
-  public Map<StepExprNode, PathType> getSubsteps() {
-    return substeps;
+  public Map<StepExprNode, PathType> getSubpaths() {
+    return subpaths;
   }
   
   public boolean isForBound() {
@@ -135,47 +150,9 @@ public class PathType extends AbstractType {
   public List<String> getSpecialFunctionCalls() {
     return specialFunctionCalls;
   }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    
-    if (!(obj instanceof PathType)) {
-      return false;
-    }
-    
-    final PathType path = (PathType)obj;
-    
-    if (isForBound != path.isForBound) {
-      return false;
-    }
-    
-    if (!pathExprNode.equals(path.pathExprNode)) {
-      return false;
-    }
-    
-    if (substeps != null && !substeps.equals(path.substeps)
-            || substeps == null && path.substeps != null) {
-      return false;
-    }
-    
-    if (!specialFunctionCalls.equals(path.specialFunctionCalls)) {
-      return false;
-    }
-    
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    hash = 37 * hash + (this.pathExprNode != null ? this.pathExprNode.hashCode() : 0);
-    hash = 37 * hash + (this.substeps != null ? this.substeps.hashCode() : 0);
-    hash = 37 * hash + (this.specialFunctionCalls != null ? this.specialFunctionCalls.hashCode() : 0);
-    hash = 37 * hash + (this.isForBound ? 1 : 0);
-    return hash;
+  
+  public boolean containsSpecialFunctionCalls() {
+    return !BaseUtils.isEmpty(specialFunctionCalls);
   }
 
   @Override
@@ -183,4 +160,37 @@ public class PathType extends AbstractType {
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final PathType other = (PathType) obj;
+    if (this.steps != other.steps && (this.steps == null || !this.steps.equals(other.steps))) {
+      return false;
+    }
+    if (this.initialStep != other.initialStep) {
+      return false;
+    }
+    if (this.subpaths != other.subpaths && (this.subpaths == null || !this.subpaths.equals(other.subpaths))) {
+      return false;
+    }
+    if (this.specialFunctionCalls != other.specialFunctionCalls && (this.specialFunctionCalls == null || !this.specialFunctionCalls.equals(other.specialFunctionCalls))) {
+      return false;
+    }
+    if (this.isForBound != other.isForBound) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    return hash;
+  }
+  
 }

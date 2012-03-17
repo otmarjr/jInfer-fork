@@ -69,8 +69,8 @@ public class KeysInferrer {
       final PathType leftPathType = (PathType) leftOperandType;
       final PathType rightPathType = (PathType) rightOperandType;
 
-      final ExprNode leftDetailNode = leftPathType.getPathExprNode().getSteps().get(0).getDetailNode();
-      final ExprNode rightDetailNode = rightPathType.getPathExprNode().getSteps().get(0).getDetailNode();
+      final ExprNode leftDetailNode = leftPathType.getSteps().get(0).getDetailNode();
+      final ExprNode rightDetailNode = rightPathType.getSteps().get(0).getDetailNode();
 
       if (leftDetailNode == null && rightDetailNode == null) {
         return false;
@@ -80,7 +80,7 @@ public class KeysInferrer {
         final VarRefNode leftVarRefNode = (VarRefNode) leftDetailNode;
 
         if (leftVarRefNode.getVarName().equals(var1)) {
-          List<StepExprNode> L1Steps = leftPathType.getPathExprNode().getSteps().subList(1, leftPathType.getPathExprNode().getSteps().size());
+          List<StepExprNode> L1Steps = leftPathType.getSteps().subList(1, leftPathType.getSteps().size());
           L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
           L2 = (PathExprNode) operatorNode.getRightSide();
           return true;
@@ -91,7 +91,7 @@ public class KeysInferrer {
         final VarRefNode rightVarRefNode = (VarRefNode) rightDetailNode;
 
         if (rightVarRefNode.getVarName().equals(var1)) {
-          List<StepExprNode> L1Steps = rightPathType.getPathExprNode().getSteps().subList(1, rightPathType.getPathExprNode().getSteps().size());
+          List<StepExprNode> L1Steps = rightPathType.getSteps().subList(1, rightPathType.getSteps().size());
           L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
           L2 = (PathExprNode) operatorNode.getOperand();
           return true;
@@ -121,8 +121,8 @@ public class KeysInferrer {
       final PathType leftPathType = (PathType) leftOperandType;
       final PathType rightPathType = (PathType) rightOperandType;
 
-      final ExprNode leftDetailNode = leftPathType.getPathExprNode().getSteps().get(0).getDetailNode();
-      final ExprNode rightDetailNode = rightPathType.getPathExprNode().getSteps().get(0).getDetailNode();
+      final ExprNode leftDetailNode = leftPathType.getSteps().get(0).getDetailNode();
+      final ExprNode rightDetailNode = rightPathType.getSteps().get(0).getDetailNode();
 
       if (leftDetailNode == null || rightDetailNode == null) {
         return false;
@@ -136,16 +136,16 @@ public class KeysInferrer {
       final VarRefNode rightVarRefNode = (VarRefNode) rightDetailNode;
 
       if (leftVarRefNode.getVarName().equals(var1) && rightVarRefNode.getVarName().equals(var2)) {
-        List<StepExprNode> L1Steps = leftPathType.getPathExprNode().getSteps().subList(1, leftPathType.getPathExprNode().getSteps().size());
-        List<StepExprNode> L2Steps = rightPathType.getPathExprNode().getSteps().subList(1, rightPathType.getPathExprNode().getSteps().size());
+        List<StepExprNode> L1Steps = leftPathType.getSteps().subList(1, leftPathType.getSteps().size());
+        List<StepExprNode> L2Steps = rightPathType.getSteps().subList(1, rightPathType.getSteps().size());
         L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
         L2 = new PathExprNode(L2Steps, InitialStep.CONTEXT);
         return true;
       }
 
       if (rightVarRefNode.getVarName().equals(var1) && leftVarRefNode.getVarName().equals(var2)) {
-        List<StepExprNode> L2Steps = leftPathType.getPathExprNode().getSteps().subList(1, leftPathType.getPathExprNode().getSteps().size());
-        List<StepExprNode> L1Steps = rightPathType.getPathExprNode().getSteps().subList(1, rightPathType.getPathExprNode().getSteps().size());
+        List<StepExprNode> L2Steps = leftPathType.getSteps().subList(1, leftPathType.getSteps().size());
+        List<StepExprNode> L1Steps = rightPathType.getSteps().subList(1, rightPathType.getSteps().size());
         L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
         L2 = new PathExprNode(L2Steps, InitialStep.CONTEXT);
         return true;
@@ -273,7 +273,7 @@ public class KeysInferrer {
   }
 
   private static boolean usesOnlyChildAndDescendantAxes(final PathType pathType) {
-    for (final StepExprNode stepNode : pathType.getPathExprNode().getSteps()) {
+    for (final StepExprNode stepNode : pathType.getSteps()) {
       if (stepNode.isAxisStep()) {
         final AxisKind axisKind = stepNode.getAxisNode().getAxisKind();
         if (axisKind != AxisKind.CHILD && axisKind != AxisKind.DESCENDANT && axisKind != AxisKind.DESCENDANT_OR_SELF) {
@@ -284,7 +284,7 @@ public class KeysInferrer {
       final ExprNode detailNode = stepNode.getDetailNode();
       if (detailNode != null) {
         if (VarRefNode.class.isInstance(detailNode)) {
-          if (usesOnlyChildAndDescendantAxes(pathType.getSubsteps().get(stepNode)) == false) {
+          if (usesOnlyChildAndDescendantAxes(pathType.getSubpaths().get(stepNode)) == false) {
             return false;
           }
         }
@@ -296,7 +296,7 @@ public class KeysInferrer {
 
   // Vracia ten jediny predikat na konci.
   private static ExprNode endsWithExactlyOnePredicate(final PathType pathType) {
-    final StepExprNode lastStepNode = pathType.getPathExprNode().getSteps().get(pathType.getPathExprNode().getSteps().size() - 1);
+    final StepExprNode lastStepNode = pathType.getSteps().get(pathType.getSteps().size() - 1);
     if (!lastStepNode.hasPredicates()) {
       return null;
     }
@@ -327,7 +327,7 @@ public class KeysInferrer {
     if (jefp.isExprJoinFormPredicate(predicate, forVar)) {
       final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio OK? Je exprNode vzdy naozaj typu PathType?
       final PathType P2WithPredicate = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
-      final StepExprNode lastStep = P2WithPredicate.getPathExprNode().getSteps().get(P2WithPredicate.getPathExprNode().getSteps().size() - 1);
+      final StepExprNode lastStep = P2WithPredicate.getSteps().get(P2WithPredicate.getSteps().size() - 1);
       StepExprNode newLastStep;
 
       if (lastStep.isAxisStep()) {
@@ -336,10 +336,10 @@ public class KeysInferrer {
         newLastStep = new StepExprNode(lastStep.getDetailNode(), null);
       }
 
-      final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getPathExprNode().getSteps());
-      newSteps.set(P2WithPredicate.getPathExprNode().getSteps().size() - 1, newLastStep);
+      final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getSteps());
+      newSteps.set(P2WithPredicate.getSteps().size() - 1, newLastStep);
 
-      final PathType P2 = new PathType(new PathExprNode(newSteps, P2WithPredicate.getPathExprNode().getInitialStep())); // TODO rio do DP!!
+      final PathType P2 = new PathType(new PathExprNode(newSteps, P2WithPredicate.getInitialStep())); // TODO rio do DP!!
       if (ForClauseNode.class.isInstance(bindingNode)) {
         joinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, jefp.getL1(), jefp.getL2()));
       } else if (LetClauseNode.class.isInstance(bindingNode)) {
@@ -410,7 +410,7 @@ public class KeysInferrer {
   }
 
   private static boolean isTargetPath(final PathType pathType, final String varName) {
-    final StepExprNode firstStep = pathType.getPathExprNode().getSteps().get(0);
+    final StepExprNode firstStep = pathType.getSteps().get(0);
     final ExprNode detailNode = firstStep.getDetailNode();
 
     if (detailNode == null) {
@@ -471,7 +471,7 @@ public class KeysInferrer {
         assert(varRefNode.getType().getCategory() == Type.Category.PATH);
         final PathType pathType = (PathType)varRefNode.getType();
         if (isTargetPath(pathType, varName)) {
-          final PathExprNode path = pathType.getPathExprNode();
+          final PathExprNode path = new PathExprNode(pathType.getSteps(), pathType.getInitialStep());
           path.setParentNode(varRefNode.getParentNode());
           paths.add(path);
         }
@@ -487,8 +487,8 @@ public class KeysInferrer {
   }
 
   private static boolean isWithoutPredicates(final PathType pathType) {
-    final Map<StepExprNode, PathType> subSteps = pathType.getSubsteps();
-    for (final StepExprNode stepExprNode : pathType.getPathExprNode().getSteps()) {
+    final Map<StepExprNode, PathType> subSteps = pathType.getSubpaths();
+    for (final StepExprNode stepExprNode : pathType.getSteps()) {
       if (stepExprNode.hasPredicates()) {
         return false;
       }
@@ -503,8 +503,8 @@ public class KeysInferrer {
   }
 
   private static boolean isWithoutPredicatesExceptLastStep(final PathType pathType) {
-    final Map<StepExprNode, PathType> subSteps = pathType.getSubsteps();
-    final List<StepExprNode> stepNodes = pathType.getPathExprNode().getSteps();
+    final Map<StepExprNode, PathType> subSteps = pathType.getSubpaths();
+    final List<StepExprNode> stepNodes = pathType.getSteps();
     for (final StepExprNode stepExprNode : stepNodes) {
       if (stepExprNode == stepNodes.get(stepNodes.size() - 1)) {
         break;
@@ -589,7 +589,7 @@ public class KeysInferrer {
         final PathType pathType = (PathType) leftOperand.getType();
         if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
-            final ExprNode detailNode = pathType.getPathExprNode().getSteps().get(0).getDetailNode();
+            final ExprNode detailNode = pathType.getSteps().get(0).getDetailNode();
             if (detailNode != null) {
               if (VarRefNode.class.isInstance(detailNode)) {
                 if (((VarRefNode) detailNode).getVarName().equals(var)) {
@@ -604,7 +604,7 @@ public class KeysInferrer {
         final PathType pathType = (PathType) rightOperand.getType();
         if (usesOnlyChildAndDescendantAxes(pathType) && isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
-            final ExprNode detailNode = pathType.getPathExprNode().getSteps().get(0).getDetailNode();
+            final ExprNode detailNode = pathType.getSteps().get(0).getDetailNode();
             if (detailNode != null) {
               if (VarRefNode.class.isInstance(detailNode)) {
                 if (((VarRefNode) detailNode).getVarName().equals(var)) {

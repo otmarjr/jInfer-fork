@@ -14,14 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
+package cz.cuni.mff.ksi.jinfer.base.objects.xquery.types;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AtomicTypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.KindTestNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.TypeNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 
 /**
  * Abstract base class of all implementation classes representing types.
@@ -110,7 +111,7 @@ public abstract class AbstractType implements Type {
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ONE);
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ZERO);
         final XSDType xsdType = (XSDType)forBindingExprType;
-        final XSDType.XSDAtomicType atomicType = xsdType.getAtomicType();
+        final XSDBuiltinAtomicType atomicType = xsdType.getAtomicType();
         return new XSDType(atomicType, Cardinality.ONE);
       }
         
@@ -141,7 +142,7 @@ public abstract class AbstractType implements Type {
         
       case XSD_BUILT_IN: {
         final XSDType xsdType = (XSDType)returnClauseType;
-        final XSDType.XSDAtomicType atomicType = xsdType.getAtomicType();
+        final XSDBuiltinAtomicType atomicType = xsdType.getAtomicType();
         return new XSDType(atomicType, Cardinality.ZERO_OR_MORE);
       }
         

@@ -24,10 +24,7 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages>
-                <package>cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys</package>
-                <package>cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils</package>
-            </public-packages>
+            <public-packages/>
         </data>
     </configuration>
 </project>

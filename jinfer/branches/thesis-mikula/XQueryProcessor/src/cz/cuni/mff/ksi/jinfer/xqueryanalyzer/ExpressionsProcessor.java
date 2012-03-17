@@ -16,9 +16,13 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.UnknownType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.*;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -179,7 +183,7 @@ public class ExpressionsProcessor {
       final IfExprNode ifExprNode = (IfExprNode)expressionNode;
       return ifExprNode.getThenExpressionNode().getExprNode().getType();
     } else if (QuantifiedExprNode.class.isInstance(expressionNode)) { // TODO rio do diplomky!!
-      return new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE);
+      return new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE);
     }
     assert (false); // TODO rio dorobit pre ostatne typy
     return null;
@@ -193,7 +197,7 @@ public class ExpressionsProcessor {
     final Operator operator = operatorNode.getOperator();
 
     if (isOperatorClassComparison(operator)) {
-      return new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE);
+      return new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE);
     }
 
     if (isOperatorClassAddition(operator)) {
@@ -217,7 +221,7 @@ public class ExpressionsProcessor {
     }
 
     if (operator == Operator.TO) {
-      return new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ZERO_OR_MORE);
+      return new XSDType(XSDBuiltinAtomicType.INTEGER, Cardinality.ZERO_OR_MORE);
     }
 
     return new UnknownType();
@@ -230,42 +234,42 @@ public class ExpressionsProcessor {
     final XSDType type1 = (XSDType)numericType1;
     final XSDType type2 = (XSDType)numericType2;
     
-    final XSDType.XSDAtomicType atomic1 = type1.getAtomicType();
-    final XSDType.XSDAtomicType atomic2 = type2.getAtomicType();
+    final XSDBuiltinAtomicType atomic1 = type1.getAtomicType();
+    final XSDBuiltinAtomicType atomic2 = type2.getAtomicType();
     
     if (atomic1 == atomic2) {
       return type1;
     }
     
-    if (atomic1 == XSDType.XSDAtomicType.DOUBLE) {
+    if (atomic1 == XSDBuiltinAtomicType.DOUBLE) {
       return type1;
     }
-    if (atomic2 == XSDType.XSDAtomicType.DOUBLE) {
+    if (atomic2 == XSDBuiltinAtomicType.DOUBLE) {
       return type2;
     }
     
-    if (atomic1 == XSDType.XSDAtomicType.FLOAT) {
+    if (atomic1 == XSDBuiltinAtomicType.FLOAT) {
       return type1;
     }
-    if (atomic2 == XSDType.XSDAtomicType.FLOAT) {
+    if (atomic2 == XSDBuiltinAtomicType.FLOAT) {
       return type2;
     }
     
-    if (atomic1 == XSDType.XSDAtomicType.DECIMAL) {
+    if (atomic1 == XSDBuiltinAtomicType.DECIMAL) {
       return type1;
     }
-    if (atomic2 == XSDType.XSDAtomicType.DECIMAL) {
+    if (atomic2 == XSDBuiltinAtomicType.DECIMAL) {
       return type2;
     }
     
-    if (atomic1 == XSDType.XSDAtomicType.INTEGER) {
+    if (atomic1 == XSDBuiltinAtomicType.INTEGER) {
       return type1;
     }
-    if (atomic2 == XSDType.XSDAtomicType.INTEGER) {
+    if (atomic2 == XSDBuiltinAtomicType.INTEGER) {
       return type2;
     }
     
-    return new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE);
+    return new XSDType(XSDBuiltinAtomicType.INTEGER, Cardinality.ONE);
     
     // TODO rio Nie je dokoncene, ale nam pravdepodobne bude stacit.
   }

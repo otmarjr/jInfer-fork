@@ -26,9 +26,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.NameTestNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.SelfOrDescendantStepNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -40,8 +39,8 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.ForeignKey;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.Key;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +102,7 @@ public abstract class AbstractElementsExporter {
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
       final String type = TypeUtils.getBuiltinType(element);
-      final XSDType.XSDAtomicType xqueryType = (XSDType.XSDAtomicType)element.getMetadata().get("xquery_analyzer_type");
+      final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)element.getMetadata().get("xquery_analyzer_type");
       
       if (xqueryType == null) {
         indentator.append(" type=\"" + type + '"');
@@ -207,8 +206,8 @@ public abstract class AbstractElementsExporter {
       indentator.indent("<xs:key name=\"key" + new Integer(keyNumber).toString() + "\">\n");
       ++keyNumber;
       indentator.increaseIndentation();
-      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPath) + "\"/>\n");
-      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPath) + "\"/>\n");
+      indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + keyPath.toString() + "\"/>\n");
       indentator.decreaseIndentation();
       indentator.indent("</xs:key>\n");
     }
@@ -230,61 +229,11 @@ public abstract class AbstractElementsExporter {
 
       indentator.indent("<xs:keyref name=\"" + keyName + "Ref\">\n");
       indentator.increaseIndentation();
-      indentator.indent("<xs:selector xpath=\"" + pathTypeParserToString(targetPath) + "\"/>\n");
-      indentator.indent("<xs:field xpath=\"" + pathTypeParserToString(keyPath) + "\"/>\n");
+      indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + keyPath.toString() + "\"/>\n");
       indentator.decreaseIndentation();
       indentator.indent("</xs:keyref>\n");
     }
-  }
-  
-  // TODO rio refactor
-  private String pathTypeParserToString(final NormalizedPathType parser) {
-    final StringBuilder stringBuilder = new StringBuilder();
-    boolean isFirstNode = true;
-    boolean printChildAxis = true;
-    
-    for (final StepExprNode step : parser.getSteps()) {
-      assert(step.hasPredicates() == false);
-            
-      if (SelfOrDescendantStepNode.class.isInstance(step)) {
-        if (isFirstNode) {
-          stringBuilder.append(".");
-        }
-        stringBuilder.append("//");
-        printChildAxis = false;
-      } else {
-        assert(step.isAxisStep());
-        final AxisNode axisNode = step.getAxisNode();
-
-        switch (axisNode.getAxisKind()) {
-          case ATTRIBUTE:
-            if (!isFirstNode && printChildAxis) {
-              stringBuilder.append("/");
-            }
-            stringBuilder.append("@");
-            break;
-            
-          case CHILD:
-            if (!isFirstNode && printChildAxis) {
-              stringBuilder.append("/");
-            }
-            break;
-            
-          default:
-            assert(false);
-        }
-        
-        final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
-        assert(NameTestNode.class.isInstance(itemTypeNode));
-        stringBuilder.append(((NameTestNode)itemTypeNode).getName());
-        
-        printChildAxis = true;
-      }
-      
-      isFirstNode = false;
-    }
-    
-    return stringBuilder.toString();
   }
 
   private void processElementAttributes(final Element element) throws InterruptedException {
@@ -298,7 +247,7 @@ public abstract class AbstractElementsExporter {
         indentator.append(attribute.getName());
 
         final String type = TypeUtils.getBuiltinAttributeType(attribute);
-        final XSDType.XSDAtomicType xqueryType = (XSDType.XSDAtomicType)attribute.getMetadata().get("xquery_analyzer_type");
+        final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)attribute.getMetadata().get("xquery_analyzer_type");
       
         if (xqueryType == null) {
           indentator.append("\" type=\"" + type + '"');

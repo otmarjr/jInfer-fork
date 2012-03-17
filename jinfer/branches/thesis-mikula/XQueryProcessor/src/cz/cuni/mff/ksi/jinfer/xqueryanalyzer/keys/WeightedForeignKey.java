@@ -16,6 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
+
 /**
  *
  * @author rio

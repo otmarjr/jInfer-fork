@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor;
+package cz.cuni.mff.ksi.jinfer.base.interfaces.xquery;
 
 /**
  * Interface for types used by XQuery Processor module.

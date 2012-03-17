@@ -14,13 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
+package cz.cuni.mff.ksi.jinfer.base.objects.xquery.types;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AxisNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.NameTestNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.SelfOrDescendantStepNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.List;
 
 /**
  * A representation of a path type in a normalized form. It means that all
- * variable references are resolved, so the path does not contains subpaths.
+ * variable references are resolved, so the path does not contain any subpaths.
  * 
  * This class does not extend {@link AbstractType} nor implements {@link Type},
  * because it does not represent a type in the processing of syntax tree as do
@@ -161,6 +163,59 @@ public class NormalizedPathType {
     return newNormalizedPathType;
   }
 
+  /**
+   * Creates an XQuery string representation of the normalized path.
+   * TODO rio Print predicates, take initial step into consideration, ...
+   */
+  @Override
+  public String toString() {
+    final StringBuilder stringBuilder = new StringBuilder();
+    boolean isFirstNode = true;
+    boolean printChildAxis = true;
+    
+    for (final StepExprNode step : steps) {
+            
+      if (step instanceof SelfOrDescendantStepNode) {
+        if (isFirstNode) {
+          stringBuilder.append(".");
+        }
+        stringBuilder.append("//");
+        printChildAxis = false;
+      } else {
+        assert(step.isAxisStep());
+        final AxisNode axisNode = step.getAxisNode();
+
+        switch (axisNode.getAxisKind()) {
+          case ATTRIBUTE:
+            if (!isFirstNode && printChildAxis) {
+              stringBuilder.append("/");
+            }
+            stringBuilder.append("@");
+            break;
+            
+          case CHILD:
+            if (!isFirstNode && printChildAxis) {
+              stringBuilder.append("/");
+            }
+            break;
+            
+          default:
+            assert(false);
+        }
+        
+        final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
+        assert(NameTestNode.class.isInstance(itemTypeNode));
+        stringBuilder.append(((NameTestNode)itemTypeNode).getName());
+        
+        printChildAxis = true;
+      }
+      
+      isFirstNode = false;
+    }
+    
+    return stringBuilder.toString();
+  }
+  
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {

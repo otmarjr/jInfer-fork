@@ -18,15 +18,14 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.ClassifiedJoinPattern;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.ContextPathFinder;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.JoinPattern;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.ForeignKey;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.Key;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.NegativeKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.NegativeUniquenessStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.WeightedForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.WeightedKey;
@@ -646,11 +645,11 @@ public class KeysInferrer {
 
       if (type == ClassifiedJoinPattern.Type.O1) {
         final Key key = new Key(C, P1, new PathType(jp.getL1()));
-        final Key notKey = new NegativeKey(C, P2, new PathType(jp.getL2()));
+        final Key notKey = new Key(C, P2, new PathType(jp.getL2()));
         final ForeignKey foreignKey = new ForeignKey(key, P2, new PathType(jp.getL2()));
 
         final WeightedKey wKey = new WeightedKey(key, weight);
-        final WeightedKey wNotKey = new WeightedKey(notKey, weight);
+        final WeightedKey wNotKey = new WeightedKey(notKey, weight * (-1));
         final WeightedForeignKey wForeignKey = new WeightedForeignKey(foreignKey, weight);
 
         keys.add(wKey);

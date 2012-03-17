@@ -40,6 +40,8 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("exists", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
     builtinFunctionTypes.put("not", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
     builtinFunctionTypes.put("concat", new XSDType(XSDType.XSDAtomicType.STRING, Cardinality.ONE));
+    builtinFunctionTypes.put("zero-or-one", new UnknownType());
+    builtinFunctionTypes.put("last", new UnknownType());
   }
   
   private final static List<String> DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES = new ArrayList<String>();
@@ -123,6 +125,11 @@ public class BuiltinFunctions {
       for (int i = 0; i < 5; ++i) {
         paramNodes.add(paramNode);
       }
+    } else if (functionName.equals("zero-or-one")) {
+      final ParamNode paramNode1 = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_MORE));
+      paramNodes.add(paramNode1);
+    } else if (functionName.equals("last")) {
+        return null;
     } else {
       assert(false); // TODO rio Doplnit dalsie vstavane funckie podla potreby.
     }

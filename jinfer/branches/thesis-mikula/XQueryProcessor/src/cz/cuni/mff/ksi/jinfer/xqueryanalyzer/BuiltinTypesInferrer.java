@@ -78,7 +78,10 @@ public class BuiltinTypesInferrer {
         if (paramTypeDeclarationNode == null) {
           continue;
         }
-        inferredTypes.put((PathType)paramType, TypeFactory.createType(paramTypeDeclarationNode));
+        final Type formalParamType = TypeFactory.createType(paramTypeDeclarationNode); // TODO rio do diplomky!
+        if (formalParamType.getCategory() != Type.Category.UNKNOWN) {
+          inferredTypes.put((PathType)paramType, formalParamType);
+        }
       }
     }
   }

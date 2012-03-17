@@ -105,7 +105,8 @@ public class PathType implements Type {
       return false;
     }
     
-    if (!substeps.equals(path.substeps)) {
+    if (substeps != null && !substeps.equals(path.substeps)
+            || substeps == null && path.substeps != null) {
       return false;
     }
     

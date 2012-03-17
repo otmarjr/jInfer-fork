@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import java.util.HashMap;
 import java.util.List;
@@ -174,8 +174,8 @@ public class KeySummarizer {
   }
   
   private boolean covers(final PathType path1, final PathType path2) {
-    final PathTypeParser parser1 = new PathTypeParser(path1);
-    final PathTypeParser parser2 = new PathTypeParser(path2);
+    final NormalizedPathType parser1 = new NormalizedPathType(path1);
+    final NormalizedPathType parser2 = new NormalizedPathType(path2);
     
     if (parser1.getInitialStep() != parser2.getInitialStep()) {
       return false;

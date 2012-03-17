@@ -16,9 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
 /**
  *
@@ -33,10 +32,10 @@ public class ForeignKey {
   public ForeignKey(final Key key, final PathType foreignTargetPath, final PathType foreignKeyPath) {
     this.key = key;
    
-    final PathTypeParser targetPathParser = new PathTypeParser(foreignTargetPath);
+    final NormalizedPathType targetPathParser = new NormalizedPathType(foreignTargetPath);
     this.foreignTargetPath = new PathType(targetPathParser.getSteps(), foreignTargetPath.getInitialStep(), null, false);
     
-    final PathTypeParser keyPathParser = new PathTypeParser(foreignKeyPath);
+    final NormalizedPathType keyPathParser = new NormalizedPathType(foreignKeyPath);
     this.foreignKeyPath = new PathType(keyPathParser.getSteps(), foreignKeyPath.getInitialStep(), null, false);
   }
   
@@ -66,14 +65,14 @@ public class ForeignKey {
       return false;
     }
     
-    final PathTypeParser ptpTarget1 = new PathTypeParser(foreignTargetPath);
-    final PathTypeParser ptpTarget2 = new PathTypeParser(other.foreignTargetPath);
+    final NormalizedPathType ptpTarget1 = new NormalizedPathType(foreignTargetPath);
+    final NormalizedPathType ptpTarget2 = new NormalizedPathType(other.foreignTargetPath);
     if (!ptpTarget1.getSteps().equals(ptpTarget2.getSteps())) {
       return false;
     }
     
-    final PathTypeParser ptpKey1 = new PathTypeParser(foreignKeyPath);
-    final PathTypeParser ptpKey2 = new PathTypeParser(other.foreignKeyPath);
+    final NormalizedPathType ptpKey1 = new NormalizedPathType(foreignKeyPath);
+    final NormalizedPathType ptpKey2 = new NormalizedPathType(other.foreignKeyPath);
     if (!ptpKey1.getSteps().equals(ptpKey2.getSteps())) {
       return false;
     }
@@ -84,8 +83,8 @@ public class ForeignKey {
   @Override
   public int hashCode() {
     int hash = 7;
-    final PathTypeParser ptp1 = new PathTypeParser(foreignTargetPath);
-    final PathTypeParser ptp2 = new PathTypeParser(foreignKeyPath);
+    final NormalizedPathType ptp1 = new NormalizedPathType(foreignTargetPath);
+    final NormalizedPathType ptp2 = new NormalizedPathType(foreignKeyPath);
     hash = 37 * hash + (this.key != null ? this.key.hashCode() : 0);
     hash = 37 * hash + (this.foreignTargetPath != null ? ptp1.getSteps().hashCode() : 0);
     hash = 37 * hash + (this.foreignKeyPath != null ? ptp2.getSteps().hashCode() : 0);

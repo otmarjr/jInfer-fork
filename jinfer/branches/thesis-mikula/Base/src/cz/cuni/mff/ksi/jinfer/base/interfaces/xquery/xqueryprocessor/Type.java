@@ -22,7 +22,7 @@ package cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor;
  * There are four types:
  *  - XSD built-in type, for example xs:string, xs:int.
  *  - Node type, for example element, document.
- *  - Path type, for example $var/subnode/text()
+ *  - Path type, for example $var/subnode/text().
  *  - Unknown type, representing the rest.
  * 
  * @author rio

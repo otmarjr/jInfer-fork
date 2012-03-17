@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils;
+package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -29,18 +28,21 @@ import java.util.Stack;
  *
  * @author rio
  */
-public final class PathTypeParser {
+public class NormalizedPathType {
+
+  private final List<StepExprNode> steps = new ArrayList<StepExprNode>();
+  private InitialStep initialStep;
+  private final List<String> specialFunctionCalls; // TODO rio Does this make sense in this context?
+  private boolean isForBound; // TODO rio Does this make sense in this context?
   
   private final Stack<Integer> stepsIndices = new Stack<Integer>(); // Zasobnik indexov, kde sa prave nachadzame v kazdom liste v zasobniku listov krokov. Hodnota udava ktory je dalsi v poradi (0 -> ideme prave na nulu).
   private final Stack<List<StepExprNode>> stepsStack = new Stack<List<StepExprNode>>();
   private final Stack<PathType> pathTypesStack = new Stack<PathType>();
   private StepExprNode actualStep;
-  private InitialStep initialStep;
   private boolean isFirstStep = true;
   private boolean hasPredicates = false;
-  private List<StepExprNode> steps = new ArrayList<StepExprNode>();
   
-  public PathTypeParser(final PathType pathType) {
+  public NormalizedPathType(final PathType pathType) {
     stepsIndices.push(0);
     stepsStack.push(pathType.getSteps());
     pathTypesStack.push(pathType);
@@ -48,8 +50,11 @@ public final class PathTypeParser {
     while(goNextStep()) {
       steps.add(actualStep);
     }
+    
+    specialFunctionCalls = pathType.getSpecialFunctionCalls();
+    isForBound = pathType.isForBound();
   }
-   
+  
   private boolean goNextStep() {
     int index = stepsIndices.pop();
     final List<StepExprNode> actualSteps = stepsStack.peek();
@@ -98,7 +103,7 @@ public final class PathTypeParser {
     return initialStep;
   }
 
-  public boolean isHasPredicates() {
+  public boolean hasPredicates() {
     return hasPredicates;
   }
 
@@ -107,10 +112,10 @@ public final class PathTypeParser {
   }
   
   public static boolean arePathTypesSame(final PathType pathType1, final PathType pathType2) {
-    final PathTypeParser ptp1 = new PathTypeParser(pathType1);
-    final PathTypeParser ptp2 = new PathTypeParser(pathType2);
+    final NormalizedPathType npt1 = new NormalizedPathType(pathType1);
+    final NormalizedPathType npt2 = new NormalizedPathType(pathType2);
     
-    return ptp1.getSteps().equals(ptp2.getSteps());
+    return npt1.getSteps().equals(npt2.getSteps());
   }
   
 }

@@ -16,9 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
 /**
  * TODO rio comment
@@ -32,16 +31,16 @@ public class Key {
   
   public Key(final PathType contextPath, final PathType targetPath, final PathType keyPath) {
     if (contextPath != null) {
-      final PathTypeParser contextPathParser = new PathTypeParser(contextPath);
+      final NormalizedPathType contextPathParser = new NormalizedPathType(contextPath);
       this.contextPath = new PathType(contextPathParser.getSteps(), contextPath.getInitialStep(), null, false);
     } else {
       this.contextPath = null;
     }
     
-    final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
+    final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
     this.targetPath = new PathType(targetPathParser.getSteps(), targetPath.getInitialStep(), null, false);
     
-    final PathTypeParser keyPathParser = new PathTypeParser(keyPath);
+    final NormalizedPathType keyPathParser = new NormalizedPathType(keyPath);
     this.keyPath = new PathType(keyPathParser.getSteps(), keyPath.getInitialStep(), null, false);
   }
   
@@ -77,8 +76,8 @@ public class Key {
 
     
     if (contextPath != null && other.contextPath != null) {
-      final PathTypeParser ptp1 = new PathTypeParser(contextPath);
-      final PathTypeParser ptp2 = new PathTypeParser(other.contextPath);
+      final NormalizedPathType ptp1 = new NormalizedPathType(contextPath);
+      final NormalizedPathType ptp2 = new NormalizedPathType(other.contextPath);
       if (!ptp1.getSteps().equals(ptp2.getSteps())) {
         return false;
       }
@@ -86,14 +85,14 @@ public class Key {
       return false;
     }
     
-    final PathTypeParser ptpTarget1 = new PathTypeParser(targetPath);
-    final PathTypeParser ptpTarget2 = new PathTypeParser(other.targetPath);
+    final NormalizedPathType ptpTarget1 = new NormalizedPathType(targetPath);
+    final NormalizedPathType ptpTarget2 = new NormalizedPathType(other.targetPath);
     if (!ptpTarget1.getSteps().equals(ptpTarget2.getSteps())) {
       return false;
     }
     
-    final PathTypeParser ptpKey1 = new PathTypeParser(keyPath);
-    final PathTypeParser ptpKey2 = new PathTypeParser(other.keyPath);
+    final NormalizedPathType ptpKey1 = new NormalizedPathType(keyPath);
+    final NormalizedPathType ptpKey2 = new NormalizedPathType(other.keyPath);
     if (!ptpKey1.getSteps().equals(ptpKey2.getSteps())) {
       return false;
     }
@@ -104,12 +103,12 @@ public class Key {
   @Override
   public int hashCode() {
     int hash = 3;
-    PathTypeParser ptpContext = null;
+    NormalizedPathType ptpContext = null;
     if (contextPath != null) {
-      ptpContext = new PathTypeParser(contextPath);
+      ptpContext = new NormalizedPathType(contextPath);
     }
-    final PathTypeParser ptpTarget = new PathTypeParser(targetPath);
-    final PathTypeParser ptpKey = new PathTypeParser(keyPath);
+    final NormalizedPathType ptpTarget = new NormalizedPathType(targetPath);
+    final NormalizedPathType ptpKey = new NormalizedPathType(keyPath);
     hash = 17 * hash + (this.contextPath != null ? ptpContext.getSteps().hashCode() : 0);
     hash = 17 * hash + (this.targetPath != null ? ptpTarget.getSteps().hashCode() : 0);
     hash = 17 * hash + (this.keyPath != null ? ptpKey.getSteps().hashCode() : 0);

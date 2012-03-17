@@ -16,8 +16,8 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
 /**
  *
@@ -31,13 +31,13 @@ public class NegativeUniquenessStatement {
 
   public NegativeUniquenessStatement(final PathType contextPath, final PathType targetPath, final int weight) {
     if (contextPath != null) {
-      final PathTypeParser contextPathParser = new PathTypeParser(contextPath);
+      final NormalizedPathType contextPathParser = new NormalizedPathType(contextPath);
       this.contextPath = new PathType(contextPathParser.getSteps(), contextPath.getInitialStep(), null, false);
     } else {
       this.contextPath = null;
     }
     
-    final PathTypeParser targetPathParser = new PathTypeParser(targetPath);
+    final NormalizedPathType targetPathParser = new NormalizedPathType(targetPath);
     this.targetPath = new PathType(targetPathParser.getSteps(), targetPath.getInitialStep(), null, false);
     
     this.weight = weight;

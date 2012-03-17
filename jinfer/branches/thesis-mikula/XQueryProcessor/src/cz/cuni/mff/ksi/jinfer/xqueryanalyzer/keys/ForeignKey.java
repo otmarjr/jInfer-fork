@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeParser;
 
 /**
  *
@@ -44,6 +45,46 @@ public class ForeignKey {
 
   public PathType getForeignTargetPath() {
     return foreignTargetPath;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final ForeignKey other = (ForeignKey) obj;
+    
+    if (!key.equals(other.key)) {
+      return false;
+    }
+    
+    final PathTypeParser ptpTarget1 = new PathTypeParser(foreignTargetPath);
+    final PathTypeParser ptpTarget2 = new PathTypeParser(other.foreignTargetPath);
+    if (!ptpTarget1.getSteps().equals(ptpTarget2.getSteps())) {
+      return false;
+    }
+    
+    final PathTypeParser ptpKey1 = new PathTypeParser(foreignKeyPath);
+    final PathTypeParser ptpKey2 = new PathTypeParser(other.foreignKeyPath);
+    if (!ptpKey1.getSteps().equals(ptpKey2.getSteps())) {
+      return false;
+    }
+    
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    final PathTypeParser ptp1 = new PathTypeParser(foreignTargetPath);
+    final PathTypeParser ptp2 = new PathTypeParser(foreignKeyPath);
+    hash = 37 * hash + (this.key != null ? this.key.hashCode() : 0);
+    hash = 37 * hash + (this.foreignTargetPath != null ? ptp1.getSteps().hashCode() : 0);
+    hash = 37 * hash + (this.foreignKeyPath != null ? ptp2.getSteps().hashCode() : 0);
+    return hash;
   }
   
   

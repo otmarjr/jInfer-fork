@@ -69,12 +69,14 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private static final String METADATA_KEY_KEYS = "xquery_analyzer_keys";
   private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_analyzer_foreign_keys";
   
-  private final KeysInferrer keysInferrer = new KeysInferrer();
+  private KeysInferrer keysInferrer;
   private List<InferredType> inferredTypes;
 
   @Override
   public void start(final Input input, final List<Element> grammar, final XQueryAnalyzerCallback callback) throws InterruptedException {
     List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
+    
+    keysInferrer = new KeysInferrer();
     
     for (final ModuleNode mn : xquerySyntaxTrees) {
       processSyntaxTree(mn);
@@ -84,7 +86,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     
     keysInferrer.summarize();
     final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
-    final Map<Key, List<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
+    final Map<Key, Set<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
     saveInferredKeys(grammar, keys, foreignKeys);
     
     LOG.info("Total number of inferred key statements: " + keys.size());
@@ -210,7 +212,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     }
   }
   
-  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys, Map<Key, List<ForeignKey>> foreignKeys) throws InterruptedException {
+  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
     final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
     
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
@@ -231,14 +233,19 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);
       
+      final Set<ForeignKey> fKeys = foreignKeys.get(key);
+      
       if (contextPath != null) {
         final PathTypeParser ptp = new PathTypeParser(contextPath);
         for (final StepExprNode step : ptp.getSteps()) {
           contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
         }
+      } else {
+        removeFirstPathItemTypeNode(key.getTargetPath());
+        for (final ForeignKey fKey : fKeys) {
+          removeFirstPathItemTypeNode(fKey.getForeignTargetPath());
+        }
       }
-      
-      final List<ForeignKey> fKeys = foreignKeys.get(key);
       
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
@@ -252,12 +259,25 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
         }
         
         if (!BaseUtils.isEmpty(fKeys)) {
-          final List<ForeignKey> savedFKeys = (List<ForeignKey>)metadata.get(METADATA_KEY_FOREIGN_KEYS);
+          final Set<ForeignKey> savedFKeys = (Set<ForeignKey>)metadata.get(METADATA_KEY_FOREIGN_KEYS);
           if (savedFKeys == null) {
             metadata.put(METADATA_KEY_FOREIGN_KEYS, fKeys);
           } else {
             savedFKeys.addAll(fKeys);
           }
+        }
+      }
+    }
+  }
+  
+  private static void removeFirstPathItemTypeNode(final PathType pathType) {
+    final StepExprNode step = pathType.getPathExprNode().getSteps().get(0);
+    if (step.isAxisStep()) {
+      final AxisNode axisNode = step.getAxisNode();
+      if (axisNode != null) {
+        final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
+        if (itemTypeNode != null) {
+          pathType.getPathExprNode().getSteps().remove(0);
         }
       }
     }

@@ -106,4 +106,11 @@ public final class PathTypeParser {
     return steps;
   }
   
+  public static boolean arePathTypesSame(final PathType pathType1, final PathType pathType2) {
+    final PathTypeParser ptp1 = new PathTypeParser(pathType1);
+    final PathTypeParser ptp2 = new PathTypeParser(pathType2);
+    
+    return ptp1.getSteps().equals(ptp2.getSteps());
+  }
+  
 }

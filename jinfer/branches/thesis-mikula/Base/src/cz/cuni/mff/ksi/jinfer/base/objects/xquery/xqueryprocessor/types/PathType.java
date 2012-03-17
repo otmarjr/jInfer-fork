@@ -38,6 +38,7 @@ public class PathType implements Type {
     SPECIAL_FUNCTION_NAMES.add("avg");
     SPECIAL_FUNCTION_NAMES.add("sum");
     SPECIAL_FUNCTION_NAMES.add("zero-or-one");
+    SPECIAL_FUNCTION_NAMES.add("exactly-one");
   }
   
   private final PathExprNode pathExprNode;

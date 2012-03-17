@@ -38,9 +38,13 @@ public class BuiltinFunctions {
     builtinFunctionTypes.put("distinct-values", new UnknownType());
     builtinFunctionTypes.put("count", new XSDType(XSDType.XSDAtomicType.INTEGER, Cardinality.ONE));
     builtinFunctionTypes.put("exists", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("contains", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
+    builtinFunctionTypes.put("empty", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
     builtinFunctionTypes.put("not", new XSDType(XSDType.XSDAtomicType.BOOLEAN, Cardinality.ONE));
     builtinFunctionTypes.put("concat", new XSDType(XSDType.XSDAtomicType.STRING, Cardinality.ONE));
+    builtinFunctionTypes.put("string", new XSDType(XSDType.XSDAtomicType.STRING, Cardinality.ONE));
     builtinFunctionTypes.put("zero-or-one", new UnknownType());
+    builtinFunctionTypes.put("exactly-one", new UnknownType());
     builtinFunctionTypes.put("last", new UnknownType());
   }
   
@@ -125,11 +129,19 @@ public class BuiltinFunctions {
       for (int i = 0; i < 5; ++i) {
         paramNodes.add(paramNode);
       }
-    } else if (functionName.equals("zero-or-one")) {
+    } else if (functionName.equals("zero-or-one") || functionName.equals("exactly-one") || functionName.equals("string") || functionName.equals("empty")) {
       final ParamNode paramNode1 = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_MORE));
       paramNodes.add(paramNode1);
     } else if (functionName.equals("last")) {
         return null;
+    } else if (functionName.equals("contains")) {
+      final ItemTypeNode itemTypeNode1 = new AtomicTypeNode("xs:string");
+      final ParamNode paramNode1 = new ParamNode("arg1", new TypeNode(Cardinality.ZERO_OR_ONE, itemTypeNode1));
+      final ParamNode paramNode2 = new ParamNode("arg2", new TypeNode(Cardinality.ZERO_OR_ONE, itemTypeNode1));
+      final ParamNode paramNode3 = new ParamNode("collation", new TypeNode(Cardinality.ONE, itemTypeNode1));
+      paramNodes.add(paramNode1);
+      paramNodes.add(paramNode2);
+      paramNodes.add(paramNode3);
     } else {
       assert(false); // TODO rio Doplnit dalsie vstavane funckie podla potreby.
     }

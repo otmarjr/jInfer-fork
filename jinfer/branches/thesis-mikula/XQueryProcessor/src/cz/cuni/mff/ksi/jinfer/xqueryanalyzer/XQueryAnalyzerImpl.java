@@ -38,6 +38,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -69,7 +70,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
   private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_analyzer_foreign_keys";
   
   private final KeysInferrer keysInferrer = new KeysInferrer();
-  private Map<PathType, Type> inferredTypes;
+  private List<InferredType> inferredTypes;
 
   @Override
   public void start(final Input input, final List<Element> grammar, final XQueryAnalyzerCallback callback) throws InterruptedException {
@@ -78,12 +79,15 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     for (final ModuleNode mn : xquerySyntaxTrees) {
       processSyntaxTree(mn);
       saveInferredTypes(grammar, inferredTypes);
+      LOG.info("Number of inferred type statements in a current tree: " + inferredTypes.size());
     }
     
     keysInferrer.summarize();
     final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
     final Map<Key, List<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
     saveInferredKeys(grammar, keys, foreignKeys);
+    
+    LOG.info("Total number of inferred key statements: " + keys.size());
     
     callback.finished(grammar);
   }
@@ -135,7 +139,7 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     return ret;
   }
   
-  private static void saveInferredTypes(final List<Element> grammar, Map<PathType, Type> inferredTypes) throws InterruptedException {
+  private static void saveInferredTypes(final List<Element> grammar, List<InferredType> inferredTypes) throws InterruptedException {
     final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
     
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
@@ -144,13 +148,14 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
     
     final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
     
-    for (final PathType pathType : inferredTypes.keySet()) {
-      final Type inferredType = inferredTypes.get(pathType);
-      if (inferredType.getCategory() != Type.Category.BUILT_IN) {
+    for (final InferredType inferredType : inferredTypes) {
+      final PathType pathType = inferredType.getPathType();
+      final Type type = inferredType.getType();
+      if (type.getCategory() != Type.Category.BUILT_IN) {
         continue;
       }
       
-      XSDType.XSDAtomicType inferredAtomicType = ((XSDType)inferredType).getAtomicType();
+      XSDType.XSDAtomicType inferredAtomicType = ((XSDType)type).getAtomicType();
       
       final PathTypeParser ptp = new PathTypeParser(pathType);
       final boolean hasPredicates = ptp.isHasPredicates();      
@@ -163,12 +168,12 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
 
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
-        final XSDType.XSDAtomicType type = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
+        final XSDType.XSDAtomicType xsdType = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {
-          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, type);
+          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
           if (moreSpecificType != null) {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
@@ -184,12 +189,12 @@ public class XQueryAnalyzerImpl implements XQueryAnalyzer {
       
       for (final Attribute attribute : contextSet.getAttributes()) {
         final Map<String, Object> metadata = attribute.getMetadata();
-        final XSDType.XSDAtomicType type = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
+        final XSDType.XSDAtomicType xsdType = (XSDType.XSDAtomicType)metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {
-          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, type);
+          final XSDType.XSDAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
           if (moreSpecificType != null) {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);

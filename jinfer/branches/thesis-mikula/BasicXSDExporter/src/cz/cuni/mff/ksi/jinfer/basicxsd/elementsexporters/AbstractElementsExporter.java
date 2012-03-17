@@ -107,8 +107,8 @@ public abstract class AbstractElementsExporter {
       if (xqueryType == null) {
         indentator.append(" type=\"" + type + '"');
       } else {
-        LOG.info("Built-in type of element inferred by the simplifier: " + type);
-        LOG.info("Built-in type of element inferred by the xquery analyzer: xs:" + xqueryType);
+        LOG.info("Built-in type of element \"" + element.getName() + "\" inferred by the simplifier: " + type);
+        LOG.info("Built-in type of element \"" + element.getName() + "\" inferred by the xquery analyzer: xs:" + xqueryType);
         indentator.append(" type=\"xs:" + xqueryType + '"');
       }
       indentator.append(OccurencesProcessor.processOccurrences(interval));
@@ -303,8 +303,8 @@ public abstract class AbstractElementsExporter {
         if (xqueryType == null) {
           indentator.append("\" type=\"" + type + '"');
         } else {
-          LOG.info("Built-in type of attribute inferred by the simplifier: " + type);
-          LOG.info("Built-in type of attribute inferred by the xquery analyzer: xs:" + xqueryType);
+          LOG.info("Built-in type of attribute \"" + attribute.getName() + "\" inferred by the simplifier: " + type);
+          LOG.info("Built-in type of attribute \"" + attribute.getName() + "\" inferred by the xquery analyzer: xs:" + xqueryType);
           indentator.append("\" type=\"xs:" + xqueryType + '"');
         }
 

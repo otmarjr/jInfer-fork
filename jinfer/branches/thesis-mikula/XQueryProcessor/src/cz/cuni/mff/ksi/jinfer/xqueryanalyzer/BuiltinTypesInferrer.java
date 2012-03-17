@@ -20,9 +20,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types.TypeFactory;
-import java.util.HashMap;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -32,14 +32,14 @@ public class BuiltinTypesInferrer {
   
   private final ModuleNode root;
   private final FunctionsProcessor fp;
-  private final Map<PathType, Type> inferredTypes = new HashMap<PathType, Type>();
+  private final List<InferredType> inferredTypes = new ArrayList<InferredType>();
   
   public BuiltinTypesInferrer(final ModuleNode root, final FunctionsProcessor fp) {
     this.root = root;
     this.fp = fp;
   }
   
-  public Map<PathType, Type> process() {
+  public List<InferredType> process() {
     processRecursive(root);
     return inferredTypes;
   }
@@ -80,7 +80,7 @@ public class BuiltinTypesInferrer {
         }
         final Type formalParamType = TypeFactory.createType(paramTypeDeclarationNode); // TODO rio do diplomky!
         if (formalParamType.getCategory() != Type.Category.UNKNOWN) {
-          inferredTypes.put((PathType)paramType, formalParamType);
+          inferredTypes.add(new InferredType((PathType)paramType, formalParamType));
         }
       }
     }
@@ -123,6 +123,7 @@ public class BuiltinTypesInferrer {
       case GEN_LESS_THAN:
       case GEN_LESS_THAN_EQUALS:
       case GEN_GREATER_THAN_EQUALS:
+      case GEN_GREATER_THAN:
       case GEN_EQUALS:
       case GEN_NOT_EQUALS:
       {
@@ -150,11 +151,11 @@ public class BuiltinTypesInferrer {
     
     if (pathType != null) {
       assert(type != null);
-      inferredTypes.put(pathType, type);
+      inferredTypes.add(new InferredType(pathType, type));
     }
   }
 
-  public Map<PathType, Type> getInferredTypes() {
+  public List<InferredType> getInferredTypes() {
     return inferredTypes;
   }
     

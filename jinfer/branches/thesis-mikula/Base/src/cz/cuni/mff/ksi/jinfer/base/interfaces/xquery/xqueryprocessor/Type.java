@@ -17,19 +17,52 @@
 package cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor;
 
 /**
- * TODO rio
+ * Interface for types used by XQuery Processor module.
+ * 
+ * There are four types:
+ *  - XSD built-in type, for example xs:string, xs:int.
+ *  - Node type, for example element, document.
+ *  - Path type, for example $var/subnode/text()
+ *  - Unknown type, representing the rest.
+ * 
  * @author rio
  */
 public interface Type {
   
   public enum Category {
-    BUILT_IN,
+    XSD_BUILT_IN,
     NODE,
     PATH,
     UNKNOWN;
   }
   
+  /**
+   * Returns the category of this type.
+   */
   public Category getCategory();
 
-  public boolean isNumeric();
+  /**
+   * Is this type numeric? TODO rio What does it mean?
+   */
+  public boolean isNumeric(); // TODO rio Do we want/need?
+  
+  /**
+   * Is this type one of XSD built-in atomic types?
+   */
+  public boolean isXsdBuiltinType();
+  
+  /**
+   * Is this type of the node type category?
+   */
+  public boolean isNodeType();
+  
+  /**
+   * Is this type of the path type category?
+   */
+  public boolean isPathType();
+  
+  /**
+   * Is this type of the unknown category?
+   */
+  public boolean isUnknownType();
 }

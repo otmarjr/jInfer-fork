@@ -17,24 +17,55 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.KindTestNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.TypeNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AtomicTypeNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
-import java.util.HashMap;
-import java.util.Map;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.KindTestNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.TypeNode;
 
 /**
- * TODO rio comment
+ * Abstract base class of all implementation classes representing types.
+ * 
+ * It provides default implementation of methods from {@link Type} interface and
+ * some utility static methods working with types.
+ * Every implementation class has to override a methods that does not suit.
+ * 
  * @author rio
  */
-public class TypeFactory {
+public abstract class AbstractType implements Type {
+
+  @Override
+  public boolean isNodeType() {
+    return false;
+  }
+
+  @Override
+  public boolean isNumeric() {
+    return false;
+  }
+
+  @Override
+  public boolean isPathType() {
+    return false;
+  }
+
+  @Override
+  public boolean isUnknownType() {
+    return false;
+  }
+
+  @Override
+  public boolean isXsdBuiltinType() {
+    return false;
+  }
   
+  /**
+   * Creates an instance from the specified {@link TypeNode}. Its purpose is to
+   * convert TypeNodes from the syntax trees to out representation of types.
+   * 
+   * @param typeNode TypeNode to create an instance of Type.
+   * @return An instance of Type.
+   */
   public static Type createType(final TypeNode typeNode) {
     final ItemTypeNode itemTypeNode = typeNode.getItemTypeNode();
     if (itemTypeNode == null) {
@@ -57,6 +88,14 @@ public class TypeFactory {
     }
   }
   
+  /**
+   * When a type is bound to a variable in a for clause, its semantic is slightly
+   * changed. This method provides the conversion from a type to a type bound
+   * in a for clause.
+   * 
+   * @param forBindingExprType A type of expression in a binding for clause.
+   * @return A type of the for bound variable.
+   */
   public static Type createForBoundType(final Type forBindingExprType) {
     switch (forBindingExprType.getCategory()) {
       case UNKNOWN:
@@ -67,7 +106,7 @@ public class TypeFactory {
         return new PathType(pathType.getPathExprNode(), pathType.getSubsteps(), true);
       }
       
-      case BUILT_IN: {
+      case XSD_BUILT_IN: {
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ONE);
         assert(((XSDType)forBindingExprType).getCardinality() != Cardinality.ZERO);
         final XSDType xsdType = (XSDType)forBindingExprType;
@@ -77,15 +116,19 @@ public class TypeFactory {
         
       case NODE: {
         final NodeType nodeType = (NodeType)forBindingExprType;
-        return new NodeType(nodeType.getNType(), Cardinality.ONE);
+        return new NodeType(nodeType.getNodeTypeCategory(), Cardinality.ONE);
       }
         
       default:
-        assert(false);
         throw new IllegalStateException();
     }
   }
   
+  /**
+   * Does the reverse operation as {@link #createForBoundType(cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.xqueryprocessor.Type)}.
+   * @param returnClauseType A type of the return clause to perform the type unbind.
+   * @return An unbound type.
+   */
   public static Type createForUnboundType(final Type returnClauseType) {
     switch (returnClauseType.getCategory()) {
       case UNKNOWN:
@@ -96,7 +139,7 @@ public class TypeFactory {
         return new PathType(pathType.getPathExprNode(), pathType.getSubsteps(), false);
       }
         
-      case BUILT_IN: {
+      case XSD_BUILT_IN: {
         final XSDType xsdType = (XSDType)returnClauseType;
         final XSDType.XSDAtomicType atomicType = xsdType.getAtomicType();
         return new XSDType(atomicType, Cardinality.ZERO_OR_MORE);
@@ -104,34 +147,12 @@ public class TypeFactory {
         
       case NODE: {
         final NodeType nodeType = (NodeType)returnClauseType;
-        return new NodeType(nodeType.getNType(), Cardinality.ZERO_OR_MORE);
+        return new NodeType(nodeType.getNodeTypeCategory(), Cardinality.ZERO_OR_MORE);
       }
         
       default:
-        assert(false);
         throw new IllegalStateException();
     }
-  }
-  
-  public static PathType createPathType(final PathExprNode pathExprNode) {
-    final Map<StepExprNode, PathType> substeps = new HashMap<StepExprNode, PathType>();
-    
-    for (final StepExprNode stepNode : pathExprNode.getSteps()) {
-      final ExprNode detailNode = stepNode.getDetailNode();
-      if (detailNode != null) {
-        if (VarRefNode.class.isInstance(detailNode)) {
-          final VarRefNode varRefNode = (VarRefNode)detailNode;
-          final Type type = varRefNode.getType();
-          if (type.getCategory() != Type.Category.PATH) {
-            assert(false);
-          }
-          final PathType pathType = (PathType)type;
-          substeps.put(stepNode, pathType);
-        }
-      }
-    }
-    
-    return new PathType(pathExprNode, substeps, false);
   }
   
 }

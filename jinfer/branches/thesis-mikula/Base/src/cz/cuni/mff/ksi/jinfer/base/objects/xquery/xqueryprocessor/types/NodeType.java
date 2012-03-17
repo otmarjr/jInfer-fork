@@ -19,12 +19,13 @@ package cz.cuni.mff.ksi.jinfer.base.objects.xquery.xqueryprocessor.types;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
 
 /**
- *
+ * A representation of so called node type. For possible categories of node types,
+ * see {@link NodeTypeCategory}
  * @author rio
  */
 public class NodeType extends CardinalityType {
   
-  public enum NType {
+  public enum NodeTypeCategory {
     ANY_KIND,
     ATTRIBUTE,
     COMMENT,
@@ -36,24 +37,25 @@ public class NodeType extends CardinalityType {
     TEXT; 
   }
   
-  private final NType nType;
+  private final NodeTypeCategory nodeTypeCategory;
   
-  public NodeType(final NType nType, final Cardinality cardinality) {
+  public NodeType(final NodeTypeCategory nodeTypeCategory, final Cardinality cardinality) {
     super(cardinality);
-    this.nType = nType;
+    this.nodeTypeCategory = nodeTypeCategory;
   }
 
   @Override
   public Category getCategory() {
     return Category.NODE;
   }
-
+  
   @Override
-  public boolean isNumeric() {
-    return false;
+  public boolean isNodeType() {
+    return true;
   }
   
-  public NType getNType() {
-    return nType;
+  public NodeTypeCategory getNodeTypeCategory() {
+    return nodeTypeCategory;
   }
+  
 }

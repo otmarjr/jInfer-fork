@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns;
 
+import com.sun.org.apache.xpath.internal.ExpressionNode;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
@@ -28,7 +29,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 import java.util.List;
 
 /**
- *
+ * Parser of an expression node of form L2 = var/L1 for a specified variable var.
+ * @see ExpressionNode
+ * @see PathExprNode
  * @author rio
  */
 public final class JoinPredicateFormExprParser {
@@ -41,14 +44,27 @@ public final class JoinPredicateFormExprParser {
     isExprPredicateForm = isPredicateForm(exprNode, varName);
   }
   
+  /**
+   * Is the expression passed to the constructor of a desired form?
+   */
   public boolean isExprPredicateForm() {
     return isExprPredicateForm;
   }
 
+  /**
+   * If {@link #isExprPredicateForm()} method returned true, this method returns
+   * the path L1.
+   * @return Path L1.
+   */
   public PathExprNode getL1() {
     return L1;
   }
 
+  /**
+   * If {@link #isExprPredicateForm()} method returned true, this method returns
+   * the path L2.
+   * @return Path L2.
+   */
   public PathExprNode getL2() {
     return L2;
   }  

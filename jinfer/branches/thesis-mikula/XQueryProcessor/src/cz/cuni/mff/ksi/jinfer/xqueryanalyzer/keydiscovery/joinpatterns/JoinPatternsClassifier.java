@@ -29,11 +29,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This class provides classification of join patterns occurrences using the
+ * rules R1-R5. For details, see PDF documentation.
+ * 
  * @author rio
  */
 public class JoinPatternsClassifier {
   
+  /**
+   * Classifies the specified list of join pattern occurrences.
+   */
   public static List<ClassifiedJoinPattern> classify(final List<JoinPattern> joinPatterns) {
     final List<ClassifiedJoinPattern> classifiedJoinPatterns = new ArrayList<ClassifiedJoinPattern>();
     for (final JoinPattern joinPattern : joinPatterns) {

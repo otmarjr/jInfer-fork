@@ -52,22 +52,21 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
   
   private static final String NAME = "Basic_XQuery_Processor";
   private static final String DISPLAY_NAME = "Basic XQuery Processor";
-  
-  private KeysInferrer keysInferrer;
-  private List<InferredType> inferredTypes;
 
   @Override
   public void start(final Input input, final List<Element> grammar, final XQueryProcessorCallback callback) throws InterruptedException {
     List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
     LOG.info("Input XQuery files parsed into " + xquerySyntaxTrees.size() + " syntax trees");
     
-    inferredTypes = new ArrayList<InferredType>();
-    keysInferrer = new KeysInferrer();
+    final List<InferredType> inferredTypes = new ArrayList<InferredType>();
+    final KeysInferrer keysInferrer = new KeysInferrer();
     
     for (final ModuleNode root : xquerySyntaxTrees) {
-      final SyntaxTreeProcessor syntaxTreeProcessor = new SyntaxTreeProcessor(root, keysInferrer);
+      final SyntaxTreeProcessor syntaxTreeProcessor = new SyntaxTreeProcessor(root);
       syntaxTreeProcessor.process();
       inferredTypes.addAll(syntaxTreeProcessor.getInferredTypes());
+      keysInferrer.addJoinPatterns(syntaxTreeProcessor.getJoinPatterns());
+      keysInferrer.addNegativeUniquenessStatements(syntaxTreeProcessor.getNegativeUniquenessStatements());
     }
     
     LOG.info("Total Number of inferred type statements: " + inferredTypes.size());

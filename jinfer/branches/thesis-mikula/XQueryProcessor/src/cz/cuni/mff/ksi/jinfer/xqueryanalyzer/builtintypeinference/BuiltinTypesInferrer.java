@@ -14,13 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.expressiontypesanalysis.FunctionsAnalyser;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +31,15 @@ import java.util.List;
 public class BuiltinTypesInferrer {
   
   private final ModuleNode root;
-  private final FunctionsProcessor fp;
-  private final List<InferredType> inferredTypes = new ArrayList<InferredType>();
+  private final FunctionsAnalyser fp;
+  private final List<InferredTypeStatement> inferredTypes = new ArrayList<InferredTypeStatement>();
   
-  public BuiltinTypesInferrer(final ModuleNode root, final FunctionsProcessor fp) {
+  public BuiltinTypesInferrer(final ModuleNode root, final FunctionsAnalyser fp) {
     this.root = root;
     this.fp = fp;
   }
   
-  public List<InferredType> process() {
+  public List<InferredTypeStatement> process() {
     processRecursive(root);
     return inferredTypes;
   }
@@ -80,7 +80,7 @@ public class BuiltinTypesInferrer {
         }
         final Type formalParamType = AbstractType.createType(paramTypeDeclarationNode); // TODO rio do diplomky!
         if (formalParamType.getCategory() != Type.Category.UNKNOWN) {
-          inferredTypes.add(new InferredType((PathType)paramType, formalParamType));
+          inferredTypes.add(new InferredTypeStatement((PathType)paramType, formalParamType));
         }
       }
     }
@@ -151,11 +151,11 @@ public class BuiltinTypesInferrer {
     
     if (pathType != null) {
       assert(type != null);
-      inferredTypes.add(new InferredType(pathType, type));
+      inferredTypes.add(new InferredTypeStatement(pathType, type));
     }
   }
 
-  public List<InferredType> getInferredTypes() {
+  public List<InferredTypeStatement> getInferredTypes() {
     return inferredTypes;
   }
     

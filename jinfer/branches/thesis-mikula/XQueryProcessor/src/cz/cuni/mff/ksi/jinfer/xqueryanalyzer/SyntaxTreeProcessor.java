@@ -16,10 +16,15 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.expressiontypesanalysis.ExpressionTypesAnalyser;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.expressiontypesanalysis.FunctionsAnalyser;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.BuiltinTypesInferrer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPatternsFinder;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessFinder;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.JoinPattern;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.NegativeUniquenessStatement;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPattern;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +35,7 @@ import java.util.List;
 public class SyntaxTreeProcessor {
   
   private final ModuleNode root;
-  private final List<InferredType> inferredTypes = new ArrayList<InferredType>();
+  private final List<InferredTypeStatement> inferredTypes = new ArrayList<InferredTypeStatement>();
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
@@ -39,8 +44,8 @@ public class SyntaxTreeProcessor {
   }
   
   public void process() {
-    final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
-    final ExpressionsProcessor expressionProcessor = new ExpressionsProcessor(root, functionsProcessor);
+    final FunctionsAnalyser functionsProcessor = new FunctionsAnalyser(root);
+    final ExpressionTypesAnalyser expressionProcessor = new ExpressionTypesAnalyser(root, functionsProcessor);
     expressionProcessor.process();
     final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
     bti.process();
@@ -55,7 +60,7 @@ public class SyntaxTreeProcessor {
     joinPatterns.addAll(joinPatternsFinder.getJoinPatterns());
   }
   
-  public List<InferredType> getInferredTypes() {
+  public List<InferredTypeStatement> getInferredTypes() {
     return inferredTypes;
   }
   

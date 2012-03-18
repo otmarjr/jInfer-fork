@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
@@ -30,8 +30,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VariableBindi
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.WhereClauseNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.XQNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.NegativeUniquenessStatement;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeUtils;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class NegativeUniquenessFinder {
     if (FunctionCallNode.class.isInstance(node)) {
       final FunctionCallNode funcCallNode = (FunctionCallNode) node;
       final String funcName = funcCallNode.getFuncName();
-      final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(funcName);
+      final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(funcName);
       if (builtinFuncName != null
               && builtinFuncName.equals("distinct-values") // Bereme len distinct-values, kedze min, max a sum sa uz zapocitavaju v ramci hladania join patterns.
               //|| builtinFuncName.equals("min")

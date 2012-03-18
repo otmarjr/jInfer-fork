@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.expressiontypesanalysis;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
@@ -28,12 +28,12 @@ import java.util.Map;
  * Analyza globalnych funkcii pre jeden syntakticky strom.
  * @author rio
  */
-public class FunctionsProcessor {
+public class FunctionsAnalyser {
   
   private final Map<String, FunctionDeclNode> functionDeclarationNodes;
   private final Map<String, Type> functionTypes;
   
-  public FunctionsProcessor(final ModuleNode root) {
+  public FunctionsAnalyser(final ModuleNode root) {
     functionDeclarationNodes = getFunctionDeclarationNodes(root);
     functionTypes = determineFunctionReturnTypes(functionDeclarationNodes);
   }
@@ -44,10 +44,10 @@ public class FunctionsProcessor {
   
   public Type getFunctionType(final FunctionCallNode functionCallNode) {
     final String qualifiedName = functionCallNode.getFuncName();
-    final String builtinFunctionName = BuiltinFunctions.isBuiltinFunction(qualifiedName);
+    final String builtinFunctionName = BuiltinFunctionsUtils.isBuiltinFunction(qualifiedName);
     
     if (builtinFunctionName != null) {
-      return BuiltinFunctions.getFunctionCallType(functionCallNode);
+      return BuiltinFunctionsUtils.getFunctionCallType(functionCallNode);
     } else {
       if (functionTypes.containsKey(qualifiedName)) {
         return functionTypes.get(qualifiedName);
@@ -88,10 +88,10 @@ public class FunctionsProcessor {
   }
   
   public ParamListNode getParamListNode(final String functionName) {
-    final String builtinFunctionName = BuiltinFunctions.isBuiltinFunction(functionName);
+    final String builtinFunctionName = BuiltinFunctionsUtils.isBuiltinFunction(functionName);
             
     if (builtinFunctionName != null) {
-      return BuiltinFunctions.getParamListNode(builtinFunctionName);
+      return BuiltinFunctionsUtils.getParamListNode(builtinFunctionName);
     } else {
       if (functionDeclarationNodes.containsKey(functionName)) {
         return functionDeclarationNodes.get(functionName).getParamListNode();

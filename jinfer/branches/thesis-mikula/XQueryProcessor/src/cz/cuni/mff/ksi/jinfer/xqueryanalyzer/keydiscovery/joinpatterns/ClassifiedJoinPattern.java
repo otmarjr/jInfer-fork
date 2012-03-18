@@ -14,31 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils;
-
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns;
 
 /**
  *
  * @author rio
  */
-public class InferredType {
-
-  private final PathType pathType;
+public class ClassifiedJoinPattern {
+  
+  public enum Type {
+    O1,
+    O2
+  }
+  
+  private final JoinPattern joinPattern;
+  private final int weight; // Multiplied by 100.
   private final Type type;
   
-  public InferredType(final PathType pathType, final Type type) {
-    this.pathType = pathType;
+  public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {
+    this.joinPattern = joinPattern;
     this.type = type;
+    this.weight = weight;
   }
-
-  public PathType getPathType() {
-    return pathType;
-  }
-
+  
   public Type getType() {
     return type;
   }
   
+  public int getWeight() {
+    return weight;
+  }
+  
+  public JoinPattern getJoinPattern() {
+    return joinPattern;
+  }
 }

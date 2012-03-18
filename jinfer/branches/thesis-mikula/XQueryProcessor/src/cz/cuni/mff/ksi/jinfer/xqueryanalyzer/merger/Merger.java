@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.merger;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
@@ -37,10 +37,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeEvaluationContextNodesSet;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.XSDAtomicTypesUtils;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -85,7 +84,7 @@ public class Merger {
    * @param inferredTypes
    * @throws InterruptedException 
    */
-  public void mergeInferredTypes(List<InferredType> inferredTypes) throws InterruptedException {
+  public void mergeInferredTypes(List<InferredTypeStatement> inferredTypes) throws InterruptedException {
     writeInferredTypesToGrammar(topologicallySortedGrammar, inferredTypes);
   }
   
@@ -105,14 +104,14 @@ public class Merger {
    * @param inferredTypes The inferred type statements.
    * @throws InterruptedException 
    */
-  private static void writeInferredTypesToGrammar(final List<Element> topologicalSortedGrammar, List<InferredType> inferredTypes) throws InterruptedException {
+  private static void writeInferredTypesToGrammar(final List<Element> topologicalSortedGrammar, List<InferredTypeStatement> inferredTypes) throws InterruptedException {
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
       return;
     }
     
     final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
     
-    for (final InferredType inferredType : inferredTypes) {
+    for (final InferredTypeStatement inferredType : inferredTypes) {
       final PathType pathType = inferredType.getPathType();
       final Type type = inferredType.getType();
       if (type.getCategory() != Type.Category.XSD_BUILT_IN) {
@@ -310,7 +309,7 @@ public class Merger {
       final ExprNode detailNode = step.getDetailNode();
       
       if (FunctionCallNode.class.isInstance(detailNode)) {
-        final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(((FunctionCallNode)detailNode).getFuncName());
+        final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(((FunctionCallNode)detailNode).getFuncName());
         if ("doc".equals(builtinFuncName)) {
           return contextSet;
         }

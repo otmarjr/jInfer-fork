@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author rio
  */
-public class BuiltinFunctions {
+public class BuiltinFunctionsUtils {
   
   private final static Map<String, Type> builtinFunctionTypes = new HashMap<String, Type>();
   static {
@@ -86,7 +86,7 @@ public class BuiltinFunctions {
   
   public static Type getFunctionCallType(final FunctionCallNode functionCallNode) {
     final String functionName = functionCallNode.getFuncName();
-    final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(functionName);
+    final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(functionName);
     
     assert (builtinFuncName != null);
     

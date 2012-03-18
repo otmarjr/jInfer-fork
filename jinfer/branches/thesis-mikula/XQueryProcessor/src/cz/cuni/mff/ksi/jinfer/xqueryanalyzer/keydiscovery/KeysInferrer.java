@@ -14,16 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.ClassifiedJoinPattern;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.JoinPattern;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.WeightedKeysCreator;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPatternsClassifier;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.ClassifiedJoinPattern;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPattern;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.NegativeUniquenessStatement;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.WeightedForeignKey;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.WeightedKey;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.WeightedForeignKey;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.WeightedKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;

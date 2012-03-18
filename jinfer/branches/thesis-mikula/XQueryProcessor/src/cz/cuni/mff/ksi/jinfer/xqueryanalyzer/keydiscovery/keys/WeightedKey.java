@@ -14,29 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 
 /**
  *
  * @author rio
  */
-public class WeightedForeignKey {
+public class WeightedKey {
   
-  private final ForeignKey key;
+  private final Key key;
   private final int weight;
   
-  public WeightedForeignKey(final ForeignKey key, final int weight) {
+  public WeightedKey(final Key key, final int weight) {
     this.key = key;
-    this.weight = weight;
+    if (key.isPossitive()) {
+      this.weight = weight;
+    } else {
+      this.weight = 0 - weight;
+    }
   }
-
+  
   public int getWeight() {
     return weight;
   }
 
-  public ForeignKey getKey() {
+  public Key getKey() {
     return key;
   }
   

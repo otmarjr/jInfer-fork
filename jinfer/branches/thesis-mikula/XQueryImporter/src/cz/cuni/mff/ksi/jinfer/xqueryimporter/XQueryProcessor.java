@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryimporter;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.objects.FolderType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.XQNode;
 import cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer.XQConverter;
 import cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer.XQParseException;
 import java.io.InputStream;
@@ -75,14 +76,34 @@ public class XQueryProcessor implements Processor<ModuleNode> {
       LOG.error("Error parsing XQuery file, ignoring and going on.", e);
       return Collections.EMPTY_LIST;
     }
+    
+    final ModuleNode syntaxTree = converter.getModuleNode();
+    initParentReferences(syntaxTree);
+    
     final List<ModuleNode> result = new ArrayList<ModuleNode>();
-    result.add(converter.getModuleNode());
+    result.add(syntaxTree);
     return result;
   }
 
   @Override
   public boolean processUndefined() {
     return false;
+  }
+  
+  /**
+   * Initializes references to a parent node for every node in a specified
+   * syntax tree. This is needed because the parser does not create these
+   * references.
+   * @param root A syntax tree to be initialized.
+   */
+  private static void initParentReferences(final XQNode root) {
+    final List<XQNode> subnodes = root.getSubnodes();
+    if (subnodes != null) {
+      for (final XQNode subnode : subnodes) {
+        subnode.setParentNode(root);
+        initParentReferences(subnode);
+      }
+    }
   }
   
 }

@@ -19,11 +19,23 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 
 /**
- *
+ * An utility class providing functions with XSD built-in atomic types.
  * @author rio
  */
 public class XSDAtomicTypesUtils {
 
+  /**
+   * Selects a more specific type from the two specified.
+   * 
+   * In detail, if type1 can be casted (without any loss) to type2, returns type1.
+   * If none of the types can be casted to the other, returns string.
+   * 
+   * TODO rio This is not completed, but probably sufficient for out purpose.
+   * 
+   * @param type1
+   * @param type2
+   * @return A more specific type or string.
+   */
   public static XSDBuiltinAtomicType selectMoreSpecific(final XSDBuiltinAtomicType type1, final XSDBuiltinAtomicType type2) {
     if (type1 == XSDBuiltinAtomicType.STRING) {
       return type2;
@@ -235,7 +247,6 @@ public class XSDAtomicTypesUtils {
     
     ////////////////////////////////////////////////
     
-    // TODO rio Nekompletne, ale asi bude stacit, pre nase ucely.
     return XSDBuiltinAtomicType.STRING;
   }
 }

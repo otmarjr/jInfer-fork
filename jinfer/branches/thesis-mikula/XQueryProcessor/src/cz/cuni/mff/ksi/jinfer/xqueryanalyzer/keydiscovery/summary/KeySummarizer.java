@@ -18,16 +18,13 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary;
 
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKey;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * TODO rio refactor
  * @author rio
  */
 public class KeySummarizer {
@@ -117,12 +114,6 @@ public class KeySummarizer {
       keysMaxWeight = Math.abs(weight);
     }
   }
-  
-  /*public void summarize(final WeightedForeignKey key) {
-    if (foreignKeys.containsKey(key.getKey())) {
-      foreignKeys.get(key.getKey()).add(key.getWeight());
-    }
-  }*/
   
   public Map<Key, SummarizedInfo> getSummarizedKeys() {
     computeKeyCoverage();

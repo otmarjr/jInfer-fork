@@ -36,7 +36,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * A finder of negative uniqueness statements in a syntax tree.
+ * 
+ * To find negative uniqueness statements for a particular syntax tree, construct
+ * an instance by passing the tree to the constructor. Then run {@link #process()} method,
+ * and then the statements can be retrieves by {@link #getNegativeUniquenessStatements()}
+ * method.
+ * 
+ * @see NegativeUniquenessStatement
  * @author rio
  */
 public class NegativeUniquenessFinder {
@@ -44,14 +51,24 @@ public class NegativeUniquenessFinder {
   private final ModuleNode root;
   private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
+  /**
+   * @param root A syntax tree.
+   */
   public NegativeUniquenessFinder(final ModuleNode root) {
     this.root = root;
   }
   
+  /**
+   * Runs the search in the syntax tree passed to the constructor.
+   */
   public void process() {
     processRecursive(root);
   }
   
+  /**
+   * After a call of {@link #process()} method, it retrieves the found statements.
+   * @return 
+   */
   public List<NegativeUniquenessStatement> getNegativeUniquenessStatements() {
     return negativeUniquenessStatements;
   }
@@ -74,7 +91,7 @@ public class NegativeUniquenessFinder {
       final String funcName = funcCallNode.getFuncName();
       final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(funcName);
       if (builtinFuncName != null
-              && builtinFuncName.equals("distinct-values") // Bereme len distinct-values, kedze min, max a sum sa uz zapocitavaju v ramci hladania join patterns.
+              && builtinFuncName.equals("distinct-values") // We take into consideration "distinc-values" function only, because the others influenced the classification of join patterns and we do not want to count them again.
               //|| builtinFuncName.equals("min")
               //|| builtinFuncName.equals("max")
               //|| builtinFuncName.equals("sum")
@@ -164,12 +181,6 @@ public class NegativeUniquenessFinder {
   }
 
   private void memorizeNegativeWeight(final PathType pathType, final int weight) {
-    /*Integer oldWeight = negativeWeights.get(pathType);
-    int newWeight = weight;
-    if (oldWeight != null) {
-      newWeight += oldWeight.intValue();
-    }
-    negativeWeights.put(pathType, newWeight);*/
     negativeUniquenessStatements.add(new NegativeUniquenessStatement(pathType, weight));
   }
 }

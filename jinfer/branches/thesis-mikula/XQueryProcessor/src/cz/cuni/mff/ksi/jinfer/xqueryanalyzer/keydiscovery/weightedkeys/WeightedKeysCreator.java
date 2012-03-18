@@ -21,14 +21,21 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.ClassifiedJoinPattern;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPattern;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedForeignKey;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.ContextPathFinder;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * A class to create weighted keys from classified join pattern occurrences.
+ * 
+ * How to:
+ * 1. Create an instance by passing classified join patterns to the constructor.
+ * 2. Run {@link #process} method.
+ * 3. Retrieves the created keys and foreign keys by the getter methods.
+ * 
+ * @see ClassifiedJoinPattern
+ * @see WeightedKey
+ * @see WeightedForeignKey
  * @author rio
  */
 public class WeightedKeysCreator {

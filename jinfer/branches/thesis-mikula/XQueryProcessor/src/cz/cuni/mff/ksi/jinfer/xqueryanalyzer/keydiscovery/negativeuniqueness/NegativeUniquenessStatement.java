@@ -20,7 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
- *
+ * A representation of negative uniqueness statements. For description of
+ * negative uniqueness statements, refer to the PDF documentation.
  * @author rio
  */
 public class NegativeUniquenessStatement {

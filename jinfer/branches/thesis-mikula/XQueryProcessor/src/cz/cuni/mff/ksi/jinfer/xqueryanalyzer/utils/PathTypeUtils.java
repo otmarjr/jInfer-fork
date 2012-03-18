@@ -25,11 +25,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * An utility class providing PathType functions.
  * @author rio
  */
 public class PathTypeUtils {
   
+  /**
+   * Determined if a path is without predicates with an exception of its last step.
+   */
   public static boolean isWithoutPredicatesExceptLastStep(final PathType pathType) {
     final Map<StepExprNode, PathType> subSteps = pathType.getSubpaths();
     final List<StepExprNode> stepNodes = pathType.getSteps();
@@ -51,6 +54,9 @@ public class PathTypeUtils {
     return true;
   }
   
+  /**
+   * Determined if a path is completely without predicates.
+   */
   public static boolean isWithoutPredicates(final PathType pathType) {
     final Map<StepExprNode, PathType> subSteps = pathType.getSubpaths();
     for (final StepExprNode stepExprNode : pathType.getSteps()) {
@@ -67,6 +73,9 @@ public class PathTypeUtils {
     return true;
   }
   
+  /**
+   * Determines if a path uses only axis child, descendant, and descendant-or-self.
+   */
   public static boolean usesOnlyChildAndDescendantAxes(final PathType pathType) {
     for (final StepExprNode stepNode : pathType.getSteps()) {
       if (stepNode.isAxisStep()) {
@@ -89,7 +98,12 @@ public class PathTypeUtils {
     return true;
   }
 
-  // Vracia ten jediny predikat na konci.
+  /**
+   * If a path has just one predicate and it is in its last step, returns this
+   * predicate. Else returns null.
+   * @param pathType A path.
+   * @return The only predicate from the last step or null, if it does not exist.
+   */
   public static ExprNode endsWithExactlyOnePredicate(final PathType pathType) {
     final StepExprNode lastStepNode = pathType.getSteps().get(pathType.getSteps().size() - 1);
     if (!lastStepNode.hasPredicates()) {

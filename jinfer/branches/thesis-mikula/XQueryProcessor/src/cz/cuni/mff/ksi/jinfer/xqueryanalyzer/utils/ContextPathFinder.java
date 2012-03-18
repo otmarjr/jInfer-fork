@@ -23,7 +23,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * An utility class to determine a common context of two specified paths.
+ * The common context of paths P1 and P2 is found as follows:
+ *  - If at least one of P1 and P2 is an absolute path, they do not have a common
+ *    context.
+ *  - Else, if P1 and P2 starts with the same variable, a path referenced by variable
+ *    is their common context.
+ *  - Else, found P1' and P2' paths referenced by the starting variables and process
+ *    recursively.
+ * 
+ * @see PathType
  * @author rio
  */
 public final class ContextPathFinder {
@@ -44,14 +53,23 @@ public final class ContextPathFinder {
     return contextPath != null;
   }
 
+  /**
+   * @return The common context path, if it was found.
+   */
   public PathType getContextPath() {
     return contextPath;
   }
 
+  /**
+   * @return path1 stripped of the common context.
+   */
   public PathType getNewPath1() {
     return newPath1;
   }
 
+  /**
+   * @return path2 stripped of the common context.
+   */
   public PathType getNewPath2() {
     return newPath2;
   }

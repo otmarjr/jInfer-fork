@@ -40,10 +40,16 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * TODO rio comment
- *
- * Hlavna trieda XQuery modulu. Postupne pusta jednotlive kroky algoritmu
- * na zistovanie informacii z dotazov.
+ * The main class of this module. It is a basic implementation
+ * of {@link XQueryProcessor} interface.
+ * 
+ * It takes two inputs. One is a simplifier grammar, the second is a data structure
+ * holding all project input files. 
+ * It selects XQuery queries from the input files,
+ * for each it parses it to create its syntax tree. The syntax trees are then
+ * processed resulting in inferred statements.
+ * Finally, the inferred statements are written to the metadata of the grammar
+ * and the grammar is passed to the next module.
  *
  * @author rio
  */

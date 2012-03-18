@@ -24,8 +24,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO rio comment
- * Analyza globalnych funkcii pre jeden syntakticky strom.
+ * This class provides type analysis of of user-defined function in a syntax tree,
+ * and encapsulates the user-defined functions under one interface together with
+ * built-in functions.
+ * 
+ * In particular, it determines and provides types of arguments (in a form
+ * of {@link ParamListNode} instances), types of return values, and definition
+ * of user-defined functions (in a form of {@link FunctionDeclNode} instances).
+ * 
  * @author rio
  */
 public class FunctionsAnalyser {
@@ -33,15 +39,27 @@ public class FunctionsAnalyser {
   private final Map<String, FunctionDeclNode> functionDeclarationNodes;
   private final Map<String, Type> functionTypes;
   
+  /**
+   * 
+   * @param root A syntax tree.
+   */
   public FunctionsAnalyser(final ModuleNode root) {
     functionDeclarationNodes = getFunctionDeclarationNodes(root);
     functionTypes = determineFunctionReturnTypes(functionDeclarationNodes);
   }
   
+  /**
+   * Retrieves {@link FunctionDeclNode} instance for a specified function name.
+   */
   public FunctionDeclNode getFunctionDeclarationNode(final String functionName) {
     return functionDeclarationNodes.get(functionName);
   }
   
+  /**
+   * Retrieves a type of the function specified by {@link FunctionDeclNode}.
+   * @param functionCallNode A node of the syntax tree representing a function call.
+   * @return A type of the function's return value.
+   */
   public Type getFunctionType(final FunctionCallNode functionCallNode) {
     final String qualifiedName = functionCallNode.getFuncName();
     final String builtinFunctionName = BuiltinFunctionsUtils.isBuiltinFunction(qualifiedName);
@@ -51,6 +69,26 @@ public class FunctionsAnalyser {
     } else {
       if (functionTypes.containsKey(qualifiedName)) {
         return functionTypes.get(qualifiedName);
+      }
+    }
+    
+    assert(false);
+    return null;
+  }
+  
+  /**
+   * Retrieves information on a function's arguments.
+   * @param functionName A name of a function.
+   * @return The function's arguments.
+   */
+  public ParamListNode getParamListNode(final String functionName) {
+    final String builtinFunctionName = BuiltinFunctionsUtils.isBuiltinFunction(functionName);
+            
+    if (builtinFunctionName != null) {
+      return BuiltinFunctionsUtils.getParamListNode(builtinFunctionName);
+    } else {
+      if (functionDeclarationNodes.containsKey(functionName)) {
+        return functionDeclarationNodes.get(functionName).getParamListNode();
       }
     }
     
@@ -87,18 +125,4 @@ public class FunctionsAnalyser {
     return fTypes;
   }
   
-  public ParamListNode getParamListNode(final String functionName) {
-    final String builtinFunctionName = BuiltinFunctionsUtils.isBuiltinFunction(functionName);
-            
-    if (builtinFunctionName != null) {
-      return BuiltinFunctionsUtils.getParamListNode(builtinFunctionName);
-    } else {
-      if (functionDeclarationNodes.containsKey(functionName)) {
-        return functionDeclarationNodes.get(functionName).getParamListNode();
-      }
-    }
-    
-    assert(false);
-    return null;
-  }
 }

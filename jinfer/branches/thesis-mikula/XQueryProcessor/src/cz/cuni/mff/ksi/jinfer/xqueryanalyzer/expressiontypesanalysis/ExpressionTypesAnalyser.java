@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.expressiontypesanalysis;
 
+import com.sun.org.apache.xpath.internal.ExpressionNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.UnknownType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
@@ -29,38 +30,47 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO rio comment
- *
- * Zistovanie typov vyrazov v jednom syntaktickom strome.
+ * This class provides analysis of expression types for a syntax tree.
  * 
- * Najprv zisti typy globalnych premennych a typy vyrazov v prologu dotazu. Potom
- * vyrazy v tele dotazu.
+ * After a call to {@link #process()} method, the types of expression are written
+ * the expression nodes in the syntax tree.
  * 
- * TODO rio Treba dorobit analyzu volani funkcii s tym, ze sa bude zistovat typ tak, ze sa vyuzije tele funkcie.
- * TODO rio Porozmyslat, ci nie je potrebne zlucit zistovanie typov user-defined funkcii a globalnych premennych, kedze glob. premenna moze pouzivat funkcie a opacne.
+ * @see Type
+ * @see ExpressionNode
  * 
  * @author rio
  */
 public class ExpressionTypesAnalyser {
   
-  private final ModuleNode root; // Koren syntaktickeho stromu
-  private final FunctionsAnalyser fp; // Procesor funkcii dodany z vonku.
+  private final ModuleNode root;
+  private final FunctionsAnalyser functionsAnalyser;
 
-  public ExpressionTypesAnalyser(final ModuleNode root, final FunctionsAnalyser fp) {
+  /**
+   * 
+   * @param root A syntax tree.
+   * @param functionsAnalyser A functions analyser for the syntax tree.
+   */
+  public ExpressionTypesAnalyser(final ModuleNode root, final FunctionsAnalyser functionsAnalyser) {
     this.root = root;
-    this.fp = fp;
+    this.functionsAnalyser = functionsAnalyser;
   }
   
+  /**
+   * Runs the analysis of the types. The determined types are written directly
+   * to the expression nodes in the syntax tree.
+   */
   public void process() {
+    // Step 1: Determine types of global variables.
     final PrologNode prologNode = root.getPrologNode();
     final Map<String, Type> globalVarTypes = new HashMap<String, Type>();
     if (prologNode != null) {
-      globalVarTypes.putAll(analysisOfGlobalVarTypes(prologNode, fp));
+      globalVarTypes.putAll(analysisOfGlobalVarTypes(prologNode, functionsAnalyser));
     }
     
+    // Step 2: Determine types of the query body.
     final QueryBodyNode queryBodyNode = root.getQueryBodyNode();
     if (queryBodyNode != null) {
-      final Map<String, Type> vars = analysisOfExpressionTypes(queryBodyNode, globalVarTypes, fp);
+      final Map<String, Type> vars = analysisOfExpressionTypes(queryBodyNode, globalVarTypes, functionsAnalyser);
       assert(vars.isEmpty());
     }
   }
@@ -99,7 +109,7 @@ public class ExpressionTypesAnalyser {
     final Map<String, Type> localContextVarTypes = new HashMap<String, Type>(contextVarTypes);
     final Map<String, Type> newContextVarTypes = new HashMap<String, Type>();
 
-    // Analyze types of the subnodes.
+    // Analyse types of the subnodes.
     final List<XQNode> subnodes = root.getSubnodes();
     if (subnodes != null) {
       for (final XQNode subnode : root.getSubnodes()) {
@@ -149,9 +159,9 @@ public class ExpressionTypesAnalyser {
     } else if (OperatorNode.class.isInstance(expressionNode)) {
       return determineOperatorType((OperatorNode) expressionNode);
     } else if (VarRefNode.class.isInstance(expressionNode)) {
-      // Je to kvoli tomu, aby vo FLWORoch bola premenna obsahujuca cestu sama cesta zacinajuce touto premennou, aby bolo mozne ju povazovat za target return path.
+      // We need to do this to achieve a correct type for this case. If the type is PathType, it needs to be corrected to contain one step with the variable reference to the original path.
       final Type varType = contextVarTypes.get(((VarRefNode) expressionNode).getVarName());
-      if (varType.getCategory() == Type.Category.PATH) {
+      if (varType.isPathType()) {
         final List<StepExprNode> steps = new ArrayList<StepExprNode>();
         final StepExprNode step = new StepExprNode(expressionNode, null);
         steps.add(step);
@@ -167,7 +177,7 @@ public class ExpressionTypesAnalyser {
       return new PathType((PathExprNode)expressionNode);
     } else if (ConstructorNode.class.isInstance(expressionNode)) {
       //final ConstructorNode constructorNode = (ConstructorNode)expressionNode;
-      // TODO rio Aky typ ma constructor?
+      // TODO rio How to determine a type of a constructor?
       return new UnknownType();
     } else if (CommaOperatorNode.class.isInstance(expressionNode)) {
       final CommaOperatorNode commaOperatorNode = (CommaOperatorNode)expressionNode;
@@ -176,7 +186,7 @@ public class ExpressionTypesAnalyser {
         if (!exprNode.getType().equals(type)) {
           return new UnknownType();
         }
-        // TODO rio Toto nie je presne, pravidla budu zlozitejsie.
+        // TODO rio How to determine a type fo a comma operator?
         return new UnknownType();
       }
     } else if (IfExprNode.class.isInstance(expressionNode)) {
@@ -185,7 +195,7 @@ public class ExpressionTypesAnalyser {
     } else if (QuantifiedExprNode.class.isInstance(expressionNode)) { // TODO rio do diplomky!!
       return new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE);
     }
-    assert (false); // TODO rio dorobit pre ostatne typy
+    assert (false); // TODO rio Implement other expressions.
     return null;
   }
 
@@ -203,14 +213,14 @@ public class ExpressionTypesAnalyser {
     if (isOperatorClassAddition(operator)) {
       final Type leftType = operatorNode.getOperand().getType();
       
-      // Moze byt aj unarny operator, v takom pripade je typ jasny.
+      // Handle an unary operator.
       if (operatorNode.getRightSide() == null) {
         return leftType;
       }
       
       final Type rightType = operatorNode.getRightSide().getType();
       
-      // TODO rio Co so sekvenciami? Plati aj pre ne?
+      // TODO rio What about cardinality and sequences?
       if (leftType.isNumeric() && rightType.isNumeric()) {
         return selectCommonType(leftType, rightType); 
       } else if (leftType.isNumeric()) {
@@ -271,7 +281,7 @@ public class ExpressionTypesAnalyser {
     
     return new XSDType(XSDBuiltinAtomicType.INTEGER, Cardinality.ONE);
     
-    // TODO rio Nie je dokoncene, ale nam pravdepodobne bude stacit.
+    // TODO rio Not finished, but probably sufficient for our purpose.
   }
 
   private static boolean isOperatorClassComparison(final Operator op) {

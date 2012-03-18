@@ -19,7 +19,6 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.merger.Merger;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.KeysInferrer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;
@@ -30,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.SummarizedKey;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -80,7 +80,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     LOG.info("Total Number of inferred type statements: " + inferredTypes.size());
     
     keysInferrer.summarize();
-    final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
+    final Collection<SummarizedKey> keys = keysInferrer.getKeys();
     final Map<Key, Set<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
     LOG.info("Total number of inferred key statements: " + keys.size());
     

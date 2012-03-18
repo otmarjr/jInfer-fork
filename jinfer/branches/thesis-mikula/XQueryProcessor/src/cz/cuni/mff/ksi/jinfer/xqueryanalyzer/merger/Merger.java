@@ -40,8 +40,10 @@ import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.SummarizedKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.XSDAtomicTypesUtils;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +97,7 @@ public class Merger {
    * @param foreignKeys
    * @throws InterruptedException 
    */
-  public void mergeInferredKeys(Map<Key, KeySummarizer.SummarizedInfo> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
+  public void mergeInferredKeys(Collection<SummarizedKey> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
     writeInferredKeysToGrammar(topologicallySortedGrammar, keys, foreignKeys);
   }
   
@@ -181,19 +183,19 @@ public class Merger {
    * @param foreignKeys
    * @throws InterruptedException 
    */
-  private static void writeInferredKeysToGrammar(final List<Element> topologicalSortedGrammar, Map<Key, KeySummarizer.SummarizedInfo> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
+  private static void writeInferredKeysToGrammar(final List<Element> topologicalSortedGrammar, Collection<SummarizedKey> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
       return;
     }
     
     final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
     
-    for (Key key : keys.keySet()) {
-      final KeySummarizer.SummarizedInfo keyInfo = keys.get(key);
-      
-      if (keyInfo.getNormalizedWeight() < 0.3) {
+    for (final SummarizedKey summarizedKey : keys) {
+      if (summarizedKey.getNormalizedWeight() < 0.3) { // TODO rio nastavit tento threshold
         continue;
       }
+      
+      Key key = summarizedKey.getKey();
 
       final NormalizedPathType contextPath = key.getContextPath();
       

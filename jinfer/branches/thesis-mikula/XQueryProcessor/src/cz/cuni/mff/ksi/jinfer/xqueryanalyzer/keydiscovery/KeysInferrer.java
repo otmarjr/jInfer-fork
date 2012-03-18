@@ -24,9 +24,11 @@ import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPatte
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.SummarizedKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKey;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -58,7 +60,7 @@ public class KeysInferrer {
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
-  private Map<Key, KeySummarizer.SummarizedInfo> summarizedKeys;
+  private Collection<SummarizedKey> summarizedKeys;
   private Map<Key, Set<ForeignKey>> keysToForeignKeys;
   
   /**
@@ -93,8 +95,6 @@ public class KeysInferrer {
       final ForeignKey fk = wfk.getKey();
       final Key k = fk.getKey();
       
-      assert(summarizedKeys.containsKey(k));
-      
       if (keysToForeignKeys.containsKey(k)) {
         keysToForeignKeys.get(k).add(fk);
       } else {
@@ -108,7 +108,7 @@ public class KeysInferrer {
   /**
    * Retrieves inferred keys after the summarization.
    */
-  public Map<Key, KeySummarizer.SummarizedInfo> getKeys() {
+  public Collection<SummarizedKey> getKeys() {
     return summarizedKeys;
   }
   
@@ -119,7 +119,7 @@ public class KeysInferrer {
     return keysToForeignKeys;
   }
   
-  private static Map<Key, KeySummarizer.SummarizedInfo> summarizeKeys(List<WeightedKey> wKeys, List<NegativeUniquenessStatement> nuss) {
+  private static Collection<SummarizedKey> summarizeKeys(List<WeightedKey> wKeys, List<NegativeUniquenessStatement> nuss) {
     final KeySummarizer ks = new KeySummarizer();
     for (final WeightedKey wk : wKeys) {
       ks.summarize(wk, nuss);

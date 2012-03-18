@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKey;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,77 +30,37 @@ import java.util.Map;
  */
 public class KeySummarizer {
   
-  private final Map<Key, SummarizedInfo> keys = new HashMap<Key, SummarizedInfo>();
+  private final Map<Key, SummarizedKey> summarizedKeys = new HashMap<Key, SummarizedKey>();
   //private final Map<ForeignKey, SummarizedInfo> foreignKeys = new HashMap<ForeignKey, SummarizedInfo>();
   
   private int keysMaxCount = 0;
   private int keysMaxWeight = 0;
   private int keysTotalCount = 0;
   
-  public class SummarizedInfo {
+  public void summarize(final WeightedKey weightedKey, final List<NegativeUniquenessStatement> nuss) {
+    final Key key = weightedKey.getKey();
     
-    private int count;
-    private int weight;
-    private double normalizedWeight = 0;
-    
-    public SummarizedInfo() {
-      count = 0;
-      weight = 0;
+    if (!summarizedKeys.containsKey(key)) {
+      final SummarizedKey summarizedKey = new SummarizedKey(key);
+      summarizedKeys.put(key, summarizedKey);
     }
     
-    public void add(final int weight) {
-      this.weight += weight;
-      ++count;
-    }
-    
-    public void normalize(final int maxCount, final int maxWeight, final int totalCount) {
-      normalizedWeight = (double)weight / maxWeight * (1 - (maxCount - count) / totalCount);
-    }
-
-    public int getCount() {
-      return count;
-    }
-
-    public int getWeight() {
-      return weight;
-    }
-
-    public void setCount(int count) {
-      this.count = count;
-    }
-
-    public void setWeight(int weight) {
-      this.weight = weight;
-    }
-
-    public double getNormalizedWeight() {
-      return normalizedWeight;
-    }
-    
-  }
-  
-  public void summarize(final WeightedKey key, final List<NegativeUniquenessStatement> nuss) {
-    if (!keys.containsKey(key.getKey())) {
-      final SummarizedInfo si = new SummarizedInfo();
-      keys.put(key.getKey(), si);
-    }
-    
-    final SummarizedInfo si = keys.get(key.getKey());
-    int weight = key.getWeight();
+    final SummarizedKey summarizedKey = summarizedKeys.get(key);
+    int weight = weightedKey.getWeight();
     
     for (final NegativeUniquenessStatement nus : nuss) {
-      if ((nus.getContextPath() == null && key.getKey().getContextPath() == null || nus.getContextPath().equals(key.getKey().getContextPath()))
-              && nus.getTargetPath().equals(key.getKey().getTargetPath())) {
+      if ((nus.getContextPath() == null && key.getContextPath() == null || nus.getContextPath().equals(key.getContextPath()))
+              && nus.getTargetPath().equals(key.getTargetPath())) {
         weight -= nus.getWeight();
       }
     }
     
-    si.add(weight);
+    summarizedKey.add(weight);
     
     keysTotalCount += 1;
-    final int count = si.getCount();
+    final int count = summarizedKey.getCount();
     checkMaxCount(count);
-    final int sWeight = si.getWeight();
+    final int sWeight = summarizedKey.getWeight();
     checkMaxWeight(sWeight);
   }
   
@@ -115,18 +76,18 @@ public class KeySummarizer {
     }
   }
   
-  public Map<Key, SummarizedInfo> getSummarizedKeys() {
+  public Collection<SummarizedKey> getSummarizedKeys() {
     computeKeyCoverage();
     
-    for (final SummarizedInfo si : keys.values()) {
-      si.normalize(keysMaxCount, keysMaxWeight, keysTotalCount);
+    for (final SummarizedKey summarizedKey : summarizedKeys.values()) {
+      summarizedKey.normalize(keysMaxCount, keysMaxWeight, keysTotalCount);
     }
-    return keys;
+    return summarizedKeys.values();
   }
   
   private void computeKeyCoverage() {
-    for (final Key key1 : keys.keySet()) {
-      for (final Key key2 : keys.keySet()) {
+    for (final Key key1 : summarizedKeys.keySet()) {
+      for (final Key key2 : summarizedKeys.keySet()) {
         if (key1 == key2) {
           continue;
         }
@@ -139,28 +100,28 @@ public class KeySummarizer {
         assert(!key1.getContextPath().equals(key2.getContextPath()));
         
         if (key1.getContextPath().covers(key2.getContextPath())) {
-          final SummarizedInfo si1 = keys.get(key1);
-          final SummarizedInfo si2 = keys.get(key2);
+          final SummarizedKey summarizedKey1 = summarizedKeys.get(key1);
+          final SummarizedKey summarizedKey2 = summarizedKeys.get(key2);
           
-          final int weight1 = si1.getWeight();
-          final int count1 = si1.getCount();
-          final int weight2 = si2.getWeight();
-          final int count2 = si2.getCount();
+          final int weight1 = summarizedKey1.getWeight();
+          final int count1 = summarizedKey1.getCount();
+          final int weight2 = summarizedKey2.getWeight();
+          final int count2 = summarizedKey2.getCount();
           
           if (weight1 > 0) {
-            si2.setCount(count2 + count1);
-            si2.setWeight(weight2 + weight1);
+            summarizedKey2.setCount(count2 + count1);
+            summarizedKey2.setWeight(weight2 + weight1);
             keysTotalCount += count1;
-            checkMaxCount(si2.getCount());
-            checkMaxWeight(si2.getWeight());
+            checkMaxCount(summarizedKey2.getCount());
+            checkMaxWeight(summarizedKey2.getWeight());
           }
           
           if (weight2 < 0) {
-            si1.setCount(count1 + count2);
-            si1.setWeight(weight1 + weight2);
+            summarizedKey1.setCount(count1 + count2);
+            summarizedKey1.setWeight(weight1 + weight2);
             keysTotalCount += count2;
-            checkMaxCount(si1.getCount());
-            checkMaxWeight(si1.getWeight());
+            checkMaxCount(summarizedKey1.getCount());
+            checkMaxWeight(summarizedKey1.getWeight());
           }
         }
       }

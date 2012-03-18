@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * An utility class providing basic functions for handling built-in functions.
@@ -110,8 +111,7 @@ public class BuiltinFunctionsUtils {
     if (builtinFunctionTypes.containsKey(builtinFuncName)) {
       return builtinFunctionTypes.get(builtinFuncName);
     } else {
-      assert(false);
-      return null;
+      throw new NotImplementedException();
     }
   }
   
@@ -160,7 +160,7 @@ public class BuiltinFunctionsUtils {
       paramNodes.add(paramNode2);
       paramNodes.add(paramNode3);
     } else {
-      assert(false); // TODO rio Complete if needed.
+      throw new NotImplementedException(); // TODO rio Implement completely if needed.
     }
     
     return new ParamListNode(paramNodes);

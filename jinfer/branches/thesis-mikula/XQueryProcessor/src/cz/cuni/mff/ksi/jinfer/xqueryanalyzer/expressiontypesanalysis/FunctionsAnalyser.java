@@ -22,6 +22,7 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
 import java.util.HashMap;
 import java.util.Map;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * This class provides type analysis of of user-defined function in a syntax tree,
@@ -72,8 +73,7 @@ public class FunctionsAnalyser {
       }
     }
     
-    assert(false);
-    return null;
+    throw new NotImplementedException();
   }
   
   /**
@@ -92,8 +92,7 @@ public class FunctionsAnalyser {
       }
     }
     
-    assert(false);
-    return null;
+    throw new NotImplementedException();
   }
   
   private Map<String, FunctionDeclNode> getFunctionDeclarationNodes(final ModuleNode root) {

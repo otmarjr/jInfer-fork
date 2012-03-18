@@ -16,29 +16,18 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.XSDAtomicTypesUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeEvaluationContextNodesSet;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
-import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.io.File;
 import java.io.FileInputStream;
@@ -149,8 +138,6 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
   
   
   private void processSyntaxTree(final ModuleNode root) {
-    init(root); // Sets references to parent nodes.
-    
     final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
     final ExpressionsProcessor expressionProcessor = new ExpressionsProcessor(root, functionsProcessor);
     expressionProcessor.process();
@@ -181,13 +168,4 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     return Collections.emptyList();
   }
   
-  private void init(final XQNode node) {
-    final List<XQNode> subnodes = node.getSubnodes();
-    if (subnodes != null) {
-      for (final XQNode subnode : subnodes) {
-        subnode.setParentNode(node);
-        init(subnode);
-      }
-    }
-  }
 }

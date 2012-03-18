@@ -46,6 +46,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Class responsible for merging the inferred statements with the grammar.
@@ -252,7 +253,7 @@ public class Merger {
       final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
       switch (axisNode.getAxisKind()) {
         case ATTRIBUTE: {
-          assert(NameTestNode.class.isInstance(itemTypeNode)); // Not completely finish, but probably sufficient for our purpose.
+          assert(NameTestNode.class.isInstance(itemTypeNode)); // Not completely finished, but probably sufficient for our purpose.
           final NameTestNode ntn = (NameTestNode)itemTypeNode;
           final String attName = ntn.getName();
           for (final AbstractStructuralNode node : contextSet.getNodes()) {
@@ -294,16 +295,16 @@ public class Merger {
                 }
               }
             } else {
-              assert(false);
+              throw new NotImplementedException();
             }
           } else {
-              assert(false); // Not completely finish, but probably sufficient for our purpose.
+              throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
           }
           break;
         }
           
         default:
-          assert(false); // Not completely finish, but probably sufficient for our purpose.
+          throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
       }
     } else {
       final ExprNode detailNode = step.getDetailNode();
@@ -315,7 +316,7 @@ public class Merger {
         }
       } 
       
-      assert(false); // Not completely finish, but probably sufficient for our purpose.
+      throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
     }
     
     return result;

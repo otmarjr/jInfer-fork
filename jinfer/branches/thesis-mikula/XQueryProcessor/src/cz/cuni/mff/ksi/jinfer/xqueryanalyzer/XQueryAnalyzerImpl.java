@@ -26,7 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.io.File;
@@ -65,8 +64,10 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     inferredTypes = new ArrayList<InferredType>();
     keysInferrer = new KeysInferrer();
     
-    for (final ModuleNode mn : xquerySyntaxTrees) {
-      processSyntaxTree(mn);
+    for (final ModuleNode root : xquerySyntaxTrees) {
+      final SyntaxTreeProcessor syntaxTreeProcessor = new SyntaxTreeProcessor(root, keysInferrer);
+      syntaxTreeProcessor.process();
+      inferredTypes.addAll(syntaxTreeProcessor.getInferredTypes());
     }
     
     LOG.info("Total Number of inferred type statements: " + inferredTypes.size());
@@ -81,6 +82,26 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     merger.mergeInferredKeys(keys, foreignKeys);
     
     callback.finished(grammar);
+  }
+   
+  @Override
+  public String getDisplayName() {
+    return DISPLAY_NAME;
+  }
+
+  @Override
+  public String getModuleDescription() {
+    return getDisplayName();
+  }
+
+  @Override
+  public String getName() {
+    return NAME;
+  }
+
+  @Override
+  public List<String> getCapabilities() {
+    return Collections.emptyList();
   }
   
   /**
@@ -133,39 +154,6 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     }
 
     return ret;
-  }
-  
-  
-  
-  private void processSyntaxTree(final ModuleNode root) {
-    final FunctionsProcessor functionsProcessor = new FunctionsProcessor(root);
-    final ExpressionsProcessor expressionProcessor = new ExpressionsProcessor(root, functionsProcessor);
-    expressionProcessor.process();
-    final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
-    bti.process();
-    inferredTypes.addAll(bti.getInferredTypes());
-    
-    keysInferrer.process(root);
-  }
-  
-  @Override
-  public String getDisplayName() {
-    return DISPLAY_NAME;
-  }
-
-  @Override
-  public String getModuleDescription() {
-    return getDisplayName();
-  }
-
-  @Override
-  public String getName() {
-    return NAME;
-  }
-
-  @Override
-  public List<String> getCapabilities() {
-    return Collections.emptyList();
   }
   
 }

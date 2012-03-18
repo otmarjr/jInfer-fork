@@ -21,11 +21,6 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AxisNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.NameTestNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.SelfOrDescendantStepNode;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
@@ -102,7 +97,7 @@ public abstract class AbstractElementsExporter {
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
       final String type = TypeUtils.getBuiltinType(element);
-      final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)element.getMetadata().get("xquery_analyzer_type");
+      final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)element.getMetadata().get("xquery_processor_type");
       
       if (xqueryType == null) {
         indentator.append(" type=\"" + type + '"');
@@ -191,7 +186,7 @@ public abstract class AbstractElementsExporter {
   }
   
   protected void processElementKeys(final Element element) {
-    final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_analyzer_keys");
+    final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_processor_keys");
     
     if (keys == null) {
       return;
@@ -214,7 +209,7 @@ public abstract class AbstractElementsExporter {
   }
   
   protected void processElementForeignKeys(final Element element) {
-    final Set<ForeignKey> fKeys = (Set<ForeignKey>)element.getMetadata().get("xquery_analyzer_foreign_keys");
+    final Set<ForeignKey> fKeys = (Set<ForeignKey>)element.getMetadata().get("xquery_processor_foreign_keys");
     
     if (fKeys == null) {
       return;
@@ -247,7 +242,7 @@ public abstract class AbstractElementsExporter {
         indentator.append(attribute.getName());
 
         final String type = TypeUtils.getBuiltinAttributeType(attribute);
-        final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)attribute.getMetadata().get("xquery_analyzer_type");
+        final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)attribute.getMetadata().get("xquery_processor_type");
       
         if (xqueryType == null) {
           indentator.append("\" type=\"" + type + '"');

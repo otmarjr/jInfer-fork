@@ -23,8 +23,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeEvaluationContextNodesSet;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctions;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzer;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryAnalyzerCallback;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
@@ -57,24 +57,24 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author rio
  */
-@ServiceProvider(service = XQueryAnalyzer.class)
-public class XQueryAnalyzerImpl implements XQueryAnalyzer {
+@ServiceProvider(service = XQueryProcessor.class)
+public class XQueryAnalyzerImpl implements XQueryProcessor {
   
   private final static Logger LOG = Logger.getLogger(XQueryAnalyzerImpl.class);
   
-  private static final String NAME = "XQuery_Analyzer";
-  private static final String DISPLAY_NAME = "XQuery analyzer";
+  private static final String NAME = "Basic_XQuery_Processor";
+  private static final String DISPLAY_NAME = "Basic XQuery Processor";
   
-  private static final String METADATA_KEY_TYPE = "xquery_analyzer_type";
-  private static final String METADATA_KEY_HAS_PREDICATES = "xquery_analyzer_type_has_predicates";
-  private static final String METADATA_KEY_KEYS = "xquery_analyzer_keys";
-  private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_analyzer_foreign_keys";
+  private static final String METADATA_KEY_TYPE = "xquery_processor_type";
+  private static final String METADATA_KEY_HAS_PREDICATES = "xquery_processor_type_has_predicates";
+  private static final String METADATA_KEY_KEYS = "xquery_processor_keys";
+  private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_processor_foreign_keys";
   
   private KeysInferrer keysInferrer;
   private List<InferredType> inferredTypes;
 
   @Override
-  public void start(final Input input, final List<Element> grammar, final XQueryAnalyzerCallback callback) throws InterruptedException {
+  public void start(final Input input, final List<Element> grammar, final XQueryProcessorCallback callback) throws InterruptedException {
     List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
     
     keysInferrer = new KeysInferrer();

@@ -55,7 +55,7 @@ public class Runner {
   private static final Logger LOG = Logger.getLogger(Runner.class);
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
-  private final XQueryAnalyzer xqueryAnalyzer;
+  private final XQueryProcessor xqueryAnalyzer;
   private final SchemaGenerator schemaGenerator;
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
@@ -71,7 +71,7 @@ public class Runner {
       Runner.this.finishedSimplifier(grammar);
     }
   };
-  private final XQueryAnalyzerCallback xqaCallback = new XQueryAnalyzerCallback() {
+  private final XQueryProcessorCallback xqaCallback = new XQueryProcessorCallback() {
 
     @Override
     public void finished(final List<Element> grammar) {
@@ -98,8 +98,8 @@ public class Runner {
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER_PROP));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
-    // TODO rio Selection in properties panel is not implemented yet.
-    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(XQueryAnalyzer.class, "XQuery_Analyzer");
+    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(XQueryProcessor.class,
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.XQUERY_PROCESSOR_PROP, ModuleSelectionPropertiesPanel.XQUERY_PROCESSOR_DEFAULT));
   }
 
   /**

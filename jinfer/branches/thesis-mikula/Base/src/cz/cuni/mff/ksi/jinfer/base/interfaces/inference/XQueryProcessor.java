@@ -16,6 +16,9 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
+import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
+import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
@@ -23,7 +26,8 @@ import java.util.List;
  * TODO rio
  * @author rio
  */
-public interface XQueryAnalyzerCallback {
+public interface XQueryProcessor extends NamedModule, Capabilities {
   
-  void finished(final List<Element> grammar);
+  void start(final Input input, final List<Element> grammar,
+          final XQueryProcessorCallback callback) throws InterruptedException;
 }

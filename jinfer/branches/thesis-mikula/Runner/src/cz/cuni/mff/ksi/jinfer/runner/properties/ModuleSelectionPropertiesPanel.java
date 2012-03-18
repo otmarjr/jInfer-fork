@@ -44,6 +44,8 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
   public static final String SIMPLIFIER_DEFAULT = "TwoStepSimplifier";
   public static final String SCHEMAGEN_PROP = "schemagenerator";
   public static final String SCHEMAGEN_DEFAULT = "Basic_XSD_exporter";
+  public static final String XQUERY_PROCESSOR_PROP = "xqueryprocessor";
+  public static final String XQUERY_PROCESSOR_DEFAULT = "Basic_XQuery_Processor";
 
   public ModuleSelectionPropertiesPanel(final Properties properties) {
     super(properties);

@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * A data structure holding two sets. A set of nodes and a set attributes.
+ * 
+ * Its purpose is to represent a context set in evaluation of a path upon a grammar.
+ * 
  * @author rio
  */
 public class PathTypeEvaluationContextNodesSet {

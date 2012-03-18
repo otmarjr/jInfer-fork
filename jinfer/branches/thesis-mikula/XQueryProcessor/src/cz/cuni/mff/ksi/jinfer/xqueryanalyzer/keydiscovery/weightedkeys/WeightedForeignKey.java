@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 
 /**
- *
+ * A simple representation of weighted foreign keys.
  * @author rio
  */
 public class WeightedForeignKey {

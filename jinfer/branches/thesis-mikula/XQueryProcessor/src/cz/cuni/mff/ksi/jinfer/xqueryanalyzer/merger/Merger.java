@@ -241,7 +241,7 @@ public class Merger {
     assert(contextSet != null);
     
     if (SelfOrDescendantStepNode.class.isInstance(step)) {
-      // TODO rio Toto nestaci, treba aj vsetkych potomkov.
+      // TODO rio Recursively find all descendants in the grammar
       return contextSet;
     }
     
@@ -252,7 +252,7 @@ public class Merger {
       final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
       switch (axisNode.getAxisKind()) {
         case ATTRIBUTE: {
-          assert(NameTestNode.class.isInstance(itemTypeNode)); // Mozno dokoncit, v pripade potreby
+          assert(NameTestNode.class.isInstance(itemTypeNode)); // Not completely finish, but probably sufficient for our purpose.
           final NameTestNode ntn = (NameTestNode)itemTypeNode;
           final String attName = ntn.getName();
           for (final AbstractStructuralNode node : contextSet.getNodes()) {
@@ -297,13 +297,13 @@ public class Merger {
               assert(false);
             }
           } else {
-              assert(false); // Mozno dokoncit, v pripade potreby
+              assert(false); // Not completely finish, but probably sufficient for our purpose.
           }
           break;
         }
           
         default:
-          assert(false); // Mozno dokoncit, v pripade potreby
+          assert(false); // Not completely finish, but probably sufficient for our purpose.
       }
     } else {
       final ExprNode detailNode = step.getDetailNode();
@@ -315,7 +315,7 @@ public class Merger {
         }
       } 
       
-      assert(false); // Mozno dokoncit, v pripade potreby
+      assert(false); // Not completely finish, but probably sufficient for our purpose.
     }
     
     return result;

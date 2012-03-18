@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * An utility class providing basic functions for handling built-in functions.
  * @author rio
  */
 public class BuiltinFunctionsUtils {
@@ -59,7 +59,8 @@ public class BuiltinFunctionsUtils {
   }
   
   /**
-   * Zisti ci je funkcia vstavana. Ak ano vrati jej meno, inak null.
+   * If a specified function is built-in returns its name without prefix, else
+   * returns null.
    */
   public static String isBuiltinFunction(final String functionName) {
     String prefix;
@@ -84,6 +85,12 @@ public class BuiltinFunctionsUtils {
     return null;
   }
   
+  /**
+   * Returns a return type of a built-in function specified by an instance
+   * of {@link FunctionCallNode}.
+   * @param functionCallNode A function.
+   * @return A return type of the function.
+   */
   public static Type getFunctionCallType(final FunctionCallNode functionCallNode) {
     final String functionName = functionCallNode.getFuncName();
     final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(functionName);
@@ -108,6 +115,12 @@ public class BuiltinFunctionsUtils {
     }
   }
   
+  /**
+   * Returns formal arguments of a specified function represented by an instance
+   * of {@link ParamListNode}.
+   * @param functionName A function name.
+   * @return Formal arguments of the function.
+   */
   public static ParamListNode getParamListNode(final String functionName) {
     if (!builtinFunctionTypes.containsKey(functionName)) {
       return null;
@@ -147,7 +160,7 @@ public class BuiltinFunctionsUtils {
       paramNodes.add(paramNode2);
       paramNodes.add(paramNode3);
     } else {
-      assert(false); // TODO rio Doplnit dalsie vstavane funckie podla potreby.
+      assert(false); // TODO rio Complete if needed.
     }
     
     return new ParamListNode(paramNodes);

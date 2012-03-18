@@ -38,7 +38,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- *
+ * This class searches a syntax tree for join patterns occurrences.
+ * 
+ * @see JoinPattern
+ * 
  * @author rio
  */
 public class JoinPatternsFinder {
@@ -46,16 +49,25 @@ public class JoinPatternsFinder {
   private final ModuleNode root;
   private final List<JoinPattern> joinPatterns;
   
+  /**
+   * @param root A syntax tree.
+   */
   public JoinPatternsFinder(final ModuleNode root) {
     this.root = root;
     joinPatterns = new ArrayList<JoinPattern>();
   }
   
+  /**
+   * Performs the search for join patterns occurrences.
+   */
   public void process() {
     Map<String, ForClauseNode> forVariables = new HashMap<String, ForClauseNode>();
     processRecursive(root, forVariables, joinPatterns);
   }
   
+  /**
+   * Retrieves the found join patterns occurrences by {@link #process()} method.
+   */
   public List<JoinPattern> getJoinPatterns() {
     return joinPatterns;
   }
@@ -136,7 +148,6 @@ public class JoinPatternsFinder {
     }
 
     // Check for and let join patterns.
-    //if (isPredicateForm(predicate, forVar, L1, L2)) {
     final JoinPredicateFormExprParser exprParser = new JoinPredicateFormExprParser(predicate, forVar);
     if (exprParser.isExprPredicateForm()) {
       final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio OK? Je exprNode vzdy naozaj typu PathType?
@@ -163,4 +174,5 @@ public class JoinPatternsFinder {
       }
     }
   }
+  
 }

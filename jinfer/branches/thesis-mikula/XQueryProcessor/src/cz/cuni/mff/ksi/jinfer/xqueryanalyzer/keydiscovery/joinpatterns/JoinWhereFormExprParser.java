@@ -28,7 +28,9 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 import java.util.List;
 
 /**
- *
+ * Parser of an expression node of form var1/L1 = var2/L2 for specified variables var1, var2.
+ * @see ExpressionNode
+ * @see PathExprNode
  * @author rio
  */
 public final class JoinWhereFormExprParser {
@@ -41,14 +43,27 @@ public final class JoinWhereFormExprParser {
     isExprWhereForm = isWhereClauseForm(exprNode, varName1, varName2);
   }
 
+  /**
+   * Is the expression passed to the constructor of a desired form?
+   */
   public boolean isExprWhereForm() {
     return isExprWhereForm;
   }
 
+  /**
+   * If {@link #isExprPredicateForm()} method returned true, this method returns
+   * the path L1.
+   * @return Path L1.
+   */
   public PathExprNode getL1() {
     return L1;
   }
 
+  /**
+   * If {@link #isExprPredicateForm()} method returned true, this method returns
+   * the path L2.
+   * @return Path L2.
+   */
   public PathExprNode getL2() {
     return L2;
   }

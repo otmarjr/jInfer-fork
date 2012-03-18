@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.merger.Merger;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.KeysInferrer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;

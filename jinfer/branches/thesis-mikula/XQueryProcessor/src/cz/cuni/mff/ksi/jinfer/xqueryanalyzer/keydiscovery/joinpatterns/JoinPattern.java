@@ -21,7 +21,44 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VariableBindi
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
- *
+ * A representation of join pattern occurrences.
+ * 
+ * We know three types of join patterns:
+ * 
+ * For join pattern.
+ * <code>
+ *   for e1 in P1
+ *   return
+ *     for e2 in P2[L2 = e1/L1]
+ *     return Cr
+ * </code>
+ * 
+ * Let join pattern.
+ * <code>
+ *   for e1 in P1
+ *   return
+ *     let e2 in P2[L2 = e1/L1]
+ *     return Cr
+ * </code>
+ * 
+ * Join pattern 3.
+ * <code>
+ *   for e1 in P1
+ *   for e2 in P2
+ *   where e1/L1 = e2/L2
+ *   return Cr
+ * </code>
+ * 
+ * Each join pattern occurrence we represent by:
+ *  - It type.
+ *  - Binding nodes of the e1 and e2 variables.
+ *  - Paths P1,P2,L1,L2.
+ * 
+ * @see JoinPatternType
+ * @see VariableBindingNode
+ * @see PathType
+ * @see PathExprNode
+ * 
  * @author rio
  */
 public class JoinPattern {

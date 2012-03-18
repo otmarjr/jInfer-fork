@@ -37,7 +37,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.XSDAtomicTypesUtils;

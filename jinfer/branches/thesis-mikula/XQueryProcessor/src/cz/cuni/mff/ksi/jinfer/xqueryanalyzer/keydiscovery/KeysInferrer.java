@@ -16,16 +16,16 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery;
 
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.WeightedKeysCreator;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKeysCreator;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPatternsClassifier;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.ClassifiedJoinPattern;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns.JoinPattern;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.WeightedForeignKey;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.WeightedKey;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedForeignKey;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -34,7 +34,23 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * A main class responsible for the key discovery.
+ * 
+ * An instance of this class should be used as follows:
+ *  - Creation.
+ *  - For each syntax tree, join patterns and negative uniqueness statements found
+ *    in the tree should be added to this instance using {@link #addJoinPatterns(java.util.List)}
+ *    and {@link #addNegativeUniquenessStatements(java.util.List)} methods.
+ *  - After processing of all syntax tree, {@link #summarize()} should be called.
+ *  - Inferred keys and foreign keys can be retrieved by {@link #getKeys()} and
+ *    {@link #getForeignKeys()} methods.
+ * 
+ * @see JoinPattern
+ * @see NegativeUniquenessStatement
+ * @see Key
+ * @see ForeignKey
+ * @see KeySummarizer
+ * 
  * @author rio
  */
 public class KeysInferrer {
@@ -42,21 +58,29 @@ public class KeysInferrer {
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
-  public KeysInferrer() {
-    
-  }
+  private Map<Key, KeySummarizer.SummarizedInfo> summarizedKeys;
+  private Map<Key, Set<ForeignKey>> keysToForeignKeys;
   
+  /**
+   * Adds join patterns to the instance for a future summarization.
+   * @param joinPatterns 
+   */
   public void addJoinPatterns(final List<JoinPattern> joinPatterns) {
     this.joinPatterns.addAll(joinPatterns);
   }
   
+  /**
+   * Adds negative uniqueness statements to the instance for a future summarization.
+   * @param negativeUniquenessStatements 
+   */
   public void addNegativeUniquenessStatements(final List<NegativeUniquenessStatement> negativeUniquenessStatements) {
     this.negativeUniquenessStatements.addAll(negativeUniquenessStatements);
   }
   
-  private Map<Key, KeySummarizer.SummarizedInfo> summarizedKeys;
-  private Map<Key, Set<ForeignKey>> keysToForeignKeys;
-  
+  /**
+   * Should be called after all join patterns and negative uniqueness statements
+   * were added. After the call, getters for keys can be used.
+   */
   public void summarize() {
     final List<ClassifiedJoinPattern> classifiedJoinPatterns = JoinPatternsClassifier.classify(joinPatterns);
     final WeightedKeysCreator weightedKeysCreator = new WeightedKeysCreator(classifiedJoinPatterns);
@@ -81,10 +105,16 @@ public class KeysInferrer {
     }
   }
 
+  /**
+   * Retrieves inferred keys after the summarization.
+   */
   public Map<Key, KeySummarizer.SummarizedInfo> getKeys() {
     return summarizedKeys;
   }
   
+  /**
+   * Retrieves inferred foreign keys after the summarization.
+   */
   public Map<Key, Set<ForeignKey>> getForeignKeys() {
     return keysToForeignKeys;
   }

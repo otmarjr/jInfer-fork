@@ -17,7 +17,11 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.joinpatterns;
 
 /**
- *
+ * A representation of classified join patterns occurrences.
+ * 
+ * The classification involves assigning a join pattern occurrence with one of
+ * O1 and O2 types and with weight. For details see PDF documentation.
+ * 
  * @author rio
  */
 public class ClassifiedJoinPattern {

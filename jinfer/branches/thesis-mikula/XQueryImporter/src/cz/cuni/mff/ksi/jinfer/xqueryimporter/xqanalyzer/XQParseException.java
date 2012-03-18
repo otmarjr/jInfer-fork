@@ -33,19 +33,19 @@ package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;
 public class XQParseException extends Exception {
 
   /**
-   * Line number where the exception occured.
+   * Line number where the exception occurred.
    */
   private int line;
   /**
-   * Column number where the exception occured.
+   * Column number where the exception occurred.
    */
   private int column;
 
   /**
    * Creates a new XQParseException.
    *
-   * @param line Line where the exception occures.
-   * @param column Column where the exception occured.
+   * @param line Line where the exception occurred.
+   * @param column Column where the exception occurred.
    * @param message Error message.
    */
   public XQParseException(
@@ -56,7 +56,7 @@ public class XQParseException extends Exception {
   }
 
   /**
-   * Gets line number where the exception occured.
+   * Gets line number where the exception occurred.
    *
    * @return Line number.
    */
@@ -65,7 +65,7 @@ public class XQParseException extends Exception {
   }
 
   /**
-   * Gets column number where the exception occured.
+   * Gets column number where the exception occurred.
    *
    * @return Column number.
    */

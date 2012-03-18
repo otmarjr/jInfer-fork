@@ -65,32 +65,31 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
   private static final String NAME = "Basic_XQuery_Processor";
   private static final String DISPLAY_NAME = "Basic XQuery Processor";
   
-  private static final String METADATA_KEY_TYPE = "xquery_processor_type";
-  private static final String METADATA_KEY_HAS_PREDICATES = "xquery_processor_type_has_predicates";
-  private static final String METADATA_KEY_KEYS = "xquery_processor_keys";
-  private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_processor_foreign_keys";
-  
   private KeysInferrer keysInferrer;
   private List<InferredType> inferredTypes;
 
   @Override
   public void start(final Input input, final List<Element> grammar, final XQueryProcessorCallback callback) throws InterruptedException {
     List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
+    LOG.info("Input XQuery files parsed into " + xquerySyntaxTrees.size() + " syntax trees");
     
+    inferredTypes = new ArrayList<InferredType>();
     keysInferrer = new KeysInferrer();
     
     for (final ModuleNode mn : xquerySyntaxTrees) {
       processSyntaxTree(mn);
-      saveInferredTypes(grammar, inferredTypes);
-      LOG.info("Number of inferred type statements in a current tree: " + inferredTypes.size());
     }
+    
+    LOG.info("Total Number of inferred type statements: " + inferredTypes.size());
     
     keysInferrer.summarize();
     final Map<Key, KeySummarizer.SummarizedInfo> keys = keysInferrer.getKeys();
     final Map<Key, Set<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
-    saveInferredKeys(grammar, keys, foreignKeys);
-    
     LOG.info("Total number of inferred key statements: " + keys.size());
+    
+    final Merger merger = new Merger(grammar);
+    merger.mergeInferredTypes(inferredTypes);
+    merger.mergeInferredKeys(keys, foreignKeys);
     
     callback.finished(grammar);
   }
@@ -127,12 +126,17 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
       }
       try {
         if (FileUtils.getExtension(f.getAbsolutePath()).equals(xqueryProcessor.getExtension())) {
-          // TODO rio Toto je hack, kedze nam vyleze len jeden syntax tree ale kvoli rozhraniu processoru musi byt vysledok list.
+          /* TODO rio Interface of input processor requires List as a return type
+           * but our XQuery processor returns only one syntax tree per file. So
+           * it is at index 0. An empty list indicates parsing error.
+           */
           final List<ModuleNode> syntaxTree = xqueryProcessor.process(new FileInputStream(f));
           if (syntaxTree.size() > 0) {
             assert(syntaxTree.size() == 1);
             ret.add(syntaxTree.get(0));
-          } 
+          } else {
+            LOG.error("Error in XQuery file " + f.getAbsolutePath() + ". Try to strip it of empty lines and comments."); // TODO rio Fix weird parsing errors.
+          }
         }
       } catch (final FileNotFoundException e) {
         throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);
@@ -142,219 +146,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     return ret;
   }
   
-  private static void saveInferredTypes(final List<Element> grammar, List<InferredType> inferredTypes) throws InterruptedException {
-    final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
-    
-    if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
-      return;
-    }
-    
-    final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
-    
-    for (final InferredType inferredType : inferredTypes) {
-      final PathType pathType = inferredType.getPathType();
-      final Type type = inferredType.getType();
-      if (type.getCategory() != Type.Category.XSD_BUILT_IN) {
-        continue;
-      }
-      
-      XSDBuiltinAtomicType inferredAtomicType = ((XSDType)type).getAtomicType();
-      
-      final NormalizedPathType ptp = new NormalizedPathType(pathType);
-      final boolean hasPredicates = ptp.hasPredicates();      
-      
-      PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
-      contextSet.addNode(root);
-      for (final StepExprNode step : ptp.getSteps()) {
-        contextSet = evaluateStep(contextSet, step, grammar);
-      }
-
-      for (final AbstractStructuralNode node : contextSet.getNodes()) {
-        final Map<String, Object> metadata = node.getMetadata();
-        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType)metadata.get(METADATA_KEY_TYPE);
-        if (type == null) {
-          metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
-          metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
-        } else {
-          final XSDBuiltinAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
-          if (moreSpecificType != null) {
-            metadata.put(METADATA_KEY_TYPE, moreSpecificType);
-            metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
-          } else {
-            final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
-            if (!hasPredicates && oldHasPredicates) {
-              metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
-              metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
-            }
-          }
-        }
-      }
-      
-      for (final Attribute attribute : contextSet.getAttributes()) {
-        final Map<String, Object> metadata = attribute.getMetadata();
-        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType)metadata.get(METADATA_KEY_TYPE);
-        if (type == null) {
-          metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
-          metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
-        } else {
-          final XSDBuiltinAtomicType moreSpecificType = XSDAtomicTypesUtils.selectMoreSpecific(inferredAtomicType, xsdType);
-          if (moreSpecificType != null) {
-            metadata.put(METADATA_KEY_TYPE, moreSpecificType);
-            metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
-          } else {
-            final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
-            if (!hasPredicates && oldHasPredicates) {
-              metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
-              metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
-            }
-          }
-        }
-      }
-    }
-  }
   
-  private static void saveInferredKeys(final List<Element> grammar, Map<Key, KeySummarizer.SummarizedInfo> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
-    final List<Element> topologicalSortedGrammar = new TopologicalSort(grammar).sort();
-    
-    if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
-      return;
-    }
-    
-    final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
-    
-    for (Key key : keys.keySet()) {
-      final KeySummarizer.SummarizedInfo keyInfo = keys.get(key);
-      
-      if (keyInfo.getNormalizedWeight() < 0.3) {
-        continue;
-      }
-
-      final NormalizedPathType contextPath = key.getContextPath();
-      
-      PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
-      contextSet.addNode(root);
-      
-      Set<ForeignKey> fKeys = foreignKeys.get(key);
-      
-      if (contextPath != null) {
-        for (final StepExprNode step : contextPath.getSteps()) {
-          contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
-        }
-      } else {
-        key = new Key(key.getTargetPath().copyAndRemoveFirstItemTypeNode(), key.getKeyPath());
-        Set<ForeignKey> modifiedFKeys = new LinkedHashSet<ForeignKey>();
-        for (final ForeignKey fKey : fKeys) {
-          modifiedFKeys.add(new ForeignKey(key, fKey.getForeignTargetPath().copyAndRemoveFirstItemTypeNode(), fKey.getForeignKeyPath()));
-        }
-        fKeys = modifiedFKeys;
-      }
-      
-      for (final AbstractStructuralNode node : contextSet.getNodes()) {
-        final Map<String, Object> metadata = node.getMetadata();
-        final List<Key> savedKeys = (List<Key>)metadata.get(METADATA_KEY_KEYS);
-        if (savedKeys == null) {
-          final List<Key> keyList = new ArrayList<Key>();
-          keyList.add(key);
-          metadata.put(METADATA_KEY_KEYS, keyList);
-        } else {
-          savedKeys.add(key);
-        }
-        
-        if (!BaseUtils.isEmpty(fKeys)) {
-          final Set<ForeignKey> savedFKeys = (Set<ForeignKey>)metadata.get(METADATA_KEY_FOREIGN_KEYS);
-          if (savedFKeys == null) {
-            metadata.put(METADATA_KEY_FOREIGN_KEYS, fKeys);
-          } else {
-            savedFKeys.addAll(fKeys);
-          }
-        }
-      }
-    }
-  }
-  
-  private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {
-    assert(contextSet != null);
-    
-    if (SelfOrDescendantStepNode.class.isInstance(step)) {
-      // TODO rio Toto nestaci, treba aj vsetkych potomkov.
-      return contextSet;
-    }
-    
-    final PathTypeEvaluationContextNodesSet result = new PathTypeEvaluationContextNodesSet();
-    
-    if (step.isAxisStep()) {
-      final AxisNode axisNode = step.getAxisNode();
-      final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
-      switch (axisNode.getAxisKind()) {
-        case ATTRIBUTE: {
-          assert(NameTestNode.class.isInstance(itemTypeNode)); // Mozno dokoncit, v pripade potreby
-          final NameTestNode ntn = (NameTestNode)itemTypeNode;
-          final String attName = ntn.getName();
-          for (final AbstractStructuralNode node : contextSet.getNodes()) {
-            if (node.isElement()) {
-              for (final Attribute att : ((Element)node).getAttributes()) {
-                if (att.getName().equals(attName)) {
-                  result.addAttribute(att);
-                }
-              }
-            }
-          }
-          break;
-        }
-          
-        case CHILD: {
-          if (NameTestNode.class.isInstance(itemTypeNode)) {
-            final NameTestNode ntn = (NameTestNode)itemTypeNode;
-            final String nodeName = ntn.getName();
-            for (final AbstractStructuralNode node : contextSet.getNodes()) {
-              if (node.isElement()) {
-                for (final AbstractStructuralNode subnode : ((Element)node).getSubnodes().getTokens()) {
-                  if (subnode.isElement()) {
-                    for (final Element element : grammar) {
-                      if (element.getName().equals(nodeName)) {
-                        result.addNode(element);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          } else if (KindTestNode.class.isInstance(itemTypeNode)) { // TODO rio do diplomky!!
-            final KindTestNode ktn = (KindTestNode)itemTypeNode;
-            final NodeKind nk = ktn.getNodeKind();
-            if (nk == NodeKind.TEXT) {
-              for (final AbstractStructuralNode node : contextSet.getNodes()) {
-                if (node.isElement()) {
-                  result.addNode(node);
-                }
-              }
-            } else {
-              assert(false);
-            }
-          } else {
-              assert(false); // Mozno dokoncit, v pripade potreby
-          }
-          break;
-        }
-          
-        default:
-          assert(false); // Mozno dokoncit, v pripade potreby
-      }
-    } else {
-      final ExprNode detailNode = step.getDetailNode();
-      
-      if (FunctionCallNode.class.isInstance(detailNode)) {
-        final String builtinFuncName = BuiltinFunctions.isBuiltinFunction(((FunctionCallNode)detailNode).getFuncName());
-        if ("doc".equals(builtinFuncName)) {
-          return contextSet;
-        }
-      } 
-      
-      assert(false); // Mozno dokoncit, v pripade potreby
-    }
-    
-    return result;
-  }
   
   private void processSyntaxTree(final ModuleNode root) {
     init(root); // Sets references to parent nodes.
@@ -364,7 +156,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     expressionProcessor.process();
     final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
     bti.process();
-    inferredTypes = bti.getInferredTypes();
+    inferredTypes.addAll(bti.getInferredTypes());
     
     keysInferrer.process(root);
   }

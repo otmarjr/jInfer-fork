@@ -19,12 +19,13 @@
  * With his approval, we use his code in jInfer and we slightly modify it to
  * suit our cause.
  */
+
 /**
  * This package offers components for analyzing XQuery programs.
  *
  * The XQueryConverter component allows converting an XQuery program into its 
  * XML representation. The XQAnalayzer component uses the XQConverter component
- * and offers interface for queerying the created XML via XPath to gain the
+ * and offers interface for querying the created XML via XPath to gain the
  * statistics about the observed language constructions.
  */
 package cz.cuni.mff.ksi.jinfer.xqueryimporter.xqanalyzer;

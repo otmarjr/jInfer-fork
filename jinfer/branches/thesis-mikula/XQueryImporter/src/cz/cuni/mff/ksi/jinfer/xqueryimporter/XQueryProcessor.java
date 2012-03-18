@@ -30,7 +30,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * Implementation of {@link cz.cuni.mff.ksi.jinfer.base.interfaces.Processor}
- * providing logic for parsing XQuery 1.0 queries and providing their syntax trees.
+ * providing logic for parsing XQuery 1.0 queries and creating their syntax trees.
  * 
  * @author rio
  */
@@ -63,7 +63,8 @@ public class XQueryProcessor implements Processor<ModuleNode> {
    * syntax tree, the List contains just this one item.
    *
    * @param s File containing an XQuery query.
-   * @return List containing a syntax tree of the query at index 0.
+   * @return List containing a syntax tree of the query at index 0 or empty list
+   *   in a case of error.
    */
   @Override
   public List<ModuleNode> process(InputStream s) throws InterruptedException {

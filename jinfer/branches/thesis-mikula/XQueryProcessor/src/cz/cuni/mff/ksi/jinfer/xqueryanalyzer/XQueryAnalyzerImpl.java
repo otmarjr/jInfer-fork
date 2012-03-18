@@ -16,8 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.merger.Merger;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.KeysInferrer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.KeySummarizer;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;
@@ -27,7 +29,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,7 +60,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
     LOG.info("Input XQuery files parsed into " + xquerySyntaxTrees.size() + " syntax trees");
     
-    final List<InferredType> inferredTypes = new ArrayList<InferredType>();
+    final List<InferredTypeStatement> inferredTypes = new ArrayList<InferredTypeStatement>();
     final KeysInferrer keysInferrer = new KeysInferrer();
     
     for (final ModuleNode root : xquerySyntaxTrees) {

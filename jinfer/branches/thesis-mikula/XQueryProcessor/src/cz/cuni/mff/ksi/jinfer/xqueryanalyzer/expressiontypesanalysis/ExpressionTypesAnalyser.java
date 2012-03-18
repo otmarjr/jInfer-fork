@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.expressiontypesanalysis;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.UnknownType;
@@ -41,12 +41,12 @@ import java.util.Map;
  * 
  * @author rio
  */
-public class ExpressionsProcessor {
+public class ExpressionTypesAnalyser {
   
   private final ModuleNode root; // Koren syntaktickeho stromu
-  private final FunctionsProcessor fp; // Procesor funkcii dodany z vonku.
+  private final FunctionsAnalyser fp; // Procesor funkcii dodany z vonku.
 
-  public ExpressionsProcessor(final ModuleNode root, final FunctionsProcessor fp) {
+  public ExpressionTypesAnalyser(final ModuleNode root, final FunctionsAnalyser fp) {
     this.root = root;
     this.fp = fp;
   }
@@ -65,7 +65,7 @@ public class ExpressionsProcessor {
     }
   }
   
-  private static Map<String, Type> analysisOfGlobalVarTypes(final PrologNode prologNode, final FunctionsProcessor fp) {
+  private static Map<String, Type> analysisOfGlobalVarTypes(final PrologNode prologNode, final FunctionsAnalyser fp) {
     final Map<String, Type> globalVarTypes = new HashMap<String, Type>();
     
     for (final XQNode node : prologNode.getSubnodes()) {
@@ -94,7 +94,7 @@ public class ExpressionsProcessor {
     return globalVarTypes;
   }
   
-  private static Map<String, Type> analysisOfExpressionTypes(final XQNode root, final Map<String, Type> contextVarTypes, final FunctionsProcessor fp) {
+  private static Map<String, Type> analysisOfExpressionTypes(final XQNode root, final Map<String, Type> contextVarTypes, final FunctionsAnalyser fp) {
     // Copy context variable types as we do not want to modify it for the previous recursive calls.
     final Map<String, Type> localContextVarTypes = new HashMap<String, Type>(contextVarTypes);
     final Map<String, Type> newContextVarTypes = new HashMap<String, Type>();
@@ -139,7 +139,7 @@ public class ExpressionsProcessor {
     return newVars;
   }
 
-  private static Type determineExpressionType(final FunctionsProcessor fp, final ExprNode expressionNode, final Map<String, Type> contextVarTypes) {
+  private static Type determineExpressionType(final FunctionsAnalyser fp, final ExprNode expressionNode, final Map<String, Type> contextVarTypes) {
     if (LiteralNode.class.isInstance(expressionNode)) {
       final LiteralNode literalNode = (LiteralNode) expressionNode;
       return new XSDType(literalNode.getLiteralType());

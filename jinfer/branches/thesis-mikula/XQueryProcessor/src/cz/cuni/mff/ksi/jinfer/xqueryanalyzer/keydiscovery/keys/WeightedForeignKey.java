@@ -14,38 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.keys;
+
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 
 /**
  *
  * @author rio
  */
-public class ClassifiedJoinPattern {
+public class WeightedForeignKey {
   
-  public enum Type {
-    O1,
-    O2
-  }
+  private final ForeignKey key;
+  private final int weight;
   
-  private final JoinPattern joinPattern;
-  private final int weight; // Multiplied by 100.
-  private final Type type;
-  
-  public ClassifiedJoinPattern(final JoinPattern joinPattern, final Type type, final int weight) {
-    this.joinPattern = joinPattern;
-    this.type = type;
+  public WeightedForeignKey(final ForeignKey key, final int weight) {
+    this.key = key;
     this.weight = weight;
   }
-  
-  public Type getType() {
-    return type;
-  }
-  
+
   public int getWeight() {
     return weight;
   }
-  
-  public JoinPattern getJoinPattern() {
-    return joinPattern;
+
+  public ForeignKey getKey() {
+    return key;
   }
+  
 }

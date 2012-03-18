@@ -14,34 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys;
+package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
  *
  * @author rio
  */
-public class WeightedKey {
+public class InferredTypeStatement {
+
+  private final PathType pathType;
+  private final Type type;
   
-  private final Key key;
-  private final int weight;
-  
-  public WeightedKey(final Key key, final int weight) {
-    this.key = key;
-    if (key.isPossitive()) {
-      this.weight = weight;
-    } else {
-      this.weight = 0 - weight;
-    }
-  }
-  
-  public int getWeight() {
-    return weight;
+  public InferredTypeStatement(final PathType pathType, final Type type) {
+    this.pathType = pathType;
+    this.type = type;
   }
 
-  public Key getKey() {
-    return key;
+  public PathType getPathType() {
+    return pathType;
+  }
+
+  public Type getType() {
+    return type;
   }
   
 }

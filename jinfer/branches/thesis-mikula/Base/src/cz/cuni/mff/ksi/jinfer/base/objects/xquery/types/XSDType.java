@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.types;
 
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.CardinalityType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.Cardinality;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.LiteralType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;

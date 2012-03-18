@@ -29,7 +29,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This class provides a processing of one syntax tree. The processing consists
+ * of 5 steps:
+ *  - Analysis of function types. See {@link FunctionsAnalyser}.
+ *  - Analysis of expression types. See {@link ExpressionTypesAnalyser}.
+ *  - Inference of XSD built-in types for paths. See {@link BuiltinTypesInferrer}.
+ *  - Inference of negative uniqueness statements. See {@link NegativeUniquenessFinder}.
+ *  - Finding join patterns. See {@link JoinPatternsFinder}.
+ * 
+ * After a construction of an instance, method {@link #process()} can be called,
+ * and after the call, result can be retrieved by the getter methods.
+ * 
  * @author rio
  */
 public class SyntaxTreeProcessor {
@@ -39,17 +49,26 @@ public class SyntaxTreeProcessor {
   private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
   private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
+  /**
+   * A constructor from a syntax tree.
+   * @param root A syntax tree.
+   */
   public SyntaxTreeProcessor(final ModuleNode root) {
     this.root = root;
   }
   
+  /**
+   * Processes the syntax tree as described in javadoc for the entire class.
+   */
   public void process() {
-    final FunctionsAnalyser functionsProcessor = new FunctionsAnalyser(root);
-    final ExpressionTypesAnalyser expressionProcessor = new ExpressionTypesAnalyser(root, functionsProcessor);
+    final FunctionsAnalyser functionsAnalyser = new FunctionsAnalyser(root);
+    
+    final ExpressionTypesAnalyser expressionProcessor = new ExpressionTypesAnalyser(root, functionsAnalyser);
     expressionProcessor.process();
-    final BuiltinTypesInferrer bti = new BuiltinTypesInferrer(root, functionsProcessor);
-    bti.process();
-    inferredTypes.addAll(bti.getInferredTypes());
+    
+    final BuiltinTypesInferrer builtinTypesInferrer = new BuiltinTypesInferrer(root, functionsAnalyser);
+    builtinTypesInferrer.process();
+    inferredTypes.addAll(builtinTypesInferrer.getInferredTypes());
     
     final NegativeUniquenessFinder negativeUniquenessFinder = new NegativeUniquenessFinder(root);
     negativeUniquenessFinder.process();
@@ -60,14 +79,26 @@ public class SyntaxTreeProcessor {
     joinPatterns.addAll(joinPatternsFinder.getJoinPatterns());
   }
   
+  /**
+   * Can be called after the call to {@link #process()} method.
+   * @return Inferred type statements.
+   */
   public List<InferredTypeStatement> getInferredTypes() {
     return inferredTypes;
   }
   
+  /**
+   * Can be called after the call to {@link #process()} method.
+   * @return Found join patterns.
+   */
   public List<JoinPattern> getJoinPatterns() {
     return joinPatterns;
   }
   
+  /**
+   * Can be called after the call to {@link #process()} method.
+   * @return Inferred negative uniqueness statements.
+   */
   public List<NegativeUniquenessStatement> getNegativeUniquenessStatements() {
     return negativeUniquenessStatements;
   }

@@ -17,6 +17,8 @@
 package cz.cuni.mff.ksi.jinfer.xqueryanalyzer;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.joinpatterns.JoinPattern;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keys.NegativeUniquenessStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.InferredType;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +30,12 @@ import java.util.List;
 public class SyntaxTreeProcessor {
   
   private final ModuleNode root;
-  private final List<InferredType> inferredTypes;
-  private final KeysInferrer keysInferrer;
+  private final List<InferredType> inferredTypes = new ArrayList<InferredType>();
+  private final List<JoinPattern> joinPatterns = new ArrayList<JoinPattern>();
+  private final List<NegativeUniquenessStatement> negativeUniquenessStatements = new ArrayList<NegativeUniquenessStatement>();
   
-  public SyntaxTreeProcessor(final ModuleNode root, final KeysInferrer keysInferrer) {
+  public SyntaxTreeProcessor(final ModuleNode root) {
     this.root = root;
-    inferredTypes = new ArrayList<InferredType>();
-    this.keysInferrer = keysInferrer;
   }
   
   public void process() {
@@ -45,11 +46,25 @@ public class SyntaxTreeProcessor {
     bti.process();
     inferredTypes.addAll(bti.getInferredTypes());
     
-    keysInferrer.process(root);
+    final NegativeUniquenessFinder negativeUniquenessFinder = new NegativeUniquenessFinder(root);
+    negativeUniquenessFinder.process();
+    negativeUniquenessStatements.addAll(negativeUniquenessFinder.getNegativeUniquenessStatements());
+    
+    final JoinPatternsFinder joinPatternsFinder = new JoinPatternsFinder(root);
+    joinPatternsFinder.process();
+    joinPatterns.addAll(joinPatternsFinder.getJoinPatterns());
   }
   
   public List<InferredType> getInferredTypes() {
     return inferredTypes;
+  }
+  
+  public List<JoinPattern> getJoinPatterns() {
+    return joinPatterns;
+  }
+  
+  public List<NegativeUniquenessStatement> getNegativeUniquenessStatements() {
+    return negativeUniquenessStatements;
   }
   
 }

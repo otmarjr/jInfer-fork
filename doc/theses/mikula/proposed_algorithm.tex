@@ -142,29 +142,29 @@ But firstly, we describe types of expressions we want to capture and their featu
 \subsection{Expression Types}
 \begin{itemize}
 \item XML Schema built-in atomic types. See Attachment \ref{FIG_xsd_built_in_atomic_types}.
-\item Types \texttt{ElementType}, \texttt{AttributeType}, \texttt{NodeType}, \texttt{TextNodeType},\linebreak \texttt{CommentType}, \texttt{ProcessingInstructionType}, \texttt{DocumentType} representing an element, attribute, node, text node, comment, processing instruction, document node.
-\item Type representing a node or a set of nodes selected by a certain path expression. The path expression is included in this type. Let this type be identified as \texttt{PathType}.
-\item \texttt{UnknownType} representing a type without known details, which does not suit one of the three previous types. An example is XSD type \texttt{anyType}.
+\item Types \emph{ElementType}, \emph{AttributeType}, \emph{NodeType}, \emph{TextNodeType},\linebreak \emph{CommentType}, \emph{ProcessingInstructionType}, \emph{DocumentType} representing an element, attribute, node, text node, comment, processing instruction, document node.
+\item Type representing a node or a set of nodes selected by a certain path expression. The path expression is included in this type. Let this type be identified as \emph{PathType}.
+\item \emph{UnknownType} representing a type without known details, which does not suit one of the three previous types. An example is XSD type \texttt{anyType}.
 \end{itemize}
 
 \subsection{PathType}
-\texttt{PathType} contains additional information. The represented path is contained by an instance of \texttt{PathExprNode} containing list of its steps, in particular instances of \texttt{StepExprNode}. If a step is a reference to a variable which type is \texttt{PathType}, we also want to include this information. Therefore, \texttt{PathType} contain association between the steps and other \texttt{PathType}s and this association is defined for the \texttt{PathType} variable steps.
+PathType contains additional information. The represented path is contained by an instance of \texttt{PathExprNode} containing list of its steps, in particular instances of \texttt{StepExprNode}. If a step is a reference to a variable which type is PathType, we also want to include this information. Therefore, PathType contain association between the steps and other PathTypes and this association is defined for the PathType variable steps.
 
-To differ between a common \texttt{PathType} selecting a set of nodes and a \texttt{PathType} bound to a for variable in a FLWOR expression, \texttt{PathType} structure contains a flag \texttt{isForBound}.
+To differ between a common PathType selecting a set of nodes and a PathType bound to a for variable in a FLWOR expression, PathType structure contains a flag \texttt{isForBound}.
 
-Additionally, \texttt{PathType} contains a list of special functions that were called with an argument of \texttt{PathType} type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of \texttt{PathType} because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}.
+Additionally, PathType contains a list of special functions that were called with an argument of PathType type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of PathType because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}.
 
-In summary, we represent \texttt{PathType} as a structure with the following member variables.
+In summary, we represent PathType as a structure with the following member variables.
 \begin{itemize}
 \item \texttt{pathExprNode} - An instance of \texttt{PathExprNode}.
-\item \texttt{substeps} - An association between steps from \texttt{pathExprNode} and instances of \texttt{PathType} type.
+\item \texttt{substeps} - An association between steps from \texttt{pathExprNode} and instances of PathType type.
 \item \texttt{isForBound} - Boolean flag determining if the type was bound to a for variable in a for clause.
 \item \texttt{specialFunctionCalls} - List of special functions called with this instance as an argument.
 \end{itemize}
 
 \subsection{Cardinality of Types}
 
-To capture sequences, we assign the first two categories of types (all types except of \texttt{PathType} and \texttt{UnknownType}) with its cardinality as proposed in \cite{thesis_schejbal}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
+To capture sequences, we assign the first two categories of types (all types except of PathType and UnknownType) with its cardinality as proposed in \cite{thesis_schejbal}. Each of those types can be perceived as a sequence. A type representing one value or one item can be perceived as a sequence of exactly one item. The cardinality expresses one of the following five sequence types.
 
 \begin{itemize}
 \item An empty sequence.
@@ -174,7 +174,7 @@ To capture sequences, we assign the first two categories of types (all types exc
 \item A sequence containing one or more items (modifier \texttt{+}).
 \end{itemize}
 
-\texttt{PathType} is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, \texttt{UnknownType} is neither assigned with the cardinality. Expressions of \texttt{UnknownType} are not utilized it the inference, therefore, their cardinality is not needed.
+PathType is not assigned with the cardinality since we do not evaluate the queries, and therefore, we cannot determine if a certain XQuery path targets zero, one or more nodes. Alike, UnknownType is neither assigned with the cardinality. Expressions of UnknownType are not utilized it the inference, therefore, their cardinality is not needed.
 
 \subsection{Determination of Function Return Types}
 Determination of return types of functions is needed because function calls can appear in expressions. A return type of a function can be determined at the moment the analysis of expressions encounters a call of the function; however, it involves multiple transitions of the syntax tree in a search for a definition of a particular function.
@@ -385,7 +385,7 @@ A part of the function's semantic is separated in Algorithm \ref{ALG_func_determ
 
 Function \texttt{determineExpressionType} is called within function \texttt{analysis\-Of\-Expression\-Types} presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
-The order of the recursion is to firstly process children of a node and then the node itself. The order of child processing is specified by function $o$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
+The order of the recursion is firstly to process children of a node and then the node itself. The order of child processing is specified by function $o$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}. The reason is that an expression node may need to know types of its subexpressions to determine its own type and we want to determine types of all expressions. Therefore, using the described order, subexpressions of an expression are processed first, and then the expression itself without any need for further recursion, because the types of the subexpressions are already determined.
 
 The handling of new variable definitions relies on the fact that the definitions make the new variables valid only in nodes with a higher sequence number when numbered in the order described in in the previous paragraph. Therefore, the left-most (the first amongst the ordered subnodes) subnode of a certain node can be processed without an extension of the variable context. And, if the left-most subnode extends the variable context for the following nodes in the numbering, it can be easily handled because the types of the new variables can be directly determined since the binding expressions are already processed (thus, their types are known). Every node ''knows'' whether or not it may define new variables for nodes with higher sequence numbers. This is expressed in the algorithm by the condition stating at line 10. If it does define new variables, they are memorized. Later, upon processing of its parent, they are retrieved and the variable context is extended. This is done at lines 4 and 5. Function \texttt{mergeContextVarTypes} presented in Algorithm \ref{ALG_function_mergeContextVarTypes} writes every record from its second argument (the new variables) into its first argument (the variable context). If there are records for variables with the same names in the context, they are overwritten to correspond to the variable overlapping. It is important to note that we assume the variable context is not passed by reference but by value, and hence, the variable context of a certain node is not affected by the recursive processing of its subnodes.
 
@@ -419,7 +419,7 @@ The handling of new variable definitions relies on the fact that the definitions
         \ENDIF
     \ENDIF
     \STATE $set(startingNode, newVars, (startingNode.varName, type))$
-\ELSIF{$is(startingNode,$ TupleStreamNode$)$}
+\ELSIF{$is(startingNode,$ TupleStreamNode$) \vee is(startingNode,$ InClausesNode$)$}
     \FORALL{$varBindingNode \in startingNode.getChildren()$}
         \STATE $add(startingNode, newVars, get(varBindingNode, newVars))$
     \ENDFOR
@@ -834,11 +834,12 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
     \STATE $type := getType(bindingExpr)$
     \IF{$type$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes(type)$ $\wedge$ $isWithoutPredicatesExceptLastStep(type)$}
     	\STATE $P := endsWithExactlyOnePredicate(type)$
-    	\IF{$P$}
+    	\IF{$P \vee (checkJoinPattern3 \wedge isWithoutPredicates(type))$}
         	\FORALL{$(var, node) \in forVars$}
-            	\STATE $forVars := determinateJoinPatterns(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
+            	\STATE $forVars := determineJoinPattern(bindingNode, P, node, var,$ $forVars,$ $checkJoinPattern3,$ $whereExpr)$
         	\ENDFOR
-        \ELSIF{$isWithoutPredicates(type)$}
+        \ENDIF
+        \IF{$isWithoutPredicates(type)$}
         	\IF{$is(bindingNode,$ ForClauseNode$)$}
             	\STATE add $(bindingNode.varName, bindingNode)$ to $forVars$
   	       	\ENDIF
@@ -851,8 +852,8 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 \end{algorithm}
 
 \begin{algorithm}
-\caption{Function \texttt{determinateJoinPatterns}}
-\label{ALG_func_determinateJoinPatterns}
+\caption{Function \texttt{determineJoinPattern}}
+\label{ALG_func_determineJoinPattern}
 \begin{algorithmic}[1]
 \REQUIRE{\ \\
     $curBindingNode$: A variable binding node in the current FLWOR node. \\
@@ -887,7 +888,7 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
 
 To find the occurrences of the join patterns, the algorithm recursively, in pre-order, searches the syntax tree and every node representing a FLWOR expression is processed. The FLWOR processing is shown in Algorithm \ref{ALG_processing_of_flwor_expressions}. Its input is an array of couples containing names of variables which has been bound in for clauses in FLWOR expressions represented by ancestor nodes, and references to those respective for clause nodes. The processing iterates through subnodes of a current node and the iteration consists of two logical parts.
 
-In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. The responsible code is partially moved to function \texttt{determineJoinPatterns} in Algorithm \ref{ALG_func_determinateJoinPatterns}. If the subnode does not form an occurrence, and if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the current FLWOR node or in its descendant FLWOR nodes, later in the recursion.
+In the first one, a subnode is checked if it is a for or let clause that forms a join pattern occurrence with one of clauses from the input array. If it does, the occurrence is noted. The responsible code is partially moved to function \texttt{determineJoinPattern} in Algorithm \ref{ALG_func_determineJoinPattern}. If the subnode does not form an occurrence, and if it is a for clause binding a new variable satisfying the conditions to be the first for clause of a join pattern, it is added to the array along with the variable name. It can be then processed in the following clauses of the current FLWOR node or in its descendant FLWOR nodes, later in the recursion.
 
 \subsection{Analysis of the Join Pattern Occurrences}
 For each found join pattern occurrence, the algorithm displayed in Algorithm \ref{ALG_classification_of_join_pattern_occurrences} and Algorithms \ref{ALG_function_check_r2}, \ref{ALG_function_check_r3}, \ref{ALG_function_use_r4_r5} decides whether it is (O1) or (O2) case, using the rules from the original method and the rule for the join pattern 3 considering it of case (O1) and assigning it with weight of 0.5.

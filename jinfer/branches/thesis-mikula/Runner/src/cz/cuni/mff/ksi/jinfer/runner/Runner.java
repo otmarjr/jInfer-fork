@@ -166,10 +166,6 @@ public class Runner {
   }
   
   private void finishedXQueryAnalyzer(final List<Element> grammar) {
-    // TODO rio any log print?
-    //LOG.info("Runner: simplified grammar contains " + idh.getGrammar().size()
-    //        + " rules.");
-
     runAsync(new Runnable() {
 
       @Override

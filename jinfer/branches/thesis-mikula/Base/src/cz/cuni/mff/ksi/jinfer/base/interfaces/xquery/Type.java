@@ -42,7 +42,8 @@ public interface Type {
   public Category getCategory();
 
   /**
-   * Is this type numeric? TODO rio What does it mean?
+   * Is this type numeric? Numeric types are XSD built-in atomic types that can
+   * can cast to double.
    */
   public boolean isNumeric(); // TODO rio Do we want/need?
   

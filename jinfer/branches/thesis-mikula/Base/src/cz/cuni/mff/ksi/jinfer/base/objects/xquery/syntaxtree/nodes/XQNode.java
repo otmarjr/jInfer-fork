@@ -37,7 +37,7 @@ public abstract class XQNode {
 
   private XQNode parentNode;
   private Map<String, String> attributes = new HashMap<String, String>();
-  private String textContent; // TODO rio needed?
+  private String textContent;
 
   /**
    * Gets the name of the element representing the XQuery construction.

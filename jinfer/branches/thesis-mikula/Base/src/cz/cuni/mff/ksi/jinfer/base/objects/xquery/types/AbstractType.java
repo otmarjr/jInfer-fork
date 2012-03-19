@@ -23,6 +23,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.KindTestNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.TypeNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
+import org.apache.log4j.Logger;
 
 /**
  * Abstract base class of all implementation classes representing types.
@@ -34,6 +35,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
  * @author rio
  */
 public abstract class AbstractType implements Type {
+  
+  private final static Logger LOG = Logger.getLogger(AbstractType.class);
 
   @Override
   public boolean isNodeType() {
@@ -78,13 +81,11 @@ public abstract class AbstractType implements Type {
         final String typeName = itomicTypeNode.getTypeName();
         return new XSDType(typeName, cardinality);
       } else if (KindTestNode.class.isInstance(itemTypeNode)) {
-        // TODO rio vymysliet, preskumat
-        assert(false);
-        return null;
+        LOG.warn("Method \"createType\" does not implement KindTestNodes."); // TODO rio Implement.
+        return new UnknownType();
       } else {
-        // TODO rio ostavaju este 2 typy: AnyItemNode, NameTestNode - preskumat
-        assert(false);
-        return null;
+        LOG.warn("Method \"createType\" does not implement AnyItemNodes nor NameTestNode."); // TODO rio Implement.
+        return new UnknownType();
       }
     }
   }

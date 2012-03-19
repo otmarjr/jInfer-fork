@@ -25,7 +25,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO rio refactor
+ * This class provides summarization of weighted keys and negative uniqueness
+ * statements. It results into a set of {@link SummarizedKey}s. For details
+ * on how the summarization works, refer to the PDF documentation.
+ * 
+ * How to:
+ * 1. Create an instance from specified weighted keys and negative uniqueness statements.
+ * 2. Run {@link #process()} method.
+ * 3. Retrieve the summarized keys by {@link #getSummarizedKeys()} method.
+ * 
+ * @see WeightedKey
+ * @see NegativeUniquenessStatement
  * @author rio
  */
 public class KeySummarizer {

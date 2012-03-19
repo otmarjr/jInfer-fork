@@ -37,7 +37,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.TopologicalSort;
-import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.KeySummarizer;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.SummarizedKey;
@@ -61,7 +60,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @author rio
  */
 public class Merger {
-  
+
   /* Grammar metadata keys. Inferred statements will be written to the metadata
    * under these keys. Any exporter which want to use statements inferred by
    * this module, must read them from the metadata using these keys.
@@ -70,9 +69,9 @@ public class Merger {
   private static final String METADATA_KEY_HAS_PREDICATES = "xquery_processor_type_has_predicates";
   private static final String METADATA_KEY_KEYS = "xquery_processor_keys";
   private static final String METADATA_KEY_FOREIGN_KEYS = "xquery_processor_foreign_keys";
-  
+  private static final double KEY_SCORE_TRESHOLD = 0.3;
   private final List<Element> topologicallySortedGrammar;
-  
+
   /**
    * A constructor from a grammar which will be written inferred statements to.
    * @param grammar Grammar to write inferred statements to.
@@ -81,7 +80,7 @@ public class Merger {
   public Merger(final List<Element> grammar) throws InterruptedException {
     topologicallySortedGrammar = new TopologicalSort(grammar).sort();
   }
-  
+
   /**
    * Merges specified inferred type statements with the grammar.
    * @param inferredTypes
@@ -90,7 +89,7 @@ public class Merger {
   public void mergeInferredTypes(List<InferredTypeStatement> inferredTypes) throws InterruptedException {
     writeInferredTypesToGrammar(topologicallySortedGrammar, inferredTypes);
   }
-  
+
   /**
    * Merges specified inferred key statements with the grammar.
    * @param keys
@@ -100,7 +99,7 @@ public class Merger {
   public void mergeInferredKeys(Collection<SummarizedKey> keys, Map<Key, Set<ForeignKey>> foreignKeys) throws InterruptedException {
     writeInferredKeysToGrammar(topologicallySortedGrammar, keys, foreignKeys);
   }
-  
+
   /**
    * Writes the supplied inferred type statements to a topologically sorted grammar metadata.
    * @param grammar A topologically grammar to write the statements to.
@@ -111,21 +110,21 @@ public class Merger {
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
       return;
     }
-    
+
     final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
-    
+
     for (final InferredTypeStatement inferredType : inferredTypes) {
       final PathType pathType = inferredType.getPathType();
       final Type type = inferredType.getType();
       if (type.getCategory() != Type.Category.XSD_BUILT_IN) {
         continue;
       }
-      
-      XSDBuiltinAtomicType inferredAtomicType = ((XSDType)type).getAtomicType();
-      
+
+      XSDBuiltinAtomicType inferredAtomicType = ((XSDType) type).getAtomicType();
+
       final NormalizedPathType ptp = new NormalizedPathType(pathType);
-      final boolean hasPredicates = ptp.hasPredicates();      
-      
+      final boolean hasPredicates = ptp.hasPredicates();
+
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);
       for (final StepExprNode step : ptp.getSteps()) {
@@ -134,7 +133,7 @@ public class Merger {
 
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
-        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType)metadata.get(METADATA_KEY_TYPE);
+        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType) metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
@@ -144,7 +143,7 @@ public class Merger {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
           } else {
-            final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
+            final boolean oldHasPredicates = (Boolean) metadata.get(METADATA_KEY_HAS_PREDICATES);
             if (!hasPredicates && oldHasPredicates) {
               metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
               metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
@@ -152,10 +151,10 @@ public class Merger {
           }
         }
       }
-      
+
       for (final Attribute attribute : contextSet.getAttributes()) {
         final Map<String, Object> metadata = attribute.getMetadata();
-        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType)metadata.get(METADATA_KEY_TYPE);
+        final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType) metadata.get(METADATA_KEY_TYPE);
         if (type == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
@@ -165,7 +164,7 @@ public class Merger {
             metadata.put(METADATA_KEY_TYPE, moreSpecificType);
             metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
           } else {
-            final boolean oldHasPredicates = (Boolean)metadata.get(METADATA_KEY_HAS_PREDICATES);
+            final boolean oldHasPredicates = (Boolean) metadata.get(METADATA_KEY_HAS_PREDICATES);
             if (!hasPredicates && oldHasPredicates) {
               metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
               metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
@@ -175,7 +174,7 @@ public class Merger {
       }
     }
   }
-  
+
   /**
    * Writes the supplied inferred key statements to a topologically sorted grammar metadata.
    * @param topologicalSortedGrammar
@@ -187,23 +186,23 @@ public class Merger {
     if (BaseUtils.isEmpty(topologicalSortedGrammar)) {
       return;
     }
-    
+
     final Element root = topologicalSortedGrammar.get(topologicalSortedGrammar.size() - 1);
-    
+
     for (final SummarizedKey summarizedKey : keys) {
-      if (summarizedKey.getNormalizedWeight() < 0.3) { // TODO rio nastavit tento threshold
+      if (summarizedKey.getNormalizedWeight() < KEY_SCORE_TRESHOLD) {
         continue;
       }
-      
+
       Key key = summarizedKey.getKey();
 
       final NormalizedPathType contextPath = key.getContextPath();
-      
+
       PathTypeEvaluationContextNodesSet contextSet = new PathTypeEvaluationContextNodesSet();
       contextSet.addNode(root);
-      
+
       Set<ForeignKey> fKeys = foreignKeys.get(key);
-      
+
       if (contextPath != null) {
         for (final StepExprNode step : contextPath.getSteps()) {
           contextSet = evaluateStep(contextSet, step, topologicalSortedGrammar);
@@ -216,10 +215,10 @@ public class Merger {
         }
         fKeys = modifiedFKeys;
       }
-      
+
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
-        final List<Key> savedKeys = (List<Key>)metadata.get(METADATA_KEY_KEYS);
+        final List<Key> savedKeys = (List<Key>) metadata.get(METADATA_KEY_KEYS);
         if (savedKeys == null) {
           final List<Key> keyList = new ArrayList<Key>();
           keyList.add(key);
@@ -227,9 +226,9 @@ public class Merger {
         } else {
           savedKeys.add(key);
         }
-        
+
         if (!BaseUtils.isEmpty(fKeys)) {
-          final Set<ForeignKey> savedFKeys = (Set<ForeignKey>)metadata.get(METADATA_KEY_FOREIGN_KEYS);
+          final Set<ForeignKey> savedFKeys = (Set<ForeignKey>) metadata.get(METADATA_KEY_FOREIGN_KEYS);
           if (savedFKeys == null) {
             metadata.put(METADATA_KEY_FOREIGN_KEYS, fKeys);
           } else {
@@ -239,28 +238,27 @@ public class Merger {
       }
     }
   }
-  
+
   private static PathTypeEvaluationContextNodesSet evaluateStep(PathTypeEvaluationContextNodesSet contextSet, final StepExprNode step, final List<Element> grammar) {
-    assert(contextSet != null);
-    
+    assert (contextSet != null);
+
     if (SelfOrDescendantStepNode.class.isInstance(step)) {
-      // TODO rio Recursively find all descendants in the grammar
-      return contextSet;
+      return evaluateAxisSelfOrDescendant(contextSet, grammar);
     }
-    
+
     final PathTypeEvaluationContextNodesSet result = new PathTypeEvaluationContextNodesSet();
-    
+
     if (step.isAxisStep()) {
       final AxisNode axisNode = step.getAxisNode();
       final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
       switch (axisNode.getAxisKind()) {
         case ATTRIBUTE: {
-          assert(NameTestNode.class.isInstance(itemTypeNode)); // Not completely finished, but probably sufficient for our purpose.
-          final NameTestNode ntn = (NameTestNode)itemTypeNode;
+          assert (NameTestNode.class.isInstance(itemTypeNode)); // Not completely finished, but probably sufficient for our purpose.
+          final NameTestNode ntn = (NameTestNode) itemTypeNode;
           final String attName = ntn.getName();
           for (final AbstractStructuralNode node : contextSet.getNodes()) {
             if (node.isElement()) {
-              for (final Attribute att : ((Element)node).getAttributes()) {
+              for (final Attribute att : ((Element) node).getAttributes()) {
                 if (att.getName().equals(attName)) {
                   result.addAttribute(att);
                 }
@@ -269,14 +267,14 @@ public class Merger {
           }
           break;
         }
-          
+
         case CHILD: {
           if (NameTestNode.class.isInstance(itemTypeNode)) {
-            final NameTestNode ntn = (NameTestNode)itemTypeNode;
+            final NameTestNode ntn = (NameTestNode) itemTypeNode;
             final String nodeName = ntn.getName();
             for (final AbstractStructuralNode node : contextSet.getNodes()) {
               if (node.isElement()) {
-                for (final AbstractStructuralNode subnode : ((Element)node).getSubnodes().getTokens()) {
+                for (final AbstractStructuralNode subnode : ((Element) node).getSubnodes().getTokens()) {
                   if (subnode.isElement()) {
                     for (final Element element : grammar) {
                       if (element.getName().equals(nodeName)) {
@@ -288,7 +286,7 @@ public class Merger {
               }
             }
           } else if (KindTestNode.class.isInstance(itemTypeNode)) { // TODO rio do diplomky!!
-            final KindTestNode ktn = (KindTestNode)itemTypeNode;
+            final KindTestNode ktn = (KindTestNode) itemTypeNode;
             final NodeKind nk = ktn.getNodeKind();
             if (nk == NodeKind.TEXT) {
               for (final AbstractStructuralNode node : contextSet.getNodes()) {
@@ -300,27 +298,64 @@ public class Merger {
               throw new NotImplementedException();
             }
           } else {
-              throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
+            throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
           }
           break;
         }
-          
+
         default:
           throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
       }
     } else {
       final ExprNode detailNode = step.getDetailNode();
-      
+
       if (FunctionCallNode.class.isInstance(detailNode)) {
-        final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(((FunctionCallNode)detailNode).getFuncName());
+        final String builtinFuncName = BuiltinFunctionsUtils.isBuiltinFunction(((FunctionCallNode) detailNode).getFuncName());
         if ("doc".equals(builtinFuncName)) {
           return contextSet;
         }
-      } 
-      
+      }
+
       throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
     }
-    
+
     return result;
+  }
+
+  private static PathTypeEvaluationContextNodesSet evaluateAxisSelfOrDescendant(final PathTypeEvaluationContextNodesSet contextSet, final List<Element> grammar) {
+    final PathTypeEvaluationContextNodesSet ret = new PathTypeEvaluationContextNodesSet();
+    ret.addNodes(contextSet.getNodes());
+    ret.addAttributes(contextSet.getAttributes());
+
+    final PathTypeEvaluationContextNodesSet children = new PathTypeEvaluationContextNodesSet();
+    for (final AbstractStructuralNode node : contextSet.getNodes()) {
+      if (node.isElement()) {
+        final Element element = (Element) node;
+        children.addNodes(evaluateChildren(element, grammar));
+      }
+    }
+
+    final PathTypeEvaluationContextNodesSet recursionRet = evaluateAxisSelfOrDescendant(children, grammar);
+    ret.addNodes(recursionRet.getNodes());
+    ret.addAttributes(recursionRet.getAttributes());
+
+    return ret;
+  }
+
+  private static Collection<AbstractStructuralNode> evaluateChildren(final Element element, final List<Element> grammar) {
+    final List<AbstractStructuralNode> children = new ArrayList<AbstractStructuralNode>();
+    
+    for (final AbstractStructuralNode subnode : element.getSubnodes().getTokens()) {
+      if (subnode.isElement()) {
+        final Element subelement = (Element) subnode;
+        for (final Element grammarElement : grammar) {
+          if (subelement.getName().equals(grammarElement.getName())) {
+            children.add(grammarElement);
+          }
+        }
+      }
+    }
+    
+    return children;
   }
 }

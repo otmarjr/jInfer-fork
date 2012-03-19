@@ -43,7 +43,7 @@ import java.util.Set;
  *  - For each syntax tree, join patterns and negative uniqueness statements found
  *    in the tree should be added to this instance using {@link #addJoinPatterns(java.util.List)}
  *    and {@link #addNegativeUniquenessStatements(java.util.List)} methods.
- *  - After processing of all syntax tree, {@link #summarize()} should be called.
+ *  - After processing of all syntax tree, {@link #process()} should be called.
  *  - Inferred keys and foreign keys can be retrieved by {@link #getKeys()} and
  *    {@link #getForeignKeys()} methods.
  * 
@@ -119,11 +119,9 @@ public class KeysInferrer {
     return keysToForeignKeys;
   }
   
-  private static Collection<SummarizedKey> summarizeKeys(List<WeightedKey> wKeys, List<NegativeUniquenessStatement> nuss) {
-    final KeySummarizer ks = new KeySummarizer();
-    for (final WeightedKey wk : wKeys) {
-      ks.summarize(wk, nuss);
-    }
+  private static Collection<SummarizedKey> summarizeKeys(List<WeightedKey> weightedKeys, List<NegativeUniquenessStatement> negativeUniquenessStatements) {
+    final KeySummarizer ks = new KeySummarizer(weightedKeys, negativeUniquenessStatements);
+    ks.process();
     return ks.getSummarizedKeys();
   }
 }

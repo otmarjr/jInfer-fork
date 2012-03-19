@@ -30,6 +30,6 @@ public class SelfOrDescendantStepNode extends StepExprNode {
 
   public SelfOrDescendantStepNode() {
     super(new AxisNode(AxisKind.DESCENDANT_OR_SELF,
-            new KindTestNode(NodeKind.ANY_KIND), true), null); // TODO tie parentNode-y v tych dvoch vyrabanych objektoch su ok? Asi nie...
+            new KindTestNode(NodeKind.ANY_KIND), true), null);
   }
 }

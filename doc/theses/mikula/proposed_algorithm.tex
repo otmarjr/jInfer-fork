@@ -550,9 +550,7 @@ This case is quite straightforward. The algorithm encounters a function call and
 If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. The inferred statement is $P \rightarrow T$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
-
-If the operator in an arithmetic operation is one of \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{MUL}, \texttt{DIV}, one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow $ \texttt{double}.
+If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod}, \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD}, \texttt{MUL}, \texttt{DIV} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
 
 If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $P$ and the type $T$ of the other operand is one of built-in types, then the inferred statement is $P \rightarrow T$.
 

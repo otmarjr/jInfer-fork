@@ -111,7 +111,7 @@ public abstract class AbstractElementsExporter {
       return;
     }
 
-    // If element's type is global set it and finish.
+    // If element's type is global set it, set keys and finish.
     if (preprocessingResult.isElementGlobal(element.getName())) {
       indentator.append(" type=\"");
       indentator.append(typenamePrefix);
@@ -119,7 +119,16 @@ public abstract class AbstractElementsExporter {
       indentator.append(typenamePostfix);
       indentator.append("\"");
       indentator.append(OccurencesProcessor.processOccurrences(interval));
-      indentator.append("/>\n");
+      if (hasElementKeys(element)) {
+        indentator.append(">\n");
+        indentator.increaseIndentation();
+        processElementKeys(element);
+        processElementForeignKeys(element);
+        indentator.decreaseIndentation();
+        indentator.indent("</xs:element>\n");
+      } else {
+        indentator.append("/>\n");
+      }
       return;
     }
 
@@ -185,6 +194,16 @@ public abstract class AbstractElementsExporter {
     processElementAttributes(element);
   }
   
+  protected boolean hasElementKeys(final Element element) {
+    final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_processor_keys");
+    
+    if (BaseUtils.isEmpty(keys)) {
+      return false;
+    } else {    
+      return true;
+    }
+  }
+  
   protected void processElementKeys(final Element element) {
     final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_processor_keys");
     
@@ -222,7 +241,7 @@ public abstract class AbstractElementsExporter {
       final String keyName = keyNames.get(fKey.getKey());
       assert(keyName != null);
 
-      indentator.indent("<xs:keyref name=\"" + keyName + "Ref\">\n");
+      indentator.indent("<xs:keyref name=\"" + keyName + "Ref\" refer=\"" + keyName + "\">\n");
       indentator.increaseIndentation();
       indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");
       indentator.indent("<xs:field xpath=\"" + keyPath.toString() + "\"/>\n");

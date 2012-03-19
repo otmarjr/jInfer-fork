@@ -47,7 +47,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.log4j.Logger;
 
 /**
  * Class responsible for merging the inferred statements with the grammar.
@@ -60,6 +60,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @author rio
  */
 public class Merger {
+  
+  private final static Logger LOG = Logger.getLogger(Merger.class);
 
   /* Grammar metadata keys. Inferred statements will be written to the metadata
    * under these keys. Any exporter which want to use statements inferred by
@@ -285,7 +287,7 @@ public class Merger {
                 }
               }
             }
-          } else if (KindTestNode.class.isInstance(itemTypeNode)) { // TODO rio do diplomky!!
+          } else if (KindTestNode.class.isInstance(itemTypeNode)) {
             final KindTestNode ktn = (KindTestNode) itemTypeNode;
             final NodeKind nk = ktn.getNodeKind();
             if (nk == NodeKind.TEXT) {
@@ -295,16 +297,19 @@ public class Merger {
                 }
               }
             } else {
-              throw new NotImplementedException();
+              LOG.warn("evaluateStep: NodeKind " + nk.toString() + " is not implemented yet, the result of evaluation is very likely wrong.");
+              return contextSet;
             }
           } else {
-            throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
+            LOG.warn("evaluateStep: This subclass of ItemTypeNode is not implemented yet, the result of evaluation is very likely wrong.");
+            return contextSet; // Not completely finished, but probably sufficient for our purpose.
           }
           break;
         }
 
         default:
-          throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
+         LOG.warn("evaluateStep: AxisKind " + axisNode.getAxisKind().toString() + " is not implemented yet, the result of evaluation is very likely wrong.");
+         return contextSet; // Not completely finished, but probably sufficient for our purpose.
       }
     } else {
       final ExprNode detailNode = step.getDetailNode();
@@ -316,7 +321,8 @@ public class Merger {
         }
       }
 
-      throw new NotImplementedException(); // Not completely finished, but probably sufficient for our purpose.
+      LOG.warn("evaluateStep: This type of step is not implemented yet, the result of evaluation is very likely wrong.");
+      return contextSet; // Not completely finished, but probably sufficient for our purpose.
     }
 
     return result;

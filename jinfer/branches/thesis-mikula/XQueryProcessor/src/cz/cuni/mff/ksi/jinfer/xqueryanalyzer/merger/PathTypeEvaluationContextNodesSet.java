@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.merger;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -47,6 +48,14 @@ public class PathTypeEvaluationContextNodesSet {
 
   public List<AbstractStructuralNode> getNodes() {
     return nodes;
+  }
+  
+  public void addNodes(final Collection<AbstractStructuralNode> nodes) {
+    this.nodes.addAll(nodes);
+  }
+  
+  public void addAttributes(final Collection<Attribute> attributes) {
+    this.attributes.addAll(attributes);
   }
   
 }

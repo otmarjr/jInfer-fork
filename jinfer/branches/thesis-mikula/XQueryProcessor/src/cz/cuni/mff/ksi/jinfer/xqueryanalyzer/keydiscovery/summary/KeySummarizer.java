@@ -33,11 +33,34 @@ public class KeySummarizer {
   private final Map<Key, SummarizedKey> summarizedKeys = new HashMap<Key, SummarizedKey>();
   //private final Map<ForeignKey, SummarizedInfo> foreignKeys = new HashMap<ForeignKey, SummarizedInfo>();
   
+  private final List<WeightedKey> weightedKeys;
+  private final List<NegativeUniquenessStatement> negativeUniquenessStatements;
   private int keysMaxCount = 0;
   private int keysMaxWeight = 0;
   private int keysTotalCount = 0;
   
-  public void summarize(final WeightedKey weightedKey, final List<NegativeUniquenessStatement> nuss) {
+  public KeySummarizer(final List<WeightedKey> weightedKeys, final List<NegativeUniquenessStatement> negativeUniquenessStatements) {
+    this.weightedKeys = weightedKeys;
+    this.negativeUniquenessStatements = negativeUniquenessStatements;
+  }
+  
+  public void process() {
+    for (final WeightedKey weightedKey : weightedKeys) {
+      processWeightedKey(weightedKey);
+    }
+    
+    computeKeyCoverage();
+    
+    for (final SummarizedKey summarizedKey : summarizedKeys.values()) {
+      summarizedKey.normalize(keysMaxCount, keysMaxWeight, keysTotalCount);
+    }
+  }
+  
+  public Collection<SummarizedKey> getSummarizedKeys() {
+    return summarizedKeys.values();
+  }
+  
+  private void processWeightedKey(final WeightedKey weightedKey) {
     final Key key = weightedKey.getKey();
     
     if (!summarizedKeys.containsKey(key)) {
@@ -48,7 +71,7 @@ public class KeySummarizer {
     final SummarizedKey summarizedKey = summarizedKeys.get(key);
     int weight = weightedKey.getWeight();
     
-    for (final NegativeUniquenessStatement nus : nuss) {
+    for (final NegativeUniquenessStatement nus : negativeUniquenessStatements) {
       if ((nus.getContextPath() == null && key.getContextPath() == null || nus.getContextPath().equals(key.getContextPath()))
               && nus.getTargetPath().equals(key.getTargetPath())) {
         weight -= nus.getWeight();
@@ -74,15 +97,6 @@ public class KeySummarizer {
     if (keysMaxWeight < Math.abs(weight)) {
       keysMaxWeight = Math.abs(weight);
     }
-  }
-  
-  public Collection<SummarizedKey> getSummarizedKeys() {
-    computeKeyCoverage();
-    
-    for (final SummarizedKey summarizedKey : summarizedKeys.values()) {
-      summarizedKey.normalize(keysMaxCount, keysMaxWeight, keysTotalCount);
-    }
-    return summarizedKeys.values();
   }
   
   private void computeKeyCoverage() {

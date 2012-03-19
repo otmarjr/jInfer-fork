@@ -20,7 +20,8 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 
 /**
- * TODO rio comment
+ * This class represents keys using (C,P,{L}) definition. For details, refer
+ * to the PDF documentation.
  * @author rio
  */
 public class Key {
@@ -55,7 +56,11 @@ public class Key {
     this(null, targetPath, keyPath);
   }
   
-  public boolean isPossitive() {
+  /**
+   * Is this key positive? In other words, is this key statement satisfied?
+   * @return 
+   */
+  public boolean isPositive() {
     return true;
   }
 

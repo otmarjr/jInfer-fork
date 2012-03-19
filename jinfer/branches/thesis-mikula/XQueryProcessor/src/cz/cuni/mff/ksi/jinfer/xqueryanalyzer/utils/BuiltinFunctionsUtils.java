@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -58,6 +59,8 @@ public class BuiltinFunctionsUtils {
     DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES.add("");
     DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES.add("fn");
   }
+  
+  private static final Logger LOG = Logger.getLogger(BuiltinFunctionsUtils.class);
   
   /**
    * If a specified function is built-in returns its name without prefix, else
@@ -111,7 +114,8 @@ public class BuiltinFunctionsUtils {
     if (builtinFunctionTypes.containsKey(builtinFuncName)) {
       return builtinFunctionTypes.get(builtinFuncName);
     } else {
-      throw new NotImplementedException();
+      LOG.warn("getFunctioncCallType: Built-in function " + builtinFuncName + " is not implemented yet. Returning UnknownType.");
+      return new UnknownType(); // TODO rio Implement completely if needed.
     }
   }
   
@@ -160,7 +164,8 @@ public class BuiltinFunctionsUtils {
       paramNodes.add(paramNode2);
       paramNodes.add(paramNode3);
     } else {
-      throw new NotImplementedException(); // TODO rio Implement completely if needed.
+      LOG.warn("getParamListNode: Built-in function " + functionName + " is not implemented yet.");
+      return null; // TODO rio Implement completely if needed.
     }
     
     return new ParamListNode(paramNodes);

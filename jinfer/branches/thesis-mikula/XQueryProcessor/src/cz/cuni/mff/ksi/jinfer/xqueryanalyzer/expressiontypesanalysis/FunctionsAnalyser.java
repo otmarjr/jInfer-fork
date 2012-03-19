@@ -20,8 +20,10 @@ import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.BuiltinFunctionsUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.*;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.UnknownType;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -37,6 +39,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public class FunctionsAnalyser {
   
+  private static final Logger LOG = Logger.getLogger(FunctionsAnalyser.class);
   private final Map<String, FunctionDeclNode> functionDeclarationNodes;
   private final Map<String, Type> functionTypes;
   
@@ -73,7 +76,8 @@ public class FunctionsAnalyser {
       }
     }
     
-    throw new NotImplementedException();
+    LOG.warn("getFunctionType: Function " + qualifiedName + " is not implemented yet. Returning UnknownType.");
+    return new UnknownType();
   }
   
   /**
@@ -92,7 +96,8 @@ public class FunctionsAnalyser {
       }
     }
     
-    throw new NotImplementedException();
+    LOG.warn("getParamListNode: Function " + functionName + " is not implemented yet.");
+    return null;
   }
   
   private Map<String, FunctionDeclNode> getFunctionDeclarationNodes(final ModuleNode root) {

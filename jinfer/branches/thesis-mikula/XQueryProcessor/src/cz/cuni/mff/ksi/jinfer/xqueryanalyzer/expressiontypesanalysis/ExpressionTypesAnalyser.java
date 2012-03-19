@@ -142,7 +142,7 @@ public class ExpressionTypesAnalyser {
       }
     } else if (TupleStreamNode.class.isInstance(root)) {
       newVars = newContextVarTypes;
-    } else if (InClausesNode.class.isInstance(root)) { // TODO rio do diplomky!!
+    } else if (InClausesNode.class.isInstance(root)) {
       newVars = newContextVarTypes;
     }
 
@@ -192,7 +192,7 @@ public class ExpressionTypesAnalyser {
     } else if (IfExprNode.class.isInstance(expressionNode)) {
       final IfExprNode ifExprNode = (IfExprNode)expressionNode;
       return ifExprNode.getThenExpressionNode().getExprNode().getType();
-    } else if (QuantifiedExprNode.class.isInstance(expressionNode)) { // TODO rio do diplomky!!
+    } else if (QuantifiedExprNode.class.isInstance(expressionNode)) {
       return new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE);
     }
     assert (false); // TODO rio Implement other expressions.

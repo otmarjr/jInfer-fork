@@ -114,7 +114,7 @@ public class JoinPatternsFinder {
             for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
               determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), checkJoinPattern3, whereExpr, foundJoinPatterns);
             }
-          } else if (checkJoinPattern3 && PathTypeUtils.isWithoutPredicates((PathType) bindingExprType)) { // TODO rio do diplomky!!
+          } else if (checkJoinPattern3 && PathTypeUtils.isWithoutPredicates((PathType) bindingExprType)) {
             for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
               determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), checkJoinPattern3, whereExpr, foundJoinPatterns);
             }
@@ -140,7 +140,7 @@ public class JoinPatternsFinder {
         final JoinWhereFormExprParser exprParser = new JoinWhereFormExprParser(whereExpr, forVar, bindingNode.getVarName());
         if (exprParser.isExprWhereForm()) {
           final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio I'm not sure is this is correct - if these expressions are always path types.
-          final PathType P2 = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
+          final PathType P2 = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType();
           foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
         }
       }
@@ -151,7 +151,7 @@ public class JoinPatternsFinder {
     final JoinPredicateFormExprParser exprParser = new JoinPredicateFormExprParser(predicate, forVar);
     if (exprParser.isExprPredicateForm()) {
       final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio I'm not sure is this is correct - if these expressions are always path types.
-      final PathType P2WithPredicate = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
+      final PathType P2WithPredicate = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType();
       final StepExprNode lastStep = P2WithPredicate.getSteps().get(P2WithPredicate.getSteps().size() - 1);
       StepExprNode newLastStep;
 
@@ -164,7 +164,7 @@ public class JoinPatternsFinder {
       final List<StepExprNode> newSteps = new ArrayList<StepExprNode>(P2WithPredicate.getSteps());
       newSteps.set(P2WithPredicate.getSteps().size() - 1, newLastStep);
 
-      final PathType P2 = new PathType(new PathExprNode(newSteps, P2WithPredicate.getInitialStep())); // TODO rio do DP!!
+      final PathType P2 = new PathType(new PathExprNode(newSteps, P2WithPredicate.getInitialStep()));
       if (ForClauseNode.class.isInstance(bindingNode)) {
         foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
       } else if (LetClauseNode.class.isInstance(bindingNode)) {

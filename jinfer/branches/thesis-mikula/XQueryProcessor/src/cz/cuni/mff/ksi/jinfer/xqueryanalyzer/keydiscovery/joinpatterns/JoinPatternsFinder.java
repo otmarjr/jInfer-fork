@@ -139,7 +139,7 @@ public class JoinPatternsFinder {
         //if (isWhereClauseForm(whereExpr, bindingNode.getVarName(), forVar, L1, L2)) {
         final JoinWhereFormExprParser exprParser = new JoinWhereFormExprParser(whereExpr, forVar, bindingNode.getVarName());
         if (exprParser.isExprWhereForm()) {
-          final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio Su tieto dva riadky OK? Je exprNode vzdy naozaj typu PathType?
+          final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio I'm not sure is this is correct - if these expressions are always path types.
           final PathType P2 = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
           foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
         }
@@ -150,7 +150,7 @@ public class JoinPatternsFinder {
     // Check for and let join patterns.
     final JoinPredicateFormExprParser exprParser = new JoinPredicateFormExprParser(predicate, forVar);
     if (exprParser.isExprPredicateForm()) {
-      final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio OK? Je exprNode vzdy naozaj typu PathType?
+      final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio I'm not sure is this is correct - if these expressions are always path types.
       final PathType P2WithPredicate = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio do DP!!
       final StepExprNode lastStep = P2WithPredicate.getSteps().get(P2WithPredicate.getSteps().size() - 1);
       StepExprNode newLastStep;

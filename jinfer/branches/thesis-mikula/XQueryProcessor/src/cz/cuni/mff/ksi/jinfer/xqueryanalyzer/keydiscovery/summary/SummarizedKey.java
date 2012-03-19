@@ -19,7 +19,12 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 
 /**
- * TODO rio comment
+ * A representation of keys with their summarization information; count, sum of
+ * weights, and normalized weight. Instances are created by {@link KeySummarizer}.
+ * 
+ * TODO rio Refactor. This concept of summarized key classes with normalize method
+ * is a little weird :)
+ * 
  * @author rio
  */
 public class SummarizedKey {

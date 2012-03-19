@@ -236,20 +236,18 @@ Without loss of generality, we will focus on locally defined functions. We will 
 \REQUIRE $typeNode$: Syntax tree node of TypeNode class.
 \ENSURE Type extracted from $typeNode$.
 
-\STATE $type :=$ null
+\STATE $type :=$ UnknownType
 \STATE $cardinality := typeNode.cardinality$
 \STATE $itemTypeNode := typeNode.getChild(ItemTypeNode)$
 \IF{$is(itemTypeNode,$ AtomicTypeNode$)$}
-    \STATE $type := itemTypeNode.typeName$
+    \STATE $type :=$ XSD atomic built-in type $itemTypeNode.typeName$, $cardinality$
 \ELSIF{$is(itemTypeNode,$ KindTestNode$)$}
-    \STATE $type := itemTypeNode.nodeKind$
+    \STATE $type := itemTypeNode.nodeKind$, $cardinality$
 \ENDIF
 
-\RETURN $type, cardinality$
+\RETURN $type$
 \end{algorithmic}
 \end{algorithm}
-
-\todo[inline]{ALG Extraction of a Type from TypeNode nie uplne sedi s definiciou typov. DP JS ma nieco navyse. A tento alg je nedokonceny!!}
 
 For the rest of the thesis, we assume function \texttt{getFunctionReturnType} which takes a function name and returns the return type of the function if the function is either built-in or it is recorded in the associative array. Otherwise, \texttt{null} is returned.
 
@@ -552,9 +550,9 @@ This case is quite straightforward. The algorithm encounters a function call and
 If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. The inferred statement is $P \rightarrow T$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{*}, \texttt{div}, \texttt{mod} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{MUL}, \texttt{DIV}, \texttt{MOD} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
+If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
 
-\todo[inline]{Toto je zlozitejsie.}
+If the operator in an arithmetic operation is one of \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{MUL}, \texttt{DIV}, one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow $ \texttt{double}.
 
 If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $P$ and the type $T$ of the other operand is one of built-in types, then the inferred statement is $P \rightarrow T$.
 

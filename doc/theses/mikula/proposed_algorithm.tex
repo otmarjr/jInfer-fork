@@ -3,14 +3,22 @@ In this thesis we are developing an approach dealing with inference of XML schem
 
 There is an important assumption placed upon the input XQuery queries saying that each query must be syntactically and semantically correct. That means that if a query was evaluated (using a XQuery processor meeting the XQuery specification), the evaluation would not raise any error, neither static nor dynamic. In other words, each query is syntactically correct and it correctly queries the data in the XML documents.
 
-The proposed algorithm consists of the following four main steps, described in detail in the rest of the chapter.
+\begin{figure}
+\label{FIG_steps_algorithm}
+\caption{Steps of the proposed algorithm.}
+\includegraphics[scale=1]{algorithm.eps}
+\end{figure}
+
+The proposed algorithm consists of the following four main steps, show in Figure \ref{FIG_steps_algorithm} and described in detail in the rest of the chapter.
 
 \begin{enumerate}
-\item Construction of a syntax tree. We use lexical and syntax analyses proposed in \cite{thesis_schejbal} and for each XQuery on input, we construct a data structure defined in \ref{DEF_syntax_tree}.
-\item Static Analysis of expression types. The algorithm searches for expressions in the syntax trees and statically (without evaluation) determines their types.
-\item Inference of built-in types. When the types of expressions are determined, selected forms of expression are utilized to infer types of elements and attributes.
-\item Key discovery. The final step is an extension of approach \cite{Necasky:2009:DXK:1529282.1529414} inferring keys and foreign keys.
+\item \textbf{Construction of a syntax tree}. We use lexical and syntax analyses proposed in \cite{thesis_schejbal} and for each XQuery on input, we construct a data structure defined in \ref{DEF_syntax_tree}.
+\item \textbf{Static Analysis of expression types}. The algorithm searches for expressions in the syntax trees and statically (without evaluation) determines their types.
+\item \textbf{Inference of built-in types}. When the types of expressions are determined, selected forms of expression are utilized to infer types of elements and attributes.
+\item \textbf{Key discovery}. The final step is an extension of approach \cite{Necasky:2009:DXK:1529282.1529414} inferring keys and foreign keys.
 \end{enumerate}
+
+As can be seen in Figure \ref{FIG_steps_algorithm}, step 4 is independent on step 3. They both depend on step 2.
 
 \section{Step 1: Construction of a Syntax Tree}
 The first step of the algorithm involves lexical and syntax analyses known from the construction of compilers and produces a so-called syntax tree. The analyses are taken from Ji\v r\'{i} Schejbal's master thesis \cite{thesis_schejbal}. Since they are not directly related to the inference, and thus, they are not directly related to the topic of this thesis, we will not describe them. Nevertheless, they provides us with a helpful processing of XQuery queries and we can focus on the inference.

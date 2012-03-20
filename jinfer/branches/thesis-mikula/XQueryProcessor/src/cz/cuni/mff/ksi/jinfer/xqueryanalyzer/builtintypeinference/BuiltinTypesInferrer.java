@@ -49,6 +49,10 @@ public class BuiltinTypesInferrer {
       processFunctionCall((FunctionCallNode)node);
     } else if (OperatorNode.class.isInstance(node)) {
       processOperator((OperatorNode)node);
+    } else if (node instanceof FunctionBodyNode) {
+      // To process function body nodes, we need know the real arguments.
+      // It is not implemented yet.
+      return;
     }
     
     final List<XQNode> subnodes = node.getSubnodes();

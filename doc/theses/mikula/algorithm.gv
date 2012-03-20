@@ -1,0 +1,19 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	input_xquery [label = "XQuery query"];
+	SyntaxTreeConstruction [label = "Step 1: Syntax Tree Construction" style = "filled" fillcolor = "lightgrey"];
+	input_xquery -> SyntaxTreeConstruction;
+	StaticTypeAnalysis [label = "Step 2: Static Analysis of Expression Types" style = "filled" fillcolor = "lightgrey"];
+	SyntaxTreeConstruction -> StaticTypeAnalysis;
+	StaticTypeAnalysis -> InferenceOfBuiltInTypes;
+	InferenceOfBuiltInTypes [label = "Step 3: Inference of Built-in Types" style = "filled" fillcolor = "lightgrey"];
+	StaticTypeAnalysis -> KeyDiscovery;
+	KeyDiscovery [label = "Step 4: KeyDiscovery" style = "filled" fillcolor = "lightgrey"];
+	output_inferredTypeStatements [label = "Inferred type statements"];
+	InferenceOfBuiltInTypes -> output_inferredTypeStatements;
+	output_inferredKeyStatements [label = "Inferred key statements"];
+	KeyDiscovery -> output_inferredKeyStatements;
+}

@@ -182,7 +182,7 @@ PathType contains additional information. The represented path is contained by a
 
 To differ between a common PathType selecting a set of nodes and a PathType bound to a for variable in a FLWOR expression, PathType structure contains a flag \texttt{isForBound}.
 
-Additionally, PathType contains a list of special functions that were called with an argument of PathType type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of PathType because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}. \todo{DOPLNIT}
+Additionally, PathType contains a list of special functions that were called with an argument of PathType type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of PathType because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}, \texttt{zero-or-one}, \texttt{exactly-one}. And other may be added, when needed.
 
 In summary, we represent PathType as a structure with the following member variables.
 \begin{itemize}
@@ -550,7 +550,7 @@ To determine types of expressions, we use already introduced function \\ \texttt
 \begin{figure}
 \label{FIG_syntax_tree_1_types}
 \caption{Sample syntax tree 1 after the static analysis of types.}
-\includegraphics[scale=0.6]{syntax_tree_1_types.eps}
+\includegraphics[scale=0.5]{syntax_tree_1_types.eps}
 \end{figure}
 
 We can also determine expression types in functions. To do this for a certain function, \texttt{analysisOfExpressionTypes} function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
@@ -584,15 +584,29 @@ How are the types inferred from the expression types? We do not exploit all expr
 
 The output of this step is a set of statements of form $P \rightarrow T$, where $P$ is an instance of PathType and $T$ is an XML Schema built-in atomic type.
 
-\subsection{Function Calls}
-This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a set of elements of attributes (subexpression $E$ representing $S$) represented by PathType $P$. To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
+\subsection{Function Calls}\label{SUBSECTION_function_calls}
+This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a set of elements of attributes (subexpression $E$ representing $S$) represented by PathType $p$. To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
 
-If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. The inferred statement is $P \rightarrow T$. Otherwise, no statement is inferred.
+If the type $t$ of the formal argument is a built-in type or its sequence, then $t$ is also the inferred type of $S$. The inferred statement is $p \rightarrow t$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod}, \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD}, \texttt{MUL}, \texttt{DIV} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
+If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod}, \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD}, \texttt{MUL}, \texttt{DIV} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $p$ and the type $t$ of the other operand is one of numeric built-in types, then the inferred statement is $p \rightarrow t$.
 
-If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $P$ and the type $T$ of the other operand is one of built-in types, then the inferred statement is $P \rightarrow T$.
+If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $p$ and the type $t$ of the other operand is one of built-in types, then the inferred statement is $p \rightarrow t$.
+
+\subsection{Example}
+
+\begin{figure}
+\label{FIG_syntax_tree_1_types_type_inference}
+\caption{Example of an inference of a type from a function call.}
+\includegraphics[scale=1]{syntax_tree_1_types_type_inference.eps}
+\end{figure}
+
+Figure \ref{FIG_syntax_tree_1_types_type_inference} shows a fraction of the syntax tree from Figure \ref{FIG_syntax_tree_1_types}. When the inference of built-in types encounters the node marked by blue color, a statement will be inferred using the principle described in Chapter \ref{SUBSECTION_function_calls}. The node represents a call of \texttt{local:convert} function.
+
+This function has one formal argument of type $t =$ \texttt{xs:decimal}, \texttt{zero-or-one} cardinality. The real argument is of a PathType $p$. In particular, it is a PathType representing path \texttt{\$i/reserve}, where the \texttt{\$i} variable refers to a PathType representing for-bound \texttt{/site/open\_auctions/open\_auction} path, and one special function call of \texttt{zero-or-one} function is noted.
+
+Since the criteria for the inference from a function call are met, statement $p \rightarrow t$ is inferred.
 
 \subsection{Possible Extensions}
 As mentioned, the proposed algorithm utilizes only a small portion of XQuery constructs which can be be possibly utilized. Also, the algorithm does not perform the inference of types inside user-defined functions (it just uses the return types determined in earlier phases). That can be easily done as we know the definitions of functions and types of their real arguments. An algorithm performing the analysis in the user-defined functions can works as follows.
@@ -600,8 +614,6 @@ As mentioned, the proposed algorithm utilizes only a small portion of XQuery con
 If a currently processed expression is a function call of an user-defined function and at least one of its real arguments is an instance of PathType, get the function declaration node. In the function body, replace the formal arguments by the real arguments and set them as the local variables, so the proposed algorithms can be applied to process the function's body. Analyse the types of expressions in the body with the new information on the types of arguments by incorporating of the proposed algorithms and replace the function's return type by the one currently determined.
 
 A little complication is a recursion. A simple algorithm of that kind may never end because of the infinite analysis of the same recursive function(s). Therefore, we shall keep track of the currently analysed functions (e.g. in a stack of function calls) and do not process the recursive calls. 
-
-\todo[inline]{Pěkné, neškodilo by proložit příklady, tj. dotaz, strom, co z něho odvodíme. -- To urobim pocas implementacie pre nejaky vzorovy dotaz.}
 
 \section{Step 4: Key Discovery}
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.

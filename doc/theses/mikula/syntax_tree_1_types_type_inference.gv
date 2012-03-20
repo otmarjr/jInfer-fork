@@ -1,0 +1,32 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	QueryBodyNode [label = <<b>QueryBodyNode</b>>];
+
+	FLWORExprNode [label = <<b>FLWORExprNode</b><br/><font color="red">xs:decimal, zero-or-more</font>>];
+	QueryBodyNode -> FLWORExprNode;
+	TupleStreamNode [label = <<b>TupleStreamNode</b>>];
+	ReturnClauseNode [label = <<b>ReturnClauseNode</b>>];
+	FLWORExprNode -> TupleStreamNode;
+	FLWORExprNode -> ReturnClauseNode;
+
+	ForClauseNode [label = <<b>ForClauseNode</b><br/>varName = "i">];
+	TupleStreamNode -> ForClauseNode;
+
+	BindingSequenceNode [label = <<b>BindingSequenceNode</b>>];
+	ForClauseNode -> BindingSequenceNode;
+	PathExprNode [label = <<b>PathExprNode</b><br/>/site/open_auctions/open_auction<br/><font color="red">PathType</font>>];
+	BindingSequenceNode -> PathExprNode;
+
+
+
+	FunctionCallNode [label = <<b>FunctionCallNode</b><br/>fncName = "local:convert"<br/><font color="red">xs:decimal, zero-or-one</font>> color="blue"];
+	ReturnClauseNode -> FunctionCallNode;
+
+	FunctionCallNode2 [label = <<b>FunctionCallNode</b><br/>fncName = "zero-or-one"<br/><font color="red">PathType</font>>];
+	FunctionCallNode -> FunctionCallNode2;
+	PathExprNode2 [label = <<b>PathExprNode</b><br/>$i/reserve<br/><font color="red">PathType</font>>];
+	FunctionCallNode2 -> PathExprNode2;
+}

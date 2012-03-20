@@ -1,6 +1,5 @@
 \chapter{Combination with Existing Methods of Inference} \label{CHAPTER_combination_with_existings_methods_of_inference}
-\todo[inline]{Kontrola na zaklade dat.}
-In this chapter, we describe how to incorporate the inferred statements with existing methods of XML schema inference. We focus on a class of methods which are based on a creation and subsequent simplification of the initial grammar (as discussed in Chapter \ref{chapter_analysis_of_recent_approaches}).
+In this chapter, we describe how to incorporate the inferred statements to existing methods of XML schema inference. We focus on a class of methods which are based on a creation and subsequent simplification of the initial grammar (as discussed in Chapter \ref{chapter_analysis_of_recent_approaches}).
 
 The initial grammar contains rules of form $e \rightarrow e_1e_2\dots e_k$, where $e$ is an element and $e_1, \dots , e_k$ are its subelements. After the simplification, the simplified grammar contain rules of form $e \rightarrow E$, where $E$ is a regular expression composed of subelements of element $e$, describing its content.
 
@@ -17,7 +16,7 @@ In all tree cases, we want to determine elements from the grammar (or their attr
 \section{Evaluation of Paths}
 A path represented by PathType can contain variable references and association of these references with other paths. That is the reason why the normalization is convenient. It simply finds the variable references in the path and replaces them with steps from the associated paths, which are normalized recursively.
 
-The selection of elements is a simplified XPath evaluation. The simplification involves the aspects; the evaluation is not performed upon XML data, but the simplified grammar containing rules with a regular expression on their right side, and, partially related, predicates in path steps are not evaluated, they are ignored.
+The selection of elements is a simplified XPath evaluation. The simplification involves two aspects; the evaluation is not performed upon XML data, but the simplified grammar containing rules with a regular expression on their right side, and, partially related, predicates in path steps are not evaluated, they are ignored.
 
 It iterate through steps of a path, maintaining a so-called context set, which is a set of elements to evaluate the current step upon. The evaluation of one step is shown in Algorithm \ref{FUNC_evaluate_step}. For the retaining of readability of the code, we present an evaluation of self or descendant, child, and attribute axes, and nodes specified by name.
 
@@ -84,15 +83,11 @@ Note that, in both examples, one type is castable to the other (date to string, 
 
 Consider these two expressions; PathType $p$ is compared to an integer literal constant, and, PathType $p$ is an argument of function where a formal type of the argument is byte. The first expression is utilized to infer statement $p \rightarrow integer$, and the second one to infer statement $p \rightarrow byte$. Both of the types are correct, but the second one is more accurate.
 
-%In the case of inferred types, the situation is not that simple, because there can occur conflicting statements. In %particular, two kinds of conflicts can emerge between two statements.
-%
-%\begin{enumerate}
-%\item The two types do not equal, but one is castable to the other.
-%\item The two types do not equal and none of them is castable to the other.
-%\end{enumerate}
-%
-%The example of conflict of the first kind for path $p$ without predicates is $p_1 \rightarrow date$, $p_2 \rightarrow %string$. And another one is $p_1 \rightarrow byte$, $p_2 \rightarrow int$, where $p_1$, $p_2$ are paths that when %stripped of predicates, they equal $p$. There are two reasons of this kind of conflicts.
-%
-%The first reason is that both types are inferred correctly for nodes targeted by $p$, but one of them was inferred from a %more convenient expression and is more precise. Consider these two expressions; $PathType$ $p$ is compared to an integer %literal constant, and, $PathType$ $p$ is an argument of function where a formal type of the argument is byte. The first %expression is utilized to infer statement $p \rightarrow integer$, and the second one to infer statement $p \rightarrow %byte$. Both of the types are correct, but the second one is more accurate.
+A problem emerges for example if PathType $p$ is compared to an integer constant, and the real type of elements (or attributes) selected by $p$ is \texttt{double}. In that case, statement $p \rightarrow$ \texttt{integer} is inferred, but it is not correct.
 
-From all inferred types for a particular path, the most specific (the most accurate) is selected and assigned to respective nodes from the grammar targeted by the path.
+\subsection{Verification using XML data}
+To solves those problems, we propose a simple verification using XML data.
+
+For each PathType $p$ that occurs in the inferred type statements $\mathcal{S}_t$, we find set $T_p$ of all inferred types. $T_p = \{t|(p \rightarrow t) \in \mathcal{S}_t\}$. Then, we create sequence $T_p'$ by ordering the set $T_p$ from the most specific type to the most general one. For example, if $T_p = \{$\texttt{double}, \texttt{byte}, \texttt{int}$\}$, $T_p' = ($\texttt{byte}, \texttt{int}, \texttt{double}$)$.
+
+Since we have the XML data and path $p$ is XQuery path, we can use an XQuery process (a program that evaluates XQuery paths or queries) to select nodes $N$ targeted by $p$. The verification algorithms iterates through $T_p'$ and for each $t' \in T_p'$ it checks if every node in $N$ conforms to $t'$. If so, $t'$ is the inferred type for nodes $N$ (and PathType $p$), else the inferred type is \texttt{string}.

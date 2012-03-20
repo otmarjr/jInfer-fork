@@ -182,7 +182,7 @@ PathType contains additional information. The represented path is contained by a
 
 To differ between a common PathType selecting a set of nodes and a PathType bound to a for variable in a FLWOR expression, PathType structure contains a flag \texttt{isForBound}.
 
-Additionally, PathType contains a list of special functions that were called with an argument of PathType type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of PathType because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}.
+Additionally, PathType contains a list of special functions that were called with an argument of PathType type. The motivation is that in some cases of function calls, we want to know that the function call is performed with an instance of PathType because then, we can determine a type of the function call more precisely. Those special functions are built-in functions \texttt{data}, \texttt{min}, \texttt{max}, \texttt{avg}, \texttt{sum}, \texttt{distinct-values}. \todo{DOPLNIT}
 
 In summary, we represent PathType as a structure with the following member variables.
 \begin{itemize}
@@ -547,7 +547,17 @@ To determine types of expressions, we use already introduced function \\ \texttt
 \end{algorithmic}
 \end{algorithm}
 
+\begin{figure}
+\label{FIG_syntax_tree_1_types}
+\caption{Sample syntax tree 1 after the static analysis of types.}
+\includegraphics[scale=0.6]{syntax_tree_1_types.eps}
+\end{figure}
+
 We can also determine expression types in functions. To do this for a certain function, \texttt{analysisOfExpressionTypes} function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These argument are set as the variable context for the function body represented by another subnode.
+
+Figure \ref{FIG_syntax_tree_1_types} shows the syntax tree from Figure \ref{FIG_syntax_tree_1} after the static analysis of expression types. The types are shown in red color. Note that the node representing \texttt{zero-or-one} function call is of a PathType type, as well as its argument. It is so, because the function returns its argument unchanged, and thus, we included the function in the special functions list in the PathType definition.
+
+Also note, that the function call node of \texttt{local:convert} in the FLWOR return clause has \texttt{zero-or-one} cardinality and the FLWOR node has \texttt{zero-or-more} cardinality. The change of cardinality is a result of the for unbinding shown in Algorithm \ref{ALG_function_create_for_unbound_type}.
 
 \begin{algorithm}
 \caption{Function \texttt{createForUnboundType}}

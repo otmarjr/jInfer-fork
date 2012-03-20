@@ -1,0 +1,71 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	ModuleNode [label = <<b>ModuleNode</b>>];
+
+	PrologNode [label = <<b>PrologNode</b>>];
+	QueryBodyNode [label = <<b>QueryBodyNode</b>>];
+	ModuleNode -> PrologNode;
+	ModuleNode -> QueryBodyNode;
+
+	NamespaceDeclNode [label = <<b>NamespaceDeclNode</b><br/>"http://www.foobar.org"<br/>"local">];
+	FunctionDeclNode [label = <<b>FunctionDeclNode</b><br/>functionName = "local:convert">];
+	PrologNode -> NamespaceDeclNode;
+	PrologNode -> FunctionDeclNode;
+
+	ParamListNode [label = <<b>ParamListNode</b>>];
+	TypeNode [label = <<b>TypeNode</b><br/>cardinality = zero-or-one>];
+	FunctionBodyNode [label = <<b>FunctionBodyNode</b>>];
+	FunctionDeclNode -> ParamListNode;
+	FunctionDeclNode -> TypeNode;
+	FunctionDeclNode -> FunctionBodyNode;
+	AtomicTypeNode [label = <<b>AtomicTypeNode</b><br/>typeName = "xs:decimal">];
+	TypeNode -> AtomicTypeNode;
+
+	ParamNode [label = <<b>ParamNode</b><br/>name = "v">];
+	ParamListNode -> ParamNode;
+	ParamTypeNode [label = <<b>TypeNode</b><br/>cardinality = zero-or-one>];
+	ParamNode -> ParamTypeNode;
+	ParamAtomicTypeNode [label = <<b>AtomicTypeNode</b><br/>typeName = "xs:decimal">];
+	ParamTypeNode -> ParamAtomicTypeNode;
+
+	OperatorNode [label = <<b>OperatorNode</b><br/>operator = MULTIPLY>];
+	FunctionBodyNode -> OperatorNode;
+
+	LiteralNode [label = <<b>LiteralNode</b><br/>type = DECIMAL<br/>value = 2.20371>];
+	OperatorNode -> LiteralNode;
+
+	VarRefNode [label = <<b>VarRefNode</b><br/>varName = "v">];
+	OperatorNode -> VarRefNode;
+
+
+
+
+
+	FLWORExprNode [label = <<b>FLWORExprNode</b>>];
+	QueryBodyNode -> FLWORExprNode;
+	TupleStreamNode [label = <<b>TupleStreamNode</b>>];
+	ReturnClauseNode [label = <<b>ReturnClauseNode</b>>];
+	FLWORExprNode -> TupleStreamNode;
+	FLWORExprNode -> ReturnClauseNode;
+
+	ForClauseNode [label = <<b>ForClauseNode</b><br/>varName = "i">];
+	TupleStreamNode -> ForClauseNode;
+
+	BindingSequenceNode [label = <<b>BindingSequenceNode</b>>];
+	ForClauseNode -> BindingSequenceNode;
+	PathExprNode [label = <<b>PathExprNode</b><br/>/site/open_auctions/open_auction>];
+	BindingSequenceNode -> PathExprNode;
+
+
+
+	FunctionCallNode [label = <<b>FunctionCallNode</b><br/>fncName = "local:convert">];
+	ReturnClauseNode -> FunctionCallNode;
+
+	FunctionCallNode2 [label = <<b>FunctionCallNode</b><br/>fncName = "zero-or-one">];
+	FunctionCallNode -> FunctionCallNode2;
+	PathExprNode2 [label = <<b>PathExprNode</b><br/>$i/reserve>];
+	FunctionCallNode2 -> PathExprNode2;
+}

@@ -124,7 +124,7 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \end{tabular}
 \end{figure}
 
-Some pseudo code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function.
+Some pseudo-code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function.
 
 \begin{define}[Function $is(v, class)$]For every $v \in V$ and every $class \in C$, function $is(v, class)$ returns boolean value \texttt{true} if $c(v) = class$ or $c(v)$ is a (direct or indirect) subclass of $class$, according to the described principle. Otherwise, it returns \texttt{false}.
 \end{define}
@@ -139,6 +139,28 @@ For example, a node of \texttt{FLWORExprNode} class contains four subnodes of\li
 This characteristic is explicitly described, because several algorithms later in this chapter rely on it.
 
 \todo[inline]{priklad stromu}
+
+\subsection{Syntax Tree Example}
+
+\begin{lstlisting}[float, caption=Sample query 1., frame=single, label=listing_sample_query_1]
+declare namespace local = "http://www.foobar.org";
+declare function local:convert($v as xs:decimal?)
+  as xs:decimal?
+{
+  2.20371 * $v (: convert Dfl to Euro :)
+};
+
+for $i in /site/open_auctions/open_auction
+return local:convert(zero-or-one($i/reserve))
+\end{lstlisting}
+
+\begin{figure}
+\label{FIG_syntax_tree_1}
+\caption{Sample syntax tree 1.}
+\includegraphics[scale=0.6]{syntax_tree_1.eps}
+\end{figure}
+
+A syntax tree constructed from sample query in Listing \ref{listing_sample_query_1} is shown in Figure \ref{FIG_syntax_tree_1}.
 
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we statically (i.e. without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will not use the determined types of all expressions, however this step may be useful in a future extending.

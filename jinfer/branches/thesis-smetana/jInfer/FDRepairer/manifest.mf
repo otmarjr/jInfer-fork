@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.functionalDependencies/1
+OpenIDE-Module-Implementation-Version: 1
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/functionalDependencies/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/functionalDependencies/Bundle.properties
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
+

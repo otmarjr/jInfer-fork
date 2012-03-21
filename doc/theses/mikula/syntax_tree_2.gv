@@ -1,0 +1,92 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	ModuleNode [label = <<b>ModuleNode</b>>];
+
+	QueryBodyNode [label = <<b>QueryBodyNode</b>>];
+	ModuleNode -> QueryBodyNode;
+
+	FLWORExprNode1 [label = <<b>FLWORExprNode</b>>];
+	QueryBodyNode -> FLWORExprNode1;
+	TupleStreamNode1 [label = <<b>TupleStreamNode</b>>];
+	ReturnClauseNode1 [label = <<b>ReturnClauseNode</b>>];
+	FLWORExprNode1 -> TupleStreamNode1;
+	FLWORExprNode1 -> ReturnClauseNode1;
+
+	subgraph cluster_for1 {
+		ForClauseNode1 [label = <<b>ForClauseNode</b><br/>varName = "p">];
+		BindingSequenceNode1 [label = <<b>BindingSequenceNode</b>>];
+		PathExprNode1 [label = <<b>PathExprNode</b><br/>/site/people/person>];
+		ForClauseNode1 -> BindingSequenceNode1 -> PathExprNode1;
+		label = "for clause A";
+		color = red
+	}
+	TupleStreamNode1 -> ForClauseNode1;
+
+	LetClauseNode [label = <<b>LetClauseNode</b><br/>varName = "a">];
+	TupleStreamNode1 -> LetClauseNode;
+	BindingSequenceNode2 [label = <<b>BindingSequenceNode</b>>];
+	LetClauseNode -> BindingSequenceNode2;
+
+	FLWORExprNode2 [label = <<b>FLWORExprNode</b>>];
+	BindingSequenceNode2 -> FLWORExprNode2;
+	TupleStreamNode2 [label = <<b>TupleStreamNode</b>>];
+	ReturnClauseNode2 [label = <<b>ReturnClauseNode</b>>];
+	FLWORExprNode2 -> TupleStreamNode2;
+	FLWORExprNode2 -> WhereClauseNode;
+	FLWORExprNode2 -> ReturnClauseNode2;
+
+	subgraph cluster_for2 {
+		ForClauseNode2  [label = <<b>ForClauseNode</b><br/>varName = "t">];
+		TupleStreamNode2 -> ForClauseNode2;
+		BindingSequenceNode3 [label = <<b>BindingSequenceNode</b>>];
+		ForClauseNode2 -> BindingSequenceNode3;
+
+		PathExprNode2 [label = <<b>PathExprNode</b><br/>/site/closed_auctions/closed_auction>];
+		BindingSequenceNode3 -> PathExprNode2;
+		label = "for clause B"
+		color = red;
+	}
+
+	subgraph cluster_where {
+		WhereClauseNode [label = <<b>WhereClauseNode</b>>];
+		OperatorNode [label = <<b>OperatorNode</b><br/>oeprator = GEN_EQUALS>];
+		WhereClauseNode -> OperatorNode;
+
+		PathExprNode3 [label = <<b>PathExprNode</b><br/>$t/buyer/@person>];
+		OperatorNode -> PathExprNode3;
+		PathExprNode4 [label = <<b>PathExprNode</b><br/>$p/@id>];
+		OperatorNode -> PathExprNode4;
+
+		label = "where clause";
+		color = red;
+	}
+
+	VarRefNode1 [label = <<b>VarRefNode</b><br/>varName = "t">];
+	ReturnClauseNode2 -> VarRefNode1;
+
+	ConstructorNode [label = <<b>ConstructorNode</b><br/>...>];
+	ReturnClauseNode1 -> ConstructorNode;
+	/*NameNode1 [label = <<b>NameNode</b><br/>"item">];
+	ConstructorNode -> NameNode1;
+
+	AttrListNode [label = <<b>AttrListNode</b>>];
+	ConstructorNode -> AttrListNode;
+	AttributeNode [label = <<b>AttributeNode</b>>];
+	AttrListNode -> AttributeNode;
+	NameNode2 [label = <<b>NameNode</b><br/>"person">];
+	AttributeNode -> NameNode2;
+	ContentNode1 [label = <<b>ContentNode</b>>];
+	AttributeNode -> ContentNode1;
+	PathExprNode5 [label = <<b>PathExprNode</b><br/>$p/name/text()>];
+	ContentNode1 -> PathExprNode5;
+
+	ContentNode2 [label = <<b>ContentNode</b>>];
+	ConstructorNode -> ContentNode2;
+	FunctionCallNode [label = <<b>FunctionCallNode</b><br/>fncName = "count">];
+	ContentNode2 -> FunctionCallNode;
+	VarRefNode2 [label = <<b>VarRefNode</b><br/>varName = "a">];
+	FunctionCallNode -> VarRefNode2;*/
+}

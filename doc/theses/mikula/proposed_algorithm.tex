@@ -1146,3 +1146,29 @@ The original approach \cite{Necasky:2009:DXK:1529282.1529414} employs the follow
 
 Let $K_1, \dots, K_n$ be the inferred keys. Let $S_i$ be the score of $K_i$ and $N_i$ be the number of the inferred statements about $K_i$. Let $S^{max}$ be the maximum from $|S_1|, \dots , |S_n|$ and $N^{max}$ be the maximum norm
 from $N_1, \dots , N_n$. The normalized score $S_i$ of $K_i$ is computed as $S^{norm}_i = \frac{S_i}{S^{max}} * (1 - \frac{N^{max} - N_i}{\sum_{i=1}^{n}N_i})$
+
+\subsection{Example}
+\begin{lstlisting}[float, caption=Sample query 2., frame=single, label=listing_sample_query_2]
+for $p in /site/people/person
+let $a :=
+  for $t in /site/closed_auctions/closed_auction
+  where $t/buyer/@person = $p/@id
+  return $t
+return <item person="{$p/name/text()}">{count($a)}</item>
+\end{lstlisting}
+
+\begin{figure}
+\label{FIG_syntax_tree_2}
+\caption{Sample syntax tree 2.}
+\includegraphics[scale=0.7]{syntax_tree_2.eps}
+\end{figure}
+
+Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_sample_query_2}. In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.
+
+The next phase marks this occurrence as (O1) case with weight 0.5 and the following statements are inferred:
+
+\begin{itemize}
+\item Key $k = (/site/people/person, \{@id\})$ is satisfied.
+\item Foreign key $((/site/closed\_auctions/closed\_auction, \{buyer/@person\}) \rightarrow k)$ is satisfied.
+\item Key $(/site/closed\_auctions/closed\_auction, \{buyer/@person\})$ is not satisfied.
+\end{itemize}

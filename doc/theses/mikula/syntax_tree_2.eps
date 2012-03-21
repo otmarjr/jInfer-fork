@@ -1,0 +1,1700 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: graphviz version 2.28.0 (20120217.0326)
+%%Title: inference_process
+%%Pages: 1
+%%BoundingBox: 36 36 629 830
+%%EndComments
+save
+%%BeginProlog
+/DotDict 200 dict def
+DotDict begin
+
+/setupLatin1 {
+mark
+/EncodingVector 256 array def
+ EncodingVector 0
+
+ISOLatin1Encoding 0 255 getinterval putinterval
+EncodingVector 45 /hyphen put
+
+% Set up ISO Latin 1 character encoding
+/starnetISO {
+        dup dup findfont dup length dict begin
+        { 1 index /FID ne { def }{ pop pop } ifelse
+        } forall
+        /Encoding EncodingVector def
+        currentdict end definefont
+} def
+/Times-Roman starnetISO def
+/Times-Italic starnetISO def
+/Times-Bold starnetISO def
+/Times-BoldItalic starnetISO def
+/Helvetica starnetISO def
+/Helvetica-Oblique starnetISO def
+/Helvetica-Bold starnetISO def
+/Helvetica-BoldOblique starnetISO def
+/Courier starnetISO def
+/Courier-Oblique starnetISO def
+/Courier-Bold starnetISO def
+/Courier-BoldOblique starnetISO def
+cleartomark
+} bind def
+
+%%BeginResource: procset graphviz 0 0
+/coord-font-family /Times-Roman def
+/default-font-family /Times-Roman def
+/coordfont coord-font-family findfont 8 scalefont def
+
+/InvScaleFactor 1.0 def
+/set_scale {
+       dup 1 exch div /InvScaleFactor exch def
+       scale
+} bind def
+
+% styles
+/solid { [] 0 setdash } bind def
+/dashed { [9 InvScaleFactor mul dup ] 0 setdash } bind def
+/dotted { [1 InvScaleFactor mul 6 InvScaleFactor mul] 0 setdash } bind def
+/invis {/fill {newpath} def /stroke {newpath} def /show {pop newpath} def} bind def
+/bold { 2 setlinewidth } bind def
+/filled { } bind def
+/unfilled { } bind def
+/rounded { } bind def
+/diagonals { } bind def
+
+% hooks for setting color 
+/nodecolor { sethsbcolor } bind def
+/edgecolor { sethsbcolor } bind def
+/graphcolor { sethsbcolor } bind def
+/nopcolor {pop pop pop} bind def
+
+/beginpage {	% i j npages
+	/npages exch def
+	/j exch def
+	/i exch def
+	/str 10 string def
+	npages 1 gt {
+		gsave
+			coordfont setfont
+			0 0 moveto
+			(\() show i str cvs show (,) show j str cvs show (\)) show
+		grestore
+	} if
+} bind def
+
+/set_font {
+	findfont exch
+	scalefont setfont
+} def
+
+% draw text fitted to its expected width
+/alignedtext {			% width text
+	/text exch def
+	/width exch def
+	gsave
+		width 0 gt {
+			[] 0 setdash
+			text stringwidth pop width exch sub text length div 0 text ashow
+		} if
+	grestore
+} def
+
+/boxprim {				% xcorner ycorner xsize ysize
+		4 2 roll
+		moveto
+		2 copy
+		exch 0 rlineto
+		0 exch rlineto
+		pop neg 0 rlineto
+		closepath
+} bind def
+
+/ellipse_path {
+	/ry exch def
+	/rx exch def
+	/y exch def
+	/x exch def
+	matrix currentmatrix
+	newpath
+	x y translate
+	rx ry scale
+	0 0 1 0 360 arc
+	setmatrix
+} bind def
+
+/endpage { showpage } bind def
+/showpage { } def
+
+/layercolorseq
+	[	% layer color sequence - darkest to lightest
+		[0 0 0]
+		[.2 .8 .8]
+		[.4 .8 .8]
+		[.6 .8 .8]
+		[.8 .8 .8]
+	]
+def
+
+/layerlen layercolorseq length def
+
+/setlayer {/maxlayer exch def /curlayer exch def
+	layercolorseq curlayer 1 sub layerlen mod get
+	aload pop sethsbcolor
+	/nodecolor {nopcolor} def
+	/edgecolor {nopcolor} def
+	/graphcolor {nopcolor} def
+} bind def
+
+/onlayer { curlayer ne {invis} if } def
+
+/onlayers {
+	/myupper exch def
+	/mylower exch def
+	curlayer mylower lt
+	curlayer myupper gt
+	or
+	{invis} if
+} def
+
+/curlayer 0 def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+14 default-font-family set_font
+1 setmiterlimit
+% /arrowlength 10 def
+% /arrowwidth 5 def
+
+% make sure pdfmark is harmless for PS-interpreters other than Distiller
+/pdfmark where {pop} {userdict /pdfmark /cleartomark load put} ifelse
+% make '<<' and '>>' safe on PS Level 1 devices
+/languagelevel where {pop languagelevel}{1} ifelse
+2 lt {
+    userdict (<<) cvn ([) cvn load put
+    userdict (>>) cvn ([) cvn load put
+} if
+
+%%EndSetup
+setupLatin1
+%%Page: 1 1
+%%PageBoundingBox: 36 36 629 830
+%%PageOrientation: Portrait
+0 0 1 beginpage
+gsave
+36 36 593 794 boxprim clip newpath
+1 1 set_scale 0 rotate 40 41 translate
+% cluster_for1
+gsave
+1 setlinewidth
+0 1 1 graphcolor
+newpath 100 307 moveto
+100 526 lineto
+260 526 lineto
+260 307 lineto
+closepath stroke
+0 0 0 graphcolor
+14 /Times-Roman set_font
+137 510.8 moveto 86 (for clause A) alignedtext
+grestore
+% cluster_for2
+gsave
+1 setlinewidth
+0 1 1 graphcolor
+newpath 8 8 moveto
+8 299 lineto
+216 299 lineto
+216 8 lineto
+closepath stroke
+0 0 0 graphcolor
+14 /Times-Roman set_font
+69 283.8 moveto 86 (for clause B) alignedtext
+grestore
+% cluster_where
+gsave
+1 setlinewidth
+0 1 1 graphcolor
+newpath 224 80 moveto
+224 299 lineto
+458 299 lineto
+458 80 lineto
+closepath stroke
+0 0 0 graphcolor
+14 /Times-Roman set_font
+293.5 283.8 moveto 95 (where clause) alignedtext
+grestore
+% ModuleNode
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 417.25 786 moveto
+354.75 786 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 354.75 786 moveto
+348.75 786 342.75 780 342.75 774 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 342.75 774 moveto
+342.75 762 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 342.75 762 moveto
+342.75 756 348.75 750 354.75 750 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 354.75 750 moveto
+417.25 750 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 417.25 750 moveto
+423.25 750 429.25 756 429.25 762 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 429.25 762 moveto
+429.25 774 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 429.25 774 moveto
+429.25 780 423.25 786 417.25 786 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+351 766.5 moveto 70 (ModuleNode) alignedtext
+grestore
+% QueryBodyNode
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 427.25 714 moveto
+344.75 714 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 344.75 714 moveto
+338.75 714 332.75 708 332.75 702 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 332.75 702 moveto
+332.75 690 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 332.75 690 moveto
+332.75 684 338.75 678 344.75 678 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 344.75 678 moveto
+427.25 678 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 427.25 678 moveto
+433.25 678 439.25 684 439.25 690 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 439.25 690 moveto
+439.25 702 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 439.25 702 moveto
+439.25 708 433.25 714 427.25 714 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+341 694.5 moveto 90 (QueryBodyNode) alignedtext
+grestore
+% ModuleNode->QueryBodyNode
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 386 749.7 moveto
+386 741.98 386 732.71 386 724.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 389.5 724.1 moveto
+386 714.1 lineto
+382.5 724.1 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 389.5 724.1 moveto
+386 714.1 lineto
+382.5 724.1 lineto
+closepath stroke
+grestore
+% FLWORExprNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 429 642 moveto
+343 642 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 343 642 moveto
+337 642 331 636 331 630 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 331 630 moveto
+331 618 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 331 618 moveto
+331 612 337 606 343 606 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 343 606 moveto
+429 606 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 429 606 moveto
+435 606 441 612 441 618 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 441 618 moveto
+441 630 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 441 630 moveto
+441 636 435 642 429 642 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+339.5 622.5 moveto 93 (FLWORExprNode) alignedtext
+grestore
+% QueryBodyNode->FLWORExprNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 386 677.7 moveto
+386 669.98 386 660.71 386 652.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 389.5 652.1 moveto
+386 642.1 lineto
+382.5 652.1 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 389.5 652.1 moveto
+386 642.1 lineto
+382.5 652.1 lineto
+closepath stroke
+grestore
+% TupleStreamNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 363.5 570 moveto
+272.5 570 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 272.5 570 moveto
+266.5 570 260.5 564 260.5 558 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 260.5 558 moveto
+260.5 546 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 260.5 546 moveto
+260.5 540 266.5 534 272.5 534 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 272.5 534 moveto
+363.5 534 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 363.5 534 moveto
+369.5 534 375.5 540 375.5 546 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 375.5 546 moveto
+375.5 558 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 375.5 558 moveto
+375.5 564 369.5 570 363.5 570 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+268.5 550.5 moveto 99 (TupleStreamNode) alignedtext
+grestore
+% FLWORExprNode1->TupleStreamNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 369.19 605.7 moveto
+360.87 597.14 350.69 586.66 341.61 577.3 curveto
+stroke
+0 0 0 edgecolor
+newpath 344.09 574.84 moveto
+334.62 570.1 lineto
+339.07 579.72 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 344.09 574.84 moveto
+334.62 570.1 lineto
+339.07 579.72 lineto
+closepath stroke
+grestore
+% ReturnClauseNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 501.5 570 moveto
+406.5 570 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 406.5 570 moveto
+400.5 570 394.5 564 394.5 558 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 394.5 558 moveto
+394.5 546 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 394.5 546 moveto
+394.5 540 400.5 534 406.5 534 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 406.5 534 moveto
+501.5 534 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 501.5 534 moveto
+507.5 534 513.5 540 513.5 546 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 513.5 546 moveto
+513.5 558 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 513.5 558 moveto
+513.5 564 507.5 570 501.5 570 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+402.5 550.5 moveto 103 (ReturnClauseNode) alignedtext
+grestore
+% FLWORExprNode1->ReturnClauseNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 402.81 605.7 moveto
+411.13 597.14 421.31 586.66 430.39 577.3 curveto
+stroke
+0 0 0 edgecolor
+newpath 432.93 579.72 moveto
+437.38 570.1 lineto
+427.91 574.84 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 432.93 579.72 moveto
+437.38 570.1 lineto
+427.91 574.84 lineto
+closepath stroke
+grestore
+% ForClauseNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 233.25 495 moveto
+156.75 495 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 156.75 495 moveto
+150.75 495 144.75 489 144.75 483 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 144.75 483 moveto
+144.75 471 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 144.75 471 moveto
+144.75 465 150.75 459 156.75 459 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 156.75 459 moveto
+233.25 459 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 233.25 459 moveto
+239.25 459 245.25 465 245.25 471 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 245.25 471 moveto
+245.25 483 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 245.25 483 moveto
+245.25 489 239.25 495 233.25 495 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+153 480.5 moveto 84 (ForClauseNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+158.5 470.5 moveto 73 (varName = "p") alignedtext
+grestore
+% TupleStreamNode1->ForClauseNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 264.32 533.86 moveto
+259.02 531.49 253.82 528.87 249 526 curveto
+238.16 519.55 227.51 510.76 218.57 502.46 curveto
+stroke
+0 0 0 edgecolor
+newpath 220.82 499.78 moveto
+211.19 495.37 lineto
+215.97 504.83 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 220.82 499.78 moveto
+211.19 495.37 lineto
+215.97 504.83 lineto
+closepath stroke
+grestore
+% LetClauseNode
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 362.25 495 moveto
+285.75 495 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 285.75 495 moveto
+279.75 495 273.75 489 273.75 483 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 273.75 483 moveto
+273.75 471 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 273.75 471 moveto
+273.75 465 279.75 459 285.75 459 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 285.75 459 moveto
+362.25 459 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 362.25 459 moveto
+368.25 459 374.25 465 374.25 471 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 374.25 471 moveto
+374.25 483 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 374.25 483 moveto
+374.25 489 368.25 495 362.25 495 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+282 480.5 moveto 84 (LetClauseNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+287.5 470.5 moveto 73 (varName = "a") alignedtext
+grestore
+% TupleStreamNode1->LetClauseNode
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 319.42 533.7 moveto
+320.12 525.25 320.97 514.87 321.75 505.37 curveto
+stroke
+0 0 0 edgecolor
+newpath 325.26 505.43 moveto
+322.59 495.18 lineto
+318.28 504.86 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 325.26 505.43 moveto
+322.59 495.18 lineto
+318.28 504.86 lineto
+closepath stroke
+grestore
+% ConstructorNode
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 497.25 495 moveto
+410.75 495 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 410.75 495 moveto
+404.75 495 398.75 489 398.75 483 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 398.75 483 moveto
+398.75 471 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 398.75 471 moveto
+398.75 465 404.75 459 410.75 459 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 410.75 459 moveto
+497.25 459 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 497.25 459 moveto
+503.25 459 509.25 465 509.25 471 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 509.25 471 moveto
+509.25 483 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 509.25 483 moveto
+509.25 489 503.25 495 497.25 495 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+407 480.5 moveto 94 (ConstructorNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+449 470.5 moveto 10 (...) alignedtext
+grestore
+% ReturnClauseNode1->ConstructorNode
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 454 533.7 moveto
+454 525.25 454 514.87 454 505.37 curveto
+stroke
+0 0 0 edgecolor
+newpath 457.5 505.18 moveto
+454 495.18 lineto
+450.5 505.18 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 457.5 505.18 moveto
+454 495.18 lineto
+450.5 505.18 lineto
+closepath stroke
+grestore
+% BindingSequenceNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 239.25 423 moveto
+120.75 423 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 120.75 423 moveto
+114.75 423 108.75 417 108.75 411 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 108.75 411 moveto
+108.75 399 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 108.75 399 moveto
+108.75 393 114.75 387 120.75 387 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 120.75 387 moveto
+239.25 387 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 239.25 387 moveto
+245.25 387 251.25 393 251.25 399 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 251.25 399 moveto
+251.25 411 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 251.25 411 moveto
+251.25 417 245.25 423 239.25 423 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+117 403.5 moveto 126 (BindingSequenceNode) alignedtext
+grestore
+% ForClauseNode1->BindingSequenceNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 191.29 458.7 moveto
+189.64 450.98 187.65 441.71 185.81 433.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 189.18 432.15 moveto
+183.67 423.1 lineto
+182.34 433.62 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 189.18 432.15 moveto
+183.67 423.1 lineto
+182.34 433.62 lineto
+closepath stroke
+grestore
+% PathExprNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 222.25 351 moveto
+137.75 351 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 137.75 351 moveto
+131.75 351 125.75 345 125.75 339 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 125.75 339 moveto
+125.75 327 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 125.75 327 moveto
+125.75 321 131.75 315 137.75 315 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 137.75 315 moveto
+222.25 315 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 222.25 315 moveto
+228.25 315 234.25 321 234.25 327 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 234.25 327 moveto
+234.25 339 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 234.25 339 moveto
+234.25 345 228.25 351 222.25 351 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+140 336.5 moveto 80 (PathExprNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+134 326.5 moveto 92 (/site/people/person) alignedtext
+grestore
+% BindingSequenceNode1->PathExprNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 180 386.7 moveto
+180 378.98 180 369.71 180 361.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 183.5 361.1 moveto
+180 351.1 lineto
+176.5 361.1 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 183.5 361.1 moveto
+180 351.1 lineto
+176.5 361.1 lineto
+closepath stroke
+grestore
+% BindingSequenceNode2
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 400.25 423 moveto
+281.75 423 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 281.75 423 moveto
+275.75 423 269.75 417 269.75 411 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 269.75 411 moveto
+269.75 399 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 269.75 399 moveto
+269.75 393 275.75 387 281.75 387 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 281.75 387 moveto
+400.25 387 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 400.25 387 moveto
+406.25 387 412.25 393 412.25 399 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 412.25 399 moveto
+412.25 411 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 412.25 411 moveto
+412.25 417 406.25 423 400.25 423 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+278 403.5 moveto 126 (BindingSequenceNode) alignedtext
+grestore
+% LetClauseNode->BindingSequenceNode2
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 328.2 458.7 moveto
+330.1 450.9 332.38 441.51 334.48 432.83 curveto
+stroke
+0 0 0 edgecolor
+newpath 337.89 433.65 moveto
+336.85 423.1 lineto
+331.08 432 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 337.89 433.65 moveto
+336.85 423.1 lineto
+331.08 432 lineto
+closepath stroke
+grestore
+% FLWORExprNode2
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 384 351 moveto
+298 351 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 298 351 moveto
+292 351 286 345 286 339 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 286 339 moveto
+286 327 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 286 327 moveto
+286 321 292 315 298 315 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 298 315 moveto
+384 315 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 384 315 moveto
+390 315 396 321 396 327 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 396 327 moveto
+396 339 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 396 339 moveto
+396 345 390 351 384 351 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+294.5 331.5 moveto 93 (FLWORExprNode) alignedtext
+grestore
+% BindingSequenceNode2->FLWORExprNode2
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 341 386.7 moveto
+341 378.98 341 369.71 341 361.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 344.5 361.1 moveto
+341 351.1 lineto
+337.5 361.1 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 344.5 361.1 moveto
+341 351.1 lineto
+337.5 361.1 lineto
+closepath stroke
+grestore
+% TupleStreamNode2
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 190.5 268 moveto
+99.5 268 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 99.5 268 moveto
+93.5 268 87.5 262 87.5 256 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 87.5 256 moveto
+87.5 244 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 87.5 244 moveto
+87.5 238 93.5 232 99.5 232 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 99.5 232 moveto
+190.5 232 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 190.5 232 moveto
+196.5 232 202.5 238 202.5 244 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 202.5 244 moveto
+202.5 256 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 202.5 256 moveto
+202.5 262 196.5 268 190.5 268 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+95.5 248.5 moveto 99 (TupleStreamNode) alignedtext
+grestore
+% FLWORExprNode2->TupleStreamNode2
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 291.58 314.87 moveto
+282.47 312.03 273 309.27 264 307 curveto
+244.73 302.14 238.5 306.27 220 299 curveto
+204.19 292.78 188.12 283.05 174.94 273.98 curveto
+stroke
+0 0 0 edgecolor
+newpath 176.91 271.08 moveto
+166.73 268.15 lineto
+172.86 276.79 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 176.91 271.08 moveto
+166.73 268.15 lineto
+172.86 276.79 lineto
+closepath stroke
+grestore
+% ReturnClauseNode2
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 573.5 268 moveto
+478.5 268 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 478.5 268 moveto
+472.5 268 466.5 262 466.5 256 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 466.5 256 moveto
+466.5 244 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 466.5 244 moveto
+466.5 238 472.5 232 478.5 232 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 478.5 232 moveto
+573.5 232 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 573.5 232 moveto
+579.5 232 585.5 238 585.5 244 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 585.5 244 moveto
+585.5 256 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 585.5 256 moveto
+585.5 262 579.5 268 573.5 268 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+474.5 248.5 moveto 103 (ReturnClauseNode) alignedtext
+grestore
+% FLWORExprNode2->ReturnClauseNode2
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 396.19 321.58 moveto
+417.42 316.4 441.46 309.04 462 299 curveto
+475.12 292.58 488.27 283.33 499.2 274.67 curveto
+stroke
+0 0 0 edgecolor
+newpath 501.57 277.25 moveto
+507.09 268.21 lineto
+497.14 271.83 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 501.57 277.25 moveto
+507.09 268.21 lineto
+497.14 271.83 lineto
+closepath stroke
+grestore
+% WhereClauseNode
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 388.25 268 moveto
+293.75 268 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 293.75 268 moveto
+287.75 268 281.75 262 281.75 256 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 281.75 256 moveto
+281.75 244 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 281.75 244 moveto
+281.75 238 287.75 232 293.75 232 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 293.75 232 moveto
+388.25 232 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 388.25 232 moveto
+394.25 232 400.25 238 400.25 244 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 400.25 244 moveto
+400.25 256 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 400.25 256 moveto
+400.25 262 394.25 268 388.25 268 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+290 248.5 moveto 102 (WhereClauseNode) alignedtext
+grestore
+% FLWORExprNode2->WhereClauseNode
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 341 314.82 moveto
+341 304.19 341 290.31 341 278.2 curveto
+stroke
+0 0 0 edgecolor
+newpath 344.5 278.15 moveto
+341 268.15 lineto
+337.5 278.15 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 344.5 278.15 moveto
+341 268.15 lineto
+337.5 278.15 lineto
+closepath stroke
+grestore
+% ForClauseNode2
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 164.25 196 moveto
+87.75 196 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 87.75 196 moveto
+81.75 196 75.75 190 75.75 184 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 75.75 184 moveto
+75.75 172 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 75.75 172 moveto
+75.75 166 81.75 160 87.75 160 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 87.75 160 moveto
+164.25 160 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 164.25 160 moveto
+170.25 160 176.25 166 176.25 172 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 176.25 172 moveto
+176.25 184 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 176.25 184 moveto
+176.25 190 170.25 196 164.25 196 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+84 181.5 moveto 84 (ForClauseNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+91 171.5 moveto 70 (varName = "t") alignedtext
+grestore
+% TupleStreamNode2->ForClauseNode2
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 140.3 231.7 moveto
+138.19 223.9 135.64 214.51 133.28 205.83 curveto
+stroke
+0 0 0 edgecolor
+newpath 136.64 204.84 moveto
+130.64 196.1 lineto
+129.88 206.67 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 136.64 204.84 moveto
+130.64 196.1 lineto
+129.88 206.67 lineto
+closepath stroke
+grestore
+% VarRefNode1
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 557.25 196 moveto
+494.75 196 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 494.75 196 moveto
+488.75 196 482.75 190 482.75 184 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 482.75 184 moveto
+482.75 172 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 482.75 172 moveto
+482.75 166 488.75 160 494.75 160 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 494.75 160 moveto
+557.25 160 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 557.25 160 moveto
+563.25 160 569.25 166 569.25 172 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 569.25 172 moveto
+569.25 184 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 569.25 184 moveto
+569.25 190 563.25 196 557.25 196 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+492.5 181.5 moveto 67 (VarRefNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+491 171.5 moveto 70 (varName = "t") alignedtext
+grestore
+% ReturnClauseNode2->VarRefNode1
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 526 231.7 moveto
+526 223.98 526 214.71 526 206.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 529.5 206.1 moveto
+526 196.1 lineto
+522.5 206.1 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 529.5 206.1 moveto
+526 196.1 lineto
+522.5 206.1 lineto
+closepath stroke
+grestore
+% OperatorNode
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 398.25 196 moveto
+283.75 196 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 283.75 196 moveto
+277.75 196 271.75 190 271.75 184 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 271.75 184 moveto
+271.75 172 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 271.75 172 moveto
+271.75 166 277.75 160 283.75 160 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 283.75 160 moveto
+398.25 160 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 398.25 160 moveto
+404.25 160 410.25 166 410.25 172 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 410.25 172 moveto
+410.25 184 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 410.25 184 moveto
+410.25 190 404.25 196 398.25 196 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+301.5 181.5 moveto 79 (OperatorNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+280 171.5 moveto 122 (oeprator = GEN_EQUALS) alignedtext
+grestore
+% WhereClauseNode->OperatorNode
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 341 231.7 moveto
+341 223.98 341 214.71 341 206.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 344.5 206.1 moveto
+341 196.1 lineto
+337.5 206.1 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 344.5 206.1 moveto
+341 196.1 lineto
+337.5 206.1 lineto
+closepath stroke
+grestore
+% BindingSequenceNode3
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 176.25 124 moveto
+57.75 124 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 57.75 124 moveto
+51.75 124 45.75 118 45.75 112 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 45.75 112 moveto
+45.75 100 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 45.75 100 moveto
+45.75 94 51.75 88 57.75 88 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 57.75 88 moveto
+176.25 88 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 176.25 88 moveto
+182.25 88 188.25 94 188.25 100 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 188.25 100 moveto
+188.25 112 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 188.25 112 moveto
+188.25 118 182.25 124 176.25 124 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+54 104.5 moveto 126 (BindingSequenceNode) alignedtext
+grestore
+% ForClauseNode2->BindingSequenceNode3
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 123.78 159.7 moveto
+122.78 151.98 121.59 142.71 120.49 134.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 123.95 133.58 moveto
+119.2 124.1 lineto
+117 134.47 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 123.95 133.58 moveto
+119.2 124.1 lineto
+117 134.47 lineto
+closepath stroke
+grestore
+% PathExprNode2
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 196 52 moveto
+28 52 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 28 52 moveto
+22 52 16 46 16 40 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 16 40 moveto
+16 28 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 16 28 moveto
+16 22 22 16 28 16 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 28 16 moveto
+196 16 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 196 16 moveto
+202 16 208 22 208 28 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 208 28 moveto
+208 40 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 208 40 moveto
+208 46 202 52 196 52 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+72 37.5 moveto 80 (PathExprNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+24.5 27.5 moveto 175 (/site/closed_auctions/closed_auction) alignedtext
+grestore
+% BindingSequenceNode3->PathExprNode2
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 115.76 87.7 moveto
+115.21 79.98 114.55 70.71 113.94 62.11 curveto
+stroke
+0 0 0 edgecolor
+newpath 117.43 61.83 moveto
+113.22 52.1 lineto
+110.44 62.33 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 117.43 61.83 moveto
+113.22 52.1 lineto
+110.44 62.33 lineto
+closepath stroke
+grestore
+% PathExprNode3
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 323.25 124 moveto
+244.75 124 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 244.75 124 moveto
+238.75 124 232.75 118 232.75 112 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 232.75 112 moveto
+232.75 100 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 232.75 100 moveto
+232.75 94 238.75 88 244.75 88 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 244.75 88 moveto
+323.25 88 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 323.25 88 moveto
+329.25 88 335.25 94 335.25 100 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 335.25 100 moveto
+335.25 112 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 335.25 112 moveto
+335.25 118 329.25 124 323.25 124 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+244 109.5 moveto 80 (PathExprNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+241 99.5 moveto 86 ($t/buyer/@person) alignedtext
+grestore
+% OperatorNode->PathExprNode3
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 326.91 159.7 moveto
+320.08 151.3 311.74 141.07 304.24 131.86 curveto
+stroke
+0 0 0 edgecolor
+newpath 306.96 129.65 moveto
+297.93 124.1 lineto
+301.53 134.07 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 306.96 129.65 moveto
+297.93 124.1 lineto
+301.53 134.07 lineto
+closepath stroke
+grestore
+% PathExprNode4
+gsave
+1 setlinewidth
+0 0 0 nodecolor
+newpath 438.25 124 moveto
+365.75 124 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 365.75 124 moveto
+359.75 124 353.75 118 353.75 112 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 353.75 112 moveto
+353.75 100 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 353.75 100 moveto
+353.75 94 359.75 88 365.75 88 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 365.75 88 moveto
+438.25 88 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 438.25 88 moveto
+444.25 88 450.25 94 450.25 100 curveto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 450.25 100 moveto
+450.25 112 lineto
+stroke
+1 setlinewidth
+0 0 0 nodecolor
+newpath 450.25 112 moveto
+450.25 118 444.25 124 438.25 124 curveto
+stroke
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+362 109.5 moveto 80 (PathExprNode) alignedtext
+0 0 0 nodecolor
+10 /TeXGyrePagella-Regular set_font
+385 99.5 moveto 34 ($p/@id) alignedtext
+grestore
+% OperatorNode->PathExprNode4
+gsave
+1 setlinewidth
+0 0 0 edgecolor
+newpath 356.08 159.7 moveto
+363.39 151.3 372.31 141.07 380.34 131.86 curveto
+stroke
+0 0 0 edgecolor
+newpath 383.16 133.94 moveto
+387.09 124.1 lineto
+377.89 129.34 lineto
+closepath fill
+1 setlinewidth
+solid
+0 0 0 edgecolor
+newpath 383.16 133.94 moveto
+387.09 124.1 lineto
+377.89 129.34 lineto
+closepath stroke
+grestore
+endpage
+showpage
+grestore
+%%PageTrailer
+%%EndPage: 1
+%%Trailer
+end
+restore
+%%EOF

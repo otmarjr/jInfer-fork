@@ -1165,10 +1165,17 @@ return <item person="{$p/name/text()}">{count($a)}</item>
 
 Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_sample_query_2}. In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.
 
-The next phase marks this occurrence as (O1) case with weight 0.5 and the following statements are inferred:
+\begin{itemize}
+\item $P_1 =$ \texttt{/site/people/person}
+\item $P_2 =$ \texttt{/site/closed\_auctions/closed\_auction}
+\item $L_1 =$ \texttt{@id}
+\item $L_2 =$ \texttt{buyer/@person}
+\end{itemize}
+
+The next phase marks this occurrence as (O1) case with weight 0.5. Paths $P_1$ and $P_2$ does not have a common context, and thus, the following statements are inferred:
 
 \begin{itemize}
-\item Key $k = (/site/people/person, \{@id\})$ is satisfied.
-\item Foreign key $((/site/closed\_auctions/closed\_auction, \{buyer/@person\}) \rightarrow k)$ is satisfied.
-\item Key $(/site/closed\_auctions/closed\_auction, \{buyer/@person\})$ is not satisfied.
+\item Key $k = ($\texttt{/site/people/person}$, \{$\texttt{@id}$\})$ is satisfied.
+\item Foreign key $(($\texttt{/site/closed\_auctions/closed\_auction}$, \{$\texttt{buyer/@person}$\}) \rightarrow k)$ is satisfied.
+\item Key $($\texttt{/site/closed\_auctions/closed\_auction}$, \{$\texttt{buyer/@person}$\})$ is not satisfied.
 \end{itemize}

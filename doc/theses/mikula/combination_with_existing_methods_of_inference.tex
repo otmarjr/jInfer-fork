@@ -88,6 +88,6 @@ A problem emerges for example if PathType $p$ is compared to an integer constant
 \subsection{Verification using XML data}
 To solves those problems, we propose a simple verification using XML data.
 
-For each PathType $p$ that occurs in the inferred type statements $\mathcal{S}_t$, we find set $T_p$ of all inferred types. $T_p = \{t|(p \rightarrow t) \in \mathcal{S}_t\}$. Then, we create sequence $T_p'$ by ordering the set $T_p$ from the most specific type to the most general one. For example, if $T_p = \{$\texttt{double}, \texttt{byte}, \texttt{int}$\}$, $T_p' = ($\texttt{byte}, \texttt{int}, \texttt{double}$)$.
+For each normalized PathType $p$ from the inferred type statements $\mathcal{S}_t$, we find set $T_p$ of all inferred types. $T_p = \{t|(p \rightarrow t) \in \mathcal{S}_t\}$. Then, we create sequence $T_p'$ by ordering the set $T_p$ from the most specific type to the most general one. For example, if $T_p = \{$\texttt{double}, \texttt{byte}, \texttt{int}$\}$, $T_p' = ($\texttt{byte}, \texttt{int}, \texttt{double}$)$.
 
 Since we have the XML data and path $p$ is XQuery path, we can use an XQuery process (a program that evaluates XQuery paths or queries) to select nodes $N$ targeted by $p$. The verification algorithms iterates through $T_p'$ and for each $t' \in T_p'$ it checks if every node in $N$ conforms to $t'$. If so, $t'$ is the inferred type for nodes $N$ (and PathType $p$), else the inferred type is \texttt{string}.

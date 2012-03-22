@@ -18,11 +18,15 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AxisKind;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import sun.swing.SwingUtilities2.AATextInfo;
 
 /**
  * An utility class providing PathType functions.
@@ -97,6 +101,31 @@ public class PathTypeUtils {
 
     return true;
   }
+  
+  /**
+   * Determines if a path uses only axis child, descendant, descendant-or-self, and attribute.
+   */
+  public static boolean usesOnlyChildAndDescendantAndAttributeAxes(final PathType pathType) { // TODO do DP!!
+    for (final StepExprNode stepNode : pathType.getSteps()) {
+      if (stepNode.isAxisStep()) {
+        final AxisKind axisKind = stepNode.getAxisNode().getAxisKind();
+        if (axisKind != AxisKind.CHILD && axisKind != AxisKind.DESCENDANT && axisKind != AxisKind.DESCENDANT_OR_SELF && axisKind != AxisKind.ATTRIBUTE) {
+          return false;
+        }
+      }
+
+      final ExprNode detailNode = stepNode.getDetailNode();
+      if (detailNode != null) {
+        if (VarRefNode.class.isInstance(detailNode)) {
+          if (usesOnlyChildAndDescendantAndAttributeAxes(pathType.getSubpaths().get(stepNode)) == false) {
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
+  }
 
   /**
    * If a path has just one predicate and it is in its last step, returns this
@@ -115,5 +144,16 @@ public class PathTypeUtils {
     }
 
     return lastStepNode.getPredicateListNode().getPredicates().get(0);
+  }
+  
+  public static NormalizedPathType join(final NormalizedPathType path1, final NormalizedPathType path2) { // TODO rio do DP!!
+    assert(path2.getInitialStep() == InitialStep.CONTEXT);
+    
+    final List<StepExprNode> steps = new ArrayList<StepExprNode>(path1.getSteps());
+    steps.addAll(path2.getSteps());
+    
+    final PathType pathType = new PathType(steps, path1.getInitialStep(), null, false); // TODO rio is for bound? probably from copy from path1.
+    
+    return new NormalizedPathType(pathType);
   }
 }

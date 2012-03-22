@@ -17,7 +17,6 @@
 package cz.cuni.mff.ksi.jinfer.base.objects.xquery.types;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.xquery.Type;
-import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.AbstractType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.PathExprNode;

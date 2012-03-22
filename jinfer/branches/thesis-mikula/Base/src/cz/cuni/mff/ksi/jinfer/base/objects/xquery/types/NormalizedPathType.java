@@ -21,12 +21,15 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AxisNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ItemTypeNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.KindTestNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.NameTestNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.NodeKind;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.SelfOrDescendantStepNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StepExprNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.VarRefNode;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  * A representation of a path type in a normalized form. It means that all
@@ -45,6 +48,8 @@ import java.util.List;
  * @author rio
  */
 public class NormalizedPathType {
+  
+  private final static Logger LOG = Logger.getLogger(NormalizedPathType.class);
 
   private final List<StepExprNode> steps;
   private InitialStep initialStep;
@@ -173,6 +178,10 @@ public class NormalizedPathType {
     boolean isFirstNode = true;
     boolean printChildAxis = true;
     
+    if (getInitialStep() == InitialStep.ROOT) {
+      stringBuilder.append("/");
+    }
+    
     for (final StepExprNode step : steps) {
             
       if (step instanceof SelfOrDescendantStepNode) {
@@ -204,8 +213,18 @@ public class NormalizedPathType {
         }
         
         final ItemTypeNode itemTypeNode = axisNode.getNodeTestNode();
-        assert(NameTestNode.class.isInstance(itemTypeNode));
-        stringBuilder.append(((NameTestNode)itemTypeNode).getName());
+        if (itemTypeNode instanceof NameTestNode) {
+          stringBuilder.append(((NameTestNode)itemTypeNode).getName());
+        } else if (itemTypeNode instanceof KindTestNode) {
+          final NodeKind nodeKind = ((KindTestNode)itemTypeNode).getNodeKind();
+          if (nodeKind == NodeKind.TEXT) {
+            stringBuilder.append("text()");
+          } else {
+            LOG.warn("toString(): NodeKind " + nodeKind + " is not implemented yet, the string representation may be incorrect.");
+          }
+        } else {
+          assert(false);
+        }
         
         printChildAxis = true;
       }

@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.weightedkeys.WeightedKey;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.utils.PathTypeUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,7 @@ public class KeySummarizer {
     
     for (final NegativeUniquenessStatement nus : negativeUniquenessStatements) {
       if ((nus.getContextPath() == null && key.getContextPath() == null || nus.getContextPath().equals(key.getContextPath()))
-              && nus.getTargetPath().equals(key.getTargetPath())) {
+              && nus.getTargetPath().equals(PathTypeUtils.join(key.getTargetPath(), key.getKeyPath()))) { // TODO rio do DP!!
         weight -= nus.getWeight();
       }
     }

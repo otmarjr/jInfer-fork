@@ -25,9 +25,13 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.SummarizedKey;
 import java.io.File;
@@ -77,7 +81,19 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
       keysInferrer.addNegativeUniquenessStatements(syntaxTreeProcessor.getNegativeUniquenessStatements());
     }
     
-    LOG.info("Total Number of inferred type statements: " + inferredTypes.size());
+    // TODO rio do DP, okomentovat!!
+    final List<InferredTypeStatement> inferredTypeAbsolutePaths = new ArrayList<InferredTypeStatement>();
+    for (final InferredTypeStatement inferredTypeStatement : inferredTypes) {
+      final NormalizedPathType path = new NormalizedPathType(inferredTypeStatement.getPathType());
+      final XSDBuiltinAtomicType inferredType = ((XSDType)inferredTypeStatement.getType()).getAtomicType();
+      if (path.getInitialStep() == InitialStep.ROOT) {
+        inferredTypeAbsolutePaths.add(inferredTypeStatement);
+        LOG.info("Inferred type statement: " + path.toString() + " -> " + inferredType);
+      } else {
+        LOG.debug("Inferred type statement (skipped because the path is not absolute): " + path.toString() + " -> " + inferredType);
+      }
+    }
+    LOG.info("Total number of inferred type statements: " + inferredTypeAbsolutePaths.size());
     
     keysInferrer.summarize();
     final Collection<SummarizedKey> keys = keysInferrer.getKeys();
@@ -85,7 +101,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     LOG.info("Total number of inferred key statements: " + keys.size());
     
     final Merger merger = new Merger(grammar);
-    merger.mergeInferredTypes(inferredTypes);
+    merger.mergeInferredTypes(inferredTypeAbsolutePaths);
     merger.mergeInferredKeys(keys, foreignKeys);
     
     callback.finished(grammar);

@@ -1,0 +1,315 @@
+\chapter{Test Data} \label{APPENDIX_test_data}
+
+Test data from the XMark project \cite{xmark}. Using the provided XML generator, XML document of size approximately 1.5 MB was generated. Figure \ref{listing_dtd} is its DTD and other figures in this appendix are XQuery queries that query the XML document.
+
+The queries was slightly modified by replacing calls of \texttt{doc} function in paths by \texttt{/} (document node).
+
+\begin{lstlisting}[caption=DTD of the test XML data, frame=single, label=listing_dtd]
+<!-- DTD for auction database -->
+<!-- $Id: auction.dtd,v 1.15 2001/01/29 21:42:35 albrecht Exp $ -->
+
+<!ELEMENT site            (regions, categories, catgraph, people, open_auctions, closed_auctions)>
+
+<!ELEMENT categories      (category+)>
+<!ELEMENT category        (name, description)>
+<!ATTLIST category        id ID #REQUIRED>
+<!ELEMENT name            (#PCDATA)>
+<!ELEMENT description     (text | parlist)>
+<!ELEMENT text            (#PCDATA | bold | keyword | emph)*>
+<!ELEMENT bold            (#PCDATA | bold | keyword | emph)*>
+<!ELEMENT keyword         (#PCDATA | bold | keyword | emph)*>
+<!ELEMENT emph            (#PCDATA | bold | keyword | emph)*>
+<!ELEMENT parlist         (listitem)*>
+<!ELEMENT listitem        (text | parlist)*>
+
+<!ELEMENT catgraph        (edge*)>
+<!ELEMENT edge            EMPTY>
+<!ATTLIST edge            from IDREF #REQUIRED to IDREF #REQUIRED>
+
+<!ELEMENT regions         (africa, asia, australia, europe, namerica, samerica)>
+<!ELEMENT africa          (item*)>
+<!ELEMENT asia            (item*)>
+<!ELEMENT australia       (item*)>
+<!ELEMENT namerica        (item*)>
+<!ELEMENT samerica        (item*)>
+<!ELEMENT europe          (item*)>
+<!ELEMENT item            (location, quantity, name, payment, description, shipping, incategory+, mailbox)>
+<!ATTLIST item            id ID #REQUIRED
+                          featured CDATA #IMPLIED>
+<!ELEMENT location        (#PCDATA)>
+<!ELEMENT quantity        (#PCDATA)>
+<!ELEMENT payment         (#PCDATA)>
+<!ELEMENT shipping        (#PCDATA)>
+<!ELEMENT reserve         (#PCDATA)>
+<!ELEMENT incategory      EMPTY>
+<!ATTLIST incategory      category IDREF #REQUIRED>
+<!ELEMENT mailbox         (mail*)>
+<!ELEMENT mail            (from, to, date, text)>
+<!ELEMENT from            (#PCDATA)>
+<!ELEMENT to              (#PCDATA)>
+<!ELEMENT date            (#PCDATA)>
+<!ELEMENT itemref         EMPTY>
+<!ATTLIST itemref         item IDREF #REQUIRED>
+<!ELEMENT personref       EMPTY>
+<!ATTLIST personref       person IDREF #REQUIRED>
+
+<!ELEMENT people          (person*)>
+<!ELEMENT person          (name, emailaddress, phone?, address?, homepage?, creditcard?, profile?, watches?)>
+<!ATTLIST person          id ID #REQUIRED>
+<!ELEMENT emailaddress    (#PCDATA)>
+<!ELEMENT phone           (#PCDATA)>
+<!ELEMENT address         (street, city, country, province?, zipcode)>
+<!ELEMENT street          (#PCDATA)>
+<!ELEMENT city            (#PCDATA)>
+<!ELEMENT province        (#PCDATA)>
+<!ELEMENT zipcode         (#PCDATA)>
+<!ELEMENT country         (#PCDATA)>
+<!ELEMENT homepage        (#PCDATA)>
+<!ELEMENT creditcard      (#PCDATA)>
+<!ELEMENT profile         (interest*, education?, gender?, business, age?)>
+<!ATTLIST profile         income CDATA #IMPLIED>
+<!ELEMENT interest        EMPTY>
+<!ATTLIST interest        category IDREF #REQUIRED>
+<!ELEMENT education       (#PCDATA)>
+<!ELEMENT income          (#PCDATA)>
+<!ELEMENT gender          (#PCDATA)>
+<!ELEMENT business        (#PCDATA)>
+<!ELEMENT age             (#PCDATA)>
+<!ELEMENT watches         (watch*)>
+<!ELEMENT watch           EMPTY>
+<!ATTLIST watch           open_auction IDREF #REQUIRED>
+
+<!ELEMENT open_auctions   (open_auction*)>
+<!ELEMENT open_auction    (initial, reserve?, bidder*, current, privacy?, itemref, seller, annotation, quantity, type, interval)>
+<!ATTLIST open_auction    id ID #REQUIRED>
+<!ELEMENT privacy         (#PCDATA)>
+<!ELEMENT initial         (#PCDATA)>
+<!ELEMENT bidder          (date, time, personref, increase)>
+<!ELEMENT seller          EMPTY>
+<!ATTLIST seller          person IDREF #REQUIRED>
+<!ELEMENT current         (#PCDATA)>
+<!ELEMENT increase        (#PCDATA)>
+<!ELEMENT type            (#PCDATA)>
+<!ELEMENT interval        (start, end)>
+<!ELEMENT start           (#PCDATA)>
+<!ELEMENT end             (#PCDATA)>
+<!ELEMENT time            (#PCDATA)>
+<!ELEMENT status          (#PCDATA)>
+<!ELEMENT amount          (#PCDATA)>
+
+<!ELEMENT closed_auctions (closed_auction*)>
+<!ELEMENT closed_auction  (seller, buyer, itemref, price, date, quantity, type, annotation?)>
+<!ELEMENT buyer           EMPTY>
+<!ATTLIST buyer           person IDREF #REQUIRED>
+<!ELEMENT price           (#PCDATA)>
+<!ELEMENT annotation      (author, description?, happiness)>
+
+<!ELEMENT author          EMPTY>
+<!ATTLIST author          person IDREF #REQUIRED>
+<!ELEMENT happiness       (#PCDATA)>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Test query 1., frame=single, label=listing_test_query_1]
+for $b in /site/people/person[@id = "person0"] return $b/name/text()
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Test query 2., frame=single, label=listing_test_query_2]
+for $b in /site/open_auctions/open_auction
+return <increase>{$b/bidder[1]/increase/text()}</increase>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Test query 3., frame=single, label=listing_test_query_3]
+for $b in /site/open_auctions/open_auction
+where zero-or-one($b/bidder[1]/increase/text()) * 2 <= $b/bidder[last()]/increase/text()
+return
+  <increase
+  first="{$b/bidder[1]/increase/text()}"
+  last="{$b/bidder[last()]/increase/text()}"/>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 4., frame=single, label=listing_test_query_4]
+for $b in /site/open_auctions/open_auction
+where
+  some $pr1 in $b/bidder/personref[@person = "person20"],
+       $pr2 in $b/bidder/personref[@person = "person51"]
+  satisfies $pr1 << $pr2
+return <history>{$b/reserve/text()}</history>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 5., frame=single, label=listing_test_query_5]
+count(
+  for $i in /site/closed_auctions/closed_auction
+  where $i/price/text() >= 40
+  return $i/price
+)
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 6., frame=single, label=listing_test_query_6]
+for $b in //site/regions return count($b//item)
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 7., frame=single, label=listing_test_query_7]
+for $p in /site
+return
+  count($p//description) + count($p//annotation) + count($p//emailaddress)
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 8., frame=single, label=listing_test_query_8]
+for $p in /site/people/person
+let $a :=
+  for $t in /site/closed_auctions/closed_auction
+  where $t/buyer/@person = $p/@id
+  return $t
+return <item person="{$p/name/text()}">{count($a)}</item>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 9., frame=single, label=listing_test_query_9]
+let $ca := /site/closed_auctions/closed_auction return
+let
+    $ei := /site/regions/europe/item
+for $p in /site/people/person
+let $a :=
+  for $t in $ca
+  where $p/@id = $t/buyer/@person
+  return
+    let $n := for $t2 in $ei where $t/itemref/@item = $t2/@id return $t2
+    return <item>{$n/name/text()}</item>
+return <person name="{$p/name/text()}">{$a}</person>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 10., frame=single, label=listing_test_query_10]
+for $i in
+  distinct-values(/site/people/person/profile/interest/@category)
+let $p :=
+  for $t in /site/people/person
+  where $t/profile/interest/@category = $i
+  return
+    <personne>
+      <statistiques>
+        <sexe>{$t/profile/gender/text()}</sexe>
+        <age>{$t/profile/age/text()}</age>
+        <education>{$t/profile/education/text()}</education>
+        <revenu>{fn:data($t/profile/@income)}</revenu>
+      </statistiques>
+      <coordonnees>
+        <nom>{$t/name/text()}</nom>
+        <rue>{$t/address/street/text()}</rue>
+        <ville>{$t/address/city/text()}</ville>
+        <pays>{$t/address/country/text()}</pays>
+        <reseau>
+          <courrier>{$t/emailaddress/text()}</courrier>
+          <pagePerso>{$t/homepage/text()}</pagePerso>
+        </reseau>
+      </coordonnees>
+      <cartePaiement>{$t/creditcard/text()}</cartePaiement>
+    </personne>
+return <categorie>{<id>{$i}</id>, $p}</categorie>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 11., frame=single, label=listing_test_query_11]
+for $p in /site/people/person
+let $l :=
+  for $i in /site/open_auctions/open_auction/initial
+  where $p/profile/@income > 5000 * exactly-one($i/text())
+  return $i
+return <items name="{$p/name/text()}">{count($l)}</items>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 12., frame=single, label=listing_test_query_12]
+for $p in /site/people/person
+let $l :=
+  for $i in /site/open_auctions/open_auction/initial
+  where $p/profile/@income > 5000 * exactly-one($i/text())
+  return $i
+where $p/profile/@income > 50000
+return <items person="{$p/profile/@income}">{count($l)}</items>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 13., frame=single, label=listing_test_query_13]
+for $i in /site/regions/australia/item
+return <item name="{$i/name/text()}">{$i/description}</item>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Testing query 14., frame=single, label=listing_test_query_14]
+for $i in /site//item
+where contains(string(exactly-one($i/description)), "gold")
+return $i/name/text()
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 15., frame=single, label=listing_test_query_15]
+for $a in
+  /site/closed_auctions/closed_auction/annotation/description/parlist/
+   listitem/
+   parlist/
+   listitem/
+   text/
+   emph/
+   keyword/
+   text()
+return <text>{$a}</text>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 16., frame=single, label=listing_test_query_16]
+for $a in /site/closed_auctions/closed_auction
+where
+  not(
+    empty(
+      $a/annotation/description/parlist/listitem/parlist/listitem/text/emph/
+       keyword/
+       text()
+    )
+  )
+return <person id="{$a/seller/@person}"/>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 17., frame=single, label=listing_test_query_17]
+for $p in /site/people/person
+where empty($p/homepage/text())
+return <person name="{$p/name/text()}"/>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 18., frame=single, label=listing_test_query_18]
+declare namespace local = "http://www.foobar.org";
+declare function local:convert($v as xs:decimal?) as xs:decimal?
+{
+  2.20371 * $v (: convert Dfl to Euro :)
+};
+
+for $i in /site/open_auctions/open_auction
+return local:convert(zero-or-one($i/reserve))
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 19., frame=single, label=listing_test_query_19]
+for $b in /site/regions//item
+let $k := $b/name/text()
+order by zero-or-one($b/location) ascending empty greatest
+return <item name="{$k}">{$b/location/text()}</item>
+\end{lstlisting}
+
+\begin{lstlisting}[float=htpb, caption=Test query 20., frame=single, label=listing_test_query_20]
+<result>
+  <preferred>
+    {count(/site/people/person/profile[@income >= 100000])}
+  </preferred>
+  <standard>
+    {
+      count(
+        /site/people/person/
+         profile[@income < 100000 and @income >= 30000]
+      )
+    }
+  </standard>
+  <challenge>
+    {count(/site/people/person/profile[@income < 30000])}
+  </challenge>
+  <na>
+    {
+      count(
+        for $p in /site/people/person
+        where empty($p/profile/@income)
+        return $p
+      )
+    }
+  </na>
+</result>
+\end{lstlisting}

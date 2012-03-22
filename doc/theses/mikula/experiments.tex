@@ -1,15 +1,35 @@
 \chapter{Experiments}
 In this chapter we describe how we performed experiments with the implementation and what problems we encountered.
 
-\section{Testing Data}
-To get meaningful results of the experiments, testing data should be composed of XML documents, which are instances of a certain, possibly not known, XML schema, and a set of XQuery queries which query the XML documents. The amount of the XML data does not have to be large. On the other hand, the set of queries should be large (at least hundreds of queries) and the queries should be real, not artificially made.
+\section{Test Data}
+To get meaningful results of the experiments, test data should be composed of XML documents, which are instances of a certain, possibly not known, XML schema, and a set of XQuery queries which query the XML documents. The amount of the XML data does not have to be large. On the other hand, the set of queries should be large (at least hundreds of queries) and the queries should be real, not artificially made.
 
-In a search for such testing data, we have not succeeded. Large sets of XML data are available, but large sets of XQuery queries are not or it is not a simple task to obtain them.
+In a search for such test data, we have not succeeded. Large sets of XML data are available, but large sets of XQuery queries are not or it is not a simple task to obtain them.
 
-If we cannot obtain an ideal set of testing data, we can at least try to find the most suitable one from available non-ideal sets.
+If we cannot obtain an ideal set of test data, we can at least try to find the most suitable one from available non-ideal sets.
 
-Sets of XML data and XQuery queries can be found in W3C XML Query Use Cases \cite{Marchiori:07:XQU}. However, those are very small sets of queries and the analysis of XQuery in Chapter \ref{CHAPTER_analysis_of_xquery} was worked out using those queries, and thus, the relevancy of such testing data is questionable.
+Sets of XML data and XQuery queries can be found in W3C XML Query Use Cases \cite{Marchiori:07:XQU}. However, those are very small sets of queries and the analysis of XQuery in Chapter \ref{CHAPTER_analysis_of_xquery} was worked out using those queries, and thus, the relevancy of such test data is questionable.
 
 Another considered possibility was to obtain some set of XML data and create queries to it. This notion was rejected because such set would have all of the negative characteristics; it would be small, artificially made, and it would not be independent, as well.
 
-At last, we concluded to use data provided by the XMark project \cite{xmark}. It consists of automatically generated XML data and a set of twenty XQuery queries related to the data. Although, this set is also very small, it is more or less real and we did not known the set in the process of developing the algorithm.
+At last, we concluded to use data provided by the XMark project \cite{xmark}. They are attached in Appendix \ref{APPENDIX_test_data} and they consists of automatically generated XML data and a set of twenty XQuery queries related to the data. Although, this set is also very small, it is more or less real and we did not known the set in the process of developing the algorithm.
+
+\section{Results}
+
+\subsection{Type Statements Inference}
+The following six type statements were inferred.\\
+\texttt{/site/open\_auctions/open\_auction/bidder/increase/text()} $\rightarrow$ \texttt{integer}\\
+\texttt{/site/closed\_auctions/closed\_auction/price/text()} $\rightarrow$ \texttt{integer}\\
+\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer}\\
+\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer}\\
+\texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{integer}\\
+\texttt{/site/open\_auctions/open\_auction/reserve} $\rightarrow$ \texttt{decimal}
+
+Only the sixth statement is correct. Other five are incorrect, because, comparing to the data, real type of nodes selected by the paths is \texttt{decimal}, as well.
+
+To reveal the cause of the incorrect type inference, see, for example, query in Listing \ref{listing_test_query_12}. In the where clause, values of \texttt{/site/people/person/profile/@income} are compared to the integer literal constant \texttt{50000}. From this expression, it is not possible to infer the type correctly. Problem is that this is the only inferred statement. Better results can be achieved by providing a larger set of input queries, containing also expressions that can be exploited to infer correct statements. Then the verification with data can be incorporated to choose the correct statements.
+
+
+
+
+\subsection{Key Discovery}

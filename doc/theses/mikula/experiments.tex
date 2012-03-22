@@ -1,1 +1,15 @@
 \chapter{Experiments}
+In this chapter we describe how we performed experiments with the implementation and what problems we encountered.
+
+\section{Testing Data}
+To get meaningful results of the experiments, testing data should be composed of XML documents, which are instances of a certain, possibly not known, XML schema, and a set of XQuery queries which query the XML documents. The amount of the XML data does not have to be large. On the other hand, the set of queries should be large (at least hundreds of queries) and the queries should be real, not artificially made.
+
+In a search for such testing data, we have not succeeded. Large sets of XML data are available, but large sets of XQuery queries are not or it is not a simple task to obtain them.
+
+If we cannot obtain an ideal set of testing data, we can at least try to find the most suitable one from available non-ideal sets.
+
+Sets of XML data and XQuery queries can be found in W3C XML Query Use Cases \cite{Marchiori:07:XQU}. However, those are very small sets of queries and the analysis of XQuery in Chapter \ref{CHAPTER_analysis_of_xquery} was worked out using those queries, and thus, the relevancy of such testing data is questionable.
+
+Another considered possibility was to obtain some set of XML data and create queries to it. This notion was rejected because such set would have all of the negative characteristics; it would be small, artificially made, and it would not be independent, as well.
+
+At last, we concluded to use data provided by the XMark project \cite{xmark}. It consists of automatically generated XML data and a set of twenty XQuery queries related to the data. Although, this set is also very small, it is more or less real and we did not known the set in the process of developing the algorithm.

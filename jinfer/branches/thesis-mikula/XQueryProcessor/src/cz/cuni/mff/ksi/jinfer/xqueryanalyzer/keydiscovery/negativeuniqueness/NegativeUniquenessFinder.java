@@ -104,7 +104,7 @@ public class NegativeUniquenessFinder {
         }
 
         final PathType pathType = (PathType) type;
-        if (PathTypeUtils.usesOnlyChildAndDescendantAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
+        if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) { // TODO rio pridana attr axe, do DP!!
           memorizeNegativeWeight(pathType, 100);
         }
       }

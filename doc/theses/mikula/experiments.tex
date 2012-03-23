@@ -16,20 +16,89 @@ At last, we concluded to use data provided by the XMark project \cite{xmark}. Th
 
 \section{Results}
 
-\subsection{Type Statements Inference}
-The following six type statements were inferred.\\
-\texttt{/site/open\_auctions/open\_auction/bidder/increase/text()} $\rightarrow$ \texttt{integer}\\
-\texttt{/site/closed\_auctions/closed\_auction/price/text()} $\rightarrow$ \texttt{integer}\\
-\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer}\\
-\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer}\\
-\texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{integer}\\
-\texttt{/site/open\_auctions/open\_auction/reserve} $\rightarrow$ \texttt{decimal}
+\subsection{Type Inference}
+Six type statements shown in Table \ref{TAB_inferred_types} were inferred.
 
-Only the sixth statement is correct. Other five are incorrect, because, comparing to the data, real type of nodes selected by the paths is \texttt{decimal}, as well.
+\begin{table}
+\label{TAB_inferred_types}
+\caption{Inferred type statements.}
+\begin{tabular}{|l|}
+\hline
+\texttt{/site/open\_auctions/open\_auction/bidder/increase/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/closed\_auctions/closed\_auction/price/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/open\_auctions/open\_auction/reserve} $\rightarrow$ \texttt{decimal} \\ \hline
+\end{tabular}
+\end{table}
 
-To reveal the cause of the incorrect type inference, see, for example, query in Listing \ref{listing_test_query_12}. In the where clause, values of \texttt{/site/people/person/profile/@income} are compared to the integer literal constant \texttt{50000}. From this expression, it is not possible to infer the type correctly. Problem is that this is the only inferred statement. Better results can be achieved by providing a larger set of input queries, containing also expressions that can be exploited to infer correct statements. Then the verification with data can be incorporated to choose the correct statements.
+Only the last inferred statement is correct. Others are incorrect, because, comparing to the data, real type of nodes selected by the paths is \texttt{decimal}, as well.
 
-
-
+To reveal the cause of the incorrect type inference, see, for example, query in Listing \ref{listing_test_query_12}. In the where clause, values of \texttt{/site/people/person/profile/\-@income} are compared to the integer literal constant \texttt{50000}. From this expression, it is not possible to infer the type correctly. The problem is that this is the only inferred statement. Better results can be achieved by providing a larger set of input queries, containing also expressions that can be exploited to infer correct statements. Then the verification with data can be incorporated to choose the correct statements.
 
 \subsection{Key Discovery}
+Four key statements and their normalized weights shown in Table \ref{TAB_inferred_keys} were inferred.
+
+\begin{table}
+\label{TAB_inferred_keys}
+\caption{Inferred key statements.}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Key} & \textbf{Weight} \\ \hline \hline
+\texttt{(/site/closed\_auctions/closed\_auction, \{buyer/@person\})} & -1.0 \\ \hline
+\texttt{(/site/regions/europe/item, \{@id\})} & -0.417 \\ \hline
+\texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & 0.417 \\ \hline
+\end{tabular}
+\end{table}
+
+The first one is correct, a buyer is not a key of closed auctions. The second one is not correct, because \texttt{id} attribute is a key of \texttt{item} elements. The third one is correct and the forth one declares \texttt{itemref} element to be a key of closed auctions, which is not true, but only with weight 0.417.
+
+Closer analysis of input queries reveals that all of the statements were inferred from occurrences of the join pattern 3. That knowledge leads to the two following observations.
+
+\begin{itemize}
+\item The original method of key discovery would not infer anything on this input data.
+\item The cause of the incorrectly inferred statements are not that they were inferred from join patterns occurrences, where a join is not done by a key/foreign key pair. It is that the for clauses (definitions of paths $P_1$ and $P_2$) in the join pattern 3 occurrence (in query in Listing \ref{listing_test_query_9}) are swapped, so the real key is considered as a foreign key and vice-versa.
+\end{itemize}
+
+A partial solution is an extension of the test data by queries containing expression that can be exploited to infer negative uniqueness statements. Such expression is, for example,\\ \texttt{distinct-values(/site/closed\_auctions/closed\_auction/itemref/@item)}\\ to get unique ids of items that was sold in some auction. Since, one item may be sold several times in auctions organized in different time periods, \texttt{distinct-values} function is applied.
+
+From the original data, one negative uniqueness statement was inferred:\\
+\texttt{/site/people/person/profile/interest/@category} is not unique with weight 1, and it it correct. Since, there is not such key statement inferred, the negative uniqueness statement is not used to any correction of weight.
+
+\begin{table}
+\label{TAB_inferred_keys_2}
+\caption{Key statements inferred from the extended test data.}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Key} & \textbf{Weight} \\ \hline \hline
+\texttt{(/site/closed\_auctions/closed\_auction, \{buyer/@person\})} & -1.0 \\ \hline
+\texttt{(/site/regions/europe/item, \{@id\})} & -0.417 \\ \hline
+\texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.417 \\ \hline
+\end{tabular}
+\end{table}
+
+From data extended by the mentioned expression, another negative uniqueness was inferred:\\
+\texttt{/site/closed\_auctions/closed\_auction/itemref/@item} with weight 1. This one decreases the weight of the falsely inferred key. Key statements inferred from the extended data are shown in Table \ref{TAB_inferred_keys_2}.
+
+As was demonstrated, larger sets of input data may lead to better results. However, the problem with the falsely rejected key still remains. It may be solved by modification of the statements inferred from occurrences of the join pattern 3. If we omit the negative statement of a key from the second for clause ($(P_2, \{L_2\})$ is not satisfied), we get better results. The modified statements inferred from an occurrence of the join pattern 3 are the following (assigned weight remains 0.5):
+
+\begin{itemize}
+\item $(P_1, \{L_1\})$ is satisfied
+\item $(P_2, \{L_2\}) \rightarrow (P_1, \{L_1\})$ is satisfied
+\end{itemize}
+
+From the extended test data, using the modified join pattern 3 statements, key statements in Table \ref{TAB_inferred_keys_3} were inferred. Those are the best results from all test runs, though it is not clear that the modified statements will produce the best results also on other larger input data. Therefore, further tests with large sets of queries are required to determine the best settings for the algorithm. 
+
+\begin{table}
+\label{TAB_inferred_keys_3}
+\caption{Key statements inferred from the extended test data using the modified JP3 statements.}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Key} & \textbf{Weight} \\ \hline \hline
+\texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.666 \\ \hline
+\end{tabular}
+\end{table}

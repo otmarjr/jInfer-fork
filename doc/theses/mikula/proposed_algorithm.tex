@@ -47,8 +47,6 @@ where $V_{LiteralNode}$ is set $\{v | v \in V, c(v) =$ \texttt{LiteralNode}$\}$,
 
 Set $\mathcal{P}$ contains other similar functions but due to their large number, we do not define them formally. Functions $varName_{VarRefNode}$, $axisKind_{AxisNode}$, $operator_{OperatorNode}$ are examples of commonly used functions from $\mathcal{P}$. Their meaning will be explained in a place of their use. For detail, see \cite{thesis_schejbal}.
 
-\todo[inline]{Hodil by se příklad stromu - jeslti nebude dál.}
-
 \subsection{Syntactic Abbreviations}
 Since we need to use the syntax tree in pseudo-algorithms, we define the following abbreviations to make its usage more simple.
 
@@ -138,8 +136,6 @@ For example, a node of \texttt{FLWORExprNode} class contains four subnodes of\li
 
 This characteristic is explicitly described, because several algorithms later in this chapter rely on it.
 
-\todo[inline]{priklad stromu}
-
 \subsection{Syntax Tree Example}
 
 \begin{figure}
@@ -148,7 +144,7 @@ This characteristic is explicitly described, because several algorithms later in
 \includegraphics[scale=0.6]{syntax_tree_1.eps}
 \end{figure}
 
-A syntax tree constructed from sample query in Listing \ref{listing_testing_query_18} is shown in Figure \ref{FIG_syntax_tree_1}.
+A syntax tree constructed from sample query in Listing \ref{listing_test_query_18} is shown in Figure \ref{FIG_syntax_tree_1}.
 
 \section{Step 2: Static Analysis of Expression Types}
 In the second step, we statically (i.e. without evaluation of the queries) determine types of expressions in the syntax tree. Information on the types of expressions can be used by consecutive steps of the algorithm. The consecutive steps will not use the determined types of all expressions, however this step may be useful in a future extending.
@@ -1142,7 +1138,7 @@ from $N_1, \dots , N_n$. The normalized score $S_i$ of $K_i$ is computed as $S^{
 \includegraphics[scale=0.7]{syntax_tree_2.eps}
 \end{figure}
 
-Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_testing_query_8} (subtree of ConstructorNode is omitted because of lack of space). In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.
+Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_test_query_8} (subtree of ConstructorNode is omitted because of lack of space). In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.
 
 \begin{itemize}
 \item $P_1 =$ \texttt{/site/people/person}

@@ -1,5 +1,5 @@
-\chapter{Experiments}
-In this chapter we describe how we performed experiments with the implementation and what problems we encountered.
+\chapter{Experiments} \label{CHAPTER_experiments}
+In this chapter we describe how we performed experiments with the implementation and what problems we faced.
 
 \section{Test Data}
 To get meaningful results of the experiments, test data should be composed of XML documents, which are instances of a certain, possibly not known, XML schema, and a set of XQuery queries which query the XML documents. The amount of the XML data does not have to be large. On the other hand, the set of queries should be large (at least hundreds of queries) and the queries should be real, not artificially made.
@@ -99,6 +99,8 @@ From the extended test data, using the modified join pattern 3 statements, key s
 \hline
 \textbf{Key} & \textbf{Weight} \\ \hline \hline
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
-\texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.666 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.333 \\ \hline
 \end{tabular}
 \end{table}
+
+\todo[inline]{Pripojit vysledne XSD? Je dost velke. Alebo aspon relevantnu cast?}

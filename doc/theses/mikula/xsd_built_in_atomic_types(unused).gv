@@ -1,0 +1,70 @@
+digraph xsd_built_in_atomic_types {
+	rankdir = LR;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+{
+	rankdir = TB;
+	duration [label = "duration"];
+	dateTime [label = "dateTime"];
+	time [label = "time"];
+	date [label = "date"];
+	gYearMonth [label = "gYearMonth"];
+}
+
+{
+	rankdir = LR;
+
+	gYear [label = "gYear"];
+	gMonthDay [label = "gMonthDay"];
+	gDay [label = "gDay"];
+	gMonth [label = "gMonth"];
+	boolean [label = "boolean"];
+	base64Binary [label = "base64Binary"];
+	hexBinary [label = "hexBinary"];
+	float [label = "float"];
+	double [label = "double"];
+	anyURI [label = "anyURI"];
+	QName [label = "QName"];
+	NOTATION [label = "NOTATION"];
+}
+
+
+{
+	rank = same;
+
+	string [label = "string"];
+	decimal [label = "decimal"];
+}
+
+	normalizedString [label = "normalizedString"];
+	token [label = "token"];
+	language [label = "language"];
+	Name [label = "Name"];
+	NMTOKEN [label = "NMTOKEN"];
+	NCName [label = "NCName"];
+	ID [label = "ID"];
+	IDREF [label = "IDREF"];
+	ENTITY [label = "ENTITY"];
+	string -> normalizedString -> token -> { language; Name; NMTOKEN }
+	Name -> NCName -> { ID; IDREF; ENTITY }
+	
+	integer [label = "integer"];
+	nonPositiveInteger [label = "nonPositiveInteger"];
+	negativeInteger [label = "negativeInteger"];
+	long [label = "long"];
+	int [label = "int"];
+	short [label = "short"];
+	byte [label = "byte"];
+	nonNegativeInteger [label = "nonNegativeInteger"];
+	unsignedLong [label = "unsignedLong"];
+	unsignedInt [label = "unsignedInt"];
+	unsignedShort [label = "unsignedShort"];
+	unsignedByte [label = "unsignedByte"];
+	positiveInteger [label = "positiveInteger"];
+	decimal -> integer -> { nonPositiveInteger; long; nonNegativeInteger }
+	nonPositiveInteger -> negativeInteger;
+	long -> int -> short -> byte;
+	nonNegativeInteger -> { unsignedLong; positiveInteger }
+	unsignedLong -> unsignedInt -> unsignedShort -> unsignedByte;
+}

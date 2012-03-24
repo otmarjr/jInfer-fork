@@ -562,6 +562,7 @@ Also note, that the function call node of \texttt{local:convert} in the FLWOR re
 \end{algorithm}
 
 \section{Step 3: Inference of Built-in Types}
+\todo[inline]{Rekurzia sa nevnara do FunctionBodyNodes a PathExprNodes - napisat, alebo je to detail?}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
 How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of PathType type (expression representing a certain element or attribute or set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
@@ -603,9 +604,11 @@ A little complication is a recursion. A simple algorithm of that kind may never 
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.
 
 \subsection{Auxiliary Functions} \label{step_4_auxiliary_functions}
+\todo[inline]{Ako je to s osou descendant or self pri hladani join patternov? Orig. metoda o nej explicitne nehovori, ale zrejme pouziva}
+\todo[inline]{Ako je to s attribute osou v L cestach join patternov? Atribut predsa moze byt kluc.}
 Firstly, we define some auxiliary functions used by algorithms in this chapter.
 
-Function \texttt{usesOnlyChildAndDescendantAxes} in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of PathType as its arguments and returns true if the path uses only child and descendant axes. Otherwise, it returns false.
+Function \texttt{usesOnlyChildAndDescendantAxes} in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of PathType as its arguments and returns true if the path uses only child, descendant and descendant or self axes. Otherwise, it returns false. Function \texttt{usesOnlyChildAnd\-DescendantAndAttributeAxes} is the same except it allows also attributes axis.
 
 \begin{algorithm}
 \caption{Function \texttt{usesOnlyChildAndDescendantAxes}}
@@ -617,7 +620,7 @@ Function \texttt{usesOnlyChildAndDescendantAxes} in Algorithm \ref{ALG_function_
 \FORALL{$stepNode \in pathType.stepNodes$}
 	\IF{$stepNode.isAxisStep$}
 		\STATE $axisKind := stepNode.axisNode.getAxisKind()$
-		\IF{$axisKind \neq$ CHILD $\wedge$ $axisKind \neq$ DESCENDANT}
+		\IF{$axisKind \neq$ CHILD $\wedge$ $axisKind \neq$ DESCENDANT $\wedge$ $axisKind \neq$ DESCENDANT\_OR\_SELF}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -1063,7 +1066,7 @@ Contrary the key discovery, PathTypes utilized in this step may contain predicat
     \IF{$node.fncName =$ 'distinct-values'}
         \STATE $argument := node.getChild(0)$
         \STATE $type := getType(argument)$
-        \IF{$type$ is PathType $\wedge$ $usesOnlyChildAndDescendantAxes(type)$ $\wedge$ $isWithoutPredicatesExceptLastStep(type)$}
+        \IF{$type$ is PathType \\ $\wedge$ $usesOnlyChildAndDescendantAndAttributeAxes(type)$ \\ $\wedge$ $isWithoutPredicatesExceptLastStep(type)$}
             \STATE memorize $argument$ as the negative key statement, weight 1
         \ENDIF
     \ENDIF
@@ -1074,6 +1077,8 @@ Contrary the key discovery, PathTypes utilized in this step may contain predicat
 Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (literal constant, reference of a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
 
 As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the count of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys.
+
+\todo[inline]{Zlucovanie vah s klucmi.}
 
 \begin{algorithm}
 \caption{Rejection of uniqueness - comparison with a constant}
@@ -1113,7 +1118,7 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
 \IF{$is(exprNode,$ OperatorNode$)$}
     \IF{$exprNode.operator =$ GEN\_EQUALS}
         \FORALL{$var \in forVars$}
-            \IF{$exprNode$ is of a form $var/L = C$ where $getType(var/L)$ is PathType $\wedge$ $isWithoutPredicatesExceptLastStep(getType(var/L))$ $\wedge$ $usesOnlyChildAndDescendantAxes(getType(var/L))$ $\wedge$ $C$ is a literal constant}
+            \IF{$exprNode$ is of a form $var/L = C$ where $getType(var/L)$ is PathType $\wedge$ $isWithoutPredicatesExceptLastStep(getType(var/L))$ $\wedge$ $usesOnlyChildAndDescendantAndAttributeAxes(getType(var/L))$ $\wedge$ $C$ is a literal constant}
                 \STATE memorize $var/L$ as the negative key statement, weight 0.9
             \ENDIF
         \ENDFOR

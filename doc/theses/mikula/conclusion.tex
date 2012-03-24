@@ -7,9 +7,11 @@ Before a creation of the algorithm itself, we had to take several decisions in q
 
 In the proposed solution, we decided to incorporate lexical and syntax analyses of XQuery queries, because it is more general and more extensible than a pattern searching. To achieve that, we adopted the algorithm from a recent master thesis dealing with an analysis of XQuery queries.
 
-We also implemented several ideas from the overview to infer XSD built-in types of elements and attributes. And we slightly extended the one existing method dealing with the inference of keys. \todo{Ako dopadli testy.}
+We also implemented several ideas from the overview to infer XSD built-in types of elements and attributes. And we slightly extended the one existing method dealing with the inference of keys. We experimentally demonstrated that on some input files, results of the extended method are better than results of the original method. However, we did not succeed in a search of an ideal, large enough set of test data. The testing was performed on a small set of input queries and further testing and algorithm tuning is required.
 
 At last, we proposed a simple way how to combine the inferred statements with existing grammar inferring methods of the XML schema inference and we implemented it using jInfer framework. Thus, we created the first complete, ready-to-use, and extensible implementation of the XML xchema inference exploiting XQuery queries besides XML data.
+
+\todo[inline]{Nejake prehladne zhrnutie plusov a minusov?}
 
 \section{Future Work}
 This work implements only some ideas discussed in the overview in Chapter \ref{CHAPTER_analysis_of_xquery}, leaving most of them for a future work. Also, the implemented algorithms can be further refined as was already mentioned in Chapter \ref{CHAPTER_proposed_algorithm} with the presentation of the algorithms. For example thorough processing of user-defined function calls.
@@ -19,3 +21,5 @@ Chapter \ref{CHAPTER_precreation_of_algorithm} discusses some possible future en
 The utilization of XQuery queries certainly provides a space for incorporating an interaction with user. For example, a user may influence the scoring of inferred keys to get a more precise results.
 
 And, a very large space for a possible future research is provided by utilisation of other XML operations. The main representant is XSLT.
+
+Besides the mentioned, our opinion is that the most urgent future work is obtaining a large enough test data set, performing proper experiments, and refining the algorithm by modification of its settings (statements inferred from join pattern occurrences, weights, etc.) according to experimental results. This process was slightly suggested in Chapter \ref{CHAPTER_experiments}.

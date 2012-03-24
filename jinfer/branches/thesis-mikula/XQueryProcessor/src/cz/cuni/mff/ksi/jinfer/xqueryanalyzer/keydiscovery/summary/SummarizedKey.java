@@ -44,7 +44,7 @@ public class SummarizedKey {
   }
 
   public void normalize(final int maxCount, final int maxWeight, final int totalCount) {
-    normalizedWeight = (double) weight / maxWeight * (1 - (maxCount - count) / totalCount);
+    normalizedWeight = (double) weight / maxWeight * (1 - ((double)maxCount - count) / totalCount);
   }
   
   public Key getKey() {

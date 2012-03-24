@@ -84,7 +84,7 @@ public class KeySummarizer {
     
     for (final NegativeUniquenessStatement nus : negativeUniquenessStatements) {
       if ((nus.getContextPath() == null && key.getContextPath() == null || nus.getContextPath().equals(key.getContextPath()))
-              && nus.getTargetPath().equals(PathTypeUtils.join(key.getTargetPath(), key.getKeyPath()))) { // TODO rio do DP!!
+              && nus.getTargetPath().equals(PathTypeUtils.join(key.getTargetPath(), key.getKeyPath()))) {
         weight -= nus.getWeight();
       }
     }

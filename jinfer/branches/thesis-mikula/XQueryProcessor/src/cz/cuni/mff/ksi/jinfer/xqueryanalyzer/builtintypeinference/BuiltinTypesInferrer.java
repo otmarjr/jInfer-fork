@@ -53,6 +53,11 @@ public class BuiltinTypesInferrer {
       // To process function body nodes, we need know the real arguments.
       // It is not implemented yet.
       return;
+    } else if (node instanceof PathExprNode) {
+      // We do not want to dive to PathExprNode instances, because it results
+      // in inference of types for parts of paths. For example /n[@a = 5] infers
+      // @a -> integer.
+      return;
     }
     
     final List<XQNode> subnodes = node.getSubnodes();

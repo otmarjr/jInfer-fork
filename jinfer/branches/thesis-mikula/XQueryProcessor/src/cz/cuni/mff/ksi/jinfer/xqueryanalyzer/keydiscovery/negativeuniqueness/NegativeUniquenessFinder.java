@@ -104,7 +104,7 @@ public class NegativeUniquenessFinder {
         }
 
         final PathType pathType = (PathType) type;
-        if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) { // TODO rio pridana attr axe, do DP!!
+        if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
           memorizeNegativeWeight(pathType, 100);
         }
       }
@@ -149,7 +149,7 @@ public class NegativeUniquenessFinder {
       if (leftOperand.getType().getCategory() == Type.Category.PATH
               && LiteralNode.class.isInstance(rightOperand)) {
         final PathType pathType = (PathType) leftOperand.getType();
-        if (PathTypeUtils.usesOnlyChildAndDescendantAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
+        if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
             final ExprNode detailNode = pathType.getSteps().get(0).getDetailNode();
             if (detailNode != null) {
@@ -164,7 +164,7 @@ public class NegativeUniquenessFinder {
       } else if (rightOperand.getType().getCategory() == Type.Category.PATH
               && LiteralNode.class.isInstance(leftOperand)) {
         final PathType pathType = (PathType) rightOperand.getType();
-        if (PathTypeUtils.usesOnlyChildAndDescendantAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
+        if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
             final ExprNode detailNode = pathType.getSteps().get(0).getDetailNode();
             if (detailNode != null) {

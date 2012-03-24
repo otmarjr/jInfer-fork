@@ -86,19 +86,15 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
       }
     }
     
-    // TODO rio do DP, okomentovat!!
-    final List<InferredTypeStatement> inferredTypeAbsolutePaths = new ArrayList<InferredTypeStatement>();
     for (final InferredTypeStatement inferredTypeStatement : inferredTypes) {
       final NormalizedPathType path = new NormalizedPathType(inferredTypeStatement.getPathType());
       final XSDBuiltinAtomicType inferredType = ((XSDType)inferredTypeStatement.getType()).getAtomicType();
-      if (path.getInitialStep() == InitialStep.ROOT) {
-        inferredTypeAbsolutePaths.add(inferredTypeStatement);
-        LOG.info("Inferred type statement: " + path.toString() + " -> " + inferredType);
-      } else {
-        LOG.debug("Inferred type statement (skipped because the path is not absolute): " + path.toString() + " -> " + inferredType);
+      if (path.getInitialStep() != InitialStep.ROOT) {
+        LOG.error("Inferred type statement should not contain a relative path. Probably a bug.");
       }
+      LOG.info("Inferred type statement: " + path.toString() + " -> " + inferredType);
     }
-    LOG.info("Total number of inferred type statements: " + inferredTypeAbsolutePaths.size());
+    LOG.info("Total number of inferred type statements: " + inferredTypes.size());
     
     keysInferrer.summarize();
     final Collection<SummarizedKey> keys = keysInferrer.getKeys();
@@ -115,7 +111,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     LOG.info("Total number of inferred key statements: " + keys.size());
     
     final Merger merger = new Merger(grammar);
-    merger.mergeInferredTypes(inferredTypeAbsolutePaths);
+    merger.mergeInferredTypes(inferredTypes);
     merger.mergeInferredKeys(keys, foreignKeys);
     
     callback.finished(grammar);

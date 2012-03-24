@@ -33,6 +33,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.XSDType;
 import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.builtintypeinference.InferredTypeStatement;
+import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.negativeuniqueness.NegativeUniquenessStatement;
 import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.summary.SummarizedKey;
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,6 +80,10 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
       inferredTypes.addAll(syntaxTreeProcessor.getInferredTypes());
       keysInferrer.addJoinPatterns(syntaxTreeProcessor.getJoinPatterns());
       keysInferrer.addNegativeUniquenessStatements(syntaxTreeProcessor.getNegativeUniquenessStatements());
+      
+      for (final NegativeUniquenessStatement negativeUniquenessStatement : syntaxTreeProcessor.getNegativeUniquenessStatements()) {
+        LOG.info("Inferred negative uniqueness statement: " + negativeUniquenessStatement.getTargetPath() + ", weight: " + negativeUniquenessStatement.getWeight());
+      }
     }
     
     // TODO rio do DP, okomentovat!!
@@ -98,6 +103,15 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
     keysInferrer.summarize();
     final Collection<SummarizedKey> keys = keysInferrer.getKeys();
     final Map<Key, Set<ForeignKey>> foreignKeys = keysInferrer.getForeignKeys();
+    for (final SummarizedKey summarizedKey : keys) {
+      final Key key = summarizedKey.getKey();
+      final NormalizedPathType contextPath = key.getContextPath();
+      if (contextPath != null) {
+        LOG.info("Inferred key: (" + contextPath + ", " + key.getTargetPath() + ", {" + key.getKeyPath() + "}), normalized weight: " + summarizedKey.getNormalizedWeight());
+      } else {
+        LOG.info("Inferred key: (" + key.getTargetPath() + ", {" + key.getKeyPath() + "}), normalized weight: " + summarizedKey.getNormalizedWeight());
+      }
+    }
     LOG.info("Total number of inferred key statements: " + keys.size());
     
     final Merger merger = new Merger(grammar);

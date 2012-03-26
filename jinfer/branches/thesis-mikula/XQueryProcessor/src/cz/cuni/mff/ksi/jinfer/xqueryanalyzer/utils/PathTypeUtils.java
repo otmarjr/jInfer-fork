@@ -26,7 +26,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.PathType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import sun.swing.SwingUtilities2.AATextInfo;
 
 /**
  * An utility class providing PathType functions.

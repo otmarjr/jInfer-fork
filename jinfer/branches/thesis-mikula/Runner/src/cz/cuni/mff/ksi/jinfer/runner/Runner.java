@@ -55,7 +55,7 @@ public class Runner {
   private static final Logger LOG = Logger.getLogger(Runner.class);
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
-  private final XQueryProcessor xqueryAnalyzer;
+  private final NonGrammaticalInputProcessor xqueryAnalyzer;
   private final SchemaGenerator schemaGenerator;
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
@@ -71,7 +71,7 @@ public class Runner {
       Runner.this.finishedSimplifier(grammar);
     }
   };
-  private final XQueryProcessorCallback xqaCallback = new XQueryProcessorCallback() {
+  private final NonGrammaticalInputProcessorCallback xqaCallback = new NonGrammaticalInputProcessorCallback() {
 
     @Override
     public void finished(final List<Element> grammar) {
@@ -98,7 +98,7 @@ public class Runner {
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER_PROP));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
-    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(XQueryProcessor.class,
+    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(NonGrammaticalInputProcessor.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.XQUERY_PROCESSOR_PROP, ModuleSelectionPropertiesPanel.XQUERY_PROCESSOR_DEFAULT));
   }
 

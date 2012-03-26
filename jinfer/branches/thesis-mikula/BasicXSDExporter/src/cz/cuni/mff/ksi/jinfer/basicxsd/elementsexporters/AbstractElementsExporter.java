@@ -57,6 +57,10 @@ public abstract class AbstractElementsExporter {
   protected final String typenamePostfix;
   private int keyNumber = 1;
   private final Map<Key, String> keyNames = new HashMap<Key, String>();
+  
+  private static final String XQUERY_PROCESSOR_METADATA_TYPE = "xquery_processor_type";
+  private static final String XQUERY_PROCESSOR_METADATA_KEYS = "xquery_processor_keys";
+  private static final String XQUERY_PROCESSOR_METADATA_FOREIGN_KEYS = "xquery_processor_foreign_keys";
 
   /**
    * Constructor.
@@ -97,7 +101,7 @@ public abstract class AbstractElementsExporter {
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
       final String type = TypeUtils.getBuiltinType(element);
-      final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)element.getMetadata().get("xquery_processor_type");
+      final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_TYPE);
       
       if (xqueryType == null) {
         indentator.append(" type=\"" + type + '"');
@@ -195,7 +199,7 @@ public abstract class AbstractElementsExporter {
   }
   
   protected boolean hasElementKeys(final Element element) {
-    final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_processor_keys");
+    final List<Key> keys = (List<Key>)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_KEYS);
     
     if (BaseUtils.isEmpty(keys)) {
       return false;
@@ -205,7 +209,7 @@ public abstract class AbstractElementsExporter {
   }
   
   protected void processElementKeys(final Element element) {
-    final List<Key> keys = (List<Key>)element.getMetadata().get("xquery_processor_keys");
+    final List<Key> keys = (List<Key>)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_KEYS);
     
     if (keys == null) {
       return;
@@ -228,7 +232,7 @@ public abstract class AbstractElementsExporter {
   }
   
   protected void processElementForeignKeys(final Element element) {
-    final Set<ForeignKey> fKeys = (Set<ForeignKey>)element.getMetadata().get("xquery_processor_foreign_keys");
+    final Set<ForeignKey> fKeys = (Set<ForeignKey>)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_FOREIGN_KEYS);
     
     if (fKeys == null) {
       return;
@@ -261,7 +265,7 @@ public abstract class AbstractElementsExporter {
         indentator.append(attribute.getName());
 
         final String type = TypeUtils.getBuiltinAttributeType(attribute);
-        final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)attribute.getMetadata().get("xquery_processor_type");
+        final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)attribute.getMetadata().get(XQUERY_PROCESSOR_METADATA_TYPE);
       
         if (xqueryType == null) {
           indentator.append("\" type=\"" + type + '"');

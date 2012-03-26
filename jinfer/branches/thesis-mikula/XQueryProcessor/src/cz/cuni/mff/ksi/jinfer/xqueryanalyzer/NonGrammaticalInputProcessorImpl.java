@@ -59,9 +59,9 @@ import org.openide.util.lookup.ServiceProvider;
  * @author rio
  */
 @ServiceProvider(service = NonGrammaticalInputProcessor.class)
-public class XQueryAnalyzerImpl implements NonGrammaticalInputProcessor {
+public class NonGrammaticalInputProcessorImpl implements NonGrammaticalInputProcessor {
   
-  private final static Logger LOG = Logger.getLogger(XQueryAnalyzerImpl.class);
+  private final static Logger LOG = Logger.getLogger(NonGrammaticalInputProcessorImpl.class);
   
   private static final String NAME = "Basic_XQuery_Processor";
   private static final String DISPLAY_NAME = "Basic XQuery Processor";

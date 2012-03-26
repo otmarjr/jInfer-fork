@@ -99,7 +99,7 @@ public class Runner {
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
     xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(NonGrammaticalInputProcessor.class,
-            projectProperties.getProperty(ModuleSelectionPropertiesPanel.XQUERY_PROCESSOR_PROP, ModuleSelectionPropertiesPanel.XQUERY_PROCESSOR_DEFAULT));
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.NON_GRAMMATICAL_INPUT_PROCESSOR_PROP, ModuleSelectionPropertiesPanel.NON_GRAMMATICAL_INPUT_PROCESSOR_DEFAULT));
   }
 
   /**

@@ -97,34 +97,31 @@ public class JoinPatternsFinder {
 
     if (whereClauseNode != null) {
       whereExpr = whereClauseNode.getExprNode();
-      if (OperatorNode.class.isInstance(whereExpr)) {
-        if (((OperatorNode) whereExpr).getOperator() == Operator.GEN_EQUALS) {
-          checkJoinPattern3 = true;
-        }
+      if (OperatorNode.class.isInstance(whereExpr)
+              && ((OperatorNode) whereExpr).getOperator() == Operator.GEN_EQUALS) {
+        checkJoinPattern3 = true;
       }
     }
 
     for (final VariableBindingNode bindingNode : bindingNodes) {
       final ExprNode bindingExpr = bindingNode.getBindingSequenceNode().getExprNode();
       final Type bindingExprType = bindingExpr.getType();
-      if (bindingExprType.getCategory() == Type.Category.PATH) {
-        if (PathTypeUtils.usesOnlyChildAndDescendantAxes((PathType) bindingExprType)) {
-          final ExprNode predicate = PathTypeUtils.endsWithExactlyOnePredicate((PathType) bindingExprType);
-          if (predicate != null && PathTypeUtils.isWithoutPredicatesExceptLastStep((PathType) bindingExprType)) {
-            for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
-              determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), checkJoinPattern3, whereExpr, foundJoinPatterns);
-            }
-          } else if (checkJoinPattern3 && PathTypeUtils.isWithoutPredicates((PathType) bindingExprType)) {
-            for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
-              determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), checkJoinPattern3, whereExpr, foundJoinPatterns);
-            }
+      if (bindingExprType.getCategory() == Type.Category.PATH
+              && PathTypeUtils.usesOnlyChildAndDescendantAxes((PathType) bindingExprType)) {
+        final ExprNode predicate = PathTypeUtils.endsWithExactlyOnePredicate((PathType) bindingExprType);
+        if (predicate != null && PathTypeUtils.isWithoutPredicatesExceptLastStep((PathType) bindingExprType)) {
+          for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
+            determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), checkJoinPattern3, whereExpr, foundJoinPatterns);
           }
-          
-          if (PathTypeUtils.isWithoutPredicates((PathType) bindingExprType)) {
-            if (ForClauseNode.class.isInstance(bindingNode)) {
-              forVariables.put(bindingNode.getVarName(), (ForClauseNode) bindingNode);
-            }
+        } else if (checkJoinPattern3 && PathTypeUtils.isWithoutPredicates((PathType) bindingExprType)) {
+          for (final Entry<String, ForClauseNode> entry : forVariables.entrySet()) {
+            determineJoinPattern(bindingNode, predicate, entry.getValue(), entry.getKey(), checkJoinPattern3, whereExpr, foundJoinPatterns);
           }
+        }
+
+        if (PathTypeUtils.isWithoutPredicates((PathType) bindingExprType)
+                && ForClauseNode.class.isInstance(bindingNode)) {
+          forVariables.put(bindingNode.getVarName(), (ForClauseNode) bindingNode);
         }
       }
     }

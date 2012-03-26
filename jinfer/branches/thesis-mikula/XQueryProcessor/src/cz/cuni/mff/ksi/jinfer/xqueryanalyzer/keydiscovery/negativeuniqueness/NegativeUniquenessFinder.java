@@ -122,10 +122,9 @@ public class NegativeUniquenessFinder {
     for (final VariableBindingNode bindingNode : flworNode.getTupleStreamNode().getBindingClauses()) {
       if (ForClauseNode.class.isInstance(bindingNode)) {
         final ExprNode exprNode = bindingNode.getBindingSequenceNode().getExprNode();
-        if (exprNode.getType().getCategory() == Type.Category.PATH) {
-          if (PathTypeUtils.usesOnlyChildAndDescendantAxes((PathType) exprNode.getType())) {
-            forVars.add(bindingNode.getVarName());
-          }
+        if (exprNode.getType().getCategory() == Type.Category.PATH
+                && PathTypeUtils.usesOnlyChildAndDescendantAxes((PathType)exprNode.getType())) {
+          forVars.add(bindingNode.getVarName());
         }
       }
     }
@@ -152,12 +151,10 @@ public class NegativeUniquenessFinder {
         if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
             final ExprNode detailNode = pathType.getSteps().get(0).getDetailNode();
-            if (detailNode != null) {
-              if (VarRefNode.class.isInstance(detailNode)) {
-                if (((VarRefNode) detailNode).getVarName().equals(var)) {
-                  memorizeNegativeWeight(pathType, 90);
-                }
-              }
+            if (detailNode != null
+                    && VarRefNode.class.isInstance(detailNode)
+                    && ((VarRefNode) detailNode).getVarName().equals(var)) {
+              memorizeNegativeWeight(pathType, 90);
             }
           }
         }
@@ -167,12 +164,10 @@ public class NegativeUniquenessFinder {
         if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(pathType) && PathTypeUtils.isWithoutPredicatesExceptLastStep(pathType)) {
           for (final String var : forVars) {
             final ExprNode detailNode = pathType.getSteps().get(0).getDetailNode();
-            if (detailNode != null) {
-              if (VarRefNode.class.isInstance(detailNode)) {
-                if (((VarRefNode) detailNode).getVarName().equals(var)) {
-                  memorizeNegativeWeight(pathType, 90);
-                }
-              }
+            if (detailNode != null
+                    && VarRefNode.class.isInstance(detailNode)
+                    && ((VarRefNode) detailNode).getVarName().equals(var)) {
+              memorizeNegativeWeight(pathType, 90);
             }
           }
         }

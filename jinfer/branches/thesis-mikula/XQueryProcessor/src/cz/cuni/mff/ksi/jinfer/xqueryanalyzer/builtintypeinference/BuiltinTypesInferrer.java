@@ -120,11 +120,11 @@ public class BuiltinTypesInferrer {
             pathType = (PathType)leftType;
             type = rightType;
           }
-        } else if (rightType.getCategory() == Type.Category.PATH) {
-          if (leftType.isNumeric() && leftType.getCategory() == Type.Category.XSD_BUILT_IN) {
-            pathType = (PathType)rightType;
-            type = leftType;
-          }
+        } else if (rightType.getCategory() == Type.Category.PATH
+                && leftType.isNumeric()
+                && leftType.getCategory() == Type.Category.XSD_BUILT_IN) {
+          pathType = (PathType)rightType;
+          type = leftType;
         }
         break;
       }
@@ -145,11 +145,10 @@ public class BuiltinTypesInferrer {
             pathType = (PathType)leftType;
             type = rightType;
           }
-        } else if (rightType.getCategory() == Type.Category.PATH) {
-          if (leftType.getCategory() == Type.Category.XSD_BUILT_IN) {
-            pathType = (PathType)rightType;
-            type = leftType;
-          }
+        } else if (rightType.getCategory() == Type.Category.PATH
+                && leftType.getCategory() == Type.Category.XSD_BUILT_IN) {
+          pathType = (PathType)rightType;
+          type = leftType;
         }
         break;
       }

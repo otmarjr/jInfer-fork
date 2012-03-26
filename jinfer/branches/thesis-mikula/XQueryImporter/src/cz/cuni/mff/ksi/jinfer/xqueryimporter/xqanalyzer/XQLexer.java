@@ -13,6 +13,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.StringLiteral
  * on 13.4.10 16:55 from the specification file
  * <tt>xquery.lex</tt>
  */
+@SuppressWarnings("PMD")
 public class XQLexer implements java_cup.runtime.Scanner {
 
   /** This character denotes the end of file */

@@ -55,7 +55,7 @@ public class Runner {
   private static final Logger LOG = Logger.getLogger(Runner.class);
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
-  private final NonGrammaticalInputProcessor xqueryAnalyzer;
+  private final NonGrammaticalInputProcessor nonGrammaticalInputProcessor;
   private final SchemaGenerator schemaGenerator;
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
@@ -71,7 +71,7 @@ public class Runner {
       Runner.this.finishedSimplifier(grammar);
     }
   };
-  private final NonGrammaticalInputProcessorCallback xqaCallback = new NonGrammaticalInputProcessorCallback() {
+  private final NonGrammaticalInputProcessorCallback nonGrammticalInputProcessorCallback = new NonGrammaticalInputProcessorCallback() {
 
     @Override
     public void finished(final List<Element> grammar) {
@@ -98,7 +98,7 @@ public class Runner {
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER_PROP));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
-    xqueryAnalyzer = ModuleSelectionHelper.lookupImpl(NonGrammaticalInputProcessor.class,
+    nonGrammaticalInputProcessor = ModuleSelectionHelper.lookupImpl(NonGrammaticalInputProcessor.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.NON_GRAMMATICAL_INPUT_PROCESSOR_PROP, ModuleSelectionPropertiesPanel.NON_GRAMMATICAL_INPUT_PROCESSOR_DEFAULT));
   }
 
@@ -155,7 +155,7 @@ public class Runner {
       public void run() {
         try {
           RunningProject.setNextModuleCaps(null);
-          xqueryAnalyzer.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), grammar, xqaCallback);
+          nonGrammaticalInputProcessor.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), grammar, nonGrammticalInputProcessorCallback);
         } catch (final InterruptedException e) {
           interrupted();
         } catch (final Throwable t) {

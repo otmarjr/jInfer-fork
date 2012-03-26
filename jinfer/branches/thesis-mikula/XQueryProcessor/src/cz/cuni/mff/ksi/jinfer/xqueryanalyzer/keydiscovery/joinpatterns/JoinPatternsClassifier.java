@@ -71,10 +71,9 @@ public class JoinPatternsClassifier {
       final List<PathExprNode> returnPaths = getTargetReturnPaths(flworNode, joinPattern.getSecondVariableBindingNode().getVarName());
       for (final PathExprNode path : returnPaths) {
         final XQNode parent = path.getParentNode();
-        if (FunctionCallNode.class.isInstance(parent)) {
-          if (((FunctionCallNode) parent).getFuncName().equals("count")) {
-            return new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 75);
-          }
+        if (FunctionCallNode.class.isInstance(parent)
+                && ((FunctionCallNode) parent).getFuncName().equals("count")) {
+          return new ClassifiedJoinPattern(joinPattern, ClassifiedJoinPattern.Type.O1, 75);
         }
       }
 
@@ -97,10 +96,8 @@ public class JoinPatternsClassifier {
   private static void getTargetReturnPathTypesRecursive(final XQNode node, final String varName, final List<PathType> paths) {
     if (ExprNode.class.isInstance(node)) {
       final Type type = ((ExprNode) node).getType();
-      if (type.getCategory() == Type.Category.PATH) {
-        if (isTargetPath((PathType) type, varName)) {
-          paths.add((PathType) type);
-        }
+      if (type.getCategory() == Type.Category.PATH && isTargetPath((PathType) type, varName)) {
+        paths.add((PathType) type);
       }
     }
 

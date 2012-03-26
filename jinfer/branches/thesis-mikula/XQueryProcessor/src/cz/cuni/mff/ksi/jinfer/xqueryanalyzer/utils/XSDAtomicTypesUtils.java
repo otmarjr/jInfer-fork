@@ -40,213 +40,203 @@ public class XSDAtomicTypesUtils {
     if (type1 == XSDBuiltinAtomicType.STRING) {
       return type2;
     }
-    
+
     if (type2 == XSDBuiltinAtomicType.STRING) {
       return type1;
     }
-    
+
     if (type1 == type2) {
       return type1;
     }
-    
+
     ////////////////////////////////////////////////
-    
-    if (type1 == XSDBuiltinAtomicType.DOUBLE) {
-      if (type2 == XSDBuiltinAtomicType.FLOAT
-              || type2 == XSDBuiltinAtomicType.DECIMAL
-              || type2 == XSDBuiltinAtomicType.INTEGER
-              || type2 == XSDBuiltinAtomicType.LONG
-              || type2 == XSDBuiltinAtomicType.INT
-              || type2 == XSDBuiltinAtomicType.SHORT
-              || type2 == XSDBuiltinAtomicType.BYTE
-              || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type2 == XSDBuiltinAtomicType.SHORT) {
-        return type2;
-      }
+
+    if (type1 == XSDBuiltinAtomicType.DOUBLE
+            && (type2 == XSDBuiltinAtomicType.FLOAT
+            || type2 == XSDBuiltinAtomicType.DECIMAL
+            || type2 == XSDBuiltinAtomicType.INTEGER
+            || type2 == XSDBuiltinAtomicType.LONG
+            || type2 == XSDBuiltinAtomicType.INT
+            || type2 == XSDBuiltinAtomicType.SHORT
+            || type2 == XSDBuiltinAtomicType.BYTE
+            || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type2 == XSDBuiltinAtomicType.SHORT)) {
+      return type2;
     }
-    
-    if (type2 == XSDBuiltinAtomicType.DOUBLE) {
-      if (type1 == XSDBuiltinAtomicType.FLOAT
-              || type1 == XSDBuiltinAtomicType.DECIMAL
-              || type1 == XSDBuiltinAtomicType.INTEGER
-              || type1 == XSDBuiltinAtomicType.LONG
-              || type1 == XSDBuiltinAtomicType.INT
-              || type1 == XSDBuiltinAtomicType.SHORT
-              || type1 == XSDBuiltinAtomicType.BYTE
-              || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type1 == XSDBuiltinAtomicType.SHORT) {
-        return type1;
-      }
+
+    if (type2 == XSDBuiltinAtomicType.DOUBLE
+            && (type1 == XSDBuiltinAtomicType.FLOAT
+            || type1 == XSDBuiltinAtomicType.DECIMAL
+            || type1 == XSDBuiltinAtomicType.INTEGER
+            || type1 == XSDBuiltinAtomicType.LONG
+            || type1 == XSDBuiltinAtomicType.INT
+            || type1 == XSDBuiltinAtomicType.SHORT
+            || type1 == XSDBuiltinAtomicType.BYTE
+            || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type1 == XSDBuiltinAtomicType.SHORT)) {
+      return type1;
     }
-    
+
     ////////////////////////////////////////////////
-    
-    if (type1 == XSDBuiltinAtomicType.FLOAT) {
-      if (type2 == XSDBuiltinAtomicType.DECIMAL
-              || type2 == XSDBuiltinAtomicType.INTEGER
-              || type2 == XSDBuiltinAtomicType.LONG
-              || type2 == XSDBuiltinAtomicType.INT
-              || type2 == XSDBuiltinAtomicType.SHORT
-              || type2 == XSDBuiltinAtomicType.BYTE
-              || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type2 == XSDBuiltinAtomicType.SHORT) {
-        return type2;
-      }
+
+    if (type1 == XSDBuiltinAtomicType.FLOAT
+            && (type2 == XSDBuiltinAtomicType.DECIMAL
+            || type2 == XSDBuiltinAtomicType.INTEGER
+            || type2 == XSDBuiltinAtomicType.LONG
+            || type2 == XSDBuiltinAtomicType.INT
+            || type2 == XSDBuiltinAtomicType.SHORT
+            || type2 == XSDBuiltinAtomicType.BYTE
+            || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type2 == XSDBuiltinAtomicType.SHORT)) {
+      return type2;
     }
-    
-    if (type2 == XSDBuiltinAtomicType.FLOAT) {
-      if (type1 == XSDBuiltinAtomicType.DECIMAL
-              || type1 == XSDBuiltinAtomicType.INTEGER
-              || type1 == XSDBuiltinAtomicType.LONG
-              || type1 == XSDBuiltinAtomicType.INT
-              || type1 == XSDBuiltinAtomicType.SHORT
-              || type1 == XSDBuiltinAtomicType.BYTE
-              || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type1 == XSDBuiltinAtomicType.SHORT) {
-        return type1;
-      }
+
+    if (type2 == XSDBuiltinAtomicType.FLOAT
+            && (type1 == XSDBuiltinAtomicType.DECIMAL
+            || type1 == XSDBuiltinAtomicType.INTEGER
+            || type1 == XSDBuiltinAtomicType.LONG
+            || type1 == XSDBuiltinAtomicType.INT
+            || type1 == XSDBuiltinAtomicType.SHORT
+            || type1 == XSDBuiltinAtomicType.BYTE
+            || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type1 == XSDBuiltinAtomicType.SHORT)) {
+      return type1;
     }
-    
+
     ////////////////////////////////////////////////
-    
-    if (type1 == XSDBuiltinAtomicType.FLOAT) {
-      if (type2 == XSDBuiltinAtomicType.DECIMAL
-              || type2 == XSDBuiltinAtomicType.INTEGER
-              || type2 == XSDBuiltinAtomicType.LONG
-              || type2 == XSDBuiltinAtomicType.INT
-              || type2 == XSDBuiltinAtomicType.SHORT
-              || type2 == XSDBuiltinAtomicType.BYTE
-              || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type2 == XSDBuiltinAtomicType.SHORT) {
-        return type2;
-      }
+
+    if (type1 == XSDBuiltinAtomicType.FLOAT
+            && (type2 == XSDBuiltinAtomicType.DECIMAL
+            || type2 == XSDBuiltinAtomicType.INTEGER
+            || type2 == XSDBuiltinAtomicType.LONG
+            || type2 == XSDBuiltinAtomicType.INT
+            || type2 == XSDBuiltinAtomicType.SHORT
+            || type2 == XSDBuiltinAtomicType.BYTE
+            || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type2 == XSDBuiltinAtomicType.SHORT)) {
+      return type2;
     }
-    
-    if (type2 == XSDBuiltinAtomicType.FLOAT) {
-      if (type1 == XSDBuiltinAtomicType.DECIMAL
-              || type1 == XSDBuiltinAtomicType.INTEGER
-              || type1 == XSDBuiltinAtomicType.LONG
-              || type1 == XSDBuiltinAtomicType.INT
-              || type1 == XSDBuiltinAtomicType.SHORT
-              || type1 == XSDBuiltinAtomicType.BYTE
-              || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type1 == XSDBuiltinAtomicType.SHORT) {
-        return type1;
-      }
+
+    if (type2 == XSDBuiltinAtomicType.FLOAT
+            && (type1 == XSDBuiltinAtomicType.DECIMAL
+            || type1 == XSDBuiltinAtomicType.INTEGER
+            || type1 == XSDBuiltinAtomicType.LONG
+            || type1 == XSDBuiltinAtomicType.INT
+            || type1 == XSDBuiltinAtomicType.SHORT
+            || type1 == XSDBuiltinAtomicType.BYTE
+            || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type1 == XSDBuiltinAtomicType.SHORT)) {
+      return type1;
     }
-    
+
     ////////////////////////////////////////////////
-    
-    if (type1 == XSDBuiltinAtomicType.DECIMAL) {
-      if (type2 == XSDBuiltinAtomicType.INTEGER
-              || type2 == XSDBuiltinAtomicType.LONG
-              || type2 == XSDBuiltinAtomicType.INT
-              || type2 == XSDBuiltinAtomicType.SHORT
-              || type2 == XSDBuiltinAtomicType.BYTE
-              || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type2 == XSDBuiltinAtomicType.SHORT) {
-        return type2;
-      }
+
+    if (type1 == XSDBuiltinAtomicType.DECIMAL
+            && (type2 == XSDBuiltinAtomicType.INTEGER
+            || type2 == XSDBuiltinAtomicType.LONG
+            || type2 == XSDBuiltinAtomicType.INT
+            || type2 == XSDBuiltinAtomicType.SHORT
+            || type2 == XSDBuiltinAtomicType.BYTE
+            || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type2 == XSDBuiltinAtomicType.SHORT)) {
+      return type2;
     }
-    
-    if (type2 == XSDBuiltinAtomicType.DECIMAL) {
-      if (type1 == XSDBuiltinAtomicType.INTEGER
-              || type1 == XSDBuiltinAtomicType.LONG
-              || type1 == XSDBuiltinAtomicType.INT
-              || type1 == XSDBuiltinAtomicType.SHORT
-              || type1 == XSDBuiltinAtomicType.BYTE
-              || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type1 == XSDBuiltinAtomicType.SHORT) {
-        return type1;
-      }
+
+    if (type2 == XSDBuiltinAtomicType.DECIMAL
+            && (type1 == XSDBuiltinAtomicType.INTEGER
+            || type1 == XSDBuiltinAtomicType.LONG
+            || type1 == XSDBuiltinAtomicType.INT
+            || type1 == XSDBuiltinAtomicType.SHORT
+            || type1 == XSDBuiltinAtomicType.BYTE
+            || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type1 == XSDBuiltinAtomicType.SHORT)) {
+      return type1;
     }
-    
+
     ////////////////////////////////////////////////
-    
-    if (type1 == XSDBuiltinAtomicType.INTEGER) {
-      if (type2 == XSDBuiltinAtomicType.LONG
-              || type2 == XSDBuiltinAtomicType.INT
-              || type2 == XSDBuiltinAtomicType.SHORT
-              || type2 == XSDBuiltinAtomicType.BYTE
-              || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type2 == XSDBuiltinAtomicType.SHORT) {
-        return type2;
-      }
+
+    if (type1 == XSDBuiltinAtomicType.INTEGER
+            && (type2 == XSDBuiltinAtomicType.LONG
+            || type2 == XSDBuiltinAtomicType.INT
+            || type2 == XSDBuiltinAtomicType.SHORT
+            || type2 == XSDBuiltinAtomicType.BYTE
+            || type2 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type2 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type2 == XSDBuiltinAtomicType.SHORT)) {
+      return type2;
     }
-    
-    if (type2 == XSDBuiltinAtomicType.INTEGER) {
-      if (type1 == XSDBuiltinAtomicType.LONG
-              || type1 == XSDBuiltinAtomicType.INT
-              || type1 == XSDBuiltinAtomicType.SHORT
-              || type1 == XSDBuiltinAtomicType.BYTE
-              || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
-              || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
-              || type1 == XSDBuiltinAtomicType.SHORT) {
-        return type1;
-      }
+
+    if (type2 == XSDBuiltinAtomicType.INTEGER
+            && (type1 == XSDBuiltinAtomicType.LONG
+            || type1 == XSDBuiltinAtomicType.INT
+            || type1 == XSDBuiltinAtomicType.SHORT
+            || type1 == XSDBuiltinAtomicType.BYTE
+            || type1 == XSDBuiltinAtomicType.NON_POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.NON_NEGATIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.POSITIVE_INTEGER
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_BYTE
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_LONG
+            || type1 == XSDBuiltinAtomicType.UNSIGNED_INT
+            || type1 == XSDBuiltinAtomicType.SHORT)) {
+      return type1;
     }
-    
+
     ////////////////////////////////////////////////
-    
+
     return XSDBuiltinAtomicType.STRING;
   }
 }

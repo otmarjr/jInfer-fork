@@ -24,7 +24,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.UnknownType;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * This class provides type analysis of of user-defined function in a syntax tree,

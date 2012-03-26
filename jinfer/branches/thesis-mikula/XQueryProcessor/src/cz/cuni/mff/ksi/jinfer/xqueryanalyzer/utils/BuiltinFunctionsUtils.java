@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * An utility class providing basic functions for handling built-in functions.
@@ -79,10 +78,8 @@ public class BuiltinFunctionsUtils {
     }
     
     for (final String builtinFunctionsPrefix : DEFAULT_BUILTIN_FUNCTIONS_NAMESPACES) {
-      if (prefix.equals(builtinFunctionsPrefix)) {
-        if (builtinFunctionTypes.containsKey(name)) {
-          return name;
-        }
+      if (prefix.equals(builtinFunctionsPrefix) && builtinFunctionTypes.containsKey(name)) {
+        return name;
       }
     }
     

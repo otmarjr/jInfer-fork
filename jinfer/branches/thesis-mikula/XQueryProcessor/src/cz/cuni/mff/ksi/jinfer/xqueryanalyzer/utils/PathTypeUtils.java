@@ -47,10 +47,8 @@ public class PathTypeUtils {
       if (stepExprNode.hasPredicates()) {
         return false;
       }
-      if (subSteps.containsKey(stepExprNode)) {
-        if (!isWithoutPredicates(subSteps.get(stepExprNode))) {
-          return false;
-        }
+      if (subSteps.containsKey(stepExprNode) && !isWithoutPredicates(subSteps.get(stepExprNode))) {
+        return false;
       }
     }
 
@@ -66,10 +64,8 @@ public class PathTypeUtils {
       if (stepExprNode.hasPredicates()) {
         return false;
       }
-      if (subSteps.containsKey(stepExprNode)) {
-        if (!isWithoutPredicates(subSteps.get(stepExprNode))) {
-          return false;
-        }
+      if (subSteps.containsKey(stepExprNode) && !isWithoutPredicates(subSteps.get(stepExprNode))) {
+        return false;
       }
     }
 
@@ -89,12 +85,9 @@ public class PathTypeUtils {
       }
 
       final ExprNode detailNode = stepNode.getDetailNode();
-      if (detailNode != null) {
-        if (VarRefNode.class.isInstance(detailNode)) {
-          if (usesOnlyChildAndDescendantAxes(pathType.getSubpaths().get(stepNode)) == false) {
-            return false;
-          }
-        }
+      if (detailNode != null && VarRefNode.class.isInstance(detailNode)
+                && usesOnlyChildAndDescendantAxes(pathType.getSubpaths().get(stepNode)) == false) {
+        return false;
       }
     }
 
@@ -114,12 +107,9 @@ public class PathTypeUtils {
       }
 
       final ExprNode detailNode = stepNode.getDetailNode();
-      if (detailNode != null) {
-        if (VarRefNode.class.isInstance(detailNode)) {
-          if (usesOnlyChildAndDescendantAndAttributeAxes(pathType.getSubpaths().get(stepNode)) == false) {
-            return false;
-          }
-        }
+      if (detailNode != null && VarRefNode.class.isInstance(detailNode)
+                && usesOnlyChildAndDescendantAndAttributeAxes(pathType.getSubpaths().get(stepNode)) == false) {
+        return false;
       }
     }
 

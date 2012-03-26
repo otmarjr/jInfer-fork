@@ -219,9 +219,9 @@ public abstract class AbstractElementsExporter {
       final NormalizedPathType targetPath = key.getTargetPath();
       final NormalizedPathType keyPath = key.getKeyPath();
       
-      keyNames.put(key, "key" + new Integer(keyNumber).toString());
+      keyNames.put(key, "key" + keyNumber);
 
-      indentator.indent("<xs:key name=\"key" + new Integer(keyNumber).toString() + "\">\n");
+      indentator.indent("<xs:key name=\"key" + keyNumber + "\">\n");
       ++keyNumber;
       indentator.increaseIndentation();
       indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");

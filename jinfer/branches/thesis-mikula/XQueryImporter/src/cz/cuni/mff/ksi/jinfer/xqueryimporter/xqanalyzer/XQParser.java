@@ -128,6 +128,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.AxisKind;
 /** CUP v0.11a beta 20060608 generated parser.
   * @version Fri Feb 24 18:33:08 CET 2012
   */
+@SuppressWarnings("PMD")
 public class XQParser extends java_cup.runtime.lr_parser {
 
   /** Default constructor. */

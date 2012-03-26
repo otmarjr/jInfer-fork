@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Interface of a Simplifier module.
  *
- * <p>Simplifier is the second, middle module in the inference process. It
+ * <p>Simplifier is the second module in the inference process. It
  * receives a raw list of initial grammar rules and should output a simplified
  * yet same grammar. The exact definition of "simplified" varies greatly among
  * different algorithms; "same grammar" means that the languages they describe
@@ -40,7 +40,7 @@ public interface Simplifier extends NamedModule, Capabilities {
    * 
    * @param initialGrammar Initial Grammar to be simplified.
    * @param callback A callback object. When the initial grammar is simplified,
-   *  the resulting list of rules must be sent to the last stage by calling
+   *  the resulting list of rules must be sent to the next stage by calling
    *  the <code>finished()</code> method of this object.
    */
   void start(final List<Element> initialGrammar,

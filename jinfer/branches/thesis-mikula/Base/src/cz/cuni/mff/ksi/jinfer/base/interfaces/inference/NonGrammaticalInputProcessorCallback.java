@@ -16,18 +16,22 @@
  */
 package cz.cuni.mff.ksi.jinfer.base.interfaces.inference;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.Capabilities;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.NamedModule;
-import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import java.util.List;
 
 /**
- * TODO rio
+ * Interface defining a response to NonGrammaticalInputProcessor finishing its
+ * work.
+ * 
  * @author rio
  */
-public interface XQueryProcessor extends NamedModule, Capabilities {
+public interface NonGrammaticalInputProcessorCallback {
   
-  void start(final Input input, final List<Element> grammar,
-          final XQueryProcessorCallback callback) throws InterruptedException;
+  /**
+   * This method is called by a NonGrammaticalInputProcessor implementation,
+   * after it has finished its work.
+   * 
+   * @param grammar Merged simplified grammar.
+   */
+  void finished(final List<Element> grammar);
 }

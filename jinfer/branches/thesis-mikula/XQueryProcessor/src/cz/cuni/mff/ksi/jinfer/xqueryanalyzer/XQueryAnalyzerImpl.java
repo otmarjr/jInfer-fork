@@ -21,8 +21,8 @@ import cz.cuni.mff.ksi.jinfer.xqueryanalyzer.keydiscovery.KeysInferrer;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessor;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.XQueryProcessorCallback;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.NonGrammaticalInputProcessor;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.NonGrammaticalInputProcessorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.InitialStep;
@@ -46,7 +46,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  * The main class of this module. It is a basic implementation
- * of {@link XQueryProcessor} interface.
+ * of {@link NonGrammaticalInputProcessor} interface.
  * 
  * It takes two inputs. One is a simplifier grammar, the second is a data structure
  * holding all project input files. 
@@ -58,8 +58,8 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author rio
  */
-@ServiceProvider(service = XQueryProcessor.class)
-public class XQueryAnalyzerImpl implements XQueryProcessor {
+@ServiceProvider(service = NonGrammaticalInputProcessor.class)
+public class XQueryAnalyzerImpl implements NonGrammaticalInputProcessor {
   
   private final static Logger LOG = Logger.getLogger(XQueryAnalyzerImpl.class);
   
@@ -67,7 +67,7 @@ public class XQueryAnalyzerImpl implements XQueryProcessor {
   private static final String DISPLAY_NAME = "Basic XQuery Processor";
 
   @Override
-  public void start(final Input input, final List<Element> grammar, final XQueryProcessorCallback callback) throws InterruptedException {
+  public void start(final Input input, final List<Element> grammar, final NonGrammaticalInputProcessorCallback callback) throws InterruptedException {
     List<ModuleNode> xquerySyntaxTrees = (processXQueries(input.getQueries(), getXQueryProcessor()));
     LOG.info("Input XQuery files parsed into " + xquerySyntaxTrees.size() + " syntax trees");
     

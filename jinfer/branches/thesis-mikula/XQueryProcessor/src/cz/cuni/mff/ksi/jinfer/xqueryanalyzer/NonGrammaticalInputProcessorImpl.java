@@ -55,6 +55,8 @@ import org.openide.util.lookup.ServiceProvider;
  * processed resulting in inferred statements.
  * Finally, the inferred statements are written to the metadata of the grammar
  * and the grammar is passed to the next module.
+ * 
+ * TODO rio Rename module and packages to BasicXQueryProcessor. 
  *
  * @author rio
  */

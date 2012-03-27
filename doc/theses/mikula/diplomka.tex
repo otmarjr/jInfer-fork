@@ -72,7 +72,7 @@
   frame=single,                   % adds a frame around the code
   rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
   tabsize=2,                      % sets default tabsize to 2 spaces
-  captionpos=t,                   % sets the caption-position to bottom
+  captionpos=b,                   % sets the caption-position to bottom
   breaklines=true,                % sets automatic line breaking
   breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
   title=\lstname,                   % show the filename of files included with \lstinputlisting;
@@ -310,7 +310,9 @@ Keywords:
 \newtheorem{example}{Example}
 
 %%% Tabulky v diplomové práci, existují-li.
-\chapwithtoc{List of Tables}
+%\chapwithtoc{List of Tables}
+\listoftables
+\todo[inline]{Je List of Tables potrebny? Co figures?}
 
 \newpage
 \renewcommand\thepage{\arabic{page}}

@@ -11,8 +11,6 @@ Validity of an XML document against its XML schema expresses whether the documen
 To demonstrate the described technologies, we introduce a part of a simple XML document (see Figure \ref{FIG_a_simple_xml_example}). It represents books in a bookstore. Each book has a mandatory id, a title, a list of authors and an optional ISBN.
 
 \begin{figure}
-\caption{A simple XML example}
-\label{FIG_a_simple_xml_example}
 \begin{verbatim}
 <bookstore>
   <book id="b1">
@@ -36,8 +34,9 @@ To demonstrate the described technologies, we introduce a part of a simple XML d
   </book>
 </bookstore>
 \end{verbatim}
+\caption{A simple XML example.}
+\label{FIG_a_simple_xml_example}
 \end{figure}
-\todo[inline]{Zmensit Figure \ref{FIG_a_simple_xml_example}?}
 
 \subsection{DTD}
 Document Type Definition (DTD) expresses the structure of XML documents by declarations of elements. An element has its name and a content declared using syntax \texttt{<!ELEMENT $name$ $content$>}.

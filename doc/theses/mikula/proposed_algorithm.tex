@@ -4,9 +4,9 @@ In this thesis we are developing an approach dealing with inference of XML schem
 There is an important assumption placed upon the input XQuery queries saying that each query must be syntactically and semantically correct. That means that if a query was evaluated (using a XQuery processor meeting the XQuery specification), the evaluation would not raise any error, neither static nor dynamic. In other words, each query is syntactically correct and it correctly queries the data in the XML documents.
 
 \begin{figure}
-\label{FIG_steps_algorithm}
-\caption{Steps of the proposed algorithm.}
 \includegraphics[scale=1]{algorithm.eps}
+\caption{Steps of the proposed algorithm.}
+\label{FIG_steps_algorithm}
 \end{figure}
 
 The proposed algorithm consists of the following four main steps, show in Figure \ref{FIG_steps_algorithm} and described in detail in the rest of the chapter.
@@ -34,7 +34,7 @@ Syntax tree of XQuery query $Q$ is tuple $T = (V, E, c, \mathcal{P}, o)$ where
 \begin{itemize}
 \item $V \subset \mathbb{N}$ is a set of nodes, each node representing a particular XQuery construct in query $Q$,
 \item $E$ is a set of pairs $(v, w)$ where $v,w \in V$ and for every $a, b \in V, a \neq b: (a, b) \in E$ if and only if a construct represented by $b$ is a direct component of a construct represented by $a$ ($b$ is a child of $a$) in query $Q$,
-\item $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2},
+\item $c: V \rightarrow C$ is function assigning each node with its class from set $C$ of all XQuery language constructs listed in Tables \ref{TAB_syntax_tree_node_types_part_1}, \ref{TAB_syntax_tree_node_types_part_2},
 \item $\mathcal{P}$ is a set of functions specifying additional properties of the nodes and distinguishing the nodes of the same classes,
 \item and $o : V \rightarrow \mathcal{O}$ is a function specifying an order of children of the nodes, where $\mathcal{O} = \{o_v : E_v \rightarrow \mathbb{N} | v \in V, E_v = \{(v, w) | w \in V, (v,w) \in E\}\}$ is set of functions specifying the children order for each node. For every $v \in V, o(v) = o_v$ so that $o_v(v,w)$ is a sequential number of a construct represented by $w$ amongst constructs represented by children of $v$ in query $Q$.
 \end{itemize}
@@ -60,17 +60,13 @@ For every $v \in V$, abbreviation
 \end{itemize}
 
 \subsection{Closer Look at the Nodes of the Syntax Tree}
-The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in tables in Figures \ref{FIG_syntax_tree_node_types_part_1}, \ref{FIG_syntax_tree_node_types_part_2}. The tables are composed of classes in italic and their subclasses. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining non-bold nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
+The node classes of the syntax are organized in an is-a hierarchical structure, commonly used in the object oriented programming languages, where an object can be of several types. This hierarchy is shown in tables in Tables \ref{TAB_syntax_tree_node_types_part_1}, \ref{TAB_syntax_tree_node_types_part_2}. The tables are composed of classes in italic and their subclasses. The classes with names in bold represent a common class of a group of subclasses, and these classes cannot be directly used in the syntax tree (abstract classes). The remaining non-bold nodes represent particular constructs of the XQuery language and nodes of these classes can be used in the syntax tree. 
 
 For example, an instance of the syntax tree cannot directly contain nodes of \texttt{Node} and \texttt{ExprNode} classes (for every $v \in V, c(v) \neq$ \texttt{Node}$, c(v) \neq$ \texttt{ExprNode}), but it can contain nodes of \texttt{AttributeNode} and \texttt{LiteralNode} classes. Regarding the multiplicity of types, a node of \texttt{LiteralNode} class is also considered to be of two indirect types: \texttt{ExprNode} and \texttt{Node}.
 
 The node classes can be classified into three groups: inner node classes, leaf node classes and node classes that can be both inner and leaf. Inner node classes (marked \texttt{I}) stand for XQuery constructs that are composed of other constructs and can be further divided. An example of such class is \texttt{FLWORExprNode} which is composed of \texttt{TupleStreamNode}, \texttt{WhereClauseNode}, \texttt{OrderByClauseNode} and \texttt{ReturnClauseNode} classes. Leaf node classes (marked \texttt{L}) represent elements of XQuery language that cannot be further divided. For example, \texttt{LiteralNode}. Node \texttt{FunctionCallNode} is an example of the third group (marked \texttt{IL}). Function call of a function without arguments is represented by a leaf node while function call with arguments is represented by an inner node and its subnodes are nodes representing those arguments.
 
-\todo[inline]{Triedy hodit do tabulky, nie do figure.}
-
-\begin{figure}
-\caption{Syntax tree node types part 1. For details, see \cite{thesis_schejbal}.}
-\label{FIG_syntax_tree_node_types_part_1}
+\begin{table}
 \begin{tabular}{l l | l}
 \multicolumn{2}{l|}{\textbf{\emph{Node}}} & \textbf{\emph{ExprNode}} \\
 \hline
@@ -93,11 +89,11 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \texttt{LocationHintsNode (IL)} & \texttt{VarValueNode (IL)} & \texttt{VarRefNode (L)} \\
 \textbf{ModuleChildNode} & & \\
 \end{tabular}
-\end{figure}
+\caption{Syntax tree node types part 1. For details, see \cite{thesis_schejbal}.}
+\label{TAB_syntax_tree_node_types_part_1}
+\end{table}
 
-\begin{figure}
-\caption{Syntax tree node types part 2. For details, see \cite{thesis_schejbal}.}
-\label{FIG_syntax_tree_node_types_part_2}
+\begin{table}
 \begin{tabular}{l | l}
 \textbf{\emph{PrologChildNode}} & \textbf{\emph{ExprHolderNode}} \\
 \hline
@@ -122,7 +118,9 @@ The node classes can be classified into three groups: inner node classes, leaf n
 \cline{2-2} \texttt{PrologNode (IL)} & \texttt{SelfOrDescendantStepNode (L)} \\
 \texttt{QueryBodyNode (I)} & 
 \end{tabular}
-\end{figure}
+\caption{Syntax tree node types part 2. For details, see \cite{thesis_schejbal}.}
+\label{TAB_syntax_tree_node_types_part_2}
+\end{table}
 
 Some pseudo-code algorithms in the following sections need to determine a class of a node. The node's direct class can be determined by function $c$ from the definition of the syntax tree in Definition \ref{DEF_syntax_tree}, and hence, we also can determine its indirect classes. For the purpose of pseudo code, we define the following function.
 
@@ -141,9 +139,9 @@ This characteristic is explicitly described, because several algorithms later in
 \subsection{Syntax Tree Example}
 
 \begin{figure}
-\label{FIG_syntax_tree_1}
-\caption{Sample syntax tree 1.}
 \includegraphics[scale=0.6]{syntax_tree_1.eps}
+\caption{Sample syntax tree 1.}
+\label{FIG_syntax_tree_1}
 \end{figure}
 
 A syntax tree constructed from sample query in Listing \ref{listing_test_query_18} is shown in Figure \ref{FIG_syntax_tree_1}.
@@ -391,7 +389,7 @@ A similar approach as in the case of functions can be applied to determine types
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Figure \ref{FIG_syntax_tree_node_types_part_1}), its type can be either determined directly or it depends on its subexpressions.
+The algorithm iterates through the variable declaration nodes from the prolog and if the variable is explicitly assigned with its type, the type is noted. Otherwise, an attempt of the type deduction of the binding expression is made. The deduction of the type from the expression is presented in Algorithm \ref{ALG_func_determineExpressionType}. On input, it takes an expression node and types of local variables that are valid in the expression (also called context of variables or variable context). The presented algorithm is just shortened illustration since the complete version is too long to be presented in this text. Nevertheless, the principle is straightforward. Depending on the class of the expression node (show in Table \ref{TAB_syntax_tree_node_types_part_1}), its type can be either determined directly or it depends on its subexpressions.
 
 The meaning of the code at lines 6-14 is the following. If a variable is bound to an expression whose type is PathType, we want to assign the variable reference expression with PathType which represents path containing exactly one step, the variable reference. Some algorithm in later sections searches for paths starting with a certain variable and we want them to include also that types of expressions.	
 
@@ -534,9 +532,9 @@ To determine types of expressions, we use already introduced function \\ \texttt
 \end{algorithm}
 
 \begin{figure}
-\label{FIG_syntax_tree_1_types}
-\caption{Sample syntax tree 1 after the static analysis of types.}
 \includegraphics[scale=0.5]{syntax_tree_1_types.eps}
+\caption{Sample syntax tree 1 after the static analysis of types.}
+\label{FIG_syntax_tree_1_types}
 \end{figure}
 
 We can also determine expression types in functions. To do this for a certain function, \texttt{analysisOfExpressionTypes} function has to be called with a function declaration node as the starting node. In this case, the function declaration node contains a subnode specifying function's formal arguments. These arguments are set as the variable context for the function body represented by another subnode.
@@ -584,9 +582,9 @@ If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \tex
 \subsection{Example}
 
 \begin{figure}
-\label{FIG_syntax_tree_1_types_type_inference}
-\caption{Example of an inference of a type from a function call.}
 \includegraphics[scale=1]{syntax_tree_1_types_type_inference.eps}
+\caption{Example of an inference of a type from a function call.}
+\label{FIG_syntax_tree_1_types_type_inference}
 \end{figure}
 
 Figure \ref{FIG_syntax_tree_1_types_type_inference} shows a fraction of the syntax tree from Figure \ref{FIG_syntax_tree_1_types}. When the inference of built-in types encounters the node marked by blue color, a statement will be inferred using the principle described in Chapter \ref{SUBSECTION_function_calls}. The node represents a call of \texttt{local:convert} function.
@@ -1143,9 +1141,9 @@ from $N_1, \dots , N_n$. The normalized score $S_i$ of $K_i$ is computed as $S^{
 
 \subsection{Example}
 \begin{figure}
-\label{FIG_syntax_tree_2}
-\caption{Sample syntax tree 2.}
 \includegraphics[scale=0.7]{syntax_tree_2.eps}
+\caption{Sample syntax tree 2.}
+\label{FIG_syntax_tree_2}
 \end{figure}
 
 Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_test_query_8} (subtree of ConstructorNode is omitted because of lack of space). In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.

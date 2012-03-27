@@ -20,8 +20,6 @@ At last, we concluded to use data provided by the XMark project \cite{xmark}. Th
 Six type statements shown in Table \ref{TAB_inferred_types} were inferred.
 
 \begin{table}
-\label{TAB_inferred_types}
-\caption{Inferred type statements.}
 \begin{tabular}{|l|}
 \hline
 \texttt{/site/open\_auctions/open\_auction/bidder/increase/text()} $\rightarrow$ \texttt{integer} \\ \hline
@@ -31,6 +29,8 @@ Six type statements shown in Table \ref{TAB_inferred_types} were inferred.
 \texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{integer} \\ \hline
 \texttt{/site/open\_auctions/open\_auction/reserve} $\rightarrow$ \texttt{decimal} \\ \hline
 \end{tabular}
+\caption{Inferred type statements.}
+\label{TAB_inferred_types}
 \end{table}
 
 Only the last inferred statement is correct. Others are incorrect, because, comparing to the data, real type of nodes selected by the paths is \texttt{decimal}, as well.
@@ -41,8 +41,6 @@ To reveal the cause of the incorrect type inference, see, for example, query in 
 Four key statements and their normalized weights shown in Table \ref{TAB_inferred_keys} were inferred.
 
 \begin{table}
-\label{TAB_inferred_keys}
-\caption{Inferred key statements.}
 \begin{tabular}{|l|c|}
 \hline
 \textbf{Key} & \textbf{Weight} \\ \hline \hline
@@ -51,9 +49,11 @@ Four key statements and their normalized weights shown in Table \ref{TAB_inferre
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
 \texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & 0.417 \\ \hline
 \end{tabular}
+\caption{Inferred key statements.}
+\label{TAB_inferred_keys}
 \end{table}
 
-The first one is correct, a buyer is not a key of closed auctions. The second one is not correct, because \texttt{id} attribute is a key of \texttt{item} elements. The third one is correct and the forth one declares \texttt{itemref} element to be a key of closed auctions, which is not true, but only with weight 0.417.
+The first one is correct, a buyer is not a key of closed auctions. The second one is not correct, because \texttt{id} attribute is a key of \texttt{item} elements. The third one is correct and the fourth one declares \texttt{itemref} element to be a key of closed auctions, which is not true, but only with weight 0.417.
 
 Closer analysis of input queries reveals that all of the statements were inferred from occurrences of the join pattern 3. That knowledge leads to the two following observations.
 
@@ -68,8 +68,6 @@ From the original data, one negative uniqueness statement was inferred:\\
 \texttt{/site/people/person/profile/interest/@category} is not unique with weight 1, and it it correct. Since, there is not such key statement inferred, the negative uniqueness statement is not used to any correction of weight.
 
 \begin{table}
-\label{TAB_inferred_keys_2}
-\caption{Key statements inferred from the extended test data.}
 \begin{tabular}{|l|c|}
 \hline
 \textbf{Key} & \textbf{Weight} \\ \hline \hline
@@ -78,6 +76,8 @@ From the original data, one negative uniqueness statement was inferred:\\
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
 \texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.417 \\ \hline
 \end{tabular}
+\caption{Key statements inferred from the extended test data.}
+\label{TAB_inferred_keys_2}
 \end{table}
 
 From data extended by the mentioned expression, another negative uniqueness was inferred:\\
@@ -93,14 +93,14 @@ As was demonstrated, larger sets of input data may lead to better results. Howev
 From the extended test data, using the modified join pattern 3 statements, key statements in Table \ref{TAB_inferred_keys_3} were inferred. Those are the best results from all test runs, though it is not clear that the modified statements will produce the best results also on other larger input data. Therefore, further tests with large sets of queries are required to determine the best settings for the algorithm. 
 
 \begin{table}
-\label{TAB_inferred_keys_3}
-\caption{Key statements inferred from the extended test data using the modified JP3 statements.}
 \begin{tabular}{|l|c|}
 \hline
 \textbf{Key} & \textbf{Weight} \\ \hline \hline
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
 \texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.333 \\ \hline
 \end{tabular}
+\caption[Key statements inferred using the modified JP3 statements.]{Key statements inferred from the extended test data using the modified JP3 statements.}
+\label{TAB_inferred_keys_3}
 \end{table}
 
-\todo[inline]{Pripojit vysledne XSD? Je dost velke. Alebo aspon relevantnu cast?}
+\todo[inline]{Pripojit vysledne XSD? Je dost velke. Alebo aspon relevantnu cast? A: Neni treba, kdyz tak do appendixu.}

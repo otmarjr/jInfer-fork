@@ -25,7 +25,7 @@ How we can obtain any information about element \texttt{E} from query \texttt{Q}
 
 In addition, these statements do not express any obligation of occurrence of elements and attributes nor clearly determine multiple occurrence of elements. We also cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
 
-On the other hand, the structural inference could be useful when the entire set of all XML documents is not available and provided XML documents do not cover the structure completely.
+On the other hand, the structural inference could be useful when the entire set of all XML documents is not available and the provided XML documents do not cover the structure completely.
 
 \section{Number of Occurrences of Elements}
 Some XQuery constructs indicate multiplicity of a particular element or limit the element to occur at most once. Consider the following query assuming variable \texttt{\$book1} is bound to a certain \texttt{book} element.
@@ -46,7 +46,7 @@ A similar approach could be applied in many other situations. Another examples a
 \end{verbatim}
 
 Function \texttt{count()} returns the number of items in a provided sequence. If the sequence is a sequence of elements, the number of these elements will probably not be limited to one. The sample query indicates that the root element \texttt{book} can contain more than one element \texttt{section}.
-An exception is usage of function \texttt{count()} in a predicate in expressions where it is used to determine if count of some nodes is greater than zero. Often, this form is used to test presence of a certain node instead of actual counting of its occurrences. In this case, the node could be still limited to occur at most once.
+An exception is usage of function \texttt{count()} in a predicate in expressions where it is used to determine if the number of some nodes is greater than zero. Often, this form is used to test presence of a certain node instead of actual counting of its occurrences. In this case, the node could be still limited to occur at most once.
 
 \begin{verbatim}
 ($s/incision)[2]/instrument
@@ -78,14 +78,14 @@ return $item
 
 Alike the previous example, an expression in \texttt{order by} clause can be evaluated to at most one item or the \emph{type error} is raised. Therefore, every element \texttt{item} contains zero or one element \texttt{num} but not more.
 
-Another similar examples are arithmetic expressions and functions accepting a sequence of at most one item. Function \texttt{zero-or-one()} will raise the \emph{type error} when supplied with a sequence of more than one item.
+Other similar examples are arithmetic expressions and functions accepting a sequence of at most one item. Function \texttt{zero-or-one()} will raise the \emph{type error} when supplied with a sequence of more than one item.
 
 Those are constructs indicating limitation to zero or one occurrence. Function \texttt{exactly-one()} works similarly to the function \texttt{zero-or-one()} but accepts only sequences of exactly one item (which are in XQuery equal to this item itself).
 
 \section{Element and Attribute Types}
 
 \subsection{XML Schema Built-in Types}
-XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the number of built-in types is 44 and inheritance is involved, such analysis may be imprecise, especially when a large enough set of XML documents is not available. This is a case when a set of XQuery queries may bring optimizations. For example, consider the following occurrences of element \texttt{a}.
+XML Schema built-in types of elements and attributes can be inferred from the XML documents by analysing their content. Since the number of built-in types is 44 and inheritance is involved, such analysis may be imprecise, especially when a large enough set of XML documents is not available. This is the case when a set of XQuery queries may bring optimizations. For example, consider the following occurrences of element \texttt{a}.
 
 \begin{verbatim}
 <a>1</a>
@@ -211,7 +211,7 @@ return <item num="{$item/@num}"
          price="{$price/price}"/>
 \end{verbatim}
 
-A common three-way join can be also utilize to infer keys and foreign keys, however, the respective XML data and their analysis would be needed to tell what is a key and what is a foreign key.
+A common three-way join can be also utilized to infer keys and foreign keys, however, the respective XML data and their analysis would be needed to tell what is a key and what is a foreign key.
 
 \subsection{Join of Self-referencing Data}
 By the term ``self-referencing data'' are meant XML elements that somehow reference items from the same set. Example of a query that operates upon such data follows.
@@ -236,7 +236,7 @@ declare function local:one_level($p as element()) as element()
 </parttree>
 \end{verbatim}
 
-Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with unspecified attribute \texttt{partof} are at the top of the recursive hierarchy while, each element with this attribute specified references an element with attribute \texttt{partid} of the same value.
+Apparently, element \texttt{part} can contain attributes \texttt{partid} and \texttt{partof}. Elements with unspecified attribute \texttt{partof} are at the top of the recursive hierarchy, while each element with this attribute specified references an element with attribute \texttt{partid} of the same value.
 
 By using a similar approach as described in \cite{Necasky:2009:DXK:1529282.1529414} attribute \texttt{partid} can be marked as a key and attribute \texttt{partof} as its foreign key.
 
@@ -280,7 +280,7 @@ Other simple examples are passing a result of basic path expression to a call of
 </results>
 \end{verbatim}
 
-According to the use of \texttt{distinct-values()} function, it can be easily seen that the author of this query assumes possible occurrence of more than one \texttt{book} elements with the same value of their \texttt{title} subelement. Thus, \texttt{title} element is not unique.
+According to the use of \texttt{distinct-values()} function, it can be easily seen that the author of this query assumes possible occurrence of more than one \texttt{book} element with the same value of their \texttt{title} subelement. Thus, \texttt{title} element is not unique.
 
 Alike, variable \texttt{\$p} is bound to a price of each title and then passed to \texttt{min()} function call. That indicates that one book title is supposed to have several prices, however, it cannot be said if a certain occurrence of element \texttt{book} can contain more than one \texttt{price} subelement.
 
@@ -311,7 +311,7 @@ For each \texttt{product} element, new element \texttt{prod} with attribute \tex
 \subsection{XML Schema \texttt{xs:sequence} and \texttt{xs:all} constructs}
 If an order of appearance of some element set, for example subelements of a certain element, is important, this can be expressed by XML Schema construct \texttt{xs:sequence}. On the other hand, \texttt{xs:all} is involved when the elements may occur in any order.
 
-If there is a large enough set of XML documents available, it should be possible to correctly detect where to use \texttt{xs:sequence} and \texttt{xs:all} constructs. However, if the inference is made using a smaller set of XML documents, it may happen that every occurrence of some element set is in the same order but the input data are not representative enough to be sure. Comparison of element order in queries can help to decide for the use of \texttt{xs:sequence}.
+If there is a large enough set of XML documents available, it should be possible to correctly detect where to use \texttt{xs:sequence} and \texttt{xs:all} constructs \todo{Reference na Vostuv clanek}. However, if the inference is made using a smaller set of XML documents, it may happen that every occurrence of some element set is in the same order but the input data are not representative enough to be sure. Comparison of element order in queries can help to decide for the use of \texttt{xs:sequence}.
 
 Every two elements in an XML document that are not siblings with the same name and none of them is the root element have the nearest common ancestor determining their relative order. If there is a lack of evidence to choose between the two constructs in the ancestor, then available queries can be searched for an order comparison of these two elements like in the following query.
 

@@ -1,7 +1,7 @@
 \chapter{Used Technologies and Definitions}
 
 \section{XML Schema}
-An XML schema refers to a description of an XML document in terms of its structure and various constraints. Commonly, the XML schema describes element and attribute names, their parent-child relations, their order and a type of their content. Other constraints often expressed in the XML schema are restrictions on numbers of occurrences of elements, specification of (non-)obligatory attributes, uniqueness and specification of keys.
+An XML schema refers to a description of an XML document in terms of its structure and various constraints. Commonly, the XML schema describes element and attribute names, their parent-child relations, their order and type of their content. Other constraints often expressed in the XML schema are restrictions on numbers of occurrences of elements, specification of (non-)obligatory attributes, uniqueness and specification of keys.
 
 Various languages have been proposed to express XML schemata. The most known are Document Type Definition (DTD) \cite{Bray:08:EML} and XML Schema Definition (XML Schema, XSD) \cite{Walmsley:04:XSP, Thompson:04:XSP, Malhotra:04:XSP} which are briefly described in the following sections. Another examples of the XML schema languages are RELAX NG \cite{relaxng} and  Schematron \cite{schematron}.
 
@@ -11,7 +11,7 @@ Validity of an XML document against its XML schema expresses whether the documen
 To demonstrate the described technologies, we introduce a part of a simple XML document (see Figure \ref{FIG_a_simple_xml_example}). It represents books in a bookstore. Each book has a mandatory id, a title, a list of authors and an optional ISBN.
 
 \begin{figure}
-\caption{A simple XML example.}
+\caption{A simple XML example}
 \label{FIG_a_simple_xml_example}
 \begin{verbatim}
 <bookstore>
@@ -37,9 +37,10 @@ To demonstrate the described technologies, we introduce a part of a simple XML d
 </bookstore>
 \end{verbatim}
 \end{figure}
+\todo[inline]{Zmensit Figure \ref{FIG_a_simple_xml_example}?}
 
 \subsection{DTD}
-Document Type Definition (DTD) expresses a structure of XML documents by declarations of elements. An element has its name and a content declared using syntax \texttt{<!ELEMENT $name$ $content$>}.
+Document Type Definition (DTD) expresses the structure of XML documents by declarations of elements. An element has its name and a content declared using syntax \texttt{<!ELEMENT $name$ $content$>}.
 
 The content of an element can be denoted by \texttt{EMPTY} for an empty element, \texttt{ANY} for any content, \texttt{(\#PCDATA)} allowing only textual content (without any other subelements), or specified using regular expressions. Names of subelements are combined using operators (\texttt{|}, \texttt{+}, \texttt{*}, \texttt{?} and \texttt{,}(comma)). To express the mixed content \texttt{\#PCDATA} can be used in an alternation list with the subelement names and this alternation has to be enclosed in \texttt{*} operator.
 
@@ -47,7 +48,7 @@ Attributes of an element are specified in an attribute list \texttt{<!ATTLIST\li
 
 \begin{itemize}
 \item \texttt{CDATA} Character data - any string.
-\item \texttt{ID} An unique identifier.
+\item \texttt{ID} A unique identifier.
 \item \texttt{IDREF} An ID reference - a value of the ID.
 \item \texttt{IDREFS} A space-separated list of ID references. 
 \item \texttt{NMTOKEN}	A valid XML name.
@@ -69,6 +70,7 @@ The DTD also provides other constructs such as declaration of entities and notat
 
 An example of DTD describing the book element from the XML example in Figure \ref{FIG_a_simple_xml_example} follows.
 
+\todo[inline]{Toto do obrazku.}
 \begin{verbatim}
 <!ELEMENT book (title, authors, isbn?)>
 <!ATTRLIST book id ID #REQUIRED>
@@ -119,7 +121,7 @@ A complex type is defined in the same way.
 \end{alltt}
 The complex types can contain many constructs. Subelements are declared using \texttt{<xs:sequence>}, \texttt{<xs:choice>} and \texttt{<xs:all>} schema elements. If the order of the subelements is significant, we use \texttt{<xs:sequence>}, where the subelements in an XML instance must occur in the same order as they are defined in the sequence. If the order is not significant, we use \texttt{<xs:all>}. Construct \texttt{<xs:choice>} is equivalent to the alternation of several elements in the DTD.
 
-Moreover, these three construct can be nested and combined, assuming the combination is not ambiguous.
+Moreover, these three constructs can be nested and combined, assuming the combination is not ambiguous.
 
 Many schema elements (including \texttt{<xs:element>}, \texttt{<xs:sequence>}, \texttt{<xs:choice>}, \texttt{<xs:all>}) can be assigned with an occurrence interval. The occurrence interval is expressed using \texttt{minOccurs} and \texttt{maxOccurs} attributes. For instance, if an element is optional, it definition can be
 \begin{alltt}
@@ -138,6 +140,8 @@ An element can have a mixed content (can contain text and other elements at the 
 The XSD language consists of many more constructs we do not mention such as substitution groups, type extensions, integrity constranints and other.
 
 The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_example} can be described using the XSD as follows.
+
+\todo[inline]{Do obrazku.}
 \begin{alltt}
 <xs:element name="book">
   <xs:complexType>
@@ -163,18 +167,18 @@ A path expression is composed of individual path steps separated by \texttt{/} a
 where all predicates are optional.
 
 \subsection{Axes}
-An axis specifies a node-set relative to the current node. The default axis is \texttt{child} selecting all children nodes of the current node. Another important axes are \texttt{attribute}, selecting attributes of the current node, and \texttt{descendant-or-self} selecting the current node and all its descendants in the tree. The remaining axes are: \texttt{ancestor}, \texttt{ancestor-or-self}, \texttt{descendant}, \texttt{following}, \texttt{following-sibling}, \texttt{namespace}, \texttt{parent}, \texttt{preceding}, \texttt{preceding-sibling}, and \texttt{self}.
+An axis specifies a node-set relative to the current node. The default axis is \texttt{child} selecting all child nodes of the current node. Another important axes are \texttt{attribute}, selecting attributes of the current node, and \texttt{descendant-or-self} selecting the current node and all its descendants in the tree. The remaining axes are: \texttt{ancestor}, \texttt{ancestor-or-self}, \texttt{descendant}, \texttt{following}, \texttt{following-sibling}, \texttt{namespace}, \texttt{parent}, \texttt{preceding}, \texttt{preceding-sibling}, and \texttt{self}.
 
 \subsection{Node Tests}
 A node test identifies node(s) within all nodes selected by an axis. It can be a node type and/or node name. Examples of the node tests follow.
 \begin{itemize}
 \item \texttt{node()} All nodes selected by an axis.
 \item \texttt{text()} Text nodes.
-\item \texttt{*} All nodes assigned with their name (element and attributes).
+\item \texttt{*} All nodes assigned with their name (elements and attributes).
 \end{itemize}
 
-\subsection{Abbrevations}
-Abbrevations for several most widely used constructs are defined as follows.
+\subsection{Abbreviations}
+Abbreviations for several most widely used constructs are defined as follows.
 \begin{itemize}
 \item \texttt{$P$/$identifier$} stands for \texttt{$P$/child::$identifier$} (child is a default axis)
 \item \texttt{$P$/@$identifier$} stands for \texttt{$P$/atribute::$identifier$}
@@ -214,7 +218,7 @@ A path returning the titles of the books written by more than one author:
 \section{XQuery}
 An XML Query Language (XQuery, version 1.0) \cite{w3c_xquery} is a language designed to query XML data. It is based on XPath 2.0. XPath 2.0 is an extension of XPath 1.0 (but not entirely compatible), adding ordered sequences, their iterations, set operations, conditional expressions, quantified expressions, and XML Schema types.
 
-In the remainder of this section, basic features of the XQuery languages are briefly described. Many query samples can be found in Chapter \ref{CHAPTER_analysis_of_xquery}.
+In the remainder of this section, basic features of the XQuery languages are briefly described. Many query examples can be found in Chapter \ref{CHAPTER_analysis_of_xquery}.
 
 \subsection{Sequences}
 A sequence is an ordered set of items. The result of each XPath 2.0 (and also XQuery 1.0) path is a sequence. An item is either an atomic value or a node. An atomic value is a value of an XML Schema simple type. A node is an instance of one of the node types.
@@ -235,7 +239,7 @@ Where clause is \\
 Expression $expr$ can (and usually should) contain the variables from the for clause(s) and the remaining clauses are executed for only those tuples of values of the for variables, that the $expr$ evaluates to true.
 
 Order by clause is \\
-\texttt{order by $expr$)} \\
+\texttt{order by $expr$} \\
 and it orders the tuples of values that passed the where clause by the specified criterion.
 
 Return clause is \\

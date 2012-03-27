@@ -67,9 +67,9 @@ The dafault value is either a literal value or one of the following specifiers.
 
 The DTD also provides other constructs such as declaration of entities and notations not mentioned in this work.
 
-An example of DTD describing the book element from the XML example in Figure \ref{FIG_a_simple_xml_example} follows.
+An example of DTD describing the book element from the XML example in Figure \ref{FIG_a_simple_xml_example} is shown in Figure \ref{FIG_a_simple_dtd_example}.
 
-\todo[inline]{Toto do obrazku.}
+\begin{figure}
 \begin{verbatim}
 <!ELEMENT book (title, authors, isbn?)>
 <!ATTRLIST book id ID #REQUIRED>
@@ -82,6 +82,9 @@ An example of DTD describing the book element from the XML example in Figure \re
 
 <!ELEMENT isbn #PCDATA>
 \end{verbatim}
+\caption{A simple DTD example.}
+\label{FIG_a_simple_dtd_example}
+\end{figure}
 
 \subsection{XSD}
 Since the XSD language, containing many constructs and features, is quite comprehensive, we will describe just its basic principles. An important fact is that each XSD instance is a valid XML document. Its root element is always \texttt{<schema>} and the XSD instance begins with the following two lines.
@@ -138,9 +141,9 @@ An element can have a mixed content (can contain text and other elements at the 
 
 The XSD language consists of many more constructs we do not mention such as substitution groups, type extensions, integrity constranints and other.
 
-The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_example} can be described using the XSD as follows.
+The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_example} can be described using the XSD as shown in Figure \ref{FIG_a_simple_xsd_example}.
 
-\todo[inline]{Do obrazku.}
+\begin{figure}
 \begin{alltt}
 <xs:element name="book">
   <xs:complexType>
@@ -148,7 +151,8 @@ The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_ex
       <xs:element name="title" type="xs:string"/>
       <xs:element name="authors>
         <xs:complexType>
-          <xs:element name="author" type="xs:string" maxOccurs="unbound"/>
+          <xs:element name="author" type="xs:string"
+           maxOccurs="unbound"/>
         </xs:complexType>
       </xs:element>
       <xs:element name="isbn" type="xs:string" minOccurs="0"/>
@@ -157,6 +161,9 @@ The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_ex
   </xs:complexContent>
 </xs:element>
 \end{alltt}
+\caption{A simple XSD example.}
+\label{FIG_a_simple_xsd_example}
+\end{figure}
 
 \section{XPath}
 XML Path Language (XPath, version 1.0) \cite{xpath} is a language to select fractions of XML documents using so-called path expressions. XPath considers an XML document as a tree of nodes. It recognizes seven types of nodes: document node, element node, attribute node, text node, namespace node, processing instruction node, and comment node. The root of the tree is the document node representing the entire XML document.

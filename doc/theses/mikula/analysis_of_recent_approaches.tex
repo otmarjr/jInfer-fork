@@ -116,11 +116,11 @@ return
 
 For a certain join, the decision for one of the cases (O1) and (O2) is made by the form of the join. The query is searched for so-called \emph{join patters}. These are \emph{for join pattern} and \emph{let join pattern} and they are proclaimed in Listing \ref{listing_for_join_pattern} and Listing \ref{listing_let_join_pattern}.
 
-Each occurrence of a join pattern is classified by application of the following rules it this specific order. The first satisfied ruled is applied. The occurrence is also assigned with a weight determining how sure the method is about the inferred statement.
+Each occurrence of a join pattern is classified by application of the following rules R1 - R5 in this specific order. The first satisfied rule is applied. The occurrence is also assigned with a weight determining how sure the method is about the inferred statement.
 
-The pattern occurrence is considered of case (O1) if it is the for join pattern (weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a target return path (weight: 1) or if aggregation function \texttt{count} is applied on a target return path (weight: 0.75), where target return paths are paths in $C_R$ starting with $\$e_2$ (see Listing \ref{listing_for_join_pattern}).
+The pattern occurrence is considered of case (O1) if it is the for join pattern (R1, weight: 1), if aggregation function \texttt{avg}, \texttt{min}, \texttt{max} or \texttt{sum} is applied on a target return path (R2, weight: 1) or if aggregation function \texttt{count} is applied on a target return path (R3, weight: 0.75), where target return paths are paths in $C_R$ starting with $\$e_2$ (see Listing \ref{listing_for_join_pattern}).
 
-Otherwise, the pattern occurrence is considered of case (O2) and the assigned weight depends on the number of target return paths. If the number is greater than one, the weight is one (weight: 1), else (the number equals zero or one) the weight is one half (weight: 0.5).
+Otherwise, the pattern occurrence is considered of case (O2) and the assigned weight depends on the number of target return paths. If the number is greater than one, the weight is one (R4, weight: 1), else (the number equals zero or one) the weight is one half (R5, weight: 0.5).
 
 \subsection{Summarization of the Results}
 

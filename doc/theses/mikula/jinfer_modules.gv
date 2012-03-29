@@ -24,7 +24,7 @@ digraph inference_process {
 	user_input [label = "User input"];
 	user_input -> Simplifier;
 	Simplifier [label = "Simplifier" style = "filled" fillcolor = "lightblue"];
-	XQueryProcessor [label = "XQuery Processor" style = "filled" fillcolor = "lightyellow"];
+	XQueryProcessor [label = "Basic XQuery Processor" style = "filled" fillcolor = "lightyellow"];
 	XQueryProcessor -> XQueryImporter;
 	XQueryImporter -> XQueryProcessor [label = <Syntax trees<br/>of the queries>];
 	Simplifier -> XQueryProcessor [label = "Simplified grammar"];

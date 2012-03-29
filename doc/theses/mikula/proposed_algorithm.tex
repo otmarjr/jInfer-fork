@@ -3,6 +3,16 @@ In this thesis we are developing an approach dealing with inference of XML schem
 
 There is an important assumption placed upon the input XQuery queries saying that each query must be syntactically and semantically correct. That means that if a query was evaluated (using a XQuery processor meeting the XQuery specification), the evaluation would not raise any error, neither static nor dynamic. In other words, each query is syntactically correct and it correctly queries the data in the XML documents.
 
+\section{Motivation}
+There is a large space of possible XQuery utilizations, but obviously, they all cannot be covered by one thesis. Hence, we had to choose only some of them. We decided to focus on an inference of XSD built-in atomic types of elements and attributes, and a key discovery.
+
+The inference of types is included in several recent works (\cite{Chidlovskii:2002:SEX:544220.544288, Hegewald:2006:XES:1129755.1130124}), but generally, it is considered a side problem and it is omitted by most of the works. Since a presence of XSD simple types in an inferred schema may be often desired or demanded, and an information on types of elements and attributes can be conveniently extracted from several XQuery constructs, we decided to incorporate the inference of simple types in our proposed algorithm and to implement it.
+
+As a second part of the algorithm, we decided to extend the only method \cite{Necasky:2009:DXK:1529282.1529414} which utilizes XQuery queries and infers keys and foreign keys. The extension is based on a more general and precise processing of queries, addition of a new case of query patterns that are used in the process, and a more accurate summary of key statements by incorporating a search for statements that reject a uniqueness of certain elements and attributes.
+
+Moreover, the original method has not been implemented and experimentally proven yet. We will do that as well.
+
+\section{Overview}
 \begin{figure}
 \includegraphics[scale=1]{algorithm.eps}
 \caption{Steps of the proposed algorithm.}

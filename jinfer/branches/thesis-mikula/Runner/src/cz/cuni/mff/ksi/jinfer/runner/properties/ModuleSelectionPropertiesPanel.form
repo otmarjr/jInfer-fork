@@ -151,7 +151,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="schemaGenerator.setRenderer(new ProjectPropsComboRenderer(nonGrammaticalInputProcessor.getRenderer()));"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="nonGrammaticalInputProcessor.setRenderer(new ProjectPropsComboRenderer(nonGrammaticalInputProcessor.getRenderer()));"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

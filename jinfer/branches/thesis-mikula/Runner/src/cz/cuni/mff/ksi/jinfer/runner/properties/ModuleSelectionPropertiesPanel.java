@@ -155,7 +155,7 @@ public class ModuleSelectionPropertiesPanel extends AbstractPropertiesPanel {
         gridBagConstraints.insets = new java.awt.Insets(2, 12, 2, 12);
         add(jLabel4, gridBagConstraints);
 
-        schemaGenerator.setRenderer(new ProjectPropsComboRenderer(nonGrammaticalInputProcessor.getRenderer()));
+        nonGrammaticalInputProcessor.setRenderer(new ProjectPropsComboRenderer(nonGrammaticalInputProcessor.getRenderer()));
         nonGrammaticalInputProcessor.setMinimumSize(new java.awt.Dimension(150, 22));
         nonGrammaticalInputProcessor.setPreferredSize(new java.awt.Dimension(150, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();

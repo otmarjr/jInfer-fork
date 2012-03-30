@@ -78,9 +78,9 @@ public class WeightedKeysCreator {
     }
 
     if (type == ClassifiedJoinPattern.Type.O1) {
-      final Key key = new Key(C, P1, new PathType(jp.getL1()));
-      final Key notKey = new Key(C, P2, new PathType(jp.getL2()));
-      final ForeignKey foreignKey = new ForeignKey(key, P2, new PathType(jp.getL2()));
+      final Key key = new Key(C, P1, jp.getL1());
+      final Key notKey = new Key(C, P2, jp.getL2());
+      final ForeignKey foreignKey = new ForeignKey(key, P2, jp.getL2());
 
       final WeightedKey wKey = new WeightedKey(key, weight);
       final WeightedKey wNotKey = new WeightedKey(notKey, weight * (-1));
@@ -90,8 +90,8 @@ public class WeightedKeysCreator {
       weightedKeys.add(wNotKey);
       weightedForeignKeys.add(wForeignKey);
     } else {
-      final Key key = new Key(C, P2, new PathType(jp.getL2()));
-      final ForeignKey foreignKey = new ForeignKey(key, P1, new PathType(jp.getL1()));
+      final Key key = new Key(C, P2, jp.getL2());
+      final ForeignKey foreignKey = new ForeignKey(key, P1, jp.getL1());
 
       final WeightedKey wKey = new WeightedKey(key, weight);
       final WeightedForeignKey wForeignKey = new WeightedForeignKey(foreignKey, weight);

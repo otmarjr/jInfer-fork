@@ -36,8 +36,8 @@ import java.util.List;
 public final class JoinWhereFormExprParser {
 
   private final boolean isExprWhereForm;
-  private PathExprNode L1;
-  private PathExprNode L2;
+  private PathType L1;
+  private PathType L2;
 
   public JoinWhereFormExprParser(final ExprNode exprNode, final String varName1, final String varName2) {
     isExprWhereForm = isWhereClauseForm(exprNode, varName1, varName2);
@@ -55,7 +55,7 @@ public final class JoinWhereFormExprParser {
    * the path L1.
    * @return Path L1.
    */
-  public PathExprNode getL1() {
+  public PathType getL1() {
     return L1;
   }
 
@@ -64,7 +64,7 @@ public final class JoinWhereFormExprParser {
    * the path L2.
    * @return Path L2.
    */
-  public PathExprNode getL2() {
+  public PathType getL2() {
     return L2;
   }
 
@@ -105,16 +105,16 @@ public final class JoinWhereFormExprParser {
     if (leftVarRefNode.getVarName().equals(var1) && rightVarRefNode.getVarName().equals(var2)) {
       List<StepExprNode> L1Steps = leftPathType.getSteps().subList(1, leftPathType.getSteps().size());
       List<StepExprNode> L2Steps = rightPathType.getSteps().subList(1, rightPathType.getSteps().size());
-      L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
-      L2 = new PathExprNode(L2Steps, InitialStep.CONTEXT);
+      L1 = new PathType(new PathExprNode(L1Steps, InitialStep.CONTEXT));
+      L2 = new PathType(new PathExprNode(L2Steps, InitialStep.CONTEXT));
       return true;
     }
 
     if (rightVarRefNode.getVarName().equals(var1) && leftVarRefNode.getVarName().equals(var2)) {
       List<StepExprNode> L2Steps = leftPathType.getSteps().subList(1, leftPathType.getSteps().size());
       List<StepExprNode> L1Steps = rightPathType.getSteps().subList(1, rightPathType.getSteps().size());
-      L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
-      L2 = new PathExprNode(L2Steps, InitialStep.CONTEXT);
+      L1 = new PathType(new PathExprNode(L1Steps, InitialStep.CONTEXT));
+      L2 = new PathType(new PathExprNode(L2Steps, InitialStep.CONTEXT));
       return true;
     }
 

@@ -61,7 +61,7 @@ public class SchemaGeneratorImpl implements SchemaGenerator {
     return Collections.emptyList();
   }
 
-    @Override
+  @Override
   public String getDisplayName() {
     return DISPLAY_NAME;
   }

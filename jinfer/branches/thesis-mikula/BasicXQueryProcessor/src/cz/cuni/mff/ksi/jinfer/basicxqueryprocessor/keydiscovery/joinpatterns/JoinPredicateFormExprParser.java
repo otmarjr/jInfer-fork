@@ -37,8 +37,8 @@ import java.util.List;
 public final class JoinPredicateFormExprParser {
 
   private boolean isExprPredicateForm;
-  private PathExprNode L1;
-  private PathExprNode L2;
+  private PathType L1;
+  private PathType L2;
 
   public JoinPredicateFormExprParser(final ExprNode exprNode, final String varName) {
     isExprPredicateForm = isPredicateForm(exprNode, varName);
@@ -56,7 +56,7 @@ public final class JoinPredicateFormExprParser {
    * the path L1.
    * @return Path L1.
    */
-  public PathExprNode getL1() {
+  public PathType getL1() {
     return L1;
   }
 
@@ -65,7 +65,7 @@ public final class JoinPredicateFormExprParser {
    * the path L2.
    * @return Path L2.
    */
-  public PathExprNode getL2() {
+  public PathType getL2() {
     return L2;
   }  
   
@@ -101,8 +101,8 @@ public final class JoinPredicateFormExprParser {
 
       if (leftVarRefNode.getVarName().equals(varName)) {
         List<StepExprNode> L1Steps = leftPathType.getSteps().subList(1, leftPathType.getSteps().size());
-        L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
-        L2 = (PathExprNode) operatorNode.getRightSide();
+        L1 = new PathType(new PathExprNode(L1Steps, InitialStep.CONTEXT));
+        L2 = new PathType((PathExprNode) operatorNode.getRightSide());
         return true;
       }
     }
@@ -112,8 +112,8 @@ public final class JoinPredicateFormExprParser {
 
       if (rightVarRefNode.getVarName().equals(varName)) {
         List<StepExprNode> L1Steps = rightPathType.getSteps().subList(1, rightPathType.getSteps().size());
-        L1 = new PathExprNode(L1Steps, InitialStep.CONTEXT);
-        L2 = (PathExprNode) operatorNode.getOperand();
+        L1 = new PathType(new PathExprNode(L1Steps, InitialStep.CONTEXT));
+        L2 = new PathType((PathExprNode) operatorNode.getOperand());
         return true;
       }
     }

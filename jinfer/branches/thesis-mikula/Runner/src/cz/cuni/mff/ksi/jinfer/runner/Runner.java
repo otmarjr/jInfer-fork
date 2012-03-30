@@ -75,7 +75,7 @@ public class Runner {
 
     @Override
     public void finished(final List<Element> grammar) {
-      Runner.this.finishedXQueryAnalyzer(grammar);
+      Runner.this.finishedNonGrammaticalInputProcessor(grammar);
     }
   };
   private final SchemaGeneratorCallback sgCallback = new SchemaGeneratorCallback() {
@@ -165,7 +165,7 @@ public class Runner {
     }, "Generating result schema");
   }
   
-  private void finishedXQueryAnalyzer(final List<Element> grammar) {
+  private void finishedNonGrammaticalInputProcessor(final List<Element> grammar) {
     runAsync(new Runnable() {
 
       @Override

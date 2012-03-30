@@ -138,7 +138,12 @@ public class JoinPatternsFinder {
         if (exprParser.isExprWhereForm()) {
           final PathType P1 = (PathType) forClauseNode.getBindingSequenceNode().getExprNode().getType(); // TODO rio I'm not sure is this is correct - if these expressions are always path types.
           final PathType P2 = (PathType) bindingNode.getBindingSequenceNode().getExprNode().getType();
-          foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
+          final PathType L1 = exprParser.getL1();
+          final PathType L2 = exprParser.getL2();
+          if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(L1)
+                  && PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(L2)) {
+            foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.JP3, forClauseNode, bindingNode, P1, P2, L1, L2));
+          }
         }
       }
       return;
@@ -162,12 +167,18 @@ public class JoinPatternsFinder {
       newSteps.set(P2WithPredicate.getSteps().size() - 1, newLastStep);
 
       final PathType P2 = new PathType(new PathExprNode(newSteps, P2WithPredicate.getInitialStep()));
-      if (ForClauseNode.class.isInstance(bindingNode)) {
-        foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
-      } else if (LetClauseNode.class.isInstance(bindingNode)) {
-        foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.LET, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
-      } else {
-        assert (false);
+      final PathType L1 = exprParser.getL1();
+      final PathType L2 = exprParser.getL2();
+          
+      if (PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(L1)
+                  && PathTypeUtils.usesOnlyChildAndDescendantAndAttributeAxes(L2)) {
+        if (ForClauseNode.class.isInstance(bindingNode)) {
+          foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.FOR, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
+        } else if (LetClauseNode.class.isInstance(bindingNode)) {
+          foundJoinPatterns.add(new JoinPattern(JoinPattern.JoinPatternType.LET, forClauseNode, bindingNode, P1, P2, exprParser.getL1(), exprParser.getL2()));
+        } else {
+          assert (false);
+        }
       }
     }
   }

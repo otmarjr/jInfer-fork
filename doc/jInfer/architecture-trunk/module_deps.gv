@@ -1,0 +1,51 @@
+digraph automaton_merge1 {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 18];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 18];
+	size = "7.08, 7.08";
+	rankdir = BT;
+
+	AutoEditor
+	Base
+	BasicDTDExporter
+	BasicIGG
+	BasicRuleDisplayer
+	BasicXQueryProcessor
+	BasicXSDExporter
+	JUNG
+	Options
+	ProjectType
+	Runner
+	TreeRuleDisplayer
+	TwoStepSimplifier
+	Welcome
+	XPathFileType
+	XQueryImporter
+	XSDImportDOM
+	XSDImporter
+	XSDImportSAX
+
+	AutoEditor -> Base
+	AutoEditor -> JUNG
+	BasicDTDExporter -> Base
+	BasicIGG -> Base
+	BasicRuleDisplayer -> Base
+	BasicXQueryProcessor -> Base
+	BasicXSDExporter -> Base
+	ProjectType -> Base
+	ProjectType -> Runner
+	Runner -> Base
+	TreeRuleDisplayer -> Base
+	TreeRuleDisplayer -> JUNG
+	TwoStepSimplifier -> AutoEditor
+	TwoStepSimplifier -> Base
+	TwoStepSimplifier -> JUNG
+	Welcome -> Base
+	Welcome -> ProjectType
+	XQueryImporter -> Base
+	XSDImportDOM -> Base
+	XSDImportDOM -> XSDImporter
+	XSDImporter -> Base
+	XSDImporter -> BasicIGG
+	XSDImportSAX -> Base
+	XSDImportSAX -> XSDImporter
+}

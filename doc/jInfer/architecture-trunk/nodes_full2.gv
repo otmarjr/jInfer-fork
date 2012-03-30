@@ -1,0 +1,210 @@
+digraph nodes_full {
+	rankdir = BT;
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10, arrowhead = empty];
+{
+	rank = same;
+
+	NamedNode 
+	[shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="SFTT1000">&lt;&lt;interface&gt;&gt;</font><br/>
+		<font face="TeXGyrePagella-Bold" point-size="10">NamedNode</font>
+	</td></tr>
+	<tr><td></td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">+getContext(): List&lt;String&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getName(): String</font></td></tr>
+			<tr><td align="left" port="method3"><font face="SFTT1000">+getMetadata(): Map&lt;String, Object&gt;</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+}
+
+{
+	rank = same;
+	ContentNode [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="SFTT1000">&lt;&lt;interface&gt;&gt;</font><br/>
+		<font face="TeXGyrePagella-Bold" point-size="10">ContentNode</font>
+	</td></tr>
+	<tr><td>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">getContentType(): String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">getContent(): List&lt;String&gt;</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+
+	AbstractNamedNode [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="TeXGyrePagella-BoldItalic" point-size="10">AbstractNamedNode</font>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">-context: List&lt;String&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">-name: String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">-metadata: Map&lt;String, Object&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">#mutable: boolean</font></td></tr>
+		</table>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">+getContext(): List&lt;String&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getName(): String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+setName(name: String)</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getMetadata(): Map&lt;String, Object&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+isMutable(): boolean</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+setImmutable()</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+toString(): String</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+	
+	StructuralNode [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="SFTT1000">&lt;&lt;interface&gt;&gt;</font><br align="center"/>
+		<font face="TeXGyrePagella-Bold" point-size="10">StructuralNode</font>
+	</td></tr>
+	<tr><td>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left" port="gettype"><font face="SFTT1000">+getType(): StructuralNodeType</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+isElement(): boolean</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+isSimpleData(): boolean</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+
+	StructuralNodeType [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="SFTT1000">&lt;&lt;enum&gt;&gt;</font><br/>
+		<font face="TeXGyrePagella-Bold" point-size="10">StructuralNodeType</font>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">+ELEMENT</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+SIMPLE_DATA</font></td></tr>
+		</table>
+	</td></tr>
+	<tr><td>
+	</td></tr>
+  </table>>];
+  
+}
+
+	Attribute [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="TeXGyrePagella-Bold" point-size="10">Attribute</font>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">-contentType: String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">-content: List&lt;String&gt;</font></td></tr>
+		</table>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">+getContentType(): String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getContent(): List&lt;String&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+toString(): String</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+  
+	AbstractStructuralNode [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="TeXGyrePagella-BoldItalic" point-size="10">AbstractStructuralNode</font>
+	</td></tr>
+	<tr><td>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left" port="gettype"><font face="SFTT1000">+&lt;&lt;abstract&gt;&gt; getType(): StructuralNodeType</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+isElement(): boolean</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+isSimpleData(): boolean</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+toString(): String</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+
+	SimpleData [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="TeXGyrePagella-Bold" point-size="10">SimpleData</font>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">-contentType: String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">-content: List&lt;String&gt;</font></td></tr>
+			</table>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left" port="gettype"><font face="SFTT1000">+getType(): StructuralNodeType</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getContentType(): String</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getContent(): List&lt;String&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getMutable(): SimpleData</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+setImmutable()</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+toString(): String</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+
+	Element [shape = plaintext, label = <
+	<table cellspacing="0" cellborder="1" border="0">
+	<tr><td>
+		<font face="TeXGyrePagella-Bold" point-size="10">Element</font>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left"><font face="SFTT1000">-subnodes: Regexp&lt;AbstractStructuralNode&gt;</font></td></tr>
+			<tr><td align="left" port="attributes"><font face="SFTT1000">-attributes: List&lt;Attribute&gt;</font></td></tr>
+		</table>
+	</td></tr>
+	<tr><td cellpadding="0">
+		<table cellspacing="0" cellborder="0" border="0">
+			<tr><td align="left" port="gettype"><font face="SFTT1000">+getType(): StructuralNodeType</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getSubnodes(): Regexp&lt;AbstractStructuralNode&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getAttributes(): List&lt;Attribute&gt;</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+getMutable(): Element</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+setImmutable()</font></td></tr>
+			<tr><td align="left"><font face="SFTT1000">+toString(): String</font></td></tr>
+		</table>
+	</td></tr>
+  </table>>];
+	
+	StructuralNode -> NamedNode [label = "extends"];
+	ContentNode -> NamedNode [label = "extends"];
+	AbstractNamedNode -> NamedNode [label = "implements", style = dashed];
+	
+	AbstractStructuralNode -> StructuralNode [label = "implements", style = dashed];
+	AbstractStructuralNode -> AbstractNamedNode [label = "extends"];
+	
+	Element -> AbstractStructuralNode [label = "extends"];
+	SimpleData -> AbstractStructuralNode [label = "extends"];
+	SimpleData -> ContentNode [label = "implements", style = dashed];
+	
+	Attribute -> AbstractNamedNode [label = "extends"];
+	Attribute -> ContentNode [label = "implements", style = dashed];
+
+/*	
+	StructuralNodeType -> StructuralNode:gettype [arrowhead = "odiamond"];
+	StructuralNodeType -> AbstractStructuralNode:gettype [arrowhead = "odiamond"];
+	StructuralNodeType -> Element:gettype [arrowhead = "odiamond"];
+	StructuralNodeType -> SimpleData:gettype [arrowhead = "odiamond"];
+	Attribute -> Element:attributes [arrowhead = "odiamond"];
+	*/
+}
+

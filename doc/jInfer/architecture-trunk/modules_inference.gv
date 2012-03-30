@@ -1,0 +1,16 @@
+digraph modules_inference {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	rankdir = LR;
+
+	BasicIGG
+	TwoStepSimplifier
+	BasicXQueryProcessor
+	BasicDTDExporter
+	BasicXSDExporter
+
+	BasicIGG -> TwoStepSimplifier
+	TwoStepSimplifier -> BasicXQueryProcessor
+	BasicXQueryProcessor -> BasicDTDExporter
+	BasicXQueryProcessor -> BasicXSDExporter
+}

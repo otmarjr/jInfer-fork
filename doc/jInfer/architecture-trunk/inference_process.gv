@@ -1,0 +1,33 @@
+digraph inference_process {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+
+	node [style= rounded];
+	input_xml [label = "XML"];
+	input_dtd [label = "DTD"];
+	input_xpath [label = "XPath"];
+	input_misc [label ="..."];
+	input_xml -> 1;
+	input_dtd -> 1;
+	input_xpath -> 1;
+	input_misc -> 1;
+	1 [label = "Initial Grammar Generator" style = "filled" fillcolor = "grey"];
+	1 -> 2 [label = "Initial Grammar"];
+	user_input [label = "User input"];
+	user_input -> 2;
+	2 [label = "Simplifier" style = "filled" fillcolor = "grey"];
+	2 -> 3 [label = "Simplified grammar"];
+	input_xquery [label = "XQuery"];
+	input_misc2 [label = "..."];
+	input_xquery -> 3;
+	input_misc2 -> 3;
+	3 [label = "Non-grammatical Input Processor" style = "filled" fillcolor = "grey"];
+	4 [label = "Schema Generator" style = "filled" fillcolor = "grey"];
+	3 -> 4 [label = "Simplified grammar\nmerged with an information\n from non-gramm. inputs"];
+	output_dtd [label = "DTD"];
+	output_xsd [label = "XSD"];
+	output_misc [label = "..."];
+	4 -> output_dtd;
+	4 -> output_xsd;
+	4 -> output_misc;
+}

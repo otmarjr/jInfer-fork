@@ -1,0 +1,49 @@
+digraph interfaces_nodes {
+	node [shape = rectangle, fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	edge [fontname = "TeXGyrePagella-Regular", fontsize = 10];
+	node [style = rounded];
+
+	person [label = "person \n [Element]"];
+	person -> person_attributes [label = "member"];
+	person -> person_subnodes [label = "member"];
+	
+	person_attributes [label = "attributes \n [List<Attribute>]"];
+	person_attributes -> name [label = "list item"];
+	name [label = "name \n [Attribute]"];
+
+	person_attributes -> surname [label = "list item"];
+	surname [label ="surname \n [Attribute]"];	
+	
+	person_subnodes [label = "subnodes \n [Regexp<T>] \n CONCATENATION"];
+	person_subnodes -> person_subnodes_children [label = "member"];
+	
+	person_subnodes_children [label = "children \n [List<Regexp<T>>]"];
+	person_subnodes_children -> info [label = "list item"];
+	person_subnodes_children -> more [label = "list item"];
+	
+	info [label = "info \n [Element]"];
+	info -> info_attributes [label = "member"];
+	info -> info_subnodes [label = "member"];
+
+	info_attributes [label = "attributes \n [List<Attribute>]"];
+	info_subnodes [label = "subnodes \n [Regexp<T>] \n CONCATENATION"];
+	info_subnodes -> info_subnodes_children [label = "member"];
+	
+	info_subnodes_children [label = "children \n [List<Regexp<T>>]"];
+	info_subnodes_children -> some_text [label = "list item"];
+	info_subnodes_children -> note [label = "list item"];
+	
+	some_text [label = "Some text \n [SimpleData]"];
+	
+	note [label = "note \n [Element]"];
+	note -> note_attributes [label = "member"];
+	note -> note_subnodes [label = "member"];
+	note_attributes [label = "attributes \n [List<Attribute>]"];
+	note_subnodes [label = "subnodes \n [Regexp<T>] \n CONCATENATION"];
+	
+	more [label = "more \n [Element]"];
+	more -> more_attributes [label = "member"];
+	more -> more_subnodes [label = "member"];
+	more_attributes [label = "attributes \n [List<Attribute>]"];
+	more_subnodes [label = "subnodes \n [Regexp<T>] \n CONCATENATION"];
+}

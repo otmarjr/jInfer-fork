@@ -25,6 +25,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.FileUtils;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.Processor;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.syntaxtree.nodes.ModuleNode;
 import cz.cuni.mff.ksi.jinfer.base.utils.CloneHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RuleDisplayerHelper;
@@ -159,7 +160,11 @@ public class IGGeneratorImpl implements IGGenerator {
           ret.addAll(rules);
         }
         else {
-          LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
+          // TODO rio This is a hack to not print errors that XQuery files do not
+          // have defined mapping.
+          if (!FileUtils.getExtension(f.getAbsolutePath()).equals("xq")){
+            LOG.error("File extension does not have a corresponding mapping: " + f.getAbsolutePath());
+          }
         }
       } catch (final FileNotFoundException e) {
         throw new RuntimeException("File not found: " + f.getAbsolutePath(), e);

@@ -16,14 +16,10 @@
  */
 package cz.cuni.mff.ksi.jinfer.runner;
 
-import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier;
-import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SimplifierCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import java.util.List;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.OutputHandler;
+import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.*;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
@@ -31,7 +27,6 @@ import cz.cuni.mff.ksi.jinfer.runner.properties.ModuleSelectionPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.runner.options.RunnerPanel;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.openide.DialogDisplayer;
@@ -60,6 +55,7 @@ public class Runner {
   private static final Logger LOG = Logger.getLogger(Runner.class);
   private final IGGenerator igGenerator;
   private final Simplifier simplifier;
+  private final NonGrammaticalInputProcessor nonGrammaticalInputProcessor;
   private final SchemaGenerator schemaGenerator;
   private final IGGeneratorCallback iggCallback = new IGGeneratorCallback() {
 
@@ -73,6 +69,13 @@ public class Runner {
     @Override
     public void finished(final List<Element> grammar) {
       Runner.this.finishedSimplifier(grammar);
+    }
+  };
+  private final NonGrammaticalInputProcessorCallback nonGrammticalInputProcessorCallback = new NonGrammaticalInputProcessorCallback() {
+
+    @Override
+    public void finished(final List<Element> grammar) {
+      Runner.this.finishedNonGrammaticalInputProcessor(grammar);
     }
   };
   private final SchemaGeneratorCallback sgCallback = new SchemaGeneratorCallback() {
@@ -95,6 +98,8 @@ public class Runner {
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SIMPLIFIER_PROP));
     schemaGenerator = ModuleSelectionHelper.lookupImpl(SchemaGenerator.class,
             projectProperties.getProperty(ModuleSelectionPropertiesPanel.SCHEMAGEN_PROP, ModuleSelectionPropertiesPanel.SCHEMAGEN_DEFAULT));
+    nonGrammaticalInputProcessor = ModuleSelectionHelper.lookupImpl(NonGrammaticalInputProcessor.class,
+            projectProperties.getProperty(ModuleSelectionPropertiesPanel.NON_GRAMMATICAL_INPUT_PROCESSOR_PROP, ModuleSelectionPropertiesPanel.NON_GRAMMATICAL_INPUT_PROCESSOR_DEFAULT));
   }
 
   /**
@@ -150,7 +155,7 @@ public class Runner {
       public void run() {
         try {
           RunningProject.setNextModuleCaps(null);
-          schemaGenerator.start(grammar, sgCallback);
+          nonGrammaticalInputProcessor.start(RunningProject.getActiveProject().getLookup().lookup(Input.class), grammar, nonGrammticalInputProcessorCallback);
         } catch (final InterruptedException e) {
           interrupted();
         } catch (final Throwable t) {
@@ -158,6 +163,23 @@ public class Runner {
         }
       }
     }, "Generating result schema");
+  }
+  
+  private void finishedNonGrammaticalInputProcessor(final List<Element> grammar) {
+    runAsync(new Runnable() {
+
+      @Override
+      public void run() {
+        try {
+          RunningProject.setNextModuleCaps(null);
+          schemaGenerator.start(grammar, sgCallback);
+        } catch (final InterruptedException e) {
+          interrupted();
+        } catch (final Throwable t) {
+          unexpected(t);
+        }
+      }
+    }, "Analyzing XQuery queries");
   }
 
   private void finishedSchemaGenerator(final String schema, final String extension) {

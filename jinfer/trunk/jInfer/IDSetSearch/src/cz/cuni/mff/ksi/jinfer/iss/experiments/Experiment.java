@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.iss.experiments;
 
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ExperimentListener;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.HeuristicCallback;
 import cz.cuni.mff.ksi.jinfer.iss.experiments.interfaces.ImprovementHeuristic;
@@ -31,7 +32,6 @@ import cz.cuni.mff.ksi.jinfer.base.interfaces.Pair;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGeneratorCallback;
 import cz.cuni.mff.ksi.jinfer.base.objects.Input;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.ModuleSelectionHelper;
 import cz.cuni.mff.ksi.jinfer.iss.utils.MappingUtils;

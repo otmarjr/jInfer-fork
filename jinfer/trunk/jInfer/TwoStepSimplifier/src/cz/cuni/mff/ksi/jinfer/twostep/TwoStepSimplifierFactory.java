@@ -137,14 +137,14 @@ public class TwoStepSimplifierFactory implements Simplifier {
   }
 
   @Override
-  public void start(final List<Element> initialGrammar, final SimplifierCallback callback) throws InterruptedException {
+  public void start(final List<Element> grammar, final SimplifierCallback callback) throws InterruptedException {
     final TwoStepSimplifier simplifier = new TwoStepSimplifier(
             getClustererFactory(),
             getClusterProcessorFactory(),
             getRegularExpressionCleanerFactory(),
             getContentInferrerFactory());
-    callback.finished(
-            simplifier.simplify(initialGrammar));
+    final List<Element> simplifiedGrammar = simplifier.simplify(grammar);
+    callback.finished(simplifiedGrammar);
   }
 
   @Override

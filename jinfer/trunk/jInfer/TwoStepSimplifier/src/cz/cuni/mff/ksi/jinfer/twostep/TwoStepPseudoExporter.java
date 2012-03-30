@@ -70,7 +70,6 @@ public class TwoStepPseudoExporter implements SchemaGenerator {
   @Override
   public void start(final List<Element> grammar,
           final SchemaGeneratorCallback callback) throws InterruptedException {
-
     LOG.info("got " + grammar.size() + " rules.");
 
     // sort elements topologically

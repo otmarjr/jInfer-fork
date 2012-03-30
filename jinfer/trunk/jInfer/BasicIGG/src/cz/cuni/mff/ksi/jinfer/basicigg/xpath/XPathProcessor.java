@@ -53,7 +53,7 @@ public class XPathProcessor implements Processor<Element> {
 
   @Override
   public boolean processUndefined() {
-    return true;
+    return false;
   }
 
   @Override

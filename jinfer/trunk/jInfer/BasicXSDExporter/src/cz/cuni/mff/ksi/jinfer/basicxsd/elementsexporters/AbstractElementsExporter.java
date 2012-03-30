@@ -21,6 +21,8 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.types.NormalizedPathType;
+import cz.cuni.mff.ksi.jinfer.base.objects.xsd.XSDBuiltinAtomicType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
@@ -32,8 +34,13 @@ import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.ForeignKey;
+import cz.cuni.mff.ksi.jinfer.base.objects.xquery.keys.Key;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import org.apache.log4j.Logger;
 
 /**
@@ -48,6 +55,12 @@ public abstract class AbstractElementsExporter {
   protected final Indentator indentator;
   protected final String typenamePrefix;
   protected final String typenamePostfix;
+  private int keyNumber = 1;
+  private final Map<Key, String> keyNames = new HashMap<Key, String>();
+  
+  private static final String XQUERY_PROCESSOR_METADATA_TYPE = "xquery_processor_type";
+  private static final String XQUERY_PROCESSOR_METADATA_KEYS = "xquery_processor_keys";
+  private static final String XQUERY_PROCESSOR_METADATA_FOREIGN_KEYS = "xquery_processor_foreign_keys";
 
   /**
    * Constructor.
@@ -88,14 +101,21 @@ public abstract class AbstractElementsExporter {
     // If its type is one of built-in types we don't have much work to do
     if (TypeUtils.isOfBuiltinType(element)) {
       final String type = TypeUtils.getBuiltinType(element);
-
-      indentator.append(" type=\"" + type + '"');
+      final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_TYPE);
+      
+      if (xqueryType == null) {
+        indentator.append(" type=\"" + type + '"');
+      } else {
+        LOG.info("Built-in type of element \"" + element.getName() + "\" inferred by the simplifier: " + type);
+        LOG.info("Built-in type of element \"" + element.getName() + "\" inferred by the xquery analyzer: xs:" + xqueryType);
+        indentator.append(" type=\"xs:" + xqueryType + '"');
+      }
       indentator.append(OccurencesProcessor.processOccurrences(interval));
       indentator.append("/>\n");
       return;
     }
 
-    // If element's type is global set it and finish.
+    // If element's type is global set it, set keys and finish.
     if (preprocessingResult.isElementGlobal(element.getName())) {
       indentator.append(" type=\"");
       indentator.append(typenamePrefix);
@@ -103,7 +123,16 @@ public abstract class AbstractElementsExporter {
       indentator.append(typenamePostfix);
       indentator.append("\"");
       indentator.append(OccurencesProcessor.processOccurrences(interval));
-      indentator.append("/>\n");
+      if (hasElementKeys(element)) {
+        indentator.append(">\n");
+        indentator.increaseIndentation();
+        processElementKeys(element);
+        processElementForeignKeys(element);
+        indentator.decreaseIndentation();
+        indentator.indent("</xs:element>\n");
+      } else {
+        indentator.append("/>\n");
+      }
       return;
     }
 
@@ -144,6 +173,9 @@ public abstract class AbstractElementsExporter {
       default:
         throw new IllegalStateException("Unknown or illegal enum member.");
     }
+    
+    processElementKeys(element);
+    processElementForeignKeys(element);
 
     indentator.decreaseIndentation();
 
@@ -165,6 +197,62 @@ public abstract class AbstractElementsExporter {
 
     processElementAttributes(element);
   }
+  
+  protected boolean hasElementKeys(final Element element) {
+    final List<Key> keys = (List<Key>)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_KEYS);
+    
+    if (BaseUtils.isEmpty(keys)) {
+      return false;
+    } else {    
+      return true;
+    }
+  }
+  
+  protected void processElementKeys(final Element element) {
+    final List<Key> keys = (List<Key>)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_KEYS);
+    
+    if (keys == null) {
+      return;
+    }
+    
+    for (final Key key : keys) {
+      final NormalizedPathType targetPath = key.getTargetPath();
+      final NormalizedPathType keyPath = key.getKeyPath();
+      
+      keyNames.put(key, "key" + keyNumber);
+
+      indentator.indent("<xs:key name=\"key" + keyNumber + "\">\n");
+      ++keyNumber;
+      indentator.increaseIndentation();
+      indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + keyPath.toString() + "\"/>\n");
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:key>\n");
+    }
+  }
+  
+  protected void processElementForeignKeys(final Element element) {
+    final Set<ForeignKey> fKeys = (Set<ForeignKey>)element.getMetadata().get(XQUERY_PROCESSOR_METADATA_FOREIGN_KEYS);
+    
+    if (fKeys == null) {
+      return;
+    }
+    
+    for (final ForeignKey fKey : fKeys) {
+      final NormalizedPathType targetPath = fKey.getForeignTargetPath();
+      final NormalizedPathType keyPath = fKey.getForeignKeyPath();
+      
+      final String keyName = keyNames.get(fKey.getKey());
+      assert(keyName != null);
+
+      indentator.indent("<xs:keyref name=\"" + keyName + "Ref\" refer=\"" + keyName + "\">\n");
+      indentator.increaseIndentation();
+      indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");
+      indentator.indent("<xs:field xpath=\"" + keyPath.toString() + "\"/>\n");
+      indentator.decreaseIndentation();
+      indentator.indent("</xs:keyref>\n");
+    }
+  }
 
   private void processElementAttributes(final Element element) throws InterruptedException {
     final List<Attribute> attributes = element.getAttributes();
@@ -177,7 +265,15 @@ public abstract class AbstractElementsExporter {
         indentator.append(attribute.getName());
 
         final String type = TypeUtils.getBuiltinAttributeType(attribute);
-        indentator.append("\" type=\"" + type + '"');
+        final XSDBuiltinAtomicType xqueryType = (XSDBuiltinAtomicType)attribute.getMetadata().get(XQUERY_PROCESSOR_METADATA_TYPE);
+      
+        if (xqueryType == null) {
+          indentator.append("\" type=\"" + type + '"');
+        } else {
+          LOG.info("Built-in type of attribute \"" + attribute.getName() + "\" inferred by the simplifier: " + type);
+          LOG.info("Built-in type of attribute \"" + attribute.getName() + "\" inferred by the xquery analyzer: xs:" + xqueryType);
+          indentator.append("\" type=\"xs:" + xqueryType + '"');
+        }
 
         if (attribute.getMetadata().containsKey(IGGUtils.REQUIRED)) {
           indentator.append(" use=\"required\"");

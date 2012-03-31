@@ -621,8 +621,6 @@ A little complication is a recursion. A simple algorithm of that kind may never 
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.
 
 \subsection{Auxiliary Functions} \label{step_4_auxiliary_functions}
-\todo[inline]{Ako je to s osou descendant or self pri hladani join patternov? Orig. metoda o nej explicitne nehovori, ale zrejme pouziva}
-\todo[inline]{Ako je to s attribute osou v L cestach join patternov? Atribut predsa moze byt kluc.}
 Firstly, we define some auxiliary functions used by algorithms in this chapter.
 
 Function \texttt{usesOnlyChildAndDescendantAxes} in Algorithm \ref{ALG_function_uses_only_child_and_descendant_axes} takes an instance of PathType as its arguments and returns true if the path uses only child, descendant and descendant or self axes. Otherwise, it returns false. Function \texttt{usesOnlyChildAnd\-DescendantAndAttributeAxes} is the same except it allows also attributes axis.

@@ -92,7 +92,7 @@ public class Merger {
     writeInferredTypesToGrammar(topologicallySortedGrammar, inferredTypes);
   }
 
-  /**
+  /**<person>{$person/@id}</person><item>{$item/@id}</item><price>{$price}</price>
    * Merges specified inferred key statements with the grammar.
    * @param keys
    * @param foreignKeys
@@ -136,7 +136,7 @@ public class Merger {
       for (final AbstractStructuralNode node : contextSet.getNodes()) {
         final Map<String, Object> metadata = node.getMetadata();
         final XSDBuiltinAtomicType xsdType = (XSDBuiltinAtomicType) metadata.get(METADATA_KEY_TYPE);
-        if (type == null) {
+        if (xsdType == null) {
           metadata.put(METADATA_KEY_TYPE, inferredAtomicType);
           metadata.put(METADATA_KEY_HAS_PREDICATES, hasPredicates);
         } else {

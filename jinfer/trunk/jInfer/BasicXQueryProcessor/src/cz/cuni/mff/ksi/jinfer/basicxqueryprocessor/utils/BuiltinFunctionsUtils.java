@@ -40,6 +40,7 @@ public class BuiltinFunctionsUtils {
     builtinFunctionTypes.put("data", new UnknownType());
     builtinFunctionTypes.put("doc", new NodeType(NodeType.NodeTypeCategory.DOCUMENT, Cardinality.ONE));
     builtinFunctionTypes.put("min", new UnknownType());
+    builtinFunctionTypes.put("max", new UnknownType());
     builtinFunctionTypes.put("distinct-values", new UnknownType());
     builtinFunctionTypes.put("count", new XSDType(XSDBuiltinAtomicType.INTEGER, Cardinality.ONE));
     builtinFunctionTypes.put("exists", new XSDType(XSDBuiltinAtomicType.BOOLEAN, Cardinality.ONE));
@@ -136,7 +137,7 @@ public class BuiltinFunctionsUtils {
       final ItemTypeNode itemTypeNode = new AtomicTypeNode("xs:string");
       final ParamNode paramNode = new ParamNode("uri", new TypeNode(Cardinality.ZERO_OR_ONE, itemTypeNode));
       paramNodes.add(paramNode);
-    } else if (functionName.equals("min") || functionName.equals("distinct-values")) {
+    } else if (functionName.equals("min") || functionName.equals("max") || functionName.equals("distinct-values")) {
       final ParamNode paramNode1 = new ParamNode("arg", new TypeNode(Cardinality.ZERO_OR_MORE));
       final ItemTypeNode itemTypeNode2 = new AtomicTypeNode("xs:string");
       final ParamNode paramNode2 = new ParamNode("collation", new TypeNode(Cardinality.ONE, itemTypeNode2));

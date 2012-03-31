@@ -74,15 +74,15 @@ public class NegativeUniquenessFinder {
   }
   
   private void processRecursive(final XQNode node) {
+    rejectionOfUniqueness_aggregationFunctions(node);
+    rejectionOfUniqueness_comparisonWithAConstant(node);
+    
     final List<XQNode> subnodes = node.getSubnodes();
     if (subnodes != null) {
       for (final XQNode subnode : node.getSubnodes()) {
         processRecursive(subnode);
       }
     }
-
-    rejectionOfUniqueness_aggregationFunctions(node);
-    rejectionOfUniqueness_comparisonWithAConstant(node);
   }
 
   private void rejectionOfUniqueness_aggregationFunctions(final XQNode node) {
@@ -131,7 +131,7 @@ public class NegativeUniquenessFinder {
 
     final WhereClauseNode whereClauseNode = flworNode.getWhereClauseNode();
     if (whereClauseNode != null) {
-      rejectionOfUniqueness_processWhere(flworNode, forVars);
+      rejectionOfUniqueness_processWhere(whereClauseNode.getExprNode(), forVars);
     }
   }
 
@@ -141,7 +141,10 @@ public class NegativeUniquenessFinder {
     }
 
     final Operator op = ((OperatorNode) whereExprNode).getOperator();
-    if (op == Operator.GEN_EQUALS) {
+    if (op == Operator.AND) {
+      rejectionOfUniqueness_processWhere(((OperatorNode)whereExprNode).getOperand(), forVars);
+      rejectionOfUniqueness_processWhere(((OperatorNode)whereExprNode).getRightSide(), forVars);
+    } else if (op == Operator.GEN_EQUALS) {
       final ExprNode leftOperand = ((OperatorNode) whereExprNode).getOperand();
       final ExprNode rightOperand = ((OperatorNode) whereExprNode).getRightSide();
 

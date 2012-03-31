@@ -56,6 +56,7 @@ public abstract class AbstractElementsExporter {
   protected final String typenamePrefix;
   protected final String typenamePostfix;
   private int keyNumber = 1;
+  private int foreignKeyNumber = 1;
   private final Map<Key, String> keyNames = new HashMap<Key, String>();
   
   private static final String XQUERY_PROCESSOR_METADATA_TYPE = "xquery_processor_type";
@@ -245,7 +246,8 @@ public abstract class AbstractElementsExporter {
       final String keyName = keyNames.get(fKey.getKey());
       assert(keyName != null);
 
-      indentator.indent("<xs:keyref name=\"" + keyName + "Ref\" refer=\"" + keyName + "\">\n");
+      indentator.indent("<xs:keyref name=\"" + "keyRef" + foreignKeyNumber + '_' + keyName + "\" refer=\"" + keyName + "\">\n");
+      ++foreignKeyNumber;
       indentator.increaseIndentation();
       indentator.indent("<xs:selector xpath=\"" + targetPath.toString() + "\"/>\n");
       indentator.indent("<xs:field xpath=\"" + keyPath.toString() + "\"/>\n");

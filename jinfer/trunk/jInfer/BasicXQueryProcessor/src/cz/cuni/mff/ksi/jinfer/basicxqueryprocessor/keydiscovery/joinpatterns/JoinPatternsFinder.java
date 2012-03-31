@@ -146,7 +146,6 @@ public class JoinPatternsFinder {
           }
         }
       }
-      return;
     }
 
     // Check for and let join patterns.

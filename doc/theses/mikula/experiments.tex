@@ -1,7 +1,11 @@
 \chapter{Experiments} \label{CHAPTER_experiments}
 In this chapter we describe how we performed experiments with the implementation and what problems we faced.
 
-\section{Test Data}
+We made two test scenarios; one dealing with input data that were not made for purposes of this experiments, and the other extending the first dataset by data created for better test coverage.
+
+\section{Test Scenario A}
+
+\subsection{Test Data}
 To get meaningful results of the experiments, test data should be composed of XML documents, which are instances of a certain, possibly not known, XML schema, and a set of XQuery queries which query the XML documents. The amount of the XML data does not have to be large. On the other hand, the set of queries should be large (at least hundreds of queries) and the queries should be real, not artificially made.
 
 In a search for such test data, we have not succeeded. Large sets of XML data are available, but large sets of XQuery queries are not or it is not a simple task to obtain them.
@@ -14,9 +18,9 @@ Another considered possibility was to obtain some set of XML data and create que
 
 At last, we concluded to use data provided by the XMark project \cite{xmark}. They are attached in Appendix \ref{APPENDIX_test_data} and they consists of automatically generated XML data and a set of twenty XQuery queries related to the data. Although, this set is also very small, it is more or less real and we did not known the set in the process of developing the algorithm.
 
-\section{Results}
+\subsection{Results}
 
-\subsection{Type Inference}
+\subsubsection{Type Inference}
 Six type statements shown in Table \ref{TAB_inferred_types} were inferred.
 
 \begin{table}
@@ -37,7 +41,7 @@ Only the last inferred statement is correct. Others are incorrect, because, comp
 
 To reveal the cause of the incorrect type inference, see, for example, query in Listing \ref{listing_test_query_12}. In the where clause, values of \texttt{/site/people/person/profile/\-@income} are compared to the integer literal constant \texttt{50000}. From this expression, it is not possible to infer the type correctly. The problem is that this is the only inferred statement. Better results can be achieved by providing a larger set of input queries, containing also expressions that can be exploited to infer correct statements. Then the verification with data can be incorporated to choose the correct statements.
 
-\subsection{Key Discovery}
+\subsubsection{Key Discovery}
 Four key statements and their normalized weights shown in Table \ref{TAB_inferred_keys} were inferred.
 
 \begin{table}
@@ -103,4 +107,91 @@ From the extended test data, using the modified join pattern 3 statements, key s
 \label{TAB_inferred_keys_3}
 \end{table}
 
-\todo[inline]{Pripojit vysledne XSD? Je dost velke. Alebo aspon relevantnu cast? A: Neni treba, kdyz tak do appendixu.}
+\section{Test Scenario B}
+As mentioned before, the previous test scenario involves only data with JP3 occurrences, and therefore, it only tests the extension of the original method, while the original method itself remains untested. To correct it, we add several new test queries created by ourselves.
+
+\subsection{Test Data}
+
+\begin{lstlisting}[caption=Test query B1 containing a for join pattern occurrence., frame=single, label=listing_test_query_b1]
+for $item in /site/regions/europe/item
+let $closed_auctions := /site/closed_auctions/closed_auction[itemref/@item = $item/@id]
+return <item><id>{$item/@id}</id><max-price>{max($closed_auctions/price)}</max-price></item>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Test query B2 containing a let join pattern occurrence., frame=single, label=listing_test_query_b2]
+for $open_auction in /site/open_auctions/open_auction
+let $item := /site/regions/europe/item[@id = $open_auction/itemref/@item]
+return $item/personref/@person
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Test query B3 containing let join pattern and JP3 occurrences., frame=single, label=listing_test_query_b3, numbers=left, numberstyle=\tiny]
+for $person in /site/people/person
+where $person/profile/@income < 100.00 and $person/profile/gender = "m"
+return
+    <list>{
+        for $auction in /site/closed_auctions/closed_auction
+        let $item := /site//item[@id = $auction/itemref/@item]
+        let $price := $auction/price
+        where $auction/buyer/@person = $person/@id
+        return
+            <record><person>{$person/@id}</person><item>{$item/@id}</item><price>{$price}</price></record>
+    }</list>
+\end{lstlisting}
+
+In this scenario, we use test data from the Test Scenario A extended by queries in Listings \ref{listing_test_query_b1}, \ref{listing_test_query_b2}, and \ref{listing_test_query_b3}.
+
+\todo[inline]{Mozno popisat aj vyznam tychto dotazov?}
+
+The first two ones are simple queries containing one join pattern occurrence each. The third one contains occurrences of let join pattern (binding clauses at lines 5 and 6) and JP3 (binding clauses at lines 1 and 5, and where clause at line 8), two expressions exploitable by the inference of types (both at line 2) and one negative uniqueness statement of the comparison-with-a-constant form (comparison with \texttt{"m"} at line 2). Thus, the third query contains instances of all types of the constructs utilized by our method.
+
+\subsubsection{Results}
+
+\begin{table}
+\begin{tabular}{|l|}
+\hline
+\texttt{/site/open\_auctions/open\_auction/bidder/increase/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/closed\_auctions/closed\_auction/price/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/open\_auctions/open\_auction/initial/text()} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{integer} \\ \hline
+\texttt{/site/open\_auctions/open\_auction/reserve} $\rightarrow$ \texttt{decimal} \\ \hline
+\texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{decimal} \\ \hline
+\texttt{/site/people/person/profile/gender} $\rightarrow$ \texttt{string} \\ \hline
+\end{tabular}
+\caption{Inferred type statements B.}
+\label{TAB_inferred_types_b}
+\end{table}
+
+\begin{table}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Key} & \textbf{Weight} \\ \hline \hline
+\texttt{(/site//item, {@id})} & 0.333 \\ \hline
+\texttt{(/site/people/person, {@id})} & 0.6 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction, {buyer/@person})} & -0.6 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction, {itemref/@item})} & -0.917 \\ \hline
+\texttt{(/site/regions/europe/item, {@id})} & 0.6 \\ \hline
+\end{tabular}
+\caption{Inferred key statements B.}
+\label{TAB_inferred_keys_b}
+\end{table}
+
+\begin{table}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Node} & \textbf{Weight} \\ \hline \hline
+\texttt{(/site/people/person/profile/interest/@category)} & 1 \\ \hline
+\texttt{(/site/closed\_auctions/closed\_auction/itemref/@item)} & 1 \\ \hline
+\texttt{(/site/people/person/profile/gender)} & 0.9 \\ \hline
+\end{tabular}
+\caption{Inferred negative uniqueness statements B.}
+\label{TAB_inferred_negative_uniqueness_statements_b}
+\end{table}
+
+Results of this test scenario are shown in Tables \ref{TAB_inferred_types_b}, \ref{TAB_inferred_keys_b}, and \ref{TAB_inferred_negative_uniqueness_statements_b}. All seams to be as we expected.
+
+Note that all inferred type statements are correct, however, the weight of the \texttt{(/site//item, {@id})} key is only 0.333. The reason is that there is only one join pattern occurrence resulting to this key, and therefore in summary, its normalized weight is low and it is correct.
+
+We demonstrated that also the original method works and we can get better results with little larger input dataset. Though, this set is still very small and we do not show how the methods works with large real-world data, possibly containing FLWOR constructs not satisfying our assumption that each join is done by a key/foreign key pair.
+
+We attach the resulting XML Schema in Appendix \ref{listing_xsd}. It was made using threshold 0.3. It means that all key statements with normalized weight equal or higher than 0.3 are considered correct and are included in the schema.

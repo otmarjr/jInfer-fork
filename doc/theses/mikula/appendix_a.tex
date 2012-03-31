@@ -1,7 +1,5 @@
 \chapter{Attachments}
-\begin{figure}
-\caption{All possible values representing an operator in an instance of \texttt{OperatorNode}}
-\label{FIG_operators}
+\begin{figure}[float=htpb]
 Logical: \texttt{AND}, \texttt{OR}.
 
 Comparison: \texttt{GEN\_EQUALS}, \texttt{GEN\_NOT\_EQUALS}, \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{VAL\_EQUALS}, \texttt{VAL\_NOT\_EQUALS}, \texttt{VAL\_LESS\_THAN}, \texttt{VAL\_LESS\_THAN\_EQUALS}, \texttt{VAL\_GREATER\_THAN}, \texttt{VAL\_GREATER\_THAN\_EQUALS}, \texttt{NOD\_IS}, \texttt{NOD\_PRECEDES}, \texttt{NOD\_FOLLOWS}.
@@ -19,4 +17,395 @@ Type test: \texttt{INSTANCE\_OF}, \texttt{CASTABLE\_AS}.
 Type conversion: \texttt{TREAT\_AS}, \texttt{CAST\_AS}.
 
 Unary: \texttt{UNARY\_PLUS}, \texttt{UNARY\_MINUS}.
+\caption{All possible values representing an operator in an instance of \texttt{OperatorNode}}
+\label{FIG_operators}
 \end{figure}
+
+
+\begin{lstlisting}[caption=Resulting XSD of Test Scenario B, frame=single, label=listing_xsd]
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!-- Inferred on Sat Mar 31 21:28:32 CEST 2012 by Basic IG generator, TwoStep(Iname (with attributes), Automaton Merging State(GreedyMDL(Combined(k,h-context, s,k-strings, Null, Null),Naive Alphabet), State Removal Ordered(Weighted)), Chained(Empty Children, Nested Concatenation, Null)), Basic XSD exporter -->
+
+<!-- global types -->
+<xs:complexType name="Temph" mixed="true">
+  <xs:sequence>
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:choice>
+        <xs:element name="keyword" type="Tkeyword"/>
+        <xs:element name="bold" type="Tbold"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tbold" mixed="true">
+  <xs:sequence>
+    <xs:choice>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element name="emph" type="Temph"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:sequence>
+        <xs:element name="keyword" type="Tkeyword"/>
+      </xs:sequence>
+    </xs:choice>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tkeyword" mixed="true">
+  <xs:sequence>
+    <xs:choice>
+      <xs:sequence minOccurs="0">
+        <xs:element name="bold" type="Tbold"/>
+      </xs:sequence>
+      <xs:sequence>
+        <xs:element name="emph" type="Temph"/>
+      </xs:sequence>
+    </xs:choice>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Ttext" mixed="true">
+  <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:element name="bold" type="Tbold"/>
+    <xs:element name="keyword" type="Tkeyword"/>
+    <xs:element name="emph" type="Temph"/>
+  </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="Tparlist">
+  <xs:sequence>
+    <xs:element name="listitem" type="Tlistitem" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tlistitem">
+  <xs:choice>
+    <xs:element name="text" type="Ttext"/>
+    <xs:element name="parlist" type="Tparlist"/>
+  </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="Tdescription">
+  <xs:choice>
+    <xs:element name="parlist" type="Tparlist"/>
+    <xs:element name="text" type="Ttext"/>
+  </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="Tincategory">
+  <xs:attribute name="category" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tmail">
+  <xs:sequence>
+    <xs:element name="from" type="xs:string"/>
+    <xs:element name="to" type="xs:string"/>
+    <xs:element name="date" type="xs:string"/>
+    <xs:element name="text" type="Ttext"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tmailbox">
+  <xs:sequence minOccurs="0">
+    <xs:element name="mail" type="Tmail"/>
+    <xs:element name="mail" type="Tmail" minOccurs="0"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Titem">
+  <xs:sequence>
+    <xs:element name="location" type="xs:string"/>
+    <xs:element name="quantity" type="xs:string"/>
+    <xs:element name="name" type="xs:string"/>
+    <xs:element name="payment" type="xs:string"/>
+    <xs:element name="description" type="Tdescription"/>
+    <xs:element name="shipping" type="xs:string"/>
+    <xs:element name="incategory" type="Tincategory" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element name="mailbox" type="Tmailbox"/>
+  </xs:sequence>
+  <xs:attribute name="id" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tafrica">
+  <xs:sequence>
+    <xs:element name="item" type="Titem"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tasia">
+  <xs:sequence>
+    <xs:element name="item" type="Titem"/>
+    <xs:element name="item" type="Titem"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Taustralia">
+  <xs:sequence>
+    <xs:element name="item" type="Titem"/>
+    <xs:element name="item" type="Titem"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Teurope">
+  <xs:sequence>
+    <xs:element name="item" type="Titem" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tnamerica">
+  <xs:sequence>
+    <xs:element name="item" type="Titem" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tsamerica">
+  <xs:sequence>
+    <xs:element name="item" type="Titem"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tregions">
+  <xs:sequence>
+    <xs:element name="africa" type="Tafrica"/>
+    <xs:element name="asia" type="Tasia"/>
+    <xs:element name="australia" type="Taustralia"/>
+    <xs:element name="europe" type="Teurope"/>
+    <xs:element name="namerica" type="Tnamerica"/>
+    <xs:element name="samerica" type="Tsamerica"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tcategory">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string"/>
+    <xs:element name="description" type="Tdescription"/>
+  </xs:sequence>
+  <xs:attribute name="id" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tcategories">
+  <xs:sequence>
+    <xs:element name="category" type="Tcategory"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tedge">
+  <xs:attribute name="from" type="xs:string" use="required"/>
+  <xs:attribute name="to" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tcatgraph">
+  <xs:sequence>
+    <xs:element name="edge" type="Tedge"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Taddress">
+  <xs:sequence>
+    <xs:element name="street" type="xs:string"/>
+    <xs:element name="city" type="xs:string"/>
+    <xs:element name="country" type="xs:string"/>
+    <xs:choice>
+      <xs:element name="zipcode" type="xs:string"/>
+      <xs:sequence>
+        <xs:element name="province" type="xs:string"/>
+        <xs:element name="zipcode" type="xs:string"/>
+      </xs:sequence>
+    </xs:choice>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tinterest">
+  <xs:attribute name="category" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tprofile">
+  <xs:sequence>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="education" type="xs:string"/>
+      <xs:element name="interest" type="Tinterest"/>
+    </xs:choice>
+    <xs:choice>
+      <xs:element name="business" type="xs:string"/>
+      <xs:sequence>
+        <xs:element name="gender" type="xs:string"/>
+        <xs:element name="business" type="xs:string"/>
+      </xs:sequence>
+    </xs:choice>
+    <xs:element name="age" type="xs:string" minOccurs="0"/>
+  </xs:sequence>
+  <xs:attribute name="income" type="xs:integer" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Twatch">
+  <xs:attribute name="open_auction" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Twatches">
+  <xs:sequence>
+    <xs:element name="watch" type="Twatch" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tperson">
+  <xs:sequence>
+    <xs:element name="name" type="xs:string"/>
+    <xs:element name="emailaddress" type="xs:string"/>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="address" type="Taddress"/>
+      <xs:element name="phone" type="xs:string"/>
+      <xs:element name="homepage" type="xs:string"/>
+      <xs:element name="creditcard" type="xs:string"/>
+    </xs:choice>
+    <xs:choice>
+      <xs:sequence minOccurs="0">
+        <xs:element name="profile" type="Tprofile"/>
+        <xs:element name="watches" type="Twatches" minOccurs="0"/>
+      </xs:sequence>
+      <xs:element name="watches" type="Twatches"/>
+    </xs:choice>
+  </xs:sequence>
+  <xs:attribute name="id" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tpeople">
+  <xs:sequence>
+    <xs:element name="person" type="Tperson" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tpersonref">
+  <xs:attribute name="person" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tbidder">
+  <xs:sequence>
+    <xs:element name="date" type="xs:string"/>
+    <xs:element name="time" type="xs:string"/>
+    <xs:element name="personref" type="Tpersonref"/>
+    <xs:element name="increase" type="xs:integer"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Titemref">
+  <xs:attribute name="item" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tseller">
+  <xs:attribute name="person" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tauthor">
+  <xs:attribute name="person" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tannotation">
+  <xs:sequence>
+    <xs:element name="author" type="Tauthor"/>
+    <xs:element name="description" type="Tdescription"/>
+    <xs:element name="happiness" type="xs:string"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tinterval">
+  <xs:sequence>
+    <xs:element name="start" type="xs:string"/>
+    <xs:element name="end" type="xs:string"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Topen_auction">
+  <xs:sequence>
+    <xs:element name="initial" type="xs:integer"/>
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="reserve" type="xs:decimal"/>
+      <xs:element name="bidder" type="Tbidder"/>
+    </xs:choice>
+    <xs:element name="current" type="xs:string"/>
+    <xs:element name="privacy" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element name="itemref" type="Titemref"/>
+    <xs:element name="seller" type="Tseller"/>
+    <xs:element name="annotation" type="Tannotation"/>
+    <xs:element name="quantity" type="xs:string"/>
+    <xs:element name="type" type="xs:string"/>
+    <xs:element name="interval" type="Tinterval"/>
+  </xs:sequence>
+  <xs:attribute name="id" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Topen_auctions">
+  <xs:sequence>
+    <xs:element name="open_auction" type="Topen_auction" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tbuyer">
+  <xs:attribute name="person" type="xs:string" use="required"/>
+</xs:complexType>
+
+<xs:complexType name="Tclosed_auction">
+  <xs:sequence>
+    <xs:element name="seller" type="Tseller"/>
+    <xs:element name="buyer" type="Tbuyer"/>
+    <xs:element name="itemref" type="Titemref"/>
+    <xs:element name="price" type="xs:integer"/>
+    <xs:element name="date" type="xs:string"/>
+    <xs:element name="quantity" type="xs:string"/>
+    <xs:element name="type" type="xs:string"/>
+    <xs:element name="annotation" type="Tannotation"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tclosed_auctions">
+  <xs:sequence>
+    <xs:element name="closed_auction" type="Tclosed_auction" minOccurs="0" maxOccurs="unbounded"/>
+  </xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Tsite">
+  <xs:sequence>
+    <xs:element name="regions" type="Tregions"/>
+    <xs:element name="categories" type="Tcategories"/>
+    <xs:element name="catgraph" type="Tcatgraph"/>
+    <xs:element name="people" type="Tpeople"/>
+    <xs:element name="open_auctions" type="Topen_auctions"/>
+    <xs:element name="closed_auctions" type="Tclosed_auctions"/>
+  </xs:sequence>
+</xs:complexType>
+
+<!-- top level element -->
+<xs:element name="site" type="Tsite">
+  <xs:key name="key1">
+    <xs:selector xpath="people/person"/>
+    <xs:field xpath="@id"/>
+  </xs:key>
+  <xs:key name="key2">
+    <xs:selector xpath=".//item"/>
+    <xs:field xpath="@id"/>
+  </xs:key>
+  <xs:key name="key3">
+    <xs:selector xpath="regions/europe/item"/>
+    <xs:field xpath="@id"/>
+  </xs:key>
+  <xs:keyref name="keyRef1_key1" refer="key1">
+    <xs:selector xpath="closed_auctions/closed_auction"/>
+    <xs:field xpath="buyer/@person"/>
+  </xs:keyref>
+  <xs:keyref name="keyRef2_key2" refer="key2">
+    <xs:selector xpath="closed_auctions/closed_auction"/>
+    <xs:field xpath="itemref/@item"/>
+  </xs:keyref>
+  <xs:keyref name="keyRef3_key3" refer="key3">
+    <xs:selector xpath="closed_auctions/closed_auction"/>
+    <xs:field xpath="itemref/@item"/>
+  </xs:keyref>
+  <xs:keyref name="keyRef4_key3" refer="key3">
+    <xs:selector xpath="open_auctions/open_auction"/>
+    <xs:field xpath="itemref/@item"/>
+  </xs:keyref>
+</xs:element>
+</xs:schema>
+\end{lstlisting}

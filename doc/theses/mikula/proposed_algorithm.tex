@@ -920,29 +920,22 @@ As described in the original method and summarized in Chapter \ref{Keys} we reco
     $P$: A predicate from the binding expression. \\
     $forBindingNode$: A for binding node from an ancestor FLWOR node. \\
     $forVar$: A variable from the ancestor for binding node. \\
-    $forVars$: An array of couples of for variables and their for clause nodes. \\
     $checkJoinPattern3$: A flag determining whether to analyze the join pattern as possible join pattern 3. \\
     $whereExpr$: An expression from a where clause of the current FLWOR node.
 }
 
-\ENSURE Updated variable $forVars$.
-
-\IF{$P$ is of form $curBindingNode.varName/L_1 = var/L_2$}
+\IF{$P$ is of form $forVar/L_1 = curBindingNode.varName/L_2 \wedge usesOnlyChildAndDescendantAndAttributeAxes(L_1) \wedge usesOnlyChildAndDescendantAndAttributeAxes(L_2)$}
     \IF{$is(curBindingNode,$ ForClauseNode$)$}
         \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the for join pattern
-        \STATE remove $(forVar, forBindingNode)$ from $forVars$
     \ELSIF{$is(curBindingNode,$ LetClauseNode$)$}
         \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the for let pattern                
-        \STATE remove $(forVar, forBindingNode)$ from $forVars$
-    \ENDIF
-\ELSIF{$checkJoinPattern3$ AND $is(curBindingNode,$ ForClauseNode$)$}
-    \IF{$whereExpr$ is of form $bindingNode.varName/L_1 = var/L_2$}
-        \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the join pattern 3
-        \STATE remove $(forVar, forBindingNode)$ from $forVars$
     \ENDIF
 \ENDIF
-
-\RETURN $forVars$
+\IF{$checkJoinPattern3 \wedge is(curBindingNode,$ ForClauseNode$) \wedge usesOnlyChildAndDescendantAndAttributeAxes(L_1) \wedge usesOnlyChildAndDescendantAndAttributeAxes(L_2)$}
+    \IF{$whereExpr$ is of form $forVar/L_1 = bindingNode.varName/L_2$}
+        \STATE memorize $(forBindingNode, curBindingNode)$ as an occurrence of the join pattern 3
+    \ENDIF
+\ENDIF
 \end{algorithmic}
 \end{algorithm}
 

@@ -618,7 +618,9 @@ A little complication is a recursion. A simple algorithm of that kind may never 
 
 \section{Step 4: Key Discovery}
 \todo[inline]{Tu by neskodilo napisat, ze sice preberame alg, ale ho aj implementujeme a overime, co v povodnom clanku nebolo.}
-In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.
+In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Despite the approach was proposed, it has not been implemented yet. Therefore we will be the first to implement it and perform consecutive testing. 
+
+Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.
 
 \subsection{Auxiliary Functions} \label{step_4_auxiliary_functions}
 Firstly, we define some auxiliary functions used by algorithms in this chapter.
@@ -1066,7 +1068,15 @@ The original approach \cite{Necasky:2009:DXK:1529282.1529414} describes also inf
 \subsection{Rejection of Uniqueness}
 While the previous steps of the key discovery produce mostly positive statements about the keys, in this step, the algorithm searches for evidence on non-uniqueness of elements and attributes. The aim of this step is to eliminate or decrease the number of falsely inferred keys. A key can be inferred falsely when the assumption that every join is done via a key/foreign key pair is not correct for a particular join.
 
-When the algorithm discovers that a certain element is probably not unique, it assigns the element with a negative weight that will decrease the sum of its weights in the summarizing step.
+When the algorithm discovers that a certain element (or attribute) is probably not unique, it assigns the element (or attribute) with a negative weight that will decrease the sum of its weights in the summarizing step.
+
+We can formally define negative uniqueness statements as follows:
+
+\begin{define}[Negative uniqueness Statement]
+A negative uniqueness statement is a construct $(C, P)$, where $C$ and $P$ are PathType instances that use only child, descendant, and descendant or self ($P$ also attribute) axes. $C$ is called \emph{context path}, $P$ \emph{target path}. $C$ can be omitted as in the case of keys.
+\end{define}
+
+Note that the restrictions placed on the paths $C$ and $P$ are less restrictive as in the case of keys. If we found a negative uniqueness statement ($C$, $P$), where $P$ or $C$ contains predicates, then it implies that also $(C', P')$ is a negative uniqueness statement, where $C'$ and $P'$ are $C$ and $P$ stripped of predicates. In the case of special function calls, the explanation is the same.
 
 The first XQuery construct utilized by this step is a function call of \\ \texttt{distinct-values} function as discussed in Chapter \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a PathType on their input. Elements and attributes selected by those PathTypes are then considered to be not unique, and consequently, they cannot be keys.
 
@@ -1085,16 +1095,16 @@ Contrary to the key discovery, PathTypes utilized in this step may contain predi
         \STATE $argument := node.getChild(0)$
         \STATE $type := getType(argument)$
         \IF{$type$ is PathType \\ $\wedge$ $usesOnlyChildAndDescendantAndAttributeAxes(type)$ \\ $\wedge$ $isWithoutPredicatesExceptLastStep(type)$}
-            \STATE memorize $argument$ as the negative key statement, weight 1
+            \STATE memorize $(argument)$ as the negative key statement, weight 1
         \ENDIF
     \ENDIF
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
 
-Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (literal constant, reference of a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
+Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (literal constant, reference to a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
 
-As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the number of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys.
+As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the number of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys. This situation is handled in Algorithms \ref{ALG_rejection_of_uniqueness_comparison_with_a_constant} and \ref{ALG_rejection_of_uniqueness_function_process_where}.
 
 \begin{algorithm}
 \caption{Rejection of uniqueness - comparison with a constant}
@@ -1135,7 +1145,7 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
     \IF{$exprNode.operator =$ GEN\_EQUALS}
         \FORALL{$var \in forVars$}
             \IF{$exprNode$ is of a form $var/L = C$ where $getType(var/L)$ is PathType $\wedge$ $isWithoutPredicatesExceptLastStep(getType(var/L))$ $\wedge$ $usesOnlyChildAndDescendantAndAttributeAxes(getType(var/L))$ $\wedge$ $C$ is a literal constant}
-                \STATE memorize $var/L$ as the negative key statement, weight 0.9
+                \STATE memorize $(var/L)$ as the negative key statement, weight 0.9
             \ENDIF
         \ENDFOR
     \ELSIF{$exprNode.operator =$ AND}
@@ -1146,7 +1156,7 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
 \end{algorithmic}
 \end{algorithm}
 
-\todo[inline]{Definicia NUS a context Path, podobne ako v klucoch.}
+In spite of the presented algorithms search for global negative uniqueness statements ($C$ path is omitted) only, we included the context path in the definition for possible future extensions.
 
 \subsection{Normalization of Key Statements}
 The original approach \cite{Necasky:2009:DXK:1529282.1529414} employs the following normalization which we adopt. Is also incorporates a heuristic for precision enhancement. For details, we refer to it.

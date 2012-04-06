@@ -86,7 +86,7 @@ Consider these two expressions; PathType $p$ is compared to an integer literal c
 A problem emerges for example if PathType $p$ is compared to an integer constant, and the real type of elements (or attributes) selected by $p$ is \texttt{double}. In that case, statement $p \rightarrow$ \texttt{integer} is inferred, but it is not correct.
 
 \subsection{Verification using XML data}
-To solves those problems, we propose a simple verification using XML data.
+To solve the problems, we propose a simple verification using XML data.
 
 For each normalized PathType $p$ from the inferred type statements $\mathcal{S}_t$, we find set $T_p$ of all inferred types. $T_p = \{t|(p \rightarrow t) \in \mathcal{S}_t\}$. Then, we create sequence $T_p'$ by ordering the set $T_p$ from the most specific type to the most general one. For example, if $T_p = \{$\texttt{double}, \texttt{byte}, \texttt{int}$\}$, $T_p' = ($\texttt{byte}, \texttt{int}, \texttt{double}$)$.
 

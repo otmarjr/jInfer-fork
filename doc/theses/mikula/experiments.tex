@@ -140,8 +140,6 @@ return
 
 In this scenario, we use test data from the Test Scenario A extended by queries in Listings \ref{listing_test_query_b1}, \ref{listing_test_query_b2}, and \ref{listing_test_query_b3}.
 
-\todo[inline]{Mozno popisat aj vyznam tychto dotazov?}
-
 The first two ones are simple queries containing one join pattern occurrence each. The third one contains occurrences of let join pattern (binding clauses at lines 5 and 6) and JP3 (binding clauses at lines 1 and 5, and where clause at line 8), two expressions exploitable by the inference of types (both at line 2) and one negative uniqueness statement of the comparison-with-a-constant form (comparison with \texttt{"m"} at line 2). Thus, the third query contains instances of all types of the constructs utilized by our method.
 
 \subsubsection{Results}
@@ -188,10 +186,10 @@ The first two ones are simple queries containing one join pattern occurrence eac
 \label{TAB_inferred_negative_uniqueness_statements_b}
 \end{table}
 
-Results of this test scenario are shown in Tables \ref{TAB_inferred_types_b}, \ref{TAB_inferred_keys_b}, and \ref{TAB_inferred_negative_uniqueness_statements_b}. All seams to be as we expected.
+Results of this test scenario are shown in Tables \ref{TAB_inferred_types_b}, \ref{TAB_inferred_keys_b}, and \ref{TAB_inferred_negative_uniqueness_statements_b}. All seem to be as we expected.
 
 Note that all inferred type statements are correct, however, the weight of the \texttt{(/site//item, {@id})} key is only 0.333. The reason is that there is only one join pattern occurrence resulting to this key, and therefore in summary, its normalized weight is low and it is correct.
 
-We demonstrated that also the original method works and we can get better results with little larger input dataset. Though, this set is still very small and we do not show how the methods works with large real-world data, possibly containing FLWOR constructs not satisfying our assumption that each join is done by a key/foreign key pair.
+We demonstrated that also the original method works and we can get better results with little larger input dataset. Though, this set is still very small and we do not show how the methods work with large real-world data, possibly containing FLWOR constructs not satisfying our assumption that each join is done by a key/foreign key pair.
 
-We attach the resulting XML Schema in Appendix \ref{listing_xsd}. It was made using threshold 0.3. It means that all key statements with normalized weight equal or higher than 0.3 are considered correct and are included in the schema.
+We attach the resulting XSD in Appendix \ref{listing_xsd}. It was made using threshold 0.3. It means that all key statements with normalized weight equal or higher than 0.3 are considered correct and are included in the schema.

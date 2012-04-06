@@ -314,7 +314,7 @@ A similar approach as in the case of functions can be applied to determine types
          \STATE $step :=$ a path step (new instance of StepExprNode) representing the variable reference
 		 \STATE $substeps :=$ an empty associative array         
          \STATE $substeps[step] := type$
-         \STATE $pathExprNode :=$ new instance of PathExprNode containing one step step
+         \STATE $pathExprNode :=$ new instance of PathExprNode containing one step
          \STATE $type :=$ PathType containing $pathExprNode$ and $substeps$
      \ENDIF
 \ELSIF{$is(exprNode,$ PathExprNode$)$}
@@ -617,7 +617,6 @@ If a currently processed expression is a function call of an user-defined functi
 A little complication is a recursion. A simple algorithm of that kind may never end because of the infinite analysis of the same recursive function(s). Therefore, we shall keep track of the currently analysed functions (e.g. in a stack of function calls) and do not process the recursive calls. 
 
 \section{Step 4: Key Discovery}
-\todo[inline]{Tu by neskodilo napisat, ze sice preberame alg, ale ho aj implementujeme a overime, co v povodnom clanku nebolo.}
 In this step, the algorithm discovers keys of elements, incorporating the approach from paper \cite{Necasky:2009:DXK:1529282.1529414}, described in Chapter \ref{Keys}, and extending it. Despite the approach was proposed, it has not been implemented yet. Therefore we will be the first to implement it and perform consecutive testing. 
 
 Firstly, the syntax tree is searched for forms of FLWOR expressions to infer the keys from. Then, as described later, certain constructs are used to support or degrade the evidence of inferred statements in a final summary.
@@ -1076,7 +1075,7 @@ We can formally define negative uniqueness statements as follows:
 A negative uniqueness statement is a construct $(C, P)$, where $C$ and $P$ are PathType instances that use only child, descendant, and descendant or self ($P$ also attribute) axes. $C$ is called \emph{context path}, $P$ \emph{target path}. $C$ can be omitted as in the case of keys.
 \end{define}
 
-Note that the restrictions placed on the paths $C$ and $P$ are less restrictive as in the case of keys. If we found a negative uniqueness statement ($C$, $P$), where $P$ or $C$ contains predicates, then it implies that also $(C', P')$ is a negative uniqueness statement, where $C'$ and $P'$ are $C$ and $P$ stripped of predicates. In the case of special function calls, the explanation is the same.
+Note that the restrictions placed on the paths $C$ and $P$ are less restrictive than in the case of keys. If we find a negative uniqueness statement ($C$, $P$), where $P$ or $C$ contains predicates, then it implies that also $(C', P')$ is a negative uniqueness statement, where $C'$ and $P'$ are $C$ and $P$ stripped of predicates. In the case of special function calls, the explanation is the same.
 
 The first XQuery construct utilized by this step is a function call of \\ \texttt{distinct-values} function as discussed in Chapter \ref{Negative_uniqueness} and shown in Algorithm \ref{ALG_rejection_of_uniqueness_aggregation_functions}. The algorithm searches for calls of the mentioned functions with a PathType on their input. Elements and attributes selected by those PathTypes are then considered to be not unique, and consequently, they cannot be keys.
 
@@ -1159,7 +1158,7 @@ As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to 
 In spite of the presented algorithms search for global negative uniqueness statements ($C$ path is omitted) only, we included the context path in the definition for possible future extensions.
 
 \subsection{Normalization of Key Statements}
-The original approach \cite{Necasky:2009:DXK:1529282.1529414} employs the following normalization which we adopt. Is also incorporates a heuristic for precision enhancement. For details, we refer to it.
+The original approach \cite{Necasky:2009:DXK:1529282.1529414} employs the following normalization which we adopt. It also incorporates a heuristic for precision enhancement. For details, we refer to it.
 
 Let $K_1, \dots, K_n$ be the inferred keys. Let $S_i$ be the score (the sum of weights) of $K_i$  and $N_i$ be the number of the inferred statements about $K_i$.
 

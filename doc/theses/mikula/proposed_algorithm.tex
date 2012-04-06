@@ -15,7 +15,7 @@ Moreover, the original method has not been implemented and experimentally proven
 \section{Overview}
 \begin{figure}
 \includegraphics[scale=1]{algorithm.eps}
-\caption{Steps of the proposed algorithm.}
+\caption{Steps of the proposed algorithm}
 \label{FIG_steps_algorithm}
 \end{figure}
 
@@ -23,7 +23,7 @@ The proposed algorithm consists of the following four main steps, show in Figure
 
 \begin{enumerate}
 \item \textbf{Construction of a syntax tree}. We use lexical and syntax analyses proposed in \cite{thesis_schejbal} and for each XQuery on input, we construct a data structure defined in Definition \ref{DEF_syntax_tree}.
-\item \textbf{Static Analysis of expression types}. The algorithm searches for expressions in the syntax trees and statically (without evaluation) determines their types. \todo{Co se mysli? Datove typy?}
+\item \textbf{Static Analysis of expression types}. The algorithm searches for expressions in the syntax trees and statically (without evaluation) determines their types. See Section \ref{SECTION_expression_types}.
 \item \textbf{Inference of built-in types}. When the types of expressions are determined, selected forms of expression are utilized to infer types of elements and attributes.
 \item \textbf{Key discovery}. The final step is an extension of approach \cite{Necasky:2009:DXK:1529282.1529414} inferring keys and foreign keys.
 \end{enumerate}
@@ -150,7 +150,7 @@ This characteristic is explicitly described, because several algorithms later in
 
 \begin{figure}
 \includegraphics[scale=0.6]{syntax_tree_1.eps}
-\caption{Sample syntax tree 1.}
+\caption{Sample syntax tree 1}
 \label{FIG_syntax_tree_1}
 \end{figure}
 
@@ -163,9 +163,9 @@ The analysis of expression types can be divided into three substeps. Determinati
 
 But firstly, we describe types of expressions we want to capture and their features.
 
-\subsection{Expression Types}
+\subsection{Expression Types} \label{SECTION_expression_types}
 \begin{figure}
-\caption{XSD built-in atomic types.}
+\caption{XSD built-in atomic types}
 \label{FIG_xsd_built_in_atomic_types}
 \includegraphics[scale=0.65]{xsd-types.eps}
 \end{figure}
@@ -549,7 +549,7 @@ To determine types of expressions, we use already introduced function \\ \texttt
 
 \begin{figure}
 \includegraphics[scale=0.5]{syntax_tree_1_types.eps}
-\caption{Sample syntax tree 1 after the static analysis of types.}
+\caption{Sample syntax tree 1 after the static analysis of types}
 \label{FIG_syntax_tree_1_types}
 \end{figure}
 
@@ -578,10 +578,11 @@ Also note, that the function call node of \texttt{local:convert} in the FLWOR re
 \end{algorithm}
 
 \section{Step 3: Inference of Built-in Types}
-\todo[inline]{Rekurzia sa nevnara do FunctionBodyNodes a PathExprNodes - napisat, alebo je to detail?}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
 How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of PathType type (expression representing a certain element or attribute or a set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
+
+Likewise the previous step, the syntax tree is recursively searched for expressions meeting the conditions for the type inference. A little difference is that the recursion stops at \texttt{FunctionsBodyNode} and \texttt{PathExprNode} nodes, because the processing of these nodes requires a different approach, which we do not deal with in this thesis.
 
 The output of this step is a set of statements of the form $P \rightarrow T$, where $P$ is an instance of PathType and $T$ is an XML Schema built-in atomic type.
 
@@ -599,7 +600,7 @@ If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \tex
 
 \begin{figure}
 \includegraphics[scale=1]{syntax_tree_1_types_type_inference.eps}
-\caption{Example of an inference of a type from a function call.}
+\caption{Example of an inference of a type from a function call}
 \label{FIG_syntax_tree_1_types_type_inference}
 \end{figure}
 
@@ -1179,7 +1180,7 @@ $S^{norm}_i = \frac{S_i}{S^{max}} * (1 - \frac{N^{max} - N_i}{\sum_{i=1}^{n}N_i}
 \subsection{Example}
 \begin{figure}
 \includegraphics[scale=0.7]{syntax_tree_2.eps}
-\caption{Sample syntax tree 2.}
+\caption{Sample syntax tree 2}
 \label{FIG_syntax_tree_2}
 \end{figure}
 

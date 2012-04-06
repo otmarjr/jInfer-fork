@@ -9,12 +9,24 @@ In the proposed solution, we decided to incorporate lexical and syntax analyses 
 
 We also implemented several ideas from the overview to infer XSD built-in types of elements and attributes. And we extended and implemented the one existing method dealing with the inference of keys. We experimentally demonstrated that on some input files, results of the extended method are better than results of the original method. However, we did not succeed in the search of an ideal, large enough set of test data. The testing was performed on a small set of input queries and further testing and algorithm tuning is required.
 
-Finally, we proposed a simple way how to combine the inferred statements with existing grammar inferring methods of the XML schema inference and we implemented it using the jInfer framework. Thus, we created the first complete, ready-to-use, and extensible implementation of the XML xchema inference exploiting XQuery queries besides XML data.
+Finally, we proposed a simple way how to combine the inferred statements with existing grammar inferring methods of the XML schema inference and we implemented it using the jInfer framework. Thus, we created the first complete, ready-to-use, and extensible implementation of the XML schema inference exploiting XQuery queries besides XML data.
 
-\todo[inline]{Nejake prehladne zhrnutie plusov a minusov? ANO}
+As the main advantages and disadvantages of the work we list the following.
+\begin{itemize}
+\renewcommand{\labelitemi}{$+$}
+\item Elaboration of the overview how XQuery queries can help in the process of XML schema inference.
+\item Incorporation of the lexical and syntax analyses of input queries creating their syntax trees.
+\item Development of the static type analysis including PathTypes, which can be easily extended and use in possible future extensions.
+\item Extension of the existing method of key discovery, achieving better results.
+\item Our implementation using the jInfer framework is the first implementation of XML schema inference method utilizing XML operations.
+\renewcommand{\labelitemi}{$-$}
+\item In the proposed algorithm we dealt with a small part of possible refinements discussed in the overview.
+\item The combination with existing methods of inference is done in the simplest way, not modifying the grammar rules. But, from the view of recent XML schema inference research, the modification of the grammar rules according to the statements inferred from XML operations is vastly interesting.
+\item Since large real-world sets of XQuery queries are not available, we did not perform experiments using such sets. We only tested our method using a relatively small number input of queries, decreasing the level of reliability of the experimental results.
+\end{itemize}
 
 \section{Future Work}
-This work implements only some ideas discussed in the overview in Chapter \ref{CHAPTER_analysis_of_xquery}, leaving most of them for future work. Also, the implemented algorithms can be further refined as was already mentioned in Chapter \ref{CHAPTER_proposed_algorithm} with the presentation of the algorithms. For example thorough processing of user-defined function calls.
+As already mentioned, this work implements only some ideas discussed in the overview in Chapter \ref{CHAPTER_analysis_of_xquery}, leaving most of them for future work. Also, the implemented algorithms can be further refined as was already mentioned in Chapter \ref{CHAPTER_proposed_algorithm} with the presentation of the algorithms. For example thorough processing of user-defined function calls.
 
 Chapter \ref{CHAPTER_precreation_of_algorithm} discusses some possible future enhancements as well. A research on possibilities of modifying the grammar rules based on information extracted from XQuery queries may bring interesting results. We analyse the queries statically only, we do not evaluate them. An analysis of queries together with their results can be a topic of another future research direction.
 

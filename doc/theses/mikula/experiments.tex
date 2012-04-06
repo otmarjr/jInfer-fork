@@ -33,7 +33,7 @@ Six type statements shown in Table \ref{TAB_inferred_types} were inferred.
 \texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{integer} \\ \hline
 \texttt{/site/open\_auctions/open\_auction/reserve} $\rightarrow$ \texttt{decimal} \\ \hline
 \end{tabular}
-\caption{Inferred type statements.}
+\caption{Inferred type statements A}
 \label{TAB_inferred_types}
 \end{table}
 
@@ -53,7 +53,7 @@ Four key statements and their normalized weights shown in Table \ref{TAB_inferre
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
 \texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & 0.417 \\ \hline
 \end{tabular}
-\caption{Inferred key statements.}
+\caption{Inferred key statements A}
 \label{TAB_inferred_keys}
 \end{table}
 
@@ -80,7 +80,7 @@ From the original data, one negative uniqueness statement was inferred:\\
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
 \texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.417 \\ \hline
 \end{tabular}
-\caption{Key statements inferred from the extended test data.}
+\caption{Key statements inferred from the extended test data A}
 \label{TAB_inferred_keys_2}
 \end{table}
 
@@ -103,7 +103,7 @@ From the extended test data, using the modified join pattern 3 statements, key s
 \texttt{(/site/people/person, \{@id\})} & 1.0 \\ \hline
 \texttt{(/site/closed\_auctions/closed\_auction, \{itemref/@item\})} & -0.333 \\ \hline
 \end{tabular}
-\caption[Key statements inferred using the modified JP3 statements.]{Key statements inferred from the extended test data using the modified JP3 statements.}
+\caption[Key statements inferred using the modified JP3 statements]{Key statements inferred from the extended test data using the modified JP3 statements}
 \label{TAB_inferred_keys_3}
 \end{table}
 
@@ -156,7 +156,7 @@ The first two ones are simple queries containing one join pattern occurrence eac
 \texttt{/site/people/person/profile/@income} $\rightarrow$ \texttt{decimal} \\ \hline
 \texttt{/site/people/person/profile/gender} $\rightarrow$ \texttt{string} \\ \hline
 \end{tabular}
-\caption{Inferred type statements B.}
+\caption{Inferred type statements B}
 \label{TAB_inferred_types_b}
 \end{table}
 
@@ -170,7 +170,7 @@ The first two ones are simple queries containing one join pattern occurrence eac
 \texttt{(/site/closed\_auctions/closed\_auction, {itemref/@item})} & -0.917 \\ \hline
 \texttt{(/site/regions/europe/item, {@id})} & 0.6 \\ \hline
 \end{tabular}
-\caption{Inferred key statements B.}
+\caption{Inferred key statements B}
 \label{TAB_inferred_keys_b}
 \end{table}
 
@@ -182,7 +182,7 @@ The first two ones are simple queries containing one join pattern occurrence eac
 \texttt{(/site/closed\_auctions/closed\_auction/itemref/@item)} & 1 \\ \hline
 \texttt{(/site/people/person/profile/gender)} & 0.9 \\ \hline
 \end{tabular}
-\caption{Inferred negative uniqueness statements B.}
+\caption{Inferred negative uniqueness statements B}
 \label{TAB_inferred_negative_uniqueness_statements_b}
 \end{table}
 

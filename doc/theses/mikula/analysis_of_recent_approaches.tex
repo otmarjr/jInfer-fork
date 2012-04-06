@@ -60,7 +60,7 @@ Another improvement lies in a way how an ant decides for a particular step to pe
 \subsection{Result in XSD}
 Unlike the majority of recent approaches, this methods creates its result in XML Schema. The authors of this method focused on inferring elements with the same name but different context and the unordered sequences which can be in XSD expressed by \texttt{xs:all} construct. Elements with the same name but different context cannot be expressed in DTD and, although, the unordered sequence can be also expressed in DTD as alternations of ordered sequences, such expression in not practical nor well human-readable.
 
-\section{On Inference of XML Schema with the Knowledge of an Obsolete One}
+\section[On Inference of XML Schema with the Knowledge of an Obs. One]{On Inference of XML Schema with the Knowledge of an Obsolete One}
 The aim of approach described in \cite{Mlynkova:2009:IXS:1862681.1862693} is to exploit an obsolete XML schema as an additional input information to infer a new schema more efficiently. An XML schema can become obsolete due to changes in a set of XML documents, without capturing these changes in the schema. Thus, the schema becomes outdated and according to the paper, this case is quite common.
 
 On input, the method is given:
@@ -78,7 +78,7 @@ The algorithm consists of two independent steps:
 
 In the first step the input schema is corrected to conform to the whole set of input XML documents. This is done by creating a PTA for each production extracted from the input schema and merging it with a respective production from the initial grammar, involving ACO and MDL heuristics.
 
-In the second step, regular expressions from the corrected schema are specialized with regard to the XML documents, resulting in a more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simplier form, if this transcription preserves the validity, and refactorization to improve readability.
+In the second step, regular expressions from the corrected schema are specialized with regard to the XML documents, resulting in a more precise and readable schema. Optional substeps are pruning of unused schema fragments, correction of lower and upper bounds of occurrences, transcription of operators to a more restrictive but simpler form, if this transcription preserves the validity, and refactorization to improve readability.
 
 \section{Discovering XML Keys and Foreign Keys in Queries}\label{Keys}
 The method described in paper \cite{Necasky:2009:DXK:1529282.1529414} improves automatic XML schema inference by discovering keys and foreign keys from a set of XQuery queries. Just the queries are utilized in inference, no XML data are used. The output of this method is a set of keys and foreign keys that can be captured using XML Schema \textbf{key}, \textbf{keyref} and \textbf{unique} constructs.

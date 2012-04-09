@@ -21,7 +21,7 @@ The XTRACT \cite{Garofalakis:2000:XSE:342009.335409} system is an example of a \
 \subsection{Generalization}
 The purpose of generalization is to create a set of DTD candidates - schemata that cover fractions of the input XML data. In the last step, this set will be used to compose a (sub)optimal result with respect to a trade-off between its preciseness and conciseness. Therefore, it is desirable to create DTD candidates with various degrees of these two characteristics.
 
-Generalization is based on replacing fragments (sequences of subelements of a given element) from the input XML data by regular expressions, thus, using metacharacters like (*, +, ?). To provide a wide set of DTD candidates, each sequence is processed several times using various values of input parameters. Due to the very large number of possible DTD candidates, the authors employ certain real-life motivated heuristics.
+Generalization is based on replacing fragments (sequences of subelements of a given element) from the input XML data by regular expressions, thus, using metacharacters like \texttt{*}, \texttt{+}, \texttt{?}. To provide a wide set of DTD candidates, each sequence is processed several times using various values of input parameters. Due to the very large number of possible DTD candidates, the authors employ certain real-life motivated heuristics.
 
 For instance, paper \cite{Garofalakis:2000:XSE:342009.335409} introduces the following example: Sequences \texttt{abab} and \texttt{bbbe} are generalized to \texttt{(ab)*}, \texttt{(a|b)*}, \texttt{b*e}.
 

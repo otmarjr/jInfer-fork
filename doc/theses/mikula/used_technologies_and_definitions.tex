@@ -149,16 +149,18 @@ The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_ex
   <xs:complexType>
     <xs:sequence>
       <xs:element name="title" type="xs:string"/>
-      <xs:element name="authors>
+      <xs:element name="authors">
         <xs:complexType>
-          <xs:element name="author" type="xs:string"
-           maxOccurs="unbound"/>
+          <xs:sequence>
+            <xs:element name="author" type="xs:string"
+             maxOccurs="unbounded"/>
+          </xs:sequnce>
         </xs:complexType>
       </xs:element>
       <xs:element name="isbn" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="id" type="xs:string" use="required"/>
-  </xs:complexContent>
+  </xs:complexType>
 </xs:element>
 \end{alltt}
 \caption{A simple XSD example}

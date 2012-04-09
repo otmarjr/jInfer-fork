@@ -12,16 +12,16 @@ Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} ind
 
 Besides elements, attributes can be processed exactly in the same way. Path expression \texttt{/bib/book/@ISBN} indicates that element \texttt{book} can have attribute \texttt{ISBN}.
 
-Statements of this kind are necessary for the XML schema inference, however their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. In addition, queries may not cover the whole relevant content of the documents. Let \texttt{E} be an element occurring in an XML document and let \texttt{Q} be an XQuery query. Consider the following cases:
+Statements of this kind are necessary for the XML schema inference, however their obtaining from queries is not significant due to the following reason. These statements could be determined directly from the XML documents and it could be easily done in a more convenient way. In addition, queries may not cover the whole relevant content of the documents. Let $E$ be an element occurring in an XML document and let $Q$ be an XQuery query. Consider the following cases:
 
 \begin{enumerate}[1)]
-\item \texttt{E} is directly mentioned in \texttt{Q}. For example elements \texttt{bib}, \texttt{book} and \texttt{author} are mentioned in path expression \texttt{/bib/book/author}.
-\item \texttt{E} is not mentioned in \texttt{Q} but it does occur in a result of the evaluation of \texttt{Q}. For example path expression \texttt{/bib/book/author} returns elements \texttt{author} along with their subelements \texttt{name}, \texttt{birthdate} and \texttt{nationality}.
-\item \texttt{E} is neither mentioned in \texttt{Q}, nor it occurs in the result, but it is processed by the evaluation of \texttt{Q}. For example the evaluation of path expression \texttt{//author} processes amongst others elements \texttt{bib} and \texttt{book}, in a search for elements \texttt{author}.
-\item \texttt{E} occurs in a part of the XML document not related to \texttt{Q} at all.
+\item $E$ is directly mentioned in $Q$. For example elements \texttt{bib}, \texttt{book} and \texttt{author} are mentioned in path expression \texttt{/bib/book/author}.
+\item $E$ is not mentioned in $Q$ but it does occur in a result of the evaluation of $Q$. For example path expression \texttt{/bib/book/author} returns elements \texttt{author} along with their subelements \texttt{name}, \texttt{birthdate} and \texttt{nationality}.
+\item $E$ is neither mentioned in $Q$, nor it occurs in the result, but it is processed by the evaluation of $Q$. For example the evaluation of path expression \texttt{//author} processes amongst others elements \texttt{bib} and \texttt{book}, in a search for elements \texttt{author}.
+\item $E$ occurs in a part of the XML document not related to $Q$ at all.
 \end{enumerate}
 
-How we can obtain any information about element \texttt{E} from query \texttt{Q}? In case 1), \texttt{Q} can be directly exploited in the inference process. Case 2) requires the result of \texttt{Q} and additional processing of the result. Case 3) requires a step-by-step evaluation of \texttt{Q}, hence, the XML document is also required. And in case 4), it is not possible to obtain any information. 
+How we can obtain any information about element $E$ from query $Q$? In case 1), $Q$ can be directly exploited in the inference process. Case 2) requires the result of $Q$ and additional processing of the result. Case 3) requires a step-by-step evaluation of $Q$, hence, the XML document is also required. And in case 4), it is not possible to obtain any information. 
 
 In addition, these statements do not express any obligation of occurrence of elements and attributes nor clearly determine multiple occurrence of elements. We also cannot be sure that queries target nodes actually presented in the XML documents. Although query \texttt{/bib/book/author} indicates that element \texttt{author} is contained in element \texttt{book}, the query is valid whether this is true or not. In contrast, even basic methods of XML schema inference that utilize XML documents do not have these inadequacies.
 
@@ -243,7 +243,7 @@ By using a similar approach as described in \cite{Necasky:2009:DXK:1529282.15294
 \subsection{Negative Statements about Uniqueness} \label{Negative_uniqueness}
 In many cases a statement refusing uniqueness of element or attribute values can be inferred. Such statements may be helpful in combination with other methods in its process of making a decision whether a particular element or attribute is unique or not.
 
-Basic representant is a common \emph{FLWOR} query.
+Basic representant is a common FLWOR query.
 
 \begin{verbatim}
 <bib>

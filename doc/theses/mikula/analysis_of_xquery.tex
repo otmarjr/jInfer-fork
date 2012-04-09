@@ -6,7 +6,7 @@ Most of sample queries in this chapter are taken from \cite{Walmsley:2007:XQU:12
 \section{Structure of XML documents}
 Most of queries can be exploited to obtain some information about the structure of respective XML documents. The structure of XML documents captures elements from these documents along with their names, attributes and their organization. What the root elements in these documents are, which elements can be contained within a certain element, whether they are optional or mandatory, etc.
 
-Path expressions without predicates which use only child axis are the simpliest example of such queries. For example, path expression \texttt{/bib/book/author} indicates that element \texttt{bib} is the root element and it contains one or more elements \texttt{book} and these contain one or more elements \texttt{author}.
+Path expressions without predicates which use only child axis are the simplest example of such queries. For example, path expression \texttt{/bib/book/author} indicates that element \texttt{bib} is the root element and it contains one or more elements \texttt{book} and these contain one or more elements \texttt{author}.
 
 Additional path expressions \texttt{/bib/book/title}, \texttt{//author/name} indicate that element \texttt{book} also contains element \texttt{title} and element \texttt{author} contains element \texttt{name}. The latter one uses also descendant axis. That means the query considers all elements \texttt{author} in the document, thus it is a hint that maybe there are several elements named \texttt{author} but with different absolute paths and some of them contain an element \texttt{name}.
 

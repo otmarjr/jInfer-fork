@@ -57,7 +57,7 @@ Attributes of an element are specified in an attribute list \texttt{<!ATTLIST\li
 \item \texttt{NOTATION} A name of a notation.
 \end{itemize}
 
-The dafault value is either a literal value or one of the following specifiers.
+The default value is either a literal value or one of the following specifiers.
 
 \begin{itemize}
 \item \texttt{\#REQUIRED} The attribute is mandatory.
@@ -139,7 +139,7 @@ An element can have a mixed content (can contain text and other elements at the 
 </xs:element>
 \end{alltt}
 
-The XSD language consists of many more constructs we do not mention such as substitution groups, type extensions, integrity constranints and other.
+The XSD language consists of many more constructs we do not mention such as substitution groups, type extensions, integrity constraints and other.
 
 The book element from the sample XML document in Figure \ref{FIG_a_simple_xml_example} can be described using the XSD as shown in Figure \ref{FIG_a_simple_xsd_example}.
 
@@ -187,7 +187,7 @@ A node test identifies node(s) within all nodes selected by an axis. It can be a
 Abbreviations for several most widely used constructs are defined as follows.
 \begin{itemize}
 \item \texttt{$P$/$identifier$} stands for \texttt{$P$/child::$identifier$} (child is a default axis)
-\item \texttt{$P$/@$identifier$} stands for \texttt{$P$/atribute::$identifier$}
+\item \texttt{$P$/@$identifier$} stands for \texttt{$P$/attribute::$identifier$}
 \item \texttt{$P$/../$identifier$} stands for \texttt{$P$/parent::*/$identifier$}
 \item \texttt{$P$//$identifier$} stands for \texttt{$P$/descendant-or-self::node()/$identifier$} 
 \end{itemize}
@@ -232,7 +232,7 @@ A sequence is an ordered set of items. The result of each XPath 2.0 (and also XQ
 Each node has its identity, data type (simple or complex, according to the XML Schema types), typed value (which can be retrieved by function \texttt{fn:data()}), and string value (which can be retrieved by function \texttt{fn:string()}).
 
 \subsection{FLWOR Expressions}
-A basic construct of the XQuery language is $FLWOR$. It is an abbrevation of its five clauses: for, let, where, order by, return. For clause is \\
+A basic construct of the XQuery language is $FLWOR$. It is an abbreviation of its five clauses: for, let, where, order by, return. For clause is \\
 \texttt{for $var$ in $expr$} \\
 Expression $expr$ is evaluated and its result is a sequence. Items of the sequence are iteratively assigned to $var$ variable, which is valid also in the following clauses.
 

@@ -19,14 +19,14 @@ The XTRACT \cite{Garofalakis:2000:XSE:342009.335409} system is an example of a \
 \end{enumerate}
 
 \subsection{Generalization}
-The purpose of generalization is to create a set of DTD candidates - schemata that cover fractions of the input XML data. In the last step, this set will be used to compose a (sub)optimal result with respect to a trade-off between its preciseness and conciseness. Therefore, it is desirable to create DTD canditates with various degrees of these two characteristics.
+The purpose of generalization is to create a set of DTD candidates - schemata that cover fractions of the input XML data. In the last step, this set will be used to compose a (sub)optimal result with respect to a trade-off between its preciseness and conciseness. Therefore, it is desirable to create DTD candidates with various degrees of these two characteristics.
 
-Generalization is based on replacing fragmets (sequences of subelements of a given element) from the input XML data by regular expressions, thus, using metacharacters like (*, +, ?). To provide a wide set of DTD canditates, each sequence is processed several times using various values of input parameters. Due to the very large number of possible DTD canditates, the authors employ certain real-life motivated heuristics.
+Generalization is based on replacing fragments (sequences of subelements of a given element) from the input XML data by regular expressions, thus, using metacharacters like (*, +, ?). To provide a wide set of DTD candidates, each sequence is processed several times using various values of input parameters. Due to the very large number of possible DTD candidates, the authors employ certain real-life motivated heuristics.
 
 For instance, paper \cite{Garofalakis:2000:XSE:342009.335409} introduces the following example: Sequences \texttt{abab} and \texttt{bbbe} are generalized to \texttt{(ab)*}, \texttt{(a|b)*}, \texttt{b*e}.
 
 \subsection{Factoring}
-Factoring is a process of creating a new DTD canditate from two or more DTD canditates, decreasing their summed size without modifications in their semantics. The aim of this step is to decrease the MDL cost of DTD candidates calculated in the MDL step and thus refine the process of construction of the resulting DTD.
+Factoring is a process of creating a new DTD candidate from two or more DTD candidates, decreasing their summed size without modifications in their semantics. The aim of this step is to decrease the MDL cost of DTD candidates calculated in the MDL step and thus refine the process of construction of the resulting DTD.
 
 An example is introduced it paper \cite{Garofalakis:2000:XSE:342009.335409}: DTD candidates \texttt{ac}, \texttt{ad}, \texttt{bc} and \texttt{bd} are factored into \texttt{(a|b)(c|d)}.
 
@@ -51,7 +51,7 @@ This work, described in \cite{Vosta:2008:EAC:1802514.1802522}, combines several 
 This phase clusters elements on the basis of their context and structure. It is done by creating tree structures for each input XML document where vertices represent elements and attributes and an edge between two vertices expresses their parent-child relationship. These trees and their subtrees are then compared using an imposed tree similarity measure to find elements with the same semantics.
 
 \subsection{Schema Generalization}
-For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artifical ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant is performing steps (schema modifications), dying after a predefined number of steps and providing an information - positive feedback - on the quality of a solution found. The search is performed in a defined number of interations (or it stops if a good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
+For each cluster, a trivial schema is created, which is then generalized to achieve a reasonable result. In search for the optimal schema, \emph{Ant Colony Optimization (ACO)} heuristic is incorporated. The idea behind the ACO heuristic is that a set of artificial ants is searching a space of possible solutions, each ant given a subspace of the space to find a local suboptimum. An ant is performing steps (schema modifications), dying after a predefined number of steps and providing an information - positive feedback - on the quality of a solution found. The search is performed in a defined number of iterations (or it stops if a good enough solution is found) and the positive feedback from one iteration is used to find better results in the following iterations. Every step of an ant represents a modification of a schema, in particular, a merge of states in a corresponding PTA.
 
 One of the improvements of this heuristic is an inclusion of a negative feedback after each step of an ant, visible only in the current iteration. Due to this improvement, a larger subspace of solutions is searched.
 
@@ -126,7 +126,7 @@ Otherwise, the pattern occurrence is considered of case (O2) and the assigned we
 
 The assumption the method is based on may not be fulfilled for every join in a supplied set of queries. A key $K$ may be inferred from some query and processing of another query may result to denial of $K$ as a key.
 
-Therefore, the authors introduce a scoring function to summarize the positive and the negative statements about keys using the assigned weights. The value of the score expresses the probalitity that a respective key statement is satisfied. Finally, the scores of the inferred keys are normalized to be comparable with each other.
+Therefore, the authors introduce a scoring function to summarize the positive and the negative statements about keys using the assigned weights. The value of the score expresses the probability that a respective key statement is satisfied. Finally, the scores of the inferred keys are normalized to be comparable with each other.
 
 \subsection{Conclusion}
 The output of the method is a list of scored keys and for each key a list foreign keys referencing the key. Since the method deals only with the inference of keys, it is not a complete method of the XML schema inference. It is meant to be used in collaboration with other schema-inferring methods to refine their results.

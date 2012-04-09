@@ -178,7 +178,7 @@ But firstly, we describe types of expressions we want to capture and their featu
 \end{itemize}
 
 \subsection{PathType}
-PathType contains additional information. The represented path is contained by an instance of \texttt{PathExprNode} containing list of its steps, in particular instances of \texttt{StepExprNode}. If a step is a reference to a variable whose type is PathType, we also want to include this information. Therefore, PathType contains association between the steps and other PathTypes and this association is defined for the PathType variable steps.
+PathType contains additional information. The represented path is contained by a list of its steps, in particular instances of \texttt{StepExprNode}. If a step is a reference to a variable whose type is PathType, we also want to include this information. Therefore, PathType contains association between the steps and other PathTypes and this association is defined for the PathType variable steps.
 
 To distinguish between a common PathType selecting a set of nodes and a PathType bound to a for variable in a FLWOR expression, PathType structure contains a flag \texttt{isForBound}.
 
@@ -186,8 +186,8 @@ Additionally, PathType contains a list of special functions that were called wit
 
 In summary, we represent PathType as a structure with the following member variables.
 \begin{itemize}
-\item \texttt{pathExprNode} - An instance of \texttt{PathExprNode}.
-\item \texttt{substeps} - An association between steps from \texttt{pathExprNode} and instances of PathType type.
+\item \texttt{steps} - A list of \texttt{PathExprNode} instances.
+\item \texttt{substeps} - An association between variable-referencing steps and instances of PathType type.
 \item \texttt{isForBound} - Boolean flag determining if the type was bound to a for variable in a for clause.
 \item \texttt{specialFunctionCalls} - List of special functions called with this instance as an argument.
 \end{itemize}
@@ -314,8 +314,8 @@ A similar approach as in the case of functions can be applied to determine types
          \STATE $step :=$ a path step (new instance of StepExprNode) representing the variable reference
 		 \STATE $substeps :=$ an empty associative array         
          \STATE $substeps[step] := type$
-         \STATE $pathExprNode :=$ new instance of PathExprNode containing one step
-         \STATE $type :=$ PathType containing $pathExprNode$ and $substeps$
+         \STATE $steps :=$ an array containing one item which is $step$
+         \STATE $type :=$ PathType containing $steps$ and $substeps$
      \ENDIF
 \ELSIF{$is(exprNode,$ PathExprNode$)$}
      \STATE $type := createPathType(exprNode)$
@@ -409,7 +409,7 @@ The algorithm iterates through the variable declaration nodes from the prolog an
 
 The meaning of the code at lines 6-14 is the following. If a variable is bound to an expression whose type is PathType, we want to assign the variable reference expression with PathType which represents path containing exactly one step, the variable reference. Some algorithm in later sections searches for paths starting with a certain variable and we want them to include also that types of expressions.	
 
-A part of the function's semantic is separated in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
+A parts of the function's semantic are separated in other functions, like the one in Algorithm \ref{ALG_func_determineOperatorType}, which is not presented completely because of the same reason.
 
 Function \texttt{determineExpressionType} is called within function \texttt{analysis\-Of\-Expression\-Types} presented in Algorithm \ref{ALG_func_analysisOfExpressionTypes}, which recursively determines types of all subexpressions. Two important questions about this function emerge. How (in which order) are the tree nodes recursively processed and how does the function handle definitions (bindings) of new variables which may also appear in the expressions?
 
@@ -501,28 +501,28 @@ The types of processed global variables are available trough function \linebreak
 \REQUIRE $pathExprNode$: A reference to a PathExprNode to create the PathType from.
 \ENSURE The PathType of $pathExprNode$ expression.
 
-\STATE $stepNodes :=$ an empty array
-\STATE $forBoundSubsteps :=$ an empty associative array
-\FORALL{$stepNode \in pathExprNode.getChildren()$}
-	\STATE $detailNode := stepNode.getChild(ExprNode)$
+\STATE $steps :=$ an empty array
+\STATE $substeps :=$ an empty associative array
+\FORALL{$step \in pathExprNode.getChildren()$}
+	\STATE $detailNode := step.getChild(ExprNode)$
 	\IF{$detailNode \neq$ null}
 		\IF{$is(detailNode,$ VarRefNode$)$}
 			\STATE $type := getType(detailNode)$ \COMMENT{PathType}
 			\IF{$type.isForBound$}
-				\STATE $forBoundSubsteps[stepNode] := type$
-				\STATE add $stepNode$ to $stepNodes$
+				\STATE $substeps[stepNode] := type$
+				\STATE add $step$ to $steps$
 			\ELSE
-				\STATE add all $type.stepNodes$ to $stepNodes$
+				\STATE add all $type.steps$ to $steps$
 			\ENDIF
 		\ELSE
-			\STATE add $stepNode$ to $stepNodes$
+			\STATE add $step$ to $steps$
 		\ENDIF
 	\ELSE
-		\STATE add $stepNode$ to $stepNodes$
+		\STATE add $step$ to $steps$
 	\ENDIF
 \ENDFOR
 
-\RETURN $PathType$ with $stepNodes$, $forBoundSubsteps$, and $isForBound$ set to false
+\RETURN $PathType$ with $steps$, $substeps$, and $isForBound$ set to false
 \end{algorithmic}
 \end{algorithm}
 
@@ -580,21 +580,21 @@ Also note, that the function call node of \texttt{local:convert} in the FLWOR re
 \section{Step 3: Inference of Built-in Types}
 In this step, the algorithm goes through the syntax tree to infer types of elements and attributes from expressions using the type information from the previous step. These two steps could be merged together but for better comprehension we present it separately.
 
-How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain an subexpression $E$ of PathType type (expression representing a certain element or attribute or a set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
+How are the types inferred from the expression types? We do not exploit all expressions. Only expressions of a particular type are exploited. Specifically, an expression has to contain a subexpression $E$ of PathType type (expression representing a certain element or attribute or a set of elements or attributes). In the following text, the set represented by expression $E$ is denoted $S$. Another requirement is that the expression has to be either a function call or an arithmetic operation. As discussed in Chapter \ref{CHAPTER_analysis_of_xquery}, also other XQuery constructs can be utilized to infer built-in types, but, since the principle is similar, we focus on the two mentioned.
 
 Likewise the previous step, the syntax tree is recursively searched for expressions meeting the conditions for the type inference. A little difference is that the recursion stops at \texttt{FunctionsBodyNode} and \texttt{PathExprNode} nodes, because the processing of these nodes requires a different approach, which we do not deal with in this thesis.
 
 The output of this step is a set of statements of the form $P \rightarrow T$, where $P$ is an instance of PathType and $T$ is an XML Schema built-in atomic type.
 
 \subsection{Function Calls}\label{SUBSECTION_function_calls}
-This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a set of elements of attributes (subexpression $E$ representing $S$) represented by PathType $p$. To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
+This case is quite straightforward. The algorithm encounters a function call and one of the arguments is a set of elements of attributes (subexpression $E$ representing $S$) represented by PathType $P$. To determine the type of $S$, it is only needed to determine the type of the corresponding formal argument from the definition of the function. The function is either a built-in one so its definition is known or it is defined in the prolog section. External functions are not processed as was mentioned already.
 
-If the type $t$ of the formal argument is a built-in type or its sequence, then $t$ is also the inferred type of $S$. The inferred statement is $p \rightarrow t$. Otherwise, no statement is inferred.
+If the type $T$ of the formal argument is a built-in type or its sequence, then $T$ is also the inferred type of $S$. The inferred statement is $P \rightarrow T$. Otherwise, no statement is inferred.
 
 \subsection{Arithmetic Operations}
-If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod}, \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD}, \texttt{MUL}, \texttt{DIV} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $p$ and the type $t$ of the other operand is one of numeric built-in types, then the inferred statement is $p \rightarrow t$.
+If the operator in an arithmetic operation is one of \texttt{+}, \texttt{-}, \texttt{div}, \texttt{mod}, \texttt{*}, \texttt{/} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{PLUS}, \texttt{MINUS}, \texttt{IDIV}, \texttt{MOD}, \texttt{MUL}, \texttt{DIV} (for all operators, see Attachment \ref{FIG_operators})), one operand is of PathType $P$ and the type $T$ of the other operand is one of numeric built-in types, then the inferred statement is $P \rightarrow T$.
 
-If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $p$ and the type $t$ of the other operand is one of built-in types, then the inferred statement is $p \rightarrow t$.
+If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \texttt{=}, \texttt{!=} (the class of the expression node is \texttt{Operator} and it represents one of \texttt{GEN\_LESS\_THAN}, \texttt{GEN\_GREATER\_THAN}, \texttt{GEN\_LESS\_THAN\_EQUALS}, \texttt{GEN\_GREATER\_THAN\_EQUALS}, \texttt{GEN\_EQUALS}, \\ \texttt{GEN\_NOT\_EQUALS}), one operand is of PathType $P$ and the type $T$ of the other operand is one of built-in types, then the inferred statement is $P \rightarrow T$.
 
 \subsection{Example}
 
@@ -606,9 +606,9 @@ If the operator is one of \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}, \tex
 
 Figure \ref{FIG_syntax_tree_1_types_type_inference} shows a fraction of the syntax tree from Figure \ref{FIG_syntax_tree_1_types}. When the inference of built-in types encounters the node marked by blue color, a statement will be inferred using the principle described in Chapter \ref{SUBSECTION_function_calls}. The node represents a call of \texttt{local:convert} function.
 
-This function has one formal argument of type $t =$ \texttt{xs:decimal}, \texttt{zero-or-one} cardinality. The real argument is of a PathType $p$. In particular, it is a PathType representing path \texttt{\$i/reserve}, where the \texttt{\$i} variable refers to a PathType representing for-bound \texttt{/site/open\_auctions/open\_auction} path, and one special function call of \texttt{zero-or-one} function is noted.
+This function has one formal argument of type $T =$ \texttt{xs:decimal}, \texttt{zero-or-one} cardinality. The real argument is of a PathType $P$. In particular, it is a PathType representing path \texttt{\$i/reserve}, where the \texttt{\$i} variable refers to a PathType representing for-bound \texttt{/site/open\_auctions/open\_auction} path, and one special function call of \texttt{zero-or-one} function is noted.
 
-Since the criteria for the inference from a function call are met, statement $p \rightarrow t$ is inferred.
+Since the criteria for the inference from a function call are met, statement $P \rightarrow T$ is inferred.
 
 \subsection{Possible Extensions}
 As mentioned, the proposed algorithm utilizes only a small portion of XQuery constructs which can be be possibly utilized. Also, the algorithm does not perform the inference of types inside user-defined functions (it just uses the return types determined in earlier phases). That can be easily done as we know the definitions of functions and types of their real arguments. An algorithm performing the analysis in the user-defined functions can works as follows.
@@ -634,19 +634,19 @@ Function \texttt{usesOnlyChildAndDescendantAxes} in Algorithm \ref{ALG_function_
 \REQUIRE $pathType$: A PathType instance.
 \ENSURE A boolean result.
 
-\FORALL{$stepNode \in pathType.stepNodes$}
-	\IF{$stepNode.isAxisStep$}
-		\STATE $axisKind := stepNode.axisNode.getAxisKind()$
+\FORALL{$step \in pathType.steps$}
+	\IF{$step.isAxisStep$}
+		\STATE $axisKind := step.axisNode.getAxisKind()$
 		\IF{$axisKind \neq$ CHILD $\wedge$ $axisKind \neq$ DESCENDANT $\wedge$ $axisKind \neq$ DESCENDANT\_OR\_SELF}
 			\RETURN false
 		\ENDIF
 	\ENDIF
 \ENDFOR
 
-\STATE $detailNode := stepNode.getChild(ExprNode)$
+\STATE $detailNode := step.getChild(ExprNode)$
 \IF{$detailNode \neq$ null}
 	\IF{$is(detailNode,$ VarRefNode$)$}
-		\IF{$usesOnlyChildAndDescendantAxes($ $pathType.forBoundSubsteps[stepNode]) =$ false}
+		\IF{$usesOnlyChildAndDescendantAxes(pathType.substeps[step]) =$ false}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -665,12 +665,12 @@ Function \texttt{isWithoutPredicates} in Algorithm \ref{ALG_function_is_without_
 \REQUIRE $pathType$: A PathType instance.
 \ENSURE A boolean result.
 
-\FORALL{$stepNode \in pathType.stepNodes$}
-	\IF{$stepNode.hasPredicates$}
+\FORALL{$step \in pathType.steps$}
+	\IF{$step.hasPredicates$}
 		\RETURN false
 	\ENDIF
-	\IF{$pathType.forBoundSubsteps[stepNode] \neq$ null}
-		\IF{$isWithoutPredicates(pathType.forBoundSubsteps[stepNode] =$ false}
+	\IF{$pathType.substeps[step] \neq$ null}
+		\IF{$isWithoutPredicates(pathType.substeps[step] =$ false}
 			\RETURN false
 		\ENDIF
 	\ENDIF
@@ -689,15 +689,15 @@ Function \texttt{endsWithExactlyOnePredicate} in Algorithm \ref{ALG_function_end
 \REQUIRE $pathType$: A PathType instance.
 \ENSURE If $pathType$ ends with exactly one predicate, return value is the predicate, otherwise return value is false.
 
-\STATE $lastStepNode :=$ the last item from $pathType.stepNodes$
-\IF{$lastStepNode.hasPredicates() =$ false}
+\STATE $lastStep :=$ the last item from $pathType.steps$
+\IF{$lastStep.hasPredicates() =$ false}
 	\RETURN false
 \ENDIF
-\IF{number of items in list $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$ is higher than 1}
+\IF{number of items in list $lastStep.getChild(PredicateListNode)$ $.getChildren()$ is higher than 1}
 	\RETURN false
 \ENDIF
 
-\RETURN the only item in $lastStepNode.getChild(PredicateListNode)$ $.getChildren()$
+\RETURN the only item in $lastStep.getChild(PredicateListNode)$ $.getChild(0)$
 \end{algorithmic}
 \end{algorithm}
 
@@ -713,7 +713,7 @@ Function \texttt{isTargetPath} in Algorithm \ref{ALG_function_is_target_path} ch
 }
 \ENSURE Returns true, if the first step of path represented by the PathType instance is a reference to the specified variable.
 
-\STATE $firstStep :=$ first item from  $pathType.stepNodes$
+\STATE $firstStep :=$ first item from  $pathType.steps$
 \STATE $detailNode := firstStep.detailNode$
 \IF{$detailNode =$ null}
 	\RETURN false
@@ -862,9 +862,9 @@ where $\$e_2/L_2 = \$e_1/L_1$
 return $C_R$
 \end{lstlisting}
 
-The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_other_for_join_pattern}, \ref{listing_other_let_join_pattern} and \ref{listing_join_pattern_3}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child and descendant axes. Actually, the join patterns from Listings \ref{listing_other_for_join_pattern} and \ref{listing_other_let_join_pattern} are covered by the for and let join pattern in the original approach, but we introduce them explicitly, because their structure in the syntax tree is different.
+The two join patterns from the original approach are shown in Listings \ref{listing_for_join_pattern} and \ref{listing_let_join_pattern}. Additional join patterns are introduced in Listings \ref{listing_other_for_join_pattern}, \ref{listing_other_let_join_pattern} and \ref{listing_join_pattern_3}. In all join patterns $P_1$, $P_2$, $L_1$, $L_2$ are XQuery paths without predicates, using only child, descendant, and descendant or self ($L_1$, $L_2$ also attribute) axes. Actually, the join patterns from Listings \ref{listing_other_for_join_pattern} and \ref{listing_other_let_join_pattern} are covered by the for and let join pattern in the original approach, but we introduce them explicitly, because their structure in the syntax tree is different.
 
-Since in this step we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of PathType without predicates, using only child and descendant axes.
+Since in this step we already know the types of all expressions in the syntax tree, the requirement that $P_1$, $P_2$, $L_1$, $L_2$ are paths of the described form can be replaced by a more general requirement that $P_1$, $P_2$, $L_1$, $L_2$ are expressions of PathType satisfying the same requirements.
 
 As described in the original method and summarized in Chapter \ref{Keys} we recognize two cases (O1) and (O2) of inference of keys from occurrences of the join patterns, and rules (R1 - R5) to classify each occurrence into one of these cases. For the join pattern 3, we introduce a new rule, considering the join pattern 3 of case (O1), assigned with weight of 0.5.  The lesser weight is chosen because there is a lower probability that join of the join pattern 3 type is done via a key/foreign key pair.
 
@@ -1018,7 +1018,7 @@ As it can be seen in Algorithm \ref{ALG_classification_of_join_pattern_occurrenc
 \ENSURE True if the $jpOccurrence$ was classified as case (O1) using the R3 rule. False otherwise.
 
 \FORALL{$returnPathType \in returnPathTypes$}
-    \IF{$returnPathType.specialFunctionCalls$ contains $count$}
+    \IF{$returnPathType.specialFunctionCalls$ contains 'count'}
         \STATE mark $jpOccurrence$ as case (O1), weight 0.75 \COMMENT {R3}
         \RETURN true
     \ENDIF
@@ -1082,8 +1082,6 @@ The first XQuery construct utilized by this step is a function call of \\ \textt
 
 Aggregation functions \texttt{min}, \texttt{max}, \texttt{sum} are not utilized by the function, because they were utilized by the search for join patterns, and in the process of classification of found join patterns, they were included in the computation of the key weights.
 
-Contrary to the key discovery, PathTypes utilized in this step may contain predicates in their lasts steps. Predicates in a path's last step restrict its result, and, therefore, if a set of elements or attributes selected by a path with predicates is not unique, neither is the set of elements or attributes selected by the same path stripped of the predicates.
-
 \begin{algorithm}
 \caption{Rejection of uniqueness - aggregation functions}
 \label{ALG_rejection_of_uniqueness_aggregation_functions}
@@ -1102,7 +1100,7 @@ Contrary to the key discovery, PathTypes utilized in this step may contain predi
 \end{algorithmic}
 \end{algorithm}
 
-Besides the aggregation functions, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child and descendant axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (literal constant, reference to a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
+Besides the \texttt{distinct-values} function, a certain form of FLWOR expressions is utilized in this step. They are FLWORs that iterate through a sequence of nodes selected by a path expressions using only child, descendant, and descendant or self axes, and either that path expressions end with a predicate comparing a value of a subnode with some other value (literal constant, reference to a variable which is constant in this expressions, etc), or, the comparison is located in a where clause of a respective FLWOR.
 
 As discussed in Chapter \ref{Negative_uniqueness}, when a for clause is used to iterate through a set of items, it is expected that the number of the items may be more than one. And, together with that, the set is restricted to contain only items which satisfy a condition that a value of one of their subnodes (or descendant nodes) equals a certain value. That implies that the value in those nodes is not unique, and, alike the utilization of the aggregation functions, non-unique nodes cannot be keys. This situation is handled in Algorithms \ref{ALG_rejection_of_uniqueness_comparison_with_a_constant} and \ref{ALG_rejection_of_uniqueness_function_process_where}.
 
@@ -1184,7 +1182,7 @@ $S^{norm}_i = \frac{S_i}{S^{max}} * (1 - \frac{N^{max} - N_i}{\sum_{i=1}^{n}N_i}
 \label{FIG_syntax_tree_2}
 \end{figure}
 
-Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_test_query_8} (subtree of ConstructorNode is omitted because of lack of space). In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.
+Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \ref{listing_test_query_8} (subtree of \texttt{Construc\-torNode} is omitted because of lack of space). In this tree, the algorithm founds one occurrence of the join pattern 3. The two for clauses and one where clause which form the occurrence are shown in the red boxes.
 
 \begin{itemize}
 \item $P_1 =$ \texttt{/site/people/person}
@@ -1196,7 +1194,7 @@ Figure \ref{FIG_syntax_tree_2} shows the syntax tree of the query in Listing \re
 The next phase marks this occurrence as (O1) case with weight 0.5. Paths $P_1$ and $P_2$ does not have a common context, and thus, the following statements are inferred:
 
 \begin{itemize}
-\item Key $k = ($\texttt{/site/people/person}$, \{$\texttt{@id}$\})$ is satisfied.
-\item Foreign key $(($\texttt{/site/closed\_auctions/closed\_auction}$, \{$\texttt{buyer/@person}$\}) \rightarrow k)$ is satisfied.
+\item Key $K = ($\texttt{/site/people/person}$, \{$\texttt{@id}$\})$ is satisfied.
+\item Foreign key $(($\texttt{/site/closed\_auctions/closed\_auction}$, \{$\texttt{buyer/@person}$\}) \rightarrow K)$ is satisfied.
 \item Key $($\texttt{/site/closed\_auctions/closed\_auction}$, \{$\texttt{buyer/@person}$\})$ is not satisfied.
 \end{itemize}

@@ -7,11 +7,11 @@ Attributes of elements are not contained in the grammar directly, but every elem
 
 The combination with such methods of inference is straightforward. The rules of the grammar describe the XML structure using the most general aspect of elements and their subelements. Since the statements inferred by our method do not involve the XML structure by defining a subelement structure of elements, there are no conflicts between the grammar rules and our statements that need to be resolved.
 
-Our statements are of the three following forms. The first one is $p \rightarrow t$, where $p$ is a PathType representing an XQuery path selecting a set of elements or attributes, and $t$ is an XSD built-in atomic type.
+Our statements are of the three following forms. The first one is $P \rightarrow T$, where $P$ is a PathType representing an XQuery path selecting a set of elements or attributes, and $T$ is an XSD built-in atomic type.
 
-The second and third forms are $k = (C,P,\{L\})$ and $fk = (C(P_1,\{L_1\}) \rightarrow (P_2,\{L_2\}))$, representing a key and a foreign key, where $C,P,P_1,P_2,L,L_1,L_2$ are PathTypes without predicates using only child and descendant axes.
+The second and third forms are $K = (C,P,\{L\})$ and $K_f = (C(P_1,\{L_1\}) \rightarrow (P_2,\{L_2\}))$, representing a key and a foreign key.
 
-In all three cases, we want to determine elements from the grammar (or their attributes), targeted by the respective paths ($p$ from the first form and $C$ from the second and third form). This is done in two steps. The first one is normalization of a particular PathType and the second one is selection of the targeted elements.
+In all three cases, we want to determine elements from the grammar (or their attributes), targeted by the respective paths ($P$ from the first form and $C$ from the second and third form). This is done in two steps. The first one is normalization of a particular PathType and the second one is selection of the targeted elements.
 
 \section{Evaluation of Paths}
 A path represented by PathType can contain variable references and association of these references with other paths. That is the reason why the normalization is convenient. It simply finds the variable references in the path and replaces them with steps from the associated paths, which are normalized recursively.
@@ -77,17 +77,17 @@ And, at last, if the axis is attribute axis, elements from the context set are s
 \section{Saving the Inferred Statements}
 In case of keys, the algorithm iterates through the inferred key statements. A key's context path $C$ is evaluated and the key is assigned to the target elements selected by the context path, one element can be assigned with multiple keys. Additionally, each key is assigned with a list of foreign keys that are referencing it.
 
-In case of inferred types, the situation is slightly less simple, because there can occur conflicting statements. The examples of such conflicts for path $p$ without predicates are $p_1 \rightarrow date$, $p_2 \rightarrow string$, and, $p_1 \rightarrow byte$, $p_2 \rightarrow int$, where $p_1$, $p_2$ are paths that when stripped of predicates, they equal $p$.
+In case of inferred types, the situation is slightly less simple, because there can occur conflicting statements. The examples of such conflicts for path $P$ without predicates are $P_1 \rightarrow$ \texttt{date}, $P_2 \rightarrow$ \texttt{string}, and, $P_1 \rightarrow$ \texttt{byte}, $P_2 \rightarrow$ \texttt{int}, where $P_1$, $P_2$ are paths that when stripped of predicates, they equal $P$.
 
-Note that, in both examples, one type is castable to the other (date to string, and byte to int). Both types are inferred correctly for nodes targeted by $p$, but one of them was inferred from a more convenient expression and is more precise.
+Note that, in both examples, one type is castable to the other (\texttt{date} to \texttt{string}, and \texttt{byte} to \texttt{int}). Both types are inferred correctly for nodes targeted by $P$, but one of them was inferred from a more convenient expression and is more precise.
 
-Consider these two expressions; PathType $p$ is compared to an integer literal constant, and, PathType $p$ is an argument of function where a formal type of the argument is byte. The first expression is utilized to infer statement $p \rightarrow integer$, and the second one to infer statement $p \rightarrow byte$. Both of the types are correct, but the second one is more accurate.
+Consider these two expressions; PathType $P$ is compared to an integral literal constant, and, PathType $P$ is an argument of a function where a formal type of the argument is \texttt{byte}. The first expression is utilized to infer statement $P \rightarrow$ \texttt{integer}, and the second one to infer statement $P \rightarrow$ \texttt{byte}. Both of the types are correct, but the second one is more accurate.
 
-A problem emerges for example if PathType $p$ is compared to an integer constant, and the real type of elements (or attributes) selected by $p$ is \texttt{double}. In that case, statement $p \rightarrow$ \texttt{integer} is inferred, but it is not correct.
+A problem emerges for example if PathType $P$ is compared to an integral constant, and the real type of elements (or attributes) selected by $P$ is \texttt{double}. In that case, statement $P \rightarrow$ \texttt{integer} is inferred, but it is not correct.
 
 \subsection{Verification using XML data}
 To solve the problems, we propose a simple verification using XML data.
 
-For each normalized PathType $p$ from the inferred type statements $\mathcal{S}_t$, we find set $T_p$ of all inferred types. $T_p = \{t|(p \rightarrow t) \in \mathcal{S}_t\}$. Then, we create sequence $T_p'$ by ordering the set $T_p$ from the most specific type to the most general one. For example, if $T_p = \{$\texttt{double}, \texttt{byte}, \texttt{int}$\}$, $T_p' = ($\texttt{byte}, \texttt{int}, \texttt{double}$)$.
+For each normalized PathType $P$ from the inferred type statements $\mathcal{S}_t$, we find set $\mathcal{T}_P$ of all inferred types. $\mathcal{T}_P = \{T|(P \rightarrow T) \in \mathcal{S}_t\}$. Then, we create sequence $\mathcal{T}_P'$ by ordering the set $\mathcal{T}_P$ from the most specific type to the most general one. For example, if $\mathcal{T}_P = \{$\texttt{double}, \texttt{byte}, \texttt{int}$\}$, $\mathcal{T}_P' = ($\texttt{byte}, \texttt{int}, \texttt{double}$)$.
 
-Since we have the XML data and path $p$ is an XQuery path, we can use an XQuery processor (a program that evaluates XQuery paths or queries) to select nodes $N$ targeted by $p$. The verification algorithm iterates through $T_p'$ and for each $t' \in T_p'$ it checks if every node in $N$ conforms to $t'$. If so, $t'$ is the inferred type for nodes $N$ (and PathType $p$), else the inferred type is \texttt{string}.
+Since we have the XML data and path $P$ is an XQuery path, we can use an XQuery processor (a program that evaluates XQuery paths or queries) to select nodes $N$ targeted by $P$. The verification algorithm iterates through $\mathcal{T}_P'$ and for each $T' \in \mathcal{T}_P'$ it checks if every node in $N$ conforms to $T'$. If so, $T'$ is the inferred type for nodes $N$ (and PathType $P$), else the inferred type is \texttt{string}.

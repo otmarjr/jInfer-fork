@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.twostep/6
+OpenIDE-Module-Implementation-Version: 6
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/twostep/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/twostep/Bundle.properties
+OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier
+OpenIDE-Module-Requires: cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer
+

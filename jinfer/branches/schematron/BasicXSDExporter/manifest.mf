@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.basicxsd/5
+OpenIDE-Module-Implementation-Version: 5
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/basicxsd/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/basicxsd/Bundle.properties
+OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator
+

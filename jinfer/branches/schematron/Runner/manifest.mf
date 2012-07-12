@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.runner/5
+OpenIDE-Module-Implementation-Version: 5
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/runner/Bundle.properties
+OpenIDE-Module-Requires: 
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator,
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.NonGrammaticalInputProcessor,
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator,
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier,
+  org.openide.windows.IOProvider
+

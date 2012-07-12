@@ -91,7 +91,7 @@ public interface Clusterer<T> {
    *    throw new InterruptedException();
    *  }
    * </code>
-   * in some main loop.
+   * or utility method Interrupt.check(); in some main loop.
    *
    */
   void cluster() throws InterruptedException;

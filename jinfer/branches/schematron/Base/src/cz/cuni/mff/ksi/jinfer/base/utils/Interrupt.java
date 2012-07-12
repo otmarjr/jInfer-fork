@@ -15,15 +15,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package cz.cuni.mff.ksi.jinfer.basicxsd;
+package cz.cuni.mff.ksi.jinfer.base.utils;
 
 /**
  * Helper class to provide checking for thread interrupt.
  * @author rio
  */
-public final class InterruptChecker {
+public final class Interrupt {
 
-  private InterruptChecker() {
+  private Interrupt() {
   }
 
   /**
@@ -31,7 +31,7 @@ public final class InterruptChecker {
    * accordingly or does nothing.
    * @throws InterruptedException
    */
-  public static void checkInterrupt() throws InterruptedException {
+  public static void check() throws InterruptedException {
     if (Thread.interrupted()) {
       throw new InterruptedException();
     }

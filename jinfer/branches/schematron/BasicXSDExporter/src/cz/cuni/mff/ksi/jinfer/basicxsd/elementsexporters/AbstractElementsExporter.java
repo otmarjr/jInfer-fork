@@ -29,7 +29,7 @@ import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.IGGUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.RunningProject;
 import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
-import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
+import cz.cuni.mff.ksi.jinfer.base.utils.Interrupt;
 import cz.cuni.mff.ksi.jinfer.basicxsd.properties.XSDExportPropertiesPanel;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.RegexpTypeUtils;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
@@ -92,7 +92,7 @@ public abstract class AbstractElementsExporter {
    * @throws InterruptedException
    */
   protected void processElement(final Element element, final RegexpInterval interval) throws InterruptedException {
-    InterruptChecker.checkInterrupt();
+    Interrupt.check();
 
     // Begin definition of element and write its name.
     indentator.indent("<xs:element name=\"");
@@ -262,7 +262,7 @@ public abstract class AbstractElementsExporter {
     if (!attributes.isEmpty()) {
       assert TypeUtils.isOfComplexType(element);
       for (Attribute attribute : attributes) {
-        InterruptChecker.checkInterrupt();
+        Interrupt.check();
         indentator.indent("<xs:attribute name=\"");
         indentator.append(attribute.getName());
 
@@ -370,7 +370,7 @@ public abstract class AbstractElementsExporter {
    * @throws InterruptedException When inference was interrupted.
    */
   private void processSubElements(final Regexp<AbstractStructuralNode> regexp) throws InterruptedException {
-    InterruptChecker.checkInterrupt();
+    Interrupt.check();
 
     if (regexp.isLambda()) {
       return;

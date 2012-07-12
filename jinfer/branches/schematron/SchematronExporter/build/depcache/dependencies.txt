@@ -1,0 +1,16 @@
+||:cz.cuni.mff.ksi.jinfer.jsx.JsxSchemaGeneratorImpl
+java.lang.StringBuilder
+cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback
+cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element
+java.util.List
+java.util.Collections
+java.lang.InterruptedException
+org.apache.log4j.Logger
+cz.cuni.mff.ksi.jinfer.jsx.JsxSchemaGeneratorImpl
+java.util.Iterator
+cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator
+java.lang.Object
+cz.cuni.mff.ksi.jinfer.base.utils.Indentator
+||:cz.cuni.mff.ksi.jinfer.jsx.package-info
+java.lang.Object
+cz.cuni.mff.ksi.jinfer.jsx.package-info

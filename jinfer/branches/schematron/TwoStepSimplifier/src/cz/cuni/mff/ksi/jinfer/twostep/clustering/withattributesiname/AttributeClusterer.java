@@ -17,6 +17,7 @@
 package cz.cuni.mff.ksi.jinfer.twostep.clustering.withattributesiname;
 
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
+import cz.cuni.mff.ksi.jinfer.base.utils.Interrupt;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Cluster;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import java.util.Collection;
@@ -58,9 +59,8 @@ public class AttributeClusterer implements Clusterer<Attribute> {
     final Iterator<Cluster<Attribute>> iterator = this.nodeClusters.iterator();
 
     while (iterator.hasNext()) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
+      Interrupt.check();
+      
       final Cluster<Attribute> cluster = iterator.next();
       final Attribute representant = cluster.getRepresentant();
       if (representant.getName().equalsIgnoreCase(item.getName())) {

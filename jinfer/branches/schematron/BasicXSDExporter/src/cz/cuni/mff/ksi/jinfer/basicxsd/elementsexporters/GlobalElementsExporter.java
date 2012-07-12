@@ -20,7 +20,7 @@ package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
-import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
+import cz.cuni.mff.ksi.jinfer.base.utils.Interrupt;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;
 import java.util.List;
@@ -45,7 +45,7 @@ public final class GlobalElementsExporter extends AbstractElementsExporter {
   public void run() throws InterruptedException {
     final List<Element> globalElements = preprocessingResult.getGlobalElements();
     for (Element globalElement : globalElements) {
-      InterruptChecker.checkInterrupt();
+      Interrupt.check();
       processGlobalElement(globalElement);
     }
   }
@@ -57,7 +57,7 @@ public final class GlobalElementsExporter extends AbstractElementsExporter {
    * @throws InterruptedException
    */
   private void processGlobalElement(final Element element) throws InterruptedException {
-    InterruptChecker.checkInterrupt();
+    Interrupt.check();
 
     // If element is of a built-in type don't define it.
     if (TypeUtils.isOfBuiltinType(element)) {

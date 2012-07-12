@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dependencies>
+    <dependency>
+        <leftSidePaths>
+            <path>some XPath</path>
+            <path>another XPath</path>
+        </leftSidePaths>
+        <rightSidePaths>
+            <path>dxgfdgd</path>
+        </rightSidePaths>
+    </dependency>
+</dependencies>

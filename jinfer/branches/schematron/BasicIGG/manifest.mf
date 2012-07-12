@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.basicigg/6
+OpenIDE-Module-Implementation-Version: 6
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/basicigg/Bundle.properties
+OpenIDE-Module-Provides: cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator
+OpenIDE-Module-Requires: cz.cuni.mff.ksi.jinfer.base.interfaces.RuleDisplayer
+

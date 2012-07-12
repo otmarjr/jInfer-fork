@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.base/6
+OpenIDE-Module-Implementation-Version: 6
+OpenIDE-Module-Install: cz/cuni/mff/ksi/jinfer/base/Installer.class
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/base/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/base/Bundle.properties
+

@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.iss/2
+OpenIDE-Module-Implementation-Version: 2
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/iss/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/iss/Bundle.properties
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
+

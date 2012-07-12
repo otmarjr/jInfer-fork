@@ -1,0 +1,29 @@
+set MAPPINGS;
+set INCUMBENT;
+set REMAINING;
+
+param Weight {i in MAPPINGS};
+
+var x {i in MAPPINGS} binary;
+
+maximize z: sum {i in MAPPINGS} x[i] * Weight[i];
+
+s.t. localBranchingCondition: sum { i in INCUMBENT } (1 - x[i]) + sum { i in REMAINING } x[i] <= {k};
+
+{constraints}
+
+data;
+
+set MAPPINGS :=
+{mappings};
+
+set INCUMBENT :=
+{incumbent};
+
+set REMAINING :=
+{remaining};
+
+param Weight :=
+{weights};
+
+end;

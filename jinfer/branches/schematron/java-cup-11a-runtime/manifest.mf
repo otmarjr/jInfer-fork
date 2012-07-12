@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.java_cup_11a_runtime
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/java_cup_11a_runtime/Bundle.properties
+OpenIDE-Module-Specification-Version: 1.0
+

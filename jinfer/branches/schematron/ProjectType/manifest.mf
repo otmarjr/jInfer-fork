@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: cz.cuni.mff.ksi.jinfer.projecttype/3
+OpenIDE-Module-Implementation-Version: 3
+OpenIDE-Module-Layer: cz/cuni/mff/ksi/jinfer/projecttype/layer.xml
+OpenIDE-Module-Localizing-Bundle: cz/cuni/mff/ksi/jinfer/projecttype/Bundle.properties
+OpenIDE-Module-Requires: 
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.IGGenerator,
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.NonGrammaticalInputProcessor,
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator,
+  cz.cuni.mff.ksi.jinfer.base.interfaces.inference.Simplifier,
+  org.openide.windows.IOProvider
+

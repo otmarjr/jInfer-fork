@@ -20,6 +20,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.Interrupt;
 import cz.cuni.mff.ksi.jinfer.twostep.clustering.Clusterer;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.ClusterProcessor;
 import java.util.List;
@@ -46,9 +47,8 @@ public class Alternations implements ClusterProcessor<AbstractStructuralNode> {
     ret.getSubnodes().setInterval(RegexpInterval.getOnce());
 
     for (final AbstractStructuralNode n : rules) {
-      if (Thread.interrupted()) {
-        throw new InterruptedException();
-      }
+      Interrupt.check();
+      
       if (!n.isElement()) {
         throw new IllegalArgumentException("Expecting element here.");
       }

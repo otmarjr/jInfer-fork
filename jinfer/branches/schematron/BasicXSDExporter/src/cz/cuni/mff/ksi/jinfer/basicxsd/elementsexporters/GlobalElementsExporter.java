@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
+import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
 import cz.cuni.mff.ksi.jinfer.basicxsd.InterruptChecker;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeCategory;
 import cz.cuni.mff.ksi.jinfer.basicxsd.utils.TypeUtils;

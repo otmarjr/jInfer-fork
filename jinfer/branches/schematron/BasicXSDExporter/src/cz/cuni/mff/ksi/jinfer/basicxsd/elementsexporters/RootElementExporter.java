@@ -19,7 +19,7 @@ package cz.cuni.mff.ksi.jinfer.basicxsd.elementsexporters;
 
 import cz.cuni.mff.ksi.jinfer.basicxsd.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.basicxsd.Indentator;
+import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
 
 /**
  * Exporter which retrieves the root element from a preprocessing result and

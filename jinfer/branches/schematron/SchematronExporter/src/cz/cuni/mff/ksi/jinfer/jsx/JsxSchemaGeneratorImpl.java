@@ -18,8 +18,17 @@ package cz.cuni.mff.ksi.jinfer.jsx;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
+import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
+import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
+import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
+import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
+import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
+import cz.cuni.mff.ksi.jinfer.jsx.preprocessing.PreprocessingResult;
+import cz.cuni.mff.ksi.jinfer.jsx.preprocessing.Preprocessor;
+import cz.cuni.mff.ksi.jinfer.jsx.util.Filters;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -68,23 +77,198 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
             return;
         }
 
-        final Indentator indentator = new Indentator(2);
+        final Preprocessor preprocessor = new Preprocessor(grammar);
+        final PreprocessingResult preprocessingResult = preprocessor.getResult(); // this is always non-null
+        final Indentator indentator = new Indentator(2); // 2 spaces
 
+        //extract all ELEMENTs from under root element, so that they have proper context
+        Element root = preprocessingResult.getRootElement();
+
+//DEBUG        
+//        indentator.indent("=== THE ROOT ELEMENT ===\n");
+//        indentator.indent(preprocessingResult.getRootElement().toString() + "\n");
+//        indentator.indent("=== ================ ===\n");
+//DEBUG
+
+        if (null == root || null == root.getSubnodes()) {
+            LOG.warn("JSX: nothing to export.");
+            callback.finished(GENERATED_SUBSTITUTION_STRING, FILE_EXTENSION);
+            return;
+        }
         // Generate head of a new SCH.
         indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         indentator.indent("<schema xmlns=\"http://purl.oclc.org/dsdl/schematron\" schemaVersion=\"1.0beta\">\n");
         indentator.indent(GENERATED_SUBSTITUTION_STRING);
+        indentator.increaseIndentation();
 
+        // create pattern for root element(s), since we always get 1 root element, this rule is made statically
+        indentator.indentln("<pattern name=\"pattern-root-elements\">");
+        indentator.increaseIndentation();
 
-        // dump rules
-        for (Element element : grammar) {
-            indentator.indent(element.toString() + "\n");
+        // context for root is always "/root"
+        indentator.indent("<rule context=\"/");
+        indentator.append(root.getName());
+        indentator.append("\">\n");
+
+        indentator.increaseIndentation();
+        indentator.indentln("<assert test=\"true()\"/>"); // not-pair tag
+        indentator.decreaseIndentation();
+        indentator.indentln("</rule>");
+        indentator.indentln("<rule context=\"/*\">");
+        indentator.increaseIndentation();
+        indentator.indentln("<assert test=\"false()\">"); // pair tag
+        indentator.increaseIndentation();
+        indentator.indentln("Element '<name/>' is not allowed as root element. Only element '" + root.getName() + "' may be declared as root.");
+        indentator.decreaseIndentation();
+        indentator.indentln("</assert>");
+        indentator.decreaseIndentation();
+        indentator.indentln("</rule>");
+        indentator.decreaseIndentation();
+        indentator.indentln("</pattern>");
+
+        List<Element> allElements = Filters.filterElements(root.getSubnodes().getTokens());
+        List<Element> distinct = Filters.filterDistictNames(allElements);
+
+        for (Element element : distinct) {
+            // make pattern
+            indentator.indentln("<pattern name=\"pattern-\">");
+            indentator.increaseIndentation();
+
+            // now we need to make context based on the number of ancestors selected ...
+            indentator.indent("<rule context=\"");
+            indentator.append(element.getName());
+            indentator.append("\">\n");
+
+            indentator.increaseIndentation();
+//            <let name="grammar" value=" 'leg(tail|head)*'" />
+            indentator.indentln("<let name=\"children_regex\" value=\" '" + regexpToString(element.getSubnodes()) + "'\" />");
+//         <let name="contents" value="string-join(for $e in * return local-name ( $e ), ' ') " />
+            indentator.indentln("<let name=\"children_order\" value=\"string-join(for $c in * return local-name ( $c ), ' ') \" />");
+            indentator.indentln("<assert test=\"matches( $children_order, $children_regex )\">");
+            indentator.increaseIndentation();
+            //diagnostic message
+            // for better diagnostic make lists of following siblings
+            indentator.indentln("GRAMATIKA NEZVALIDOVALA");
+            indentator.decreaseIndentation();
+            indentator.indentln("</assert>");
+            indentator.decreaseIndentation();
+            indentator.indentln("</rule>");
+            indentator.decreaseIndentation();
+            indentator.indentln("</pattern>");
+
         }
-        
-        
+
+
+        //List<Element> distinctDescendants = Filters.filterElements(root.getAllDescendants());
+
+
+
+
+
+//DEBUG
+//        StringBuilder debugDumpElements = debugDumpElements(allElements);
+//        StringBuilder debugDumpElements2 = debugDumpElements(root.getAllDescendants());
+//        indentator.indent(debugDumpElements.toString() + "\n");
+//        indentator.indent(debugDumpElements2.toString() + "\n");
+//DEBUG
         // Close SCH.
         indentator.indent("</schema>");
-        
+
         callback.finished(indentator.toString(), FILE_EXTENSION);
     }
+
+    private StringBuilder debugDumpElements(List<? extends AbstractStructuralNode> list) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("========= debug dump ===========\n");
+
+        for (AbstractStructuralNode node : list) {
+            if (!node.isElement()) {
+                sb.append("(following node is of type ").append(node.getType().toString()).append(")\n");
+            }
+            final List<String> context = node.getContext();
+            StringBuilder path = new StringBuilder();
+            path.append('/');
+            if (context != null) {
+                for (final String ancestor : context) {
+                    path.append(ancestor).append('/');
+                }
+            }
+
+
+            sb.append("  NAME:").append(node.getName()).append("\t\t CONTEXT: ").append(path.toString()).append("\n");
+        }
+        sb.append("========= debug dump end =======\n");
+        return sb;
+    }
+
+    /**
+     * Returns string representation of regexp for use by XPath.
+     *
+     * @param subnodes
+     * @param topLevel
+     * @return
+     */
+    private String regexpToString(final Regexp<AbstractStructuralNode> regexp) {
+        switch (regexp.getType()) {
+            case LAMBDA:
+                return "";
+            case TOKEN:
+                if (regexp.getContent().isElement()) {
+                    RegexpInterval interval = regexp.getInterval();
+                    String intervalString = (interval.isKleeneCross() || interval.isKleeneStar() || interval.isOptional()) ? interval.toString() : "";
+                    return regexp.getContent().getName() + intervalString;
+                } else {
+                    return "";
+                }
+            case CONCATENATION:
+                return comboToString(regexp, ",");
+            case ALTERNATION:
+                return comboToString(regexp, "|");
+            case PERMUTATION:
+                return comboToString(regexp, "|");
+            default:
+                throw new IllegalArgumentException("Unknown enum member: " + regexp.getType());
+        }
+    }
+
+    private String comboToString(final Regexp<AbstractStructuralNode> regexp,
+            final String delimiter) {
+        RegexpInterval interval = regexp.getInterval();
+        String intervalString = (interval.isKleeneCross() || interval.isKleeneStar() || interval.isOptional()) ? interval.toString() : "";
+        return listToString(regexp.getChildren(), delimiter)
+                + intervalString;
+    }
+
+    private String listToString(final List<Regexp<AbstractStructuralNode>> list,
+            final String separator) {
+        return CollectionToString.colToString(
+                list,
+                separator,
+                new CollectionToString.ToString<Regexp<AbstractStructuralNode>>() {
+
+                    @Override
+                    public String toString(final Regexp<AbstractStructuralNode> t) {
+                        return regexpToString(t);
+                    }
+                });
+    }
+//
+//for (Element element : Collections.<Element>emptyList()) { //grammar -> commented out
+//            final StringBuilder path = new StringBuilder();
+//            Regexp<AbstractStructuralNode> subnodes = element.getSubnodes();
+//            if (RegexpType.TOKEN.equals(subnodes.getType()) && subnodes.getContent() != null) {
+//                final List<String> context = subnodes.getContent().getContext();
+//                if (context != null) {
+//                    for (final String ancestor : context) {
+//                        path.append(ancestor).append('/');
+//                    }
+//                }
+//            }
+//
+//            indentator.indent("\n");
+//            indentator.indent("\t" + element.getName() + " ConText: " + path.toString() + "\n");
+//            indentator.indent("\n");
+//            indentator.indent(element.toString());
+//        }
 }

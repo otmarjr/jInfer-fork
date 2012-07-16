@@ -51,6 +51,18 @@ public class Indentator {
     builder.append(makeIndentation());
     builder.append(string);
   }
+  
+   /**
+   * Indent specified text, append it, then append newline character "\n". 
+   *
+   * @param string Text to indent and append.
+   */
+  public void indentln(final String string) {
+    builder.append(makeIndentation());
+    builder.append(string);
+    builder.append("\n");
+  }
+
 
   /**
    * Appends specified text without indentation. No new line character is inserted, this is responsibility

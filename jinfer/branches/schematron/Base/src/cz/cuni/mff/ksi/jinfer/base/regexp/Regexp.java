@@ -529,7 +529,7 @@ public class Regexp<T> {
       return "RegexpType=null";
     }
   }
-
+  
   private static String getDelimiter(final RegexpType t) {
     switch (t) {
       case CONCATENATION:

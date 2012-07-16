@@ -19,144 +19,186 @@ package cz.cuni.mff.ksi.jinfer.base.objects.nodes;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.nodes.StructuralNodeType;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import cz.cuni.mff.ksi.jinfer.base.utils.Interrupt;
+import java.util.*;
 
 /**
  * Class representing a XML element.
- * 
+ *
  * @author vektor
  */
 public class Element extends AbstractStructuralNode {
 
-  /** List of all subnodes of this element, in the same order as in the
-   * document. */
-  private final Regexp<AbstractStructuralNode> subnodes;
-  /**
-   * List of all attributes of this element. Order doesn't matter.
-   */
-  private final List<Attribute> attributes;
+    /**
+     * List of all subnodes of this element, in the same order as in the
+     * document.
+     */
+    private final Regexp<AbstractStructuralNode> subnodes;
+    /**
+     * List of all attributes of this element. Order doesn't matter.
+     */
+    private final List<Attribute> attributes;
 
-  /**
-   * Create immutable element given all members.
-   *
-   * @param context context of the element in document (if any)
-   * @param name name of the node
-   * @param metadata any metadata associated with the node
-   * @param subnodes regular expression representing subnodes of the element (content model)
-   * @param attributes attributes of the element
-   */
-  public Element(final List<String> context,
-          final String name,
-          final Map<String, Object> metadata,
-          final Regexp<AbstractStructuralNode> subnodes,
-          final List<Attribute> attributes) {
-    this(context, name, metadata, subnodes, attributes, false);
-  }
-
-  /**
-   * Create element given all members.
-   *
-   * @param context context of the element in document (if any)
-   * @param name name of the node
-   * @param metadata any metadata associated with the node
-   * @param subnodes regular expression representing subnodes of the element (content model)
-   * @param attributes attributes of the element
-   * @param mutable if it has to be mutable
-   */
-  private Element(final List<String> context,
-          final String name,
-          final Map<String, Object> metadata,
-          final Regexp<AbstractStructuralNode> subnodes,
-          final List<Attribute> attributes,
-          final boolean mutable) {
-
-    super(context, name, metadata, mutable);
-    this.subnodes = subnodes;
-    this.attributes = attributes;
-    checkConstraits();
-  }
-
-  /**
-   * Standard method of obtaining empty mutable element.
-   * Be sure to set all members properly before using the element or calling {@link setImmutable()}.
-   *
-   * @return new Element with empty fields, which is mutable
-   */
-  public static Element getMutable() {
-    return new Element(new ArrayList<String>(),
-            null,
-            new HashMap<String, Object>(),
-            Regexp.<AbstractStructuralNode>getMutable(),
-            new ArrayList<Attribute>(),
-            true);
-  }
-
-  @Override
-  public StructuralNodeType getType() {
-    return StructuralNodeType.ELEMENT;
-  }
-
-  /**
-   * Get the subnodes regexp.
-   * @return subnodes
-   */
-  public Regexp<AbstractStructuralNode> getSubnodes() {
-    return subnodes;
-  }
-
-  /**
-   * Get all attributes of element
-   * @return list of attributes
-   */
-  public List<Attribute> getAttributes() {
-    if (attributes == null) {
-      return null;
+    /**
+     * Create immutable element given all members.
+     *
+     * @param context context of the element in document (if any)
+     * @param name name of the node
+     * @param metadata any metadata associated with the node
+     * @param subnodes regular expression representing subnodes of the element
+     * (content model)
+     * @param attributes attributes of the element
+     */
+    public Element(final List<String> context,
+            final String name,
+            final Map<String, Object> metadata,
+            final Regexp<AbstractStructuralNode> subnodes,
+            final List<Attribute> attributes) {
+        this(context, name, metadata, subnodes, attributes, false);
     }
-    if (mutable) {
-      return attributes;
+
+    /**
+     * Create element given all members.
+     *
+     * @param context context of the element in document (if any)
+     * @param name name of the node
+     * @param metadata any metadata associated with the node
+     * @param subnodes regular expression representing subnodes of the element
+     * (content model)
+     * @param attributes attributes of the element
+     * @param mutable if it has to be mutable
+     */
+    private Element(final List<String> context,
+            final String name,
+            final Map<String, Object> metadata,
+            final Regexp<AbstractStructuralNode> subnodes,
+            final List<Attribute> attributes,
+            final boolean mutable) {
+
+        super(context, name, metadata, mutable);
+        this.subnodes = subnodes;
+        this.attributes = attributes;
+        checkConstraits();
     }
-    return Collections.unmodifiableList(attributes);
-  }
 
-  @Override
-  public void setImmutable() {
-    super.setImmutable();
-    checkConstraits();
-    subnodes.setImmutable();
-  }
+    /**
+     * Standard method of obtaining empty mutable element. Be sure to set all
+     * members properly before using the element or calling {@link setImmutable()}.
+     *
+     * @return new Element with empty fields, which is mutable
+     */
+    public static Element getMutable() {
+        return new Element(new ArrayList<String>(),
+                null,
+                new HashMap<String, Object>(),
+                Regexp.<AbstractStructuralNode>getMutable(),
+                new ArrayList<Attribute>(),
+                true);
+    }
 
-  @Override
-  public String toString() {
-    final StringBuilder ret = new StringBuilder(super.toString());
-    // output attributes in form <att1, att2, att3>
-    if (!BaseUtils.isEmpty(attributes)) {
-      ret.append(' ').append('<');
-      for (int i = 0; i < attributes.size(); ++i) {
-        ret.append(attributes.get(i));
-        if (i != (attributes.size() - 1)) {
-          ret.append("; ");
+    @Override
+    public StructuralNodeType getType() {
+        return StructuralNodeType.ELEMENT;
+    }
+
+    /**
+     * Get the subnodes regexp.
+     *
+     * @return subnodes
+     */
+    public Regexp<AbstractStructuralNode> getSubnodes() {
+        return subnodes;
+    }
+
+    /**
+     * Get all attributes of element
+     *
+     * @return list of attributes
+     */
+    public List<Attribute> getAttributes() {
+        if (attributes == null) {
+            return null;
         }
-      }
-      ret.append('>');
+        if (mutable) {
+            return attributes;
+        }
+        return Collections.unmodifiableList(attributes);
     }
-    if (subnodes != null) {
-      // we really want to print this even if the collection is empty
-      ret.append('\n').append(subnodes.toString());
-    }
-    return ret.toString();
-  }
 
-  private void checkConstraits() {
-    if (subnodes == null) {
-      throw new IllegalArgumentException("Subnodes has to be non-null.");
+    @Override
+    public void setImmutable() {
+        super.setImmutable();
+        checkConstraits();
+        subnodes.setImmutable();
     }
-    if (attributes == null) {
-      throw new IllegalArgumentException("Attributes has to be non-null.");
-    }
-  }
 
+//    @Override
+//    public String toString() {
+//        final StringBuilder ret = new StringBuilder(super.toString());
+//        // output attributes in form <att1, att2, att3>
+//        if (!BaseUtils.isEmpty(attributes)) {
+//            ret.append(' ').append('<');
+//            for (int i = 0; i < attributes.size(); ++i) {
+//                ret.append(attributes.get(i));
+//                if (i != (attributes.size() - 1)) {
+//                    ret.append("; ");
+//                }
+//            }
+//            ret.append('>');
+//        }
+//        if (subnodes != null) {
+//            // we really want to print this even if the collection is empty
+//            ret.append('\n').append(subnodes.toString());
+//        }
+//        return ret.toString();
+//    }
+    
+    @Override
+    public String toString() {
+        final StringBuilder ret = new StringBuilder();
+        ret.append(getName().substring(0, 3)); // make the name short
+        if (subnodes != null) {
+            ret.append('(');
+            // we really want to print this even if the collection is empty
+            ret.append(subnodes.toString());
+            ret.append(')');
+        }
+        return ret.toString();
+    }
+
+    /**
+     * Permorms BFS for all descendants of this @code{Element}.
+     */
+    public List<Element> getAllDescendants() throws InterruptedException {
+        Deque<AbstractStructuralNode> q = new LinkedList<AbstractStructuralNode>();
+        List<AbstractStructuralNode> directSubElements = BaseUtils.filter(
+                getSubnodes().getTokens(),
+                new BaseUtils.Predicate<AbstractStructuralNode>() {
+
+                    @Override
+                    public boolean apply(final AbstractStructuralNode argument) {
+                        return argument.isElement();
+                    }
+                });
+        q.addAll(directSubElements);
+        
+        List<Element> ret = new ArrayList<Element>();
+        while (!q.isEmpty()) {
+            // we know this is element, because of filter rule
+            Element e = (Element) q.removeFirst();
+            Interrupt.check();
+            ret.add(e);
+            ret.addAll(e.getAllDescendants());
+        }
+        return ret;
+    }
+
+    private void checkConstraits() {
+        if (subnodes == null) {
+            throw new IllegalArgumentException("Subnodes has to be non-null.");
+        }
+        if (attributes == null) {
+            throw new IllegalArgumentException("Attributes has to be non-null.");
+        }
+    }
 }

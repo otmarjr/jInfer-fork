@@ -22,7 +22,6 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpType;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
 import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
@@ -46,6 +45,7 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
     private static final String DISPLAY_NAME = "jInfer Schematron Exporter";
     private static final String GENERATED_SUBSTITUTION_STRING = "<!-- %generated% -->\n";
     private static final String FILE_EXTENSION = "sch";
+    private static final int K_ANCESTORS = 2;
 
     @Override
     public String getName() {
@@ -79,82 +79,125 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
 
         final Preprocessor preprocessor = new Preprocessor(grammar);
         final PreprocessingResult preprocessingResult = preprocessor.getResult(); // this is always non-null
-        final Indentator indentator = new Indentator(2); // 2 spaces
+        final Indentator indent = new Indentator(2); // 2 spaces
 
         //extract all ELEMENTs from under root element, so that they have proper context
         Element root = preprocessingResult.getRootElement();
-
-//DEBUG        
-//        indentator.indent("=== THE ROOT ELEMENT ===\n");
-//        indentator.indent(preprocessingResult.getRootElement().toString() + "\n");
-//        indentator.indent("=== ================ ===\n");
-//DEBUG
 
         if (null == root || null == root.getSubnodes()) {
             LOG.warn("JSX: nothing to export.");
             callback.finished(GENERATED_SUBSTITUTION_STRING, FILE_EXTENSION);
             return;
         }
-        // Generate head of a new SCH.
-        indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        indentator.indent("<schema xmlns=\"http://purl.oclc.org/dsdl/schematron\" schemaVersion=\"1.0beta\">\n");
-        indentator.indent(GENERATED_SUBSTITUTION_STRING);
-        indentator.increaseIndentation();
 
-        // create pattern for root element(s), since we always get 1 root element, this rule is made statically
-        indentator.indentln("<pattern name=\"pattern-root-elements\">");
-        indentator.increaseIndentation();
+//DEBUG      
+        indent.indentln("dostavam pravidla:");
+        int z = 1;
+        for (Element element : grammar) {
+            indent.indentln(z + ")" + element.getName() + " contTyp: " + element.getSubnodes().getType());
+            indent.indentln("->" + regexpToString(element.getSubnodes()));
+            z++;
+        }
 
-        // context for root is always "/root"
-        indentator.indent("<rule context=\"/");
-        indentator.append(root.getName());
-        indentator.append("\">\n");
+//        indentator.indent("=== THE ROOT ELEMENT ===\n");
+//        indentator.indent(preprocessingResult.getRootElement().toString() + "\n");
+//        indentator.indent("=== ================ ===\n");
+//DEBUG
 
-        indentator.increaseIndentation();
-        indentator.indentln("<assert test=\"true()\"/>"); // not-pair tag
-        indentator.decreaseIndentation();
-        indentator.indentln("</rule>");
-        indentator.indentln("<rule context=\"/*\">");
-        indentator.increaseIndentation();
-        indentator.indentln("<assert test=\"false()\">"); // pair tag
-        indentator.increaseIndentation();
-        indentator.indentln("Element '<name/>' is not allowed as root element. Only element '" + root.getName() + "' may be declared as root.");
-        indentator.decreaseIndentation();
-        indentator.indentln("</assert>");
-        indentator.decreaseIndentation();
-        indentator.indentln("</rule>");
-        indentator.decreaseIndentation();
-        indentator.indentln("</pattern>");
+        generateSchemaHeader(indent); // HEADER
+        generateRootAbsorbingPattern(indent, root); // ROOT
 
-        List<Element> allElements = Filters.filterElements(root.getSubnodes().getTokens());
-        List<Element> distinct = Filters.filterDistictNames(allElements);
+
+        Element parent = root;
+        String parentName = parent.getName();
+        List<Element> childElements = Filters.filterElements(parent.getSubnodes().getTokens());
+        List<Element> distinct = Filters.filterDistictNames(childElements);
+
+        indent.indentln("");
+        // pattern allowed children of root
+        if (BaseUtils.isEmpty(distinct)) {
+            indent.indentln("<pattern name=\"empty_element_" + parentName + "\">");
+            indent.increaseIndentation();
+            indent.indentln("<rule context=\"" + Filters.getKAncestorContextFromNode(root, K_ANCESTORS) + '/' + parentName + "\">");
+            indent.increaseIndentation();
+            indent.indentln("<assert test=\"count(*) = 0\">");
+            indent.increaseIndentation();
+            indent.indentln("Element '" + parentName + "' should be empty, but isn't.");
+            indent.indentln("It has subelements <value-of select=\"string-join(for $c in * return local-name ( $c ), ' ')\"/>.");
+            indent.decreaseIndentation();
+            indent.indentln("</assert>");
+            indent.decreaseIndentation();
+            indent.indentln("</rule>");
+            indent.decreaseIndentation();
+            indent.indentln("</pattern>");
+        } else {
+            indent.indentln("<pattern name=\"children_of_" + parentName + "\">");
+            indent.increaseIndentation();
+            indent.indentln("<rule context=\"" + Filters.getKAncestorContextFromNode(root, K_ANCESTORS) + '/' + parentName + "\">");
+            indent.increaseIndentation();
+            indent.indent("<assert test=\"count(*) = count(");
+            boolean first = true;
+            for (Element el : distinct) {
+                if (!first) {
+                    indent.append("|");
+                }
+                indent.append(el.getName());
+                first = false;
+            }
+            indent.append(")\">\n");
+            indent.increaseIndentation();
+            indent.indent("Element '" + parentName + "' has subelements not specified by the schema: <value-of select=\"string-join(distinct-values(for $c in *[not(");
+            first = true;
+            for (Element el : distinct) {
+                if (!first) {
+                    indent.append(" or ");
+                }
+                indent.append("self::" + el.getName());
+                first = false;
+            }
+            indent.append(")] return local-name ( $c )), ', ')\"/>.\n");
+            indent.decreaseIndentation();
+            indent.indentln("</assert>");
+            indent.decreaseIndentation();
+            indent.indentln("</rule>");
+            indent.decreaseIndentation();
+            indent.indentln("</pattern>");
+
+        }
+        indent.indentln("");
 
         for (Element element : distinct) {
             // make pattern
-            indentator.indentln("<pattern name=\"pattern-\">");
-            indentator.increaseIndentation();
+            indent.indentln("<pattern name=\"pattern-\">");
+            indent.increaseIndentation();
 
             // now we need to make context based on the number of ancestors selected ...
-            indentator.indent("<rule context=\"");
-            indentator.append(element.getName());
-            indentator.append("\">\n");
+            indent.indent("<rule context=\"");
+            indent.append(element.getName());
+            indent.append("\">\n");
 
-            indentator.increaseIndentation();
+            indent.increaseIndentation();
 //            <let name="grammar" value=" 'leg(tail|head)*'" />
-            indentator.indentln("<let name=\"children_regex\" value=\" '" + regexpToString(element.getSubnodes()) + "'\" />");
+            //debug
+            indent.indent(element.toString() + "\n\n\n");
+            indent.indentln("<let name=\"children_regexp\" value=\" '" + regexpToString(element.getSubnodes()) + "'\" />");
 //         <let name="contents" value="string-join(for $e in * return local-name ( $e ), ' ') " />
-            indentator.indentln("<let name=\"children_order\" value=\"string-join(for $c in * return local-name ( $c ), ' ') \" />");
-            indentator.indentln("<assert test=\"matches( $children_order, $children_regex )\">");
-            indentator.increaseIndentation();
+            indent.indentln("<let name=\"children_order\" value=\"string-join(for $c in * return local-name ( $c ), ' ') \" />");
+            indent.indentln("<assert test=\"matches( $children_order, $children_regex )\">");
+            indent.increaseIndentation();
             //diagnostic message
             // for better diagnostic make lists of following siblings
-            indentator.indentln("GRAMATIKA NEZVALIDOVALA");
-            indentator.decreaseIndentation();
-            indentator.indentln("</assert>");
-            indentator.decreaseIndentation();
-            indentator.indentln("</rule>");
-            indentator.decreaseIndentation();
-            indentator.indentln("</pattern>");
+            indent.indentln("DIAG MESSAGE");
+
+            indent.indent(debugDumpElements(element.getSubnodes().getTokens()).toString() + "\n");
+            indent.indent(debugDumpElements(element.getAllDescendants()).toString() + "\n");
+
+            indent.decreaseIndentation();
+            indent.indentln("</assert>");
+            indent.decreaseIndentation();
+            indent.indentln("</rule>");
+            indent.decreaseIndentation();
+            indent.indentln("</pattern>");
 
         }
 
@@ -172,9 +215,40 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
 //        indentator.indent(debugDumpElements2.toString() + "\n");
 //DEBUG
         // Close SCH.
-        indentator.indent("</schema>");
+        indent.indent("</schema>");
 
-        callback.finished(indentator.toString(), FILE_EXTENSION);
+        callback.finished(indent.toString(), FILE_EXTENSION);
+    }
+
+    private void generateSchemaHeader(final Indentator indentator) {
+        // Generate head of a new SCH.
+        indentator.indent(GENERATED_SUBSTITUTION_STRING);
+        indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        indentator.indent("<schema xmlns=\"http://purl.oclc.org/dsdl/schematron\" queryBinding=\"xslt2\" schemaVersion=\"1.0beta\">\n");
+        indentator.increaseIndentation();
+    }
+
+    private void generateRootAbsorbingPattern(final Indentator indentator, Element root) {
+        // create pattern for root element(s), since we always get 1 root element, this rule is made statically
+        indentator.indentln("<pattern id=\"check_root_elements\">");
+        indentator.increaseIndentation();
+        // context for root is always "/%name%"
+        indentator.indent("<rule context=\"/");
+        indentator.append(root.getName());
+        indentator.append("\">");
+        indentator.append("<assert test=\"true()\"/>\n"); // not-pair tag, true never fails
+        indentator.indentln("</rule>");
+        indentator.indentln("<rule context=\"/*\">");
+        indentator.increaseIndentation();
+        indentator.indentln("<assert test=\"false()\">"); // pair tag
+        indentator.increaseIndentation();
+        indentator.indentln("Element '<name/>' is not allowed as root element. Only element '" + root.getName() + "' may be declared as root.");
+        indentator.decreaseIndentation();
+        indentator.indentln("</assert>");
+        indentator.decreaseIndentation();
+        indentator.indentln("</rule>");
+        indentator.decreaseIndentation();
+        indentator.indentln("</pattern>");
     }
 
     private StringBuilder debugDumpElements(List<? extends AbstractStructuralNode> list) {

@@ -129,20 +129,26 @@ public class Filters {
         StringBuilder res = new StringBuilder();
 
         if (k == -1) {
-            res.append('/');
             for (final String ancestor : context) {
-                res.append(ancestor).append('/');
+                res.append('/').append(ancestor);
             }
             return res.toString();
         }
 
         int remaining = k;
-        for (int i = context.size() - 1; i > 0; i--) {
+        for (int i = context.size() - 1; i >= 0; i--) {
             res.insert(0, context.get(i)); // prepend
             remaining--;
             if (remaining > 0) {
                 res.insert(0, "/");
             } else {
+                if (0 == i) {
+                    // we reached root
+                    res.insert(0, "/");
+                } else {
+                    // didnt reach root
+                    res.insert(0, "//");
+                }
                 return res.toString();
             }
         }

@@ -168,8 +168,9 @@ public class Element extends AbstractStructuralNode {
 
     /**
      * Permorms BFS for all descendants of this @code{Element}.
+     * Returns list of instances of this class.
      */
-    public List<Element> getAllDescendants() throws InterruptedException {
+    public List<Element> getAllDescendantElements() throws InterruptedException {
         Deque<AbstractStructuralNode> q = new LinkedList<AbstractStructuralNode>();
         List<AbstractStructuralNode> directSubElements = BaseUtils.filter(
                 getSubnodes().getTokens(),
@@ -188,7 +189,7 @@ public class Element extends AbstractStructuralNode {
             Element e = (Element) q.removeFirst();
             Interrupt.check();
             ret.add(e);
-            ret.addAll(e.getAllDescendants());
+            ret.addAll(e.getAllDescendantElements());
         }
         return ret;
     }

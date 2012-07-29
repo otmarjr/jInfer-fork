@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
 import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
 import java.util.Deque;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -59,5 +60,33 @@ public class Debugs {
             indentator.append("  NAME:" + node.getName() + "\t\t CONTEXT: " + path.toString() + "\n");
         }
         indentator.append("========= debug dump end =======\n");
+    }
+    
+    public static void dumpGrammar(final Indentator indent, final List<Element> grammar, final Element root) {
+        indent.indentln("dostavam pravidla:");
+        int z = 1;
+        for (Element element : grammar) {
+            if (element == root) {
+                indent.indentln("ROOT!");
+            }
+            indent.indentln(z + ") '" + element.getName() + "' " + element.getSubnodes().getType());
+            indent.indentln("\t'" + StringUtils.regexpToString(element.getSubnodes()) + "'");
+            z++;
+        }
+        indent.indentln("");
+    }
+    
+    public static void dumpGrammarToConsole(final Logger log, final List<Element> grammar, final Element root) {
+        log.warn("dostavam pravidla:");
+        int z = 1;
+        for (Element element : grammar) {
+            if (element == root) {
+                log.warn("ROOT!");
+            }
+            log.warn(z + ") '" + element.getName() + "' " + element.getSubnodes().getType());
+            log.warn("\t'" + StringUtils.regexpToString(element.getSubnodes()) + "'");
+            z++;
+        }
+        log.warn("");
     }
 }

@@ -26,24 +26,27 @@ import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
 public class RuleBuilder {
 
     public static final String GENERATED_SUBSTITUTION_STRING = "<!-- %generated% -->\n";
+    public static final String ROOT_PATTERN_ID = "root_elements";
 
     public static void generateSchemaHeader(final Indentator indentator) {
         // Generate head of a new SCH.
-        indentator.indent(GENERATED_SUBSTITUTION_STRING);
         indentator.indent("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        indentator.indent("<schema xmlns=\"http://purl.oclc.org/dsdl/schematron\" queryBinding=\"xslt2\" schemaVersion=\"1.0beta\">\n");
+        indentator.indent(GENERATED_SUBSTITUTION_STRING);
+        indentator.indent("<schema xmlns=\"http://purl.oclc.org/dsdl/schematron\" schemaVersion=\"1.0beta\">\n"); //queryBinding=\"xslt2\" 
         indentator.increaseIndentation();
     }
 
     public static void generateRootPattern(final Indentator indentator, Element root) {
         // create pattern for root element(s), since we always get 1 root element, this rule is made statically
-        indentator.indentln("<pattern id=\"check_root_elements\">");
+        indentator.indentln("<pattern id=\"" + ROOT_PATTERN_ID + "\">");
         indentator.increaseIndentation();
         // context for root is always "/%name%"
         indentator.indent("<rule context=\"/");
         indentator.append(root.getName());
-        indentator.append("\">");
-        indentator.append("<assert test=\"true()\"/>\n"); // not-pair tag, true never fails
+        indentator.append("\">\n");
+        indentator.increaseIndentation();
+        indentator.indentln("<assert test=\"true()\"/>"); // not-pair tag, true never fails
+        indentator.decreaseIndentation();
         indentator.indentln("</rule>");
         indentator.indentln("<rule context=\"/*\">");
         indentator.increaseIndentation();

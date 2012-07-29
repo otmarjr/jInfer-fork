@@ -18,13 +18,9 @@ package cz.cuni.mff.ksi.jinfer.jsx;
 
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGenerator;
 import cz.cuni.mff.ksi.jinfer.base.interfaces.inference.SchemaGeneratorCallback;
-import cz.cuni.mff.ksi.jinfer.base.objects.nodes.AbstractStructuralNode;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Attribute;
 import cz.cuni.mff.ksi.jinfer.base.objects.nodes.Element;
-import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
-import cz.cuni.mff.ksi.jinfer.base.regexp.RegexpInterval;
 import cz.cuni.mff.ksi.jinfer.base.utils.BaseUtils;
-import cz.cuni.mff.ksi.jinfer.base.utils.CollectionToString;
 import cz.cuni.mff.ksi.jinfer.base.utils.Indentator;
 import cz.cuni.mff.ksi.jinfer.jsx.preprocessing.PreprocessingResult;
 import cz.cuni.mff.ksi.jinfer.jsx.preprocessing.Preprocessor;
@@ -33,6 +29,7 @@ import cz.cuni.mff.ksi.jinfer.jsx.util.Debugs;
 import cz.cuni.mff.ksi.jinfer.jsx.util.Filters;
 import cz.cuni.mff.ksi.jinfer.jsx.util.StringUtils;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
@@ -40,7 +37,7 @@ import org.apache.log4j.Logger;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
+ * Main class managing the export process of schemas in Schematron.
  * @author reseto
  */
 @ServiceProvider(service = SchemaGenerator.class)
@@ -73,7 +70,7 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
     }
 
     @Override
-    public void start(List<Element> grammar, SchemaGeneratorCallback callback) throws InterruptedException {
+    public void start(final List<Element> grammar, SchemaGeneratorCallback callback) throws InterruptedException {
         LOG.info("JSX: got " + grammar.size() + " rules.");
         long startTime = System.currentTimeMillis();
 
@@ -97,45 +94,55 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
         }
 
 //DEBUG      
-        indent.indentln("dostavam pravidla:");
-        int z = 1;
-        for (Element element : grammar) {
-            indent.indentln(z + ")" + element.getName() + " contTyp: " + element.getSubnodes().getType());
-            indent.indentln("->" + StringUtils.regexpToString(element.getSubnodes()));
-            z++;
-        }
-        indent.indentln("");
-        indent.indentln("ROOT string:");
-        indent.indentln(StringUtils.regexpToString(root.getSubnodes()));
-        indent.indentln("");
+        Debugs.dumpGrammarToConsole(LOG, grammar, root);
 
         RuleBuilder.generateSchemaHeader(indent);                               // HEADER
         RuleBuilder.generateRootPattern(indent, root);                          // ROOT
         indent.indentln("");
 
+        List<String> generatedPatternIds = new ArrayList<String>();
+        generatedPatternIds.add(RuleBuilder.ROOT_PATTERN_ID);
 
         List<Element> filterDistictContexts = Filters.filterDistictContexts(root.getAllDescendantElements(), K_ANCESTORS);
         Deque<Element> soloQueue = new ArrayDeque<Element>(filterDistictContexts);
         soloQueue.addFirst(root);
+        //Debugs.dumpQueue(indent, queue, K_ANCESTORS);
 
+        int uniqueCounter = 0;
+        // iterate on elements of queue
         while (!soloQueue.isEmpty()) {
-            Element parent = soloQueue.removeFirst();
-            String parentName = parent.getName();
-            List<Element> childElements = Filters.filterElements(parent.getSubnodes().getTokens());
-            List<Element> distinct = Filters.filterDistictNames(childElements);
-            //Debugs.dumpQueue(indent, queue, K_ANCESTORS);
+            uniqueCounter++;
 
-            // iterate on elements of queue
-            // pattern allowed children of root
+            Element parent = soloQueue.removeFirst();
+            List<Element> childElements = Filters.filterElements(parent.getSubnodes().getTokens());
+            dumpElementChildren(indent, childElements, "current");
+
+            // dont take children of the element directly, first match the element to original grammar rule,
+            // because the element MAY be empty, but the grammar rule is properly simplified!
+            // the only thing we cannot get from the original grammar rule is the context, which is different for each element in structure
+
+            Element testMatch = Filters.matchTargetToGrammarWithContext(parent, grammar, K_ANCESTORS);
+            if (null == testMatch) {
+                testMatch = parent;
+            }
+
+            childElements = Filters.filterElements(testMatch.getSubnodes().getTokens());
+            dumpElementChildren(indent, childElements, "grammar");
+
+            List<Element> distinct = Filters.filterDistictNames(childElements);
+
+            String patternId;
+
             if (BaseUtils.isEmpty(distinct)) {
-                indent.indentln("<pattern name=\"empty_element_" + parentName + "\">");
+                patternId = parent.getName() + "_empty_element_" + uniqueCounter;
+                indent.indentln("<pattern id=\"" + patternId + "\">");
                 indent.increaseIndentation();
-                indent.indentln("<rule context=\"" + Filters.getKAncestorContextFromNode(parent, K_ANCESTORS) + '/' + parentName + "\">");
+                indent.indentln("<rule context=\"" + Filters.getKAncestorContextFromNode(parent, K_ANCESTORS) + '/' + parent.getName() + "\">");
                 indent.increaseIndentation();
                 indent.indentln("<assert test=\"count(*) = 0\">");
                 indent.increaseIndentation();
-                indent.indentln("Element '" + parentName + "' should be empty.");
-                indent.indentln("It has subelements <value-of select=\"string-join(for $c in * return local-name ( $c ), ', ')\"/>.");
+                indent.indentln("Element '" + parent.getName() + "' should be empty.");
+                indent.indentln("It has subelements <value-of select=\"string-join(for $c in * return local-name( $c ), ', ')\"/>.");
                 indent.decreaseIndentation();
                 indent.indentln("</assert>");
                 // TODO assert for no attributes?
@@ -143,8 +150,8 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
                 if (BaseUtils.isEmpty(parent.getAttributes())) {
                     indent.indentln("<assert test=\"count(*) = 0\">");
                     indent.increaseIndentation();
-                    indent.indentln("Element '" + parentName + "' should not have any attributes.");
-                    indent.indentln("It has attributes <value-of select=\"string-join(for $c in @* return local-name ( $c ), ', ')\"/>.");
+                    indent.indentln("Element '" + parent.getName() + "' should not have any attributes.");
+                    indent.indentln("It has attributes <value-of select=\"string-join(for $c in @* return local-name( $c ), ', ')\"/>.");
                     indent.decreaseIndentation();
                     indent.indentln("</assert>");
                 } else {
@@ -161,8 +168,19 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
                     }
                     indent.append(")\">\n");
                     indent.increaseIndentation();
-                    indent.indentln("--------------------------DIAG MESSAGE");
-
+                    indent.indent("Element '" + parent.getName() + "' may have attributes ");
+                    first = true;
+                    for (Attribute a : parent.getAttributes()) {
+                        if (first) {
+                            indent.append("@");
+                        } else {
+                            indent.append(" @");
+                        }
+                        indent.append(a.getName());
+                        first = false;
+                    }
+                    indent.append(".\n");
+                    indent.indentln("It has attributes <value-of select=\"string-join(for $c in @* return local-name( $c ), ', ')\"/>.");
                     indent.decreaseIndentation();
                     indent.indentln("</assert>");
                 }
@@ -173,14 +191,14 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
                 indent.indentln("</pattern>");
                 indent.indentln("");
             } else {
-                indent.indentln("<pattern name=\"content_of_element_" + parentName + "\">");
+                patternId = parent.getName() + "_element_content_" + uniqueCounter;
+                indent.indentln("<pattern id=\"" + patternId + "\">");
                 indent.increaseIndentation();
-                indent.indentln("<rule context=\"" + Filters.getKAncestorContextFromNode(parent, K_ANCESTORS) + '/' + parentName + "\">");
+                indent.indentln("<rule context=\"" + Filters.getKAncestorContextFromNode(parent, K_ANCESTORS) + '/' + parent.getName() + "\">");
                 indent.increaseIndentation();
-                indent.indentln("<let name=\"children_regexp\" value=\"'" + StringUtils.regexpToString(parent.getSubnodes()) + "'\" />");
+                indent.indentln("<let name=\"children_regexp\" value=\"'" + StringUtils.regexpToString(testMatch.getSubnodes()) + "'\" />");
                 indent.indentln("<let name=\"children_order\" value=\"string-join(for $c in * return local-name ( $c ), ' ')\" />");
 
-                indent.indentln("<assert test=\"matches( $children_order, $children_regex )\">");
                 // ASSERT no unspecified elements are present
                 indent.indent("<assert test=\"count(*) = count(");
                 boolean first = true;
@@ -193,7 +211,7 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
                 }
                 indent.append(")\">\n");
                 indent.increaseIndentation();
-                indent.indent("Element '" + parentName + "' has subelements not specified by the schema: <value-of select=\"string-join(distinct-values(for $c in *[not(");
+                indent.indent("Element '" + parent.getName() + "' has subelements not specified by the schema: <value-of select=\"string-join(distinct-values(for $c in *[not(");
                 first = true;
                 for (Element el : distinct) {
                     if (!first) {
@@ -206,7 +224,7 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
                 indent.decreaseIndentation();
                 indent.indentln("</assert>");
                 // ASSERT for structure
-                indent.indentln("<assert test=\"matches( $children_order, $children_regex )\">");
+                indent.indentln("<assert test=\"matches( $children_order, $children_regexp )\">");
                 indent.increaseIndentation();
                 //diagnostic message
                 indent.indentln("--------------------------DIAG MESSAGE");
@@ -222,7 +240,16 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
                 indent.indentln("</pattern>");
                 indent.indentln("");
             }
-        } // end while
+            generatedPatternIds.add(patternId);
+        }
+
+        indent.indentln("<phase id=\"everything\">");
+        indent.increaseIndentation();
+        for (String id : generatedPatternIds) {
+            indent.indentln("<active pattern=\"" + id + "\"/>");
+        }
+        indent.decreaseIndentation();
+        indent.indentln("</phase>");
 
 //            Debugs.dumpElements(indent, element.getSubnodes().getTokens());
 //            indent.indentln("");
@@ -231,10 +258,21 @@ public class JsxSchemaGeneratorImpl implements SchemaGenerator {
 //            Debugs.dumpElements(indent, soloQueue.getAllDescendants());
 
         // Close SCH.
+        indent.decreaseIndentation();
         indent.indent("</schema>");
 
-        LOG.debug("Schematron schema was generated in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
+        LOG.info("Schematron schema generated in " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds.");
         callback.finished(indent.toString(), FILE_EXTENSION);
+    }
+
+    private void dumpElementChildren(final Indentator indent, List<Element> childElements, final String commentName) {
+        indent.append("\n<!--\n");
+        indent.append(commentName + " element:\n");
+        for (Element element : childElements) {
+            indent.indentln("FULL NAME: " + element.getName());
+            indent.indentln("FULL CONTEXT: " + element.getContext().toString());
+        }
+        indent.append("\n-->\n");
     }
 
     private void oldcode(Indentator indent, List<Element> distinct) {

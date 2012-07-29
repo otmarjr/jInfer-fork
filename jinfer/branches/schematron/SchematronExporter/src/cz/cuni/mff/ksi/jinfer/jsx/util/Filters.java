@@ -145,10 +145,10 @@ public class Filters {
                 if (0 == i) {
                     // we reached root
                     res.insert(0, "/");
-                } else {
-                    // didnt reach root
-                    res.insert(0, "//");
-                }
+                } 
+                    // didnt reach root, do nothing
+                    // we dont need two backslashes, because Schematron is smart
+                    //res.insert(0, "//");
                 return res.toString();
             }
         }
@@ -165,12 +165,13 @@ public class Filters {
         return "//" + contextString;
     }
 
-    public Element matchTargetToGrammarWithContext(Element target, List<Element> grammar) {
+    // O(|el| x |el.context|)
+    public static Element matchTargetToGrammarWithContext(Element target, List<Element> grammar, int k) {
         if (BaseUtils.isEmpty(grammar)) {
             return null;
         }
 
-        String k_context = getKAncestorContextFromNode(target, -1);
+        String k_context = getKAncestorContextFromNode(target, k);
         Element match = null;
         Element fallback = null;
 
@@ -178,7 +179,7 @@ public class Filters {
             if (!element.getName().equals(target.getName())) {
                 continue;
             }
-            String kc2 = getKAncestorContextFromNode(element, -1);
+            String kc2 = getKAncestorContextFromNode(element, k);
 
             if (kc2.isEmpty() && null == fallback) {
                 fallback = element;

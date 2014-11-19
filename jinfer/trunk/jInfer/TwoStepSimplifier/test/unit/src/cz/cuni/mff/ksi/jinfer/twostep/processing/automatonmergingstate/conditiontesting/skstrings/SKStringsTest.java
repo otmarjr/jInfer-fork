@@ -21,7 +21,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -278,4 +281,98 @@ public class SKStringsTest {
     return automaton.toTestString();
   }
   
+  @Test // Inspired in example on Table 3.4 of DavidLosThesis
+    public void testDavidLoExampleTable34() throws InterruptedException {
+        System.out.println("davidLo Examples - chapter 3");
+        List<String> trace1;
+        trace1 = new LinkedList<String>(Arrays.asList("A", "B", "C", "D", "E"));
+
+        List<String> trace2;
+        trace2 = new LinkedList<String>(Arrays.asList("A", "B", "C", "X", "Y"));
+
+        List<String> trace3;
+        trace3 = new LinkedList<String>(Arrays.asList("A", "E", "B", "D", "E"));
+
+        Automaton<String> automaton = new Automaton<String>(true);
+
+        automaton.buildPTAOnSymbol(trace1);
+        automaton.buildPTAOnSymbol(trace2);
+        automaton.buildPTAOnSymbol(trace3);
+       
+        Map<Integer, State<String>> states;
+       
+        states = new HashMap<Integer, State<String>>();
+       
+        for (State<String> st : automaton.getDelta().keySet()){
+            states.put(st.getName(), st);
+        }
+
+        assertEquals(12, states.size());
+       
+        int k = 2;
+        double s = 1.0;
+
+        final SKStrings<String> alg = new SKStrings<String>(k, s, "AND");
+
+        List<SKString<String>> sk0 = alg.findSKStrings(k, states.get(1), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk1 = alg.findSKStrings(k, states.get(2), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk2 = alg.findSKStrings(k, states.get(3), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk3 = alg.findSKStrings(k, states.get(4), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk4 = alg.findSKStrings(k, states.get(5), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk5 = alg.findSKStrings(k, states.get(6), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk6 = alg.findSKStrings(k, states.get(7), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk7 = alg.findSKStrings(k, states.get(8), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk8 = alg.findSKStrings(k, states.get(9), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk9 = alg.findSKStrings(k, states.get(10), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk10 = alg.findSKStrings(k, states.get(11), automaton.getDelta()).getSKStrings();
+        List<SKString<String>> sk11 = alg.findSKStrings(k, states.get(12), automaton.getDelta()).getSKStrings();
+       
+        assertEquals(2, sk0.size());
+        assertEquals("A", sk0.get(0).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("B", sk0.get(0).getStr().peekLast().getAcceptSymbol());
+        assertEquals("A", sk0.get(1).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("E", sk0.get(1).getStr().peekLast().getAcceptSymbol());
+        
+        assertEquals(2, sk1.size());
+        assertEquals("B", sk1.get(0).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("C", sk1.get(0).getStr().peekLast().getAcceptSymbol());
+        assertEquals("E", sk1.get(1).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("B", sk1.get(1).getStr().peekLast().getAcceptSymbol());
+        
+        assertEquals(2, sk2.size());
+        assertEquals("C", sk2.get(0).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("D", sk2.get(0).getStr().peekLast().getAcceptSymbol());
+        assertEquals("C", sk2.get(1).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("X", sk2.get(1).getStr().peekLast().getAcceptSymbol());
+        
+        assertEquals(2, sk3.size()); // Lo's error
+        assertEquals("D", sk3.get(0).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("E", sk3.get(0).getStr().peekLast().getAcceptSymbol());
+        assertEquals("X", sk3.get(1).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("Y", sk3.get(1).getStr().peekLast().getAcceptSymbol());
+        
+        assertEquals(1, sk4.size());
+        assertEquals("E", sk4.get(0).getStr().peekFirst().getAcceptSymbol());
+        
+        assertEquals(0, sk5.size());
+        
+        assertEquals(1, sk6.size());
+        assertEquals("Y", sk6.get(0).getStr().peekFirst().getAcceptSymbol());
+        
+        assertEquals(0, sk7.size());
+        
+        assertEquals(1, sk8.size());
+        assertEquals("B", sk8.get(0).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("D", sk8.get(0).getStr().peekLast().getAcceptSymbol());
+        
+        assertEquals(1, sk9.size());
+        assertEquals("D", sk9.get(0).getStr().peekFirst().getAcceptSymbol());
+        assertEquals("E", sk9.get(0).getStr().peekLast().getAcceptSymbol());
+        
+        assertEquals(1, sk10.size());
+        assertEquals("E", sk10.get(0).getStr().peekFirst().getAcceptSymbol());
+        
+        assertEquals(0, sk11.size());
+       
+    }
 }

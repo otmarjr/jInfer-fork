@@ -88,7 +88,7 @@ class KTBucket<T> {
     }
 
     public boolean areSubset(KTBucket<T> anotherBucket) {
-        if (this.ktails.isEmpty()) {
+        if (this.ktails.isEmpty() && !anotherBucket.getKTails().isEmpty()) {
             return false;
         }
         return (anotherBucket.getKTails().containsAll(this.ktails));
@@ -96,6 +96,6 @@ class KTBucket<T> {
 
     @Override
     public String toString() {
-        return "SKBucket{" + "skstrings=" + ktails + '}';
+        return "KTBucket{" + "k-tails=" + ktails + '}';
     }
 }

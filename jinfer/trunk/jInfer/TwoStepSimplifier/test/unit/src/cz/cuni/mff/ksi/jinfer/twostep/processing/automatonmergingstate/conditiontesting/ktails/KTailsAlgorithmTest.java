@@ -19,6 +19,7 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,9 +33,7 @@ import static org.junit.Assert.*;
  */
 public class KTailsAlgorithmTest {
 
-    @Test // Inspired in example on Table 3.4 of DavidLosThesis
-    public void testDavidLoExampleTable34() throws InterruptedException {
-        System.out.println("davidLo Examples - chapter 3");
+    private Automaton<String> getDavidLosAutomaton() {
         List<String> trace1;
         trace1 = new LinkedList<>(Arrays.asList("A", "B", "C", "D", "E"));
 
@@ -50,6 +49,14 @@ public class KTailsAlgorithmTest {
         automaton.buildPTAOnSymbol(trace1);
         automaton.buildPTAOnSymbol(trace2);
         automaton.buildPTAOnSymbol(trace3);
+        return automaton;
+    }
+
+    @Test // Inspired in example on Table 3.4 of DavidLosThesis
+    public void testDavidLoExampleTable34() throws InterruptedException {
+        System.out.println("davidLo Examples - chapter 3");
+
+        Automaton<String> automaton = this.getDavidLosAutomaton();
 
         Map<Integer, State<String>> states;
 
@@ -252,15 +259,14 @@ public class KTailsAlgorithmTest {
         assertEquals(0, kt2.size());
         assertEquals(0, kt3.size());
         assertEquals(1, kt4.size());
-        assertTrue(kt4.get(0).equalsToSequence("c","a"));
+        assertTrue(kt4.get(0).equalsToSequence("c", "a"));
 
         assertEquals(1, kt5.size());
         assertTrue(kt5.get(0).equalsToSequence("a"));
 
         assertEquals(0, kt6.size());
         assertEquals(1, kt7.size());
-        assertTrue("a", kt7.get(0).equalsToSequence("a","a"));
-        
+        assertTrue("a", kt7.get(0).equalsToSequence("a", "a"));
 
         assertEquals(1, kt8.size());
         assertTrue(kt8.get(0).equalsToSequence("a"));
@@ -296,27 +302,24 @@ public class KTailsAlgorithmTest {
         List<KTail<String>> kt8 = alg.findKTails(k, states.get(8), automaton.getDelta()).getKTails();
         List<KTail<String>> kt9 = alg.findKTails(k, states.get(9), automaton.getDelta()).getKTails();
 
-        
-        
         assertEquals(1, kt1.size());
         assertTrue(kt1.get(0).equalsToSequence("a", "a", "a"));
-        
+
         assertEquals(0, kt2.size());
-        
+
         assertEquals(1, kt3.size());
         assertTrue(kt3.get(0).equalsToSequence("b", "c", "a"));
-        
+
         assertEquals(1, kt4.size());
-        assertTrue(kt4.get(0).equalsToSequence("c","a"));
+        assertTrue(kt4.get(0).equalsToSequence("c", "a"));
 
         assertEquals(1, kt5.size());
         assertTrue(kt5.get(0).equalsToSequence("a"));
 
         assertEquals(0, kt6.size());
-        
+
         assertEquals(1, kt7.size());
         assertTrue(kt7.get(0).equalsToSequence("a", "a"));
-        
 
         assertEquals(1, kt8.size());
         assertTrue(kt8.get(0).equalsToSequence("a"));
@@ -324,7 +327,7 @@ public class KTailsAlgorithmTest {
         assertEquals(1, kt9.size());
         assertTrue(kt9.get(0).equalsToSequence("b", "c", "a"));
     }
-    
+
     @Test
     public void MurphyExampleK4() throws InterruptedException {
         Automaton<String> automaton = getMurphysAutomatonFigure2();
@@ -353,28 +356,25 @@ public class KTailsAlgorithmTest {
         List<KTail<String>> kt8 = alg.findKTails(k, states.get(8), automaton.getDelta()).getKTails();
         List<KTail<String>> kt9 = alg.findKTails(k, states.get(9), automaton.getDelta()).getKTails();
 
-        
-        
         assertEquals(1, kt1.size());
         assertTrue(kt1.get(0).equalsToSequence("a", "a", "a"));
-        
+
         assertEquals(1, kt2.size());
-        assertTrue(kt2.get(0).equalsToSequence("c","b", "c", "a"));
-        
+        assertTrue(kt2.get(0).equalsToSequence("c", "b", "c", "a"));
+
         assertEquals(1, kt3.size());
         assertTrue(kt3.get(0).equalsToSequence("b", "c", "a"));
-        
+
         assertEquals(1, kt4.size());
-        assertTrue(kt4.get(0).equalsToSequence("c","a"));
+        assertTrue(kt4.get(0).equalsToSequence("c", "a"));
 
         assertEquals(1, kt5.size());
         assertTrue(kt5.get(0).equalsToSequence("a"));
 
         assertEquals(0, kt6.size());
-        
+
         assertEquals(1, kt7.size());
         assertTrue(kt7.get(0).equalsToSequence("a", "a"));
-        
 
         assertEquals(2, kt8.size());
         assertTrue(kt8.get(0).equalsToSequence("a"));
@@ -383,4 +383,65 @@ public class KTailsAlgorithmTest {
         assertEquals(1, kt9.size());
         assertTrue(kt9.get(0).equalsToSequence("b", "c", "a"));
     }
-}
+
+    @Test
+    public void testDavidLosMerge() throws InterruptedException {
+        Automaton<String> automaton = this.getDavidLosAutomaton();
+
+        KTailsAlgorithm<String> alg = new KTailsAlgorithm<>(2);
+        
+        alg.mergeStates(automaton);
+        
+        // Lo's example seems wrong, it should have 5 states.
+        assertEquals(5, automaton.getDelta().size());
+    }
+    
+    
+    @Test
+    public void testMurphysAutomatonMergeK1() throws InterruptedException{
+        Automaton<String> automaton = this.getMurphysAutomatonFigure2();
+        
+        KTailsAlgorithm<String> alg = new KTailsAlgorithm<>(1);
+        
+        alg.mergeStates(automaton);
+        
+        // There is one less merge due to absence of lambda in this alphabet
+        assertEquals(2, automaton.getDelta().size());
+    }
+    
+    @Test
+    public void testMurphysAutomatonMergeK2() throws InterruptedException{
+        Automaton<String> automaton = this.getMurphysAutomatonFigure2();
+        
+        KTailsAlgorithm<String> alg = new KTailsAlgorithm<>(2);
+        
+        alg.mergeStates(automaton);
+        
+        // There is one less merge due to absence of lambda in this alphabet
+        assertEquals(4, automaton.getDelta().size());
+    }
+    
+    @Test
+    public void testMurphysAutomatonMergeK3() throws InterruptedException{
+        Automaton<String> automaton = this.getMurphysAutomatonFigure2();
+        
+        KTailsAlgorithm<String> alg = new KTailsAlgorithm<>(3);
+        
+        alg.mergeStates(automaton);
+        
+        // There is one less merge due to absence of lambda in this alphabet
+        assertEquals(6, automaton.getDelta().size());
+    }
+    
+    @Test
+    public void testMurphysAutomatonMergeK4() throws InterruptedException{
+        Automaton<String> automaton = this.getMurphysAutomatonFigure2();
+        
+        KTailsAlgorithm<String> alg = new KTailsAlgorithm<>(4);
+        
+        alg.mergeStates(automaton);
+        
+        // There is one less merge due to absence of lambda in this alphabet
+        assertEquals(8, automaton.getDelta().size());
+    }
+}   

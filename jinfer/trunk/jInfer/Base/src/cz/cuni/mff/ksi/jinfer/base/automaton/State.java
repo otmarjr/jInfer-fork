@@ -62,6 +62,10 @@ public class State<T> {
   public int getFinalCount() {
     return finalCount;
   }
+  
+  public boolean isFinal(){
+      return this.finalCount > 0;
+  }
 
   /**
    * @param finalCount the finalCount to set

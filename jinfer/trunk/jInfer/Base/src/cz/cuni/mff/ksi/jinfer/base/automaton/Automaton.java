@@ -150,7 +150,7 @@ public class Automaton<T> {
    *
    * @return
    */
-  protected final State<T> createNewState() {
+  public final State<T> createNewState() {
     final State<T> newState = new State<T>(0, this.newStateName);
     this.nameMap.put(newStateName, newState);
     this.newStateName++;
@@ -186,7 +186,7 @@ public class Automaton<T> {
    * @param destination
    * @return
    */
-  private Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
+  public Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
     final Step<T> newStep = new Step<T>(onSymbol, source, destination, 1, 1);
     this.delta.get(source).add(newStep);
     this.reverseDelta.get(destination).add(newStep);

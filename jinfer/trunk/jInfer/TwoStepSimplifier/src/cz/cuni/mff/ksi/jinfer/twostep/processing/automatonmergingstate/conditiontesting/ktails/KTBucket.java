@@ -41,7 +41,7 @@ class KTBucket<T> {
 
     public void preceede(Step<T> step, double probability) {
         for (KTail<T> str : this.ktails) {
-            if (str.size() == this.k) {
+            if (str.size() <= this.k) {
                 str.preceede(step, probability);
             }
         }

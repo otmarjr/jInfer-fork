@@ -69,11 +69,11 @@ public class KTailsAlgorithm<T> implements MergeConditionTester<T> {
             for (Step<T> step : delta.get(state)) {
                 if (step.getDestination().isFinal()) {
                     result.add(step, (double) step.getUseCount() / (double) sum); // Must check if there are k-1 items!
-                } else {
-                    KTBucket<T> fromHim = findKTails(_k - 1, step.getDestination(), delta);
-                    fromHim.preceede(step, (double) step.getUseCount() / (double) sum); // Must check if there are k-1 items!
-                    result.addAll(fromHim);
                 }
+
+                KTBucket<T> fromHim = findKTails(_k - 1, step.getDestination(), delta);
+                fromHim.preceede(step, (double) step.getUseCount() / (double) sum); // Must check if there are k-1 items!
+                result.addAll(fromHim);
             }
             return result;
         } else if (_k == 1) {

@@ -18,9 +18,12 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 
 
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TODO anti Comment!
@@ -53,6 +56,19 @@ class KTail<T> {
 
   public Deque<Step<T>> getStr() {
     return str;
+  }
+  
+  public boolean equalsToSequence(T... sequence){
+      if (sequence == null)
+          return false;
+      
+      if (sequence.length != this.str.size())
+          return false;
+      
+      List<T> seq = Arrays.asList(sequence);
+      List<T> steps = str.stream().map(s -> s.getAcceptSymbol()).collect(Collectors.toList());
+      
+      return seq.equals(steps);
   }
   
   public int size() {

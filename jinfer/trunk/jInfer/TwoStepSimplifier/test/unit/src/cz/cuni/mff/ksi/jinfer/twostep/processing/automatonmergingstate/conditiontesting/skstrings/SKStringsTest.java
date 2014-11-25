@@ -284,20 +284,8 @@ public class SKStringsTest {
   @Test // Inspired in example on Table 3.4 of DavidLosThesis
     public void testDavidLoExampleTable34() throws InterruptedException {
         System.out.println("davidLo Examples - chapter 3");
-        List<String> trace1;
-        trace1 = new LinkedList<String>(Arrays.asList("A", "B", "C", "D", "E"));
+        Automaton<String> automaton = this.getDavidLosAutomaton();
 
-        List<String> trace2;
-        trace2 = new LinkedList<String>(Arrays.asList("A", "B", "C", "X", "Y"));
-
-        List<String> trace3;
-        trace3 = new LinkedList<String>(Arrays.asList("A", "E", "B", "D", "E"));
-
-        Automaton<String> automaton = new Automaton<String>(true);
-
-        automaton.buildPTAOnSymbol(trace1);
-        automaton.buildPTAOnSymbol(trace2);
-        automaton.buildPTAOnSymbol(trace3);
        
         Map<Integer, State<String>> states;
        
@@ -374,5 +362,39 @@ public class SKStringsTest {
         
         assertEquals(0, sk11.size());
        
+    }
+    
+    @Test
+    public void testMergeDavidLoExamples() throws InterruptedException{
+        Automaton<String> automaton = this.getDavidLosAutomaton();
+        
+        SKStrings<String> alg;
+        int k=2;
+        double s=1;
+        
+        alg = new SKStrings<>(k,s, "AND");
+        
+        alg.mergeStates(automaton);
+        
+        assertEquals(9, automaton.getDelta().size());
+    }
+    
+    private Automaton<String> getDavidLosAutomaton() {
+        List<String> trace1;
+        trace1 = new LinkedList<>(Arrays.asList("A", "B", "C", "D", "E"));
+
+        List<String> trace2;
+        trace2 = new LinkedList<>(Arrays.asList("A", "B", "C", "X", "Y"));
+
+        List<String> trace3;
+        trace3 = new LinkedList<>(Arrays.asList("A", "E", "B", "D", "E"));
+
+        Automaton<String> automaton;
+        automaton = new Automaton<String>(true);
+
+        automaton.buildPTAOnSymbol(trace1);
+        automaton.buildPTAOnSymbol(trace2);
+        automaton.buildPTAOnSymbol(trace3);
+        return automaton;
     }
 }

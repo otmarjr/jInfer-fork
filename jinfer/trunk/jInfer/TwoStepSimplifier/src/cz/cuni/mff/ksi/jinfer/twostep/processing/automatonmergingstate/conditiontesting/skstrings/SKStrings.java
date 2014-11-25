@@ -21,6 +21,7 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -171,5 +172,33 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             }
         }
         return alternatives;
+    }
+    
+    public void mergeStates(Automaton<T> automaton) throws InterruptedException {
+        boolean search = true;
+        boolean found = false;
+        List<List<List<State<T>>>> result = Collections.emptyList();
+        while (search) {
+            search = false;
+            for (State<T> state1 : automaton.getDelta().keySet()) {
+                for (State<T> state2 : automaton.getDelta().keySet()) {
+                    result = this.getMergableStates(automaton);
+                    if (!result.isEmpty()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) {
+                    break;
+                }
+            }
+            for (List<List<State<T>>> alt : result) {
+                for (List<State<T>> merg : alt) {
+                    automaton.mergeStates(merg);
+                    search = true;
+                    found = false;
+                }
+            }
+        }
     }
 }

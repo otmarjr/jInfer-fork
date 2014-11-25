@@ -83,7 +83,7 @@ class SKBucket<T> {
   }
 
   public boolean areSubset(SKBucket<T> anotherBucket) {
-    if (this.skstrings.size() == 0) {
+    if (this.skstrings.isEmpty() && !anotherBucket.getSKStrings().isEmpty()) {
       return false;
     }
     return (anotherBucket.getSKStrings().containsAll(this.skstrings));

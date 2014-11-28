@@ -228,4 +228,34 @@ public class AutomatonTest {
     final Integer result = instance.getNewStateName();
     assertEquals(expResult, result);
   }
+  
+  @Test 
+  public void testGetPrefix() {
+      List<String> t1 = Arrays.asList("1", "2", "3", "4");
+      List<String> t2 = Arrays.asList("1", "2", "3", "5");
+      List<String> t3 = Arrays.asList("1", "2", "6");
+      List<String> t4 = Arrays.asList("1", "7");
+      List<String> t5 = Arrays.asList("1", "8", "9", "A");
+      List<String> t6 = Arrays.asList("1", "8", "9", "B");
+      List<String> t7 = Arrays.asList("1", "8", "C");
+      
+      Automaton<String> automaton = new Automaton<>(true);
+      
+      automaton.buildPTAOnSymbol(t1);
+      automaton.buildPTAOnSymbol(t2);
+      automaton.buildPTAOnSymbol(t3);
+      automaton.buildPTAOnSymbol(t4);
+      automaton.buildPTAOnSymbol(t5);
+      automaton.buildPTAOnSymbol(t6);
+      automaton.buildPTAOnSymbol(t7);
+      
+      assertEquals(13, automaton.getDelta().size());
+      
+      State<String> s1 = automaton.getInitialState();
+      Set<List<String>> prefixes1 = automaton.getStatePrefixes(s1);
+      Set<List<String>> suffixes = automaton.getStateSuffixes(s1);
+      
+      assertEquals(0, prefixes1.size());
+      assertEquals(7, suffixes.size());
+  }
 }

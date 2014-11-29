@@ -20,8 +20,12 @@ package cz.cuni.mff.ksi.jinfer.base.automaton;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -253,9 +257,91 @@ public class AutomatonTest {
       
       State<String> s1 = automaton.getInitialState();
       Set<List<String>> prefixes1 = automaton.getStatePrefixes(s1);
-      Set<List<String>> suffixes = automaton.getStateSuffixes(s1);
+      Set<List<String>> suffixes1 = automaton.getStateSuffixes(s1);
+      
+      List<String> suf114 = Arrays.asList("1", "2", "3", "4");
+      List<String> suf113 = Arrays.asList("1", "2", "3");
+      List<String> suf112 = Arrays.asList("1", "2");
+      List<String> suf111 = Arrays.asList("1");
+      List<String> suf214 = Arrays.asList("1", "2", "3", "5");
+      List<String> suf313 = Arrays.asList("1", "2", "6");
+      List<String> suf412 = Arrays.asList("1", "7");
+      List<String> suf514 = Arrays.asList("1", "8", "9", "A");
+      List<String> suf513 = Arrays.asList("1", "8", "9");
+      List<String> suf512 = Arrays.asList("1", "8");
+      List<String> suf614 = Arrays.asList("1", "8", "9", "B");
+      List<String> suf714 = Arrays.asList("1", "8", "C");
+      
+      Set<List<String>> expectedSuffix1;
+      expectedSuffix1 = new HashSet<>();
+      expectedSuffix1.add(suf114);
+      expectedSuffix1.add(suf113);
+      expectedSuffix1.add(suf112);
+      expectedSuffix1.add(suf111);
+      expectedSuffix1.add(suf214);
+      expectedSuffix1.add(suf313);
+      expectedSuffix1.add(suf412);
+      expectedSuffix1.add(suf514);
+      expectedSuffix1.add(suf513);
+      expectedSuffix1.add(suf512);
+      expectedSuffix1.add(suf614);
+      expectedSuffix1.add(suf714);
       
       assertEquals(0, prefixes1.size());
-      assertEquals(7, suffixes.size());
+      assertEquals(12, suffixes1.size());
+      assertThat(suffixes1, is(expectedSuffix1));
+      
+      // Test for S2
+      State<String> s2 = automaton.getDelta().get(s1).stream()
+              .filter(t -> t.getAcceptSymbol().equals("1"))
+              .findFirst().get().getDestination();
+      
+      Set<List<String>> expectedSuffix2; 
+      // trims "1" out
+      expectedSuffix2 = expectedSuffix1.stream().map(l -> l.subList(1, l.size()))
+              .filter(l -> l.size() > 0)
+              .collect(Collectors.toSet());
+      
+      
+      Set<List<String>> expectedprefix2;
+      expectedprefix2 = new HashSet<>();
+      expectedprefix2.add(Arrays.asList("1"));
+      
+      Set<List<String>> prefixes2 = automaton.getStatePrefixes(s2);
+      Set<List<String>> suffixes2 = automaton.getStateSuffixes(s2);
+      assertEquals(1, prefixes2.size());
+      assertThat(prefixes2, is(expectedprefix2));
+      assertEquals(11, suffixes2.size());
+      assertThat(suffixes2, is(expectedSuffix2));
+      
+      // Test for S3
+      
+      State<String> s3 = automaton.getDelta().get(s2).stream()
+              .filter(t -> t.getAcceptSymbol().equals("2"))
+              .findFirst().get().getDestination();
+      
+      Set<List<String>> expectedSuffix3; 
+      // trims "1" out
+      expectedSuffix3 = expectedSuffix2.stream()
+              .filter(l -> l.get(0).equals("2"))
+              .map(l -> l.subList(1, l.size()))
+              .filter(l -> l.size() > 0)
+              .collect(Collectors.toSet());
+      
+      
+      Set<List<String>> expectedprefix3;
+      expectedprefix3 = new HashSet<>(expectedprefix2);
+      expectedprefix3.add(Arrays.asList("1", "2"));
+      
+      Set<List<String>> prefixes3 = automaton.getStatePrefixes(s3);
+      Set<List<String>> suffixes3 = automaton.getStateSuffixes(s3);
+      assertEquals(2, prefixes3.size());
+      assertThat(prefixes3, is(expectedprefix3));
+      assertEquals(4, suffixes3.size());
+      assertThat(suffixes3, is(expectedSuffix3));
+      
+      
+      
+      
   }
 }

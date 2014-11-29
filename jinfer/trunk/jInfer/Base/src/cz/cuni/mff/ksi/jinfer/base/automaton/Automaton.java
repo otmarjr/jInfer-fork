@@ -18,6 +18,7 @@ package cz.cuni.mff.ksi.jinfer.base.automaton;
 
 import cz.cuni.mff.ksi.jinfer.base.regexp.Regexp;
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -73,6 +74,11 @@ public class Automaton<T> {
      * reverseDelta so be careful when counting loops - may count twice.
      */
     protected final Map<State<T>, Set<Step<T>>> reverseDelta;
+    
+    /** Added to allow for walking the automaton backwards.
+    */
+    protected final Map<State<T>, Set<Step<T>>> inverseDelta;
+    
     /**
      * New state name is an integer that is assigned to any new state created by
      * createNewState. It is always incremented in createNewState so no two
@@ -111,10 +117,12 @@ public class Automaton<T> {
         this.newStateName = 1;
         this.delta = new LinkedHashMap<State<T>, Set<Step<T>>>();
         this.reverseDelta = new LinkedHashMap<State<T>, Set<Step<T>>>();
+        this.inverseDelta = new LinkedHashMap<State<T>, Set<Step<T>>>();
         this.mergedStates = new LinkedHashMap<State<T>, State<T>>();
         this.reverseMergedStates = new LinkedHashMap<State<T>, Set<State<T>>>();
         this.nameMap = new LinkedHashMap<Integer, State<T>>();
         this.initialState = null;
+        
     }
 
     /**
@@ -160,6 +168,7 @@ public class Automaton<T> {
         this.newStateName++;
         this.delta.put(newState, new LinkedHashSet<Step<T>>());
         this.reverseDelta.put(newState, new LinkedHashSet<Step<T>>());
+        this.inverseDelta.put(newState, new LinkedHashSet<>());
         this.reverseMergedStates.put(newState, new LinkedHashSet<State<T>>());
         return newState;
     }
@@ -192,8 +201,10 @@ public class Automaton<T> {
      */
     public Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
         final Step<T> newStep = new Step<T>(onSymbol, source, destination, 1, 1);
+        final Step<T> inverseStep = new Step<T>(onSymbol, destination, source, 1,1);
         this.delta.get(source).add(newStep);
         this.reverseDelta.get(destination).add(newStep);
+        this.inverseDelta.get(destination).add(inverseStep);
         return newStep;
     }
 
@@ -502,6 +513,10 @@ public class Automaton<T> {
     public Map<State<T>, Set<Step<T>>> getReverseDelta() {
         return reverseDelta;
     }
+    
+    public Map<State<T>, Set<Step<T>>> getInverseDelta() {
+        return inverseDelta;
+    }
 
     /**
      * @return the newStateName
@@ -548,10 +563,10 @@ public class Automaton<T> {
                     stack.push(t.getDestination());
                     P.push(newPrefix);
                 }
+            }
 
-                if (prefix.size() > 0) {
-                    prefixes.add(prefix);
-                }
+            if (prefix.size() > 0) {
+                prefixes.add(prefix);
             }
 
         }
@@ -564,6 +579,8 @@ public class Automaton<T> {
     }
 
     public Set<List<T>> getStatePrefixes(State<T> s) {
-        return this.getStateSuffixes(s, this.getReverseDelta());
+        Set<List<T>> p = this.getStateSuffixes(s, this.getInverseDelta());
+        p.stream().forEach(l -> Collections.reverse(l));
+        return p;
     }
 }

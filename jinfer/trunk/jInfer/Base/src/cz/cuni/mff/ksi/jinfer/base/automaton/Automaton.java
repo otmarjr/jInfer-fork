@@ -74,11 +74,12 @@ public class Automaton<T> {
      * reverseDelta so be careful when counting loops - may count twice.
      */
     protected final Map<State<T>, Set<Step<T>>> reverseDelta;
-    
-    /** Added to allow for walking the automaton backwards.
-    */
+
+    /**
+     * Added to allow for walking the automaton backwards.
+     */
     protected final Map<State<T>, Set<Step<T>>> inverseDelta;
-    
+
     /**
      * New state name is an integer that is assigned to any new state created by
      * createNewState. It is always incremented in createNewState so no two
@@ -110,6 +111,8 @@ public class Automaton<T> {
      */
     protected final Map<Integer, State<T>> nameMap;
 
+    private boolean hasDummyInitialState;
+
     /**
      * Constructor which doesn't create initialState
      */
@@ -122,7 +125,8 @@ public class Automaton<T> {
         this.reverseMergedStates = new LinkedHashMap<State<T>, Set<State<T>>>();
         this.nameMap = new LinkedHashMap<Integer, State<T>>();
         this.initialState = null;
-        
+        this.hasDummyInitialState = false;
+
     }
 
     /**
@@ -173,6 +177,20 @@ public class Automaton<T> {
         return newState;
     }
 
+    public final State<T> createNewDummyInitialState(T lambdaTransitionSymbol) {
+
+        State<T> newDummyInitialState = this.createNewState();
+
+        if (this.initialState != null) {
+            this.createNewStep(lambdaTransitionSymbol, newDummyInitialState, initialState);
+        }
+
+        this.initialState = newDummyInitialState;
+
+        this.hasDummyInitialState = false;
+        return newDummyInitialState;
+    }
+
     /**
      * Returns first step from state, which accepts given symbol. If there are
      * multiple such steps, return only one found.
@@ -184,8 +202,12 @@ public class Automaton<T> {
     public Step<T> getOutStepOnSymbol(final State<T> state, final T symbol) {
         final Set<Step<T>> steps = this.delta.get(state);
         for (Step<T> step : steps) {
-            if (step.getAcceptSymbol().equals(symbol)) {
+            if (hasDummyInitialState && initialState.equals(state)) {
                 return step;
+            } else {
+                if (step.getAcceptSymbol().equals(symbol)) {
+                    return step;
+                }
             }
         }
         return null;
@@ -201,7 +223,7 @@ public class Automaton<T> {
      */
     public Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
         final Step<T> newStep = new Step<T>(onSymbol, source, destination, 1, 1);
-        final Step<T> inverseStep = new Step<T>(onSymbol, destination, source, 1,1);
+        final Step<T> inverseStep = new Step<T>(onSymbol, destination, source, 1, 1);
         this.delta.get(source).add(newStep);
         this.reverseDelta.get(destination).add(newStep);
         this.inverseDelta.get(destination).add(inverseStep);
@@ -513,7 +535,7 @@ public class Automaton<T> {
     public Map<State<T>, Set<Step<T>>> getReverseDelta() {
         return reverseDelta;
     }
-    
+
     public Map<State<T>, Set<Step<T>>> getInverseDelta() {
         return inverseDelta;
     }

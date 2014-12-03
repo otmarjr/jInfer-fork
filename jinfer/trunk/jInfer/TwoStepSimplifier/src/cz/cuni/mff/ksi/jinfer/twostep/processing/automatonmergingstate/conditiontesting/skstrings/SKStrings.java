@@ -76,8 +76,7 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                     SKBucket<T> fromHim = findSKStrings(_k - 1, step.getDestination(), delta);
                     fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
                     result.addAll(fromHim);
-                }
-                else{
+                } else {
                     SKBucket<T> fromHim = new SKBucket<T>();
                     result.add(step, (double) step.getUseCount() / (double) sum);
                     fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
@@ -112,13 +111,20 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                     }
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
-                    if (state1strings.getMostProbable(this.s).areSubset(state2strings) && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
+                    if (state1strings.getMostProbable(this.s).areSubset(state2strings)
+                            && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
                         List<State<T>> mergePair = new ArrayList<State<T>>();
                         mergePair.add(state1);
                         mergePair.add(state2);
                         List<List<State<T>>> ret = new ArrayList<List<State<T>>>();
                         ret.add(mergePair);
-                        alternatives.add(ret);
+
+                        if (!alternatives.stream().anyMatch(l2 -> l2.stream().anyMatch(l
+                                -> (l.get(0).equals(state1) && l.get(1).equals(state2))
+                                || (l.get(0).equals(state2) && l.get(1).equals(state1))
+                        ))) {
+                            alternatives.add(ret);
+                        }
                     }
                 }
             }
@@ -173,7 +179,7 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         }
         return alternatives;
     }
-    
+
     public void mergeStates(Automaton<T> automaton) throws InterruptedException {
         boolean search = true;
         boolean found = false;

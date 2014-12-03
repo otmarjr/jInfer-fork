@@ -27,6 +27,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import org.apache.log4j.Logger;
@@ -112,6 +113,44 @@ public class Automaton<T> {
     protected final Map<Integer, State<T>> nameMap;
 
     private boolean hasDummyInitialState;
+
+    public Automaton(int firstStateInitialNumber) {
+        this();
+        this.newStateName = firstStateInitialNumber;
+    }
+
+    public Automaton(int firstStateInitialNumber, boolean createInitialState) {
+        this(createInitialState);
+        if (createInitialState) {
+            this.changeStateName(this.initialState.getName(), 
+                    firstStateInitialNumber);
+            this.newStateName = firstStateInitialNumber+1;
+        }
+    }
+
+    public final void changeStateName(int currentName, int newName) {
+        Optional<State<T>> st;
+        st = this.delta.keySet().stream()
+                .filter(s -> currentName == s.getName())
+                .findFirst();
+
+        if (st.isPresent()) {
+            Optional<State<T>> st2;
+
+            st2 = this.delta.keySet().stream()
+                    .filter(s -> newName == s.getName())
+                    .findFirst();
+
+            if (st2.isPresent()) {
+                st2.get().setName(currentName);
+                this.nameMap.put(currentName, st2.get());
+            }
+
+            st.get().setName(newName);
+
+            this.nameMap.put(newName, st.get());
+        }
+    }
 
     /**
      * Constructor which doesn't create initialState

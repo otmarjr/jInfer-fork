@@ -22,10 +22,13 @@ import java.util.Collections;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -397,13 +400,23 @@ public class SKStringsTest {
 
     private String getAutomatonTransitionsInRamansPFSAFileFormat(Automaton<String> aut) {
         StringBuilder sb = new StringBuilder();
+        
+        List<State<String>> l;
+        l = aut.getDelta().keySet().stream()
+                .sorted((sx, sy) -> Integer.compare(sx.getName(), sy.getName()))
+                .collect(Collectors.toList());
 
-        for (State<String> s : aut.getDelta().keySet()) {
-            int source = s.getName() - 1; // Ramans file is indexed beginning from 0
-            for (Step<String> t : aut.getDelta().get(s)) {
-                int sink = t.getDestination().getName() - 1;
-                String line = source + "	" + sink + "	                   " + t.getAcceptSymbol() + "	" + t.getUseCount() + System.getProperty("line.separator");
-                sb.append(line);
+        Formatter formatter = new Formatter(sb, Locale.US);
+        
+        for (State<String> s : l) {
+            int source = s.getName();
+            List<Step<String>> steps = aut.getDelta().get(s).stream()
+                    .sorted((tx, ty) -> Integer.compare(tx.getDestination().getName(), ty.getDestination().getName()))
+                    .collect(Collectors.toList());
+            
+            for (Step<String> t : steps) {
+                int sink = t.getDestination().getName();
+                formatter.format("%d\t%d\t                   %s\t%d\n", source,sink,t.getAcceptSymbol(),t.getUseCount());
             }
         }
 
@@ -411,11 +424,70 @@ public class SKStringsTest {
     }
 
     private Automaton<String> getRamansThesisTestStringsAutomaton() {
-        Automaton<String> automaton = new Automaton<>(true);
+        Automaton<String> automaton = new Automaton<>(0, true);
         List<List<String>> traces = testDotStringsFileTraces();
 
         traces.forEach(l -> automaton.buildPTAOnSymbol(l));
         
+        // change state names to match the same transitions in Raman's automaton
+        automaton.changeStateName(11,2);
+        automaton.changeStateName(21,3);
+        automaton.changeStateName(33,4);
+        automaton.changeStateName(40,5);
+        automaton.changeStateName(11,6);
+        automaton.changeStateName(12,7);
+        automaton.changeStateName(22,8);
+        automaton.changeStateName(34,9);
+        automaton.changeStateName(41,10);
+        automaton.changeStateName(21, 11);
+        automaton.changeStateName(17,12);
+        automaton.changeStateName(23,14);
+        automaton.changeStateName(35,15);
+        automaton.changeStateName(42, 16);
+        automaton.changeStateName(28,17);
+        automaton.changeStateName(33,18);
+        
+        automaton.changeStateName(51,19);
+        automaton.changeStateName(33,20);
+        automaton.changeStateName(23,21);
+        automaton.changeStateName(24,22);
+        
+        
+        automaton.changeStateName(36,23);
+        automaton.changeStateName(43,24);
+        automaton.changeStateName(46,25);
+        automaton.changeStateName(29,26);
+        
+        
+        automaton.changeStateName(40,27);
+        automaton.changeStateName(43,28);
+        automaton.changeStateName(52,29);
+        automaton.changeStateName(51,30);
+        automaton.changeStateName(35,31);
+        automaton.changeStateName(46,32);
+        automaton.changeStateName(37,33);
+        automaton.changeStateName(44,34);
+        automaton.changeStateName(47,35);
+        automaton.changeStateName(51,36);
+        automaton.changeStateName(51,37);
+        
+        automaton.changeStateName(44,38);
+        automaton.changeStateName(53,39);
+        automaton.changeStateName(51,40);
+        automaton.changeStateName(42,41);
+        
+        automaton.changeStateName(52,42);
+        
+        automaton.changeStateName(44,43);
+        
+        automaton.changeStateName(45,44);
+        automaton.changeStateName(48,45);
+        automaton.changeStateName(47,46);
+        
+        automaton.changeStateName(48,47);
+        automaton.changeStateName(52,48);
+        automaton.changeStateName(51,49);
+        automaton.changeStateName(53,50);
         return automaton;
     }
 

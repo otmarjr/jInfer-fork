@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
-import com.sun.media.jfxmedia.logging.Logger;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -120,8 +119,6 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
 
-                    Logger.logMsg(Logger.DEBUG, String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
-
                     if (state1strings.getMostProbable(this.s).areSubset(state2strings)
                             && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
                         List<State<T>> mergePair = new ArrayList<State<T>>();
@@ -196,6 +193,9 @@ public class SKStrings<T> implements MergeConditionTester<T> {
 
         Set<State<T>> skStringsDisplayedStates = new HashSet<>();
 
+        State<T> state1Merge = null;
+        State<T> state2Merge = null;
+
         while (merging) {
             merging = false;
             final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
@@ -204,27 +204,41 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             for (State<T> state1 : delta.keySet()) {
                 stateStrings.put(state1, this.findSKStrings(k, state1, delta));
             }
-            List<State<T>> mergePair = new ArrayList<>();
-
             List<State<T>> sortedStates = delta.keySet().stream().sorted((sx, sy) -> Integer.compare(sx.getName(), sy.getName())).collect(Collectors.toList());
 
             for (State<T> state1 : sortedStates) {
+                if (state1Merge != null) {
+                    if (state1.getName() < state1Merge.getName()) {
+                        continue;
+                    } else {
+                        state1Merge = null;
+                    }
+                }
+
                 for (State<T> state2 : sortedStates) {
-                    if (state1.equals(state2)) {
+                    if (state2.getName() <= state1.getName()) {
                         continue;
                     }
+
+                    if (state2Merge != null) {
+                        if (state2.getName() < state2Merge.getName()) {
+                            continue;
+                        } else {
+                            state2Merge = null;
+                        }
+                    }
+
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
 
-                    //Logger.logMsg(Logger.DEBUG, String.format("%d-equiv(%04d,%04d)?\n", k, state1.getName(), state2.getName()));
                     System.out.println(String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
 
                     if (!skStringsDisplayedStates.contains(state1)) {
                         System.out.println(String.format("Strings from state %d", state1.getName()));
                         state1strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
                                 .forEach(s -> {
-                                    int intPart = (int)(s.getProbability()*100);
-                                    int fracPart = (int)((s.getProbability()*100%intPart)*1000);
+                                    int intPart = (int) (s.getProbability() * 100);
+                                    int fracPart = (int) ((s.getProbability() * 100 % intPart) * 1000);
                                     System.out.println(String.format(Locale.US, "%3d.%-3d:  %s", intPart, fracPart,
                                                     s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
                                 });
@@ -234,8 +248,21 @@ public class SKStrings<T> implements MergeConditionTester<T> {
 
                     if (state1strings.getMostProbable(this.s).areSubset(state2strings)
                             && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
-                        mergePair.add(state1);
-                        mergePair.add(state2);
+                        state1Merge = state1;
+                        state2Merge = state2;
+
+                        if (!skStringsDisplayedStates.contains(state2)) {
+                            System.out.println(String.format("Strings from state %d", state2.getName()));
+                            state2strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
+                                    .forEach(s -> {
+                                        int intPart = (int) (s.getProbability() * 100);
+                                        int fracPart = (int) ((s.getProbability() * 100 % intPart) * 1000);
+                                        System.out.println(String.format(Locale.US, "%3d.%-3d:  %s", intPart, fracPart,
+                                                        s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
+                                    });
+
+                            skStringsDisplayedStates.add(state2);
+                        }
 
                         merging = true; // Inefficient, but quick hack to avoid concurrent modification exceptions.
                         break;
@@ -246,8 +273,8 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                 }
             }
             if (merging) {
-                Logger.logMsg(Logger.DEBUG, String.format("Merging %d & %d", mergePair.get(0).getName(), mergePair.get(1).getName()));
-                automaton.mergeStates(mergePair);
+                System.out.println(String.format("\nMerging %d & %d\n", state1Merge.getName(), state2Merge.getName()));
+                automaton.mergeStates(state1Merge, state2Merge);
             }
         }
     }

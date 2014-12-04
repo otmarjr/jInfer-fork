@@ -16,7 +16,6 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
-import com.sun.media.jfxmedia.logging.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,6 +29,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -507,8 +509,8 @@ public class SKStringsTest {
         assertEquals(54, automaton.getDelta().size());
         
         SKStrings<String> algorithm = new SKStrings<>(2, 1, "AND");
-        
-        //Logger.setLevel(Logger.DEBUG);
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.OFF);
         algorithm.mergeStates(automaton);
         
         String automaton_pos_skstrings = getAutomatonTransitionsInRamansPFSAFileFormat(automaton);
@@ -1588,4 +1590,4 @@ public class SKStringsTest {
 
         return traces;
     }
-}
+}   

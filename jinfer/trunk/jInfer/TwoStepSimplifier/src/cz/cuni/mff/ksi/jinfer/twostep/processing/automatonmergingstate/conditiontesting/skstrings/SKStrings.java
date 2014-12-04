@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
+import com.sun.media.jfxmedia.logging.Logger;
 import cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.MergeConditionTester;
 import cz.cuni.mff.ksi.jinfer.base.automaton.Automaton;
 import cz.cuni.mff.ksi.jinfer.base.automaton.State;
@@ -93,6 +94,10 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         throw new IllegalStateException("This is impossible.");
     }
 
+    public boolean isANDStrategy() {
+        return "AND".equals(this.strategy);
+    }
+
     @Override
     public List<List<List<State<T>>>> getMergableStates(final Automaton<T> automaton) throws InterruptedException {
         final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
@@ -111,6 +116,9 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                     }
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
+
+                    Logger.logMsg(Logger.DEBUG, String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
+
                     if (state1strings.getMostProbable(this.s).areSubset(state2strings)
                             && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
                         List<State<T>> mergePair = new ArrayList<State<T>>();
@@ -180,29 +188,76 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         return alternatives;
     }
 
-    public void mergeStates(Automaton<T> automaton) throws InterruptedException {
-        boolean search = true;
-        boolean found = false;
-        List<List<List<State<T>>>> result = Collections.emptyList();
-        while (search) {
-            search = false;
-            for (State<T> state1 : automaton.getDelta().keySet()) {
-                for (State<T> state2 : automaton.getDelta().keySet()) {
-                    result = this.getMergableStates(automaton);
-                    if (!result.isEmpty()) {
-                        found = true;
+    protected void doRamansBasedSKStrings(Automaton<T> automaton) throws InterruptedException {
+        boolean merging = true;
+
+        while (merging) {
+            merging = false;
+            final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
+            final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<State<T>, SKBucket<T>>();
+
+            for (State<T> state1 : delta.keySet()) {
+                stateStrings.put(state1, this.findSKStrings(k, state1, delta));
+            }
+            List<State<T>> mergePair = new ArrayList<>();
+
+            for (State<T> state1 : delta.keySet()) {
+                for (State<T> state2 : delta.keySet()) {
+                    if (state1.equals(state2)) {
+                        continue;
+                    }
+                    SKBucket<T> state1strings = stateStrings.get(state1);
+                    SKBucket<T> state2strings = stateStrings.get(state2);
+
+                    Logger.logMsg(Logger.DEBUG, String.format("%d-equiv(%04d,%04d)?\n", k, state1.getName(), state2.getName()));
+
+                    if (state1strings.getMostProbable(this.s).areSubset(state2strings)
+                            && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
+                        mergePair.add(state1);
+                        mergePair.add(state2);
+
+                        merging = true; // Inefficient, but quick hack to avoid concurrent modification exceptions.
                         break;
                     }
                 }
-                if (found) {
+                if (merging) {
                     break;
                 }
             }
-            for (List<List<State<T>>> alt : result) {
-                for (List<State<T>> merg : alt) {
-                    automaton.mergeStates(merg);
-                    search = true;
-                    found = false;
+            if (merging) {
+                Logger.logMsg(Logger.DEBUG, String.format("Merging %d & %d", mergePair.get(0).getName(), mergePair.get(1).getName()));
+                automaton.mergeStates(mergePair);
+            }
+        }
+    }
+
+    public void mergeStates(Automaton<T> automaton) throws InterruptedException {
+        if (this.isANDStrategy()) {
+            this.doRamansBasedSKStrings(automaton);
+        } else {
+            boolean search = true;
+            boolean found = false;
+            List<List<List<State<T>>>> result = Collections.emptyList();
+            while (search) {
+                search = false;
+                for (State<T> state1 : automaton.getDelta().keySet()) {
+                    for (State<T> state2 : automaton.getDelta().keySet()) {
+                        result = this.getMergableStates(automaton);
+                        if (!result.isEmpty()) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        break;
+                    }
+                }
+                for (List<List<State<T>>> alt : result) {
+                    for (List<State<T>> merg : alt) {
+                        automaton.mergeStates(merg);
+                        search = true;
+                        found = false;
+                    }
                 }
             }
         }

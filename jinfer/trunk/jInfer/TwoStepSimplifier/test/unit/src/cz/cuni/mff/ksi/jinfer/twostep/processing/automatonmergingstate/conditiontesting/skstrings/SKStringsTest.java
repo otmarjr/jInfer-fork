@@ -16,6 +16,7 @@
  */
 package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditiontesting.skstrings;
 
+import com.sun.media.jfxmedia.logging.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -492,7 +493,7 @@ public class SKStringsTest {
     }
 
     @Test
-    public void testRamansAutomatonParsing() {
+    public void ramansAutomatonParsing() {
         Automaton<String> automaton = getRamansThesisTestStringsAutomaton();
         
         String str = getAutomatonTransitionsInRamansPFSAFileFormat(automaton);
@@ -500,18 +501,19 @@ public class SKStringsTest {
     }
     
     @Test
-    public void testRamansSkStringsAutomaton() throws InterruptedException {
+    public void ramansSkStringsAutomaton() throws InterruptedException {
         Automaton<String> automaton = getRamansThesisTestStringsAutomaton();
         
         assertEquals(54, automaton.getDelta().size());
         
         SKStrings<String> algorithm = new SKStrings<>(2, 1, "AND");
         
+        Logger.setLevel(Logger.DEBUG);
         algorithm.mergeStates(automaton);
         
         String automaton_pos_skstrings = getAutomatonTransitionsInRamansPFSAFileFormat(automaton);
         
-        assertEquals(19, automaton.getDelta().size());
+        assertEquals(20, automaton.getDelta().size());
     }
     
     private List<List<String>> testDotStringsFileTraces() {

@@ -24,10 +24,13 @@ import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * k,h-context equivalence criterion implementation.
@@ -191,25 +194,43 @@ public class SKStrings<T> implements MergeConditionTester<T> {
     protected void doRamansBasedSKStrings(Automaton<T> automaton) throws InterruptedException {
         boolean merging = true;
 
+        Set<State<T>> skStringsDisplayedStates = new HashSet<>();
+
         while (merging) {
             merging = false;
             final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
-            final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<State<T>, SKBucket<T>>();
+            final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<>();
 
             for (State<T> state1 : delta.keySet()) {
                 stateStrings.put(state1, this.findSKStrings(k, state1, delta));
             }
             List<State<T>> mergePair = new ArrayList<>();
 
-            for (State<T> state1 : delta.keySet()) {
-                for (State<T> state2 : delta.keySet()) {
+            List<State<T>> sortedStates = delta.keySet().stream().sorted((sx, sy) -> Integer.compare(sx.getName(), sy.getName())).collect(Collectors.toList());
+
+            for (State<T> state1 : sortedStates) {
+                for (State<T> state2 : sortedStates) {
                     if (state1.equals(state2)) {
                         continue;
                     }
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
 
-                    Logger.logMsg(Logger.DEBUG, String.format("%d-equiv(%04d,%04d)?\n", k, state1.getName(), state2.getName()));
+                    //Logger.logMsg(Logger.DEBUG, String.format("%d-equiv(%04d,%04d)?\n", k, state1.getName(), state2.getName()));
+                    System.out.println(String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
+
+                    if (!skStringsDisplayedStates.contains(state1)) {
+                        System.out.println(String.format("Strings from state %d", state1.getName()));
+                        state1strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
+                                .forEach(s -> {
+                                    int intPart = (int)(s.getProbability()*100);
+                                    int fracPart = (int)((s.getProbability()*100%intPart)*1000);
+                                    System.out.println(String.format(Locale.US, "%3d.%-3d:  %s", intPart, fracPart,
+                                                    s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
+                                });
+
+                        skStringsDisplayedStates.add(state1);
+                    }
 
                     if (state1strings.getMostProbable(this.s).areSubset(state2strings)
                             && state2strings.getMostProbable(this.s).areSubset(state1strings)) {

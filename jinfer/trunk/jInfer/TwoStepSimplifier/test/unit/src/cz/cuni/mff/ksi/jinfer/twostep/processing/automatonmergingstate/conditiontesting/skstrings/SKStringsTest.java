@@ -508,7 +508,7 @@ public class SKStringsTest {
         
         SKStrings<String> algorithm = new SKStrings<>(2, 1, "AND");
         
-        Logger.setLevel(Logger.DEBUG);
+        //Logger.setLevel(Logger.DEBUG);
         algorithm.mergeStates(automaton);
         
         String automaton_pos_skstrings = getAutomatonTransitionsInRamansPFSAFileFormat(automaton);

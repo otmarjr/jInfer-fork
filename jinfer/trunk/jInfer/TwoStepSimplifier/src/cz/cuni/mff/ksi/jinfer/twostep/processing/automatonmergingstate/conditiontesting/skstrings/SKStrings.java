@@ -199,12 +199,14 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         while (merging) {
             merging = false;
             final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
+
+            List<State<T>> sortedStates = delta.keySet().stream().sorted((sx, sy) -> Integer.compare(sx.getName(), sy.getName())).collect(Collectors.toList());
+
             final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<>();
 
-            for (State<T> state1 : delta.keySet()) {
-                stateStrings.put(state1, this.findSKStrings(k, state1, delta));
+            for (State<T> st : delta.keySet()) {
+                stateStrings.put(st, this.findSKStrings(k, st, delta));
             }
-            List<State<T>> sortedStates = delta.keySet().stream().sorted((sx, sy) -> Integer.compare(sx.getName(), sy.getName())).collect(Collectors.toList());
 
             for (State<T> state1 : sortedStates) {
                 if (state1Merge != null) {
@@ -231,6 +233,10 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
 
+                    if (state1.getName() == 17){
+                        this.findSKStrings(k, state1, delta);
+                    }
+                    
                     System.out.println(String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
 
                     if (!skStringsDisplayedStates.contains(state1)) {

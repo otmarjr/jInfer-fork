@@ -69,27 +69,37 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         }
         final SKBucket<T> result = new SKBucket<T>();
         int sum = 0;
+        Map<T, Integer> symbolsCounts = new HashMap<>();
+        
         for (Step<T> step : delta.get(state)) {
             sum += step.getUseCount();
+            Integer currentSymbolCount = symbolsCounts.get(step.getAcceptSymbol());
+            
+            if (currentSymbolCount != null){
+                symbolsCounts.put(step.getAcceptSymbol(), currentSymbolCount+step.getUseCount());
+            }
+            else{
+                symbolsCounts.put(step.getAcceptSymbol(), step.getUseCount());
+            }
         }
 
         if (_k > 1) {
             for (Step<T> step : delta.get(state)) {
                 if (step.getDestination().getFinalCount() == 0) {
                     SKBucket<T> fromHim = findSKStrings(_k - 1, step.getDestination(), delta);
-                    fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
+                    fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
                     result.addAll(fromHim);
                 } else {
                     SKBucket<T> fromHim = new SKBucket<T>();
-                    result.add(step, (double) step.getUseCount() / (double) sum);
-                    fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
+                    result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                    fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
                     result.addAll(fromHim);
                 }
             }
             return result;
         } else if (_k == 1) {
             for (Step<T> step : delta.get(state)) {
-                result.add(step, (double) step.getUseCount() / (double) sum);
+                result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
             }
             return result;
         }

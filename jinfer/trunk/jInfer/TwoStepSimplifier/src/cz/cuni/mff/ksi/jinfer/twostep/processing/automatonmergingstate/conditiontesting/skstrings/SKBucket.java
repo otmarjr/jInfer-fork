@@ -19,9 +19,12 @@ package cz.cuni.mff.ksi.jinfer.twostep.processing.automatonmergingstate.conditio
 import cz.cuni.mff.ksi.jinfer.base.automaton.Step;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * TODO anti Comment!
@@ -30,10 +33,12 @@ import java.util.List;
  */
 class SKBucket<T> {
 
-  private List<SKString<T>> skstrings;
+  //private List<SKString<T>> skstrings;
+    private Set<SKString<T>> skstrings;
 
   public SKBucket() {
-    this.skstrings = new LinkedList<SKString<T>>();
+    // this.skstrings = new LinkedList<SKString<T>>();
+      this.skstrings = new HashSet<SKString<T>>();
   }
 
   public void preceede(Step<T> step, double probability) {
@@ -55,13 +60,13 @@ class SKBucket<T> {
   }
 
   public List<SKString<T>> getSKStrings() {
-    return Collections.unmodifiableList(this.skstrings);
+    return Collections.unmodifiableList(new LinkedList<>(this.skstrings));
   }
 
   public SKBucket<T> getMostProbable(final double s) {
     double intersum = 0.0;
     SKBucket<T> result = new SKBucket<T>();
-    Collections.sort(this.skstrings, new Comparator<SKString<T>>() {
+    Collections.sort(this.skstrings.stream().collect(Collectors.toList()), new Comparator<SKString<T>>() {
 
       @Override
       public int compare(SKString<T> o1, SKString<T> o2) {

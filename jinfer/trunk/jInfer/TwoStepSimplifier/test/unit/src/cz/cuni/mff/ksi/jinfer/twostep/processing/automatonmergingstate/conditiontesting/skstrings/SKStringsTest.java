@@ -504,13 +504,16 @@ public class SKStringsTest {
     
     @Test
     public void ramansSkStringsAutomaton() throws InterruptedException {
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.OFF);
+        
+        
         Automaton<String> automaton = getRamansThesisTestStringsAutomaton();
         
         assertEquals(54, automaton.getDelta().size());
         
         SKStrings<String> algorithm = new SKStrings<>(2, 1, "AND", false);
-        BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.OFF);
+        
         algorithm.mergeStates(automaton);
         
         String automaton_pos_skstrings = getAutomatonTransitionsInRamansPFSAFileFormat(automaton);

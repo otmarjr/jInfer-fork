@@ -83,6 +83,7 @@ public class SKStrings<T> implements MergeConditionTester<T> {
 
         for (Step<T> step : delta.get(state)) {
             sum += step.getUseCount();
+            
             Integer currentSymbolCount = symbolsCounts.get(step.getAcceptSymbol());
 
             if (currentSymbolCount != null) {
@@ -96,16 +97,16 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             for (Step<T> step : delta.get(state)) {
                 if (step.getDestination().getFinalCount() == 0) {
                     SKBucket<T> fromHim = findSKStrings(_k - 1, step.getDestination(), delta);
-                    //fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
-                    fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
+                    fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                    //fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
                     result.addAll(fromHim);
                 } else {
                     if (considerKStringsShorterThanKEndingInAcceptingState) {
                         SKBucket<T> fromHim = new SKBucket<T>();
-                        //result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
-                        result.add(step, (double) step.getUseCount() / (double) sum);
-                        //fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
-                        fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
+                        result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                        //result.add(step, (double) step.getUseCount() / (double) sum);
+                        fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                        //fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
                         result.addAll(fromHim);
                     }
                 }
@@ -113,8 +114,8 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             return result;
         } else if (_k == 1) {
             for (Step<T> step : delta.get(state)) {
-                //result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
-                result.add(step, (double) step.getUseCount() / (double) sum);
+                result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                // result.add(step, (double) step.getUseCount() / (double) sum);
             }
             return result;
         }
@@ -229,16 +230,16 @@ public class SKStrings<T> implements MergeConditionTester<T> {
 
             List<State<T>> sortedStates = delta.keySet().stream().sorted((sx, sy) -> Integer.compare(sx.getName(), sy.getName())).collect(Collectors.toList());
 
-            final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<>();
-
-            for (State<T> st : delta.keySet()) {
-                stateStrings.put(st, this.findSKStrings(k, st, delta));
-            }
-
             if (restart) {
                 state1Merge = sortedStates.get(0);
                 state2Merge = null;
                 skStringsDisplayedStates.clear();;
+            }
+            
+            final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<>();
+            
+            for (State<T> st : delta.keySet()) {
+                stateStrings.put(st, this.findSKStrings(k, st, delta));
             }
             for (State<T> state1 : sortedStates) {
                 restart = false;
@@ -342,11 +343,7 @@ public class SKStrings<T> implements MergeConditionTester<T> {
     public void mergeStates(Automaton<T> automaton) throws InterruptedException {
         if (this.isANDStrategy()) {
             this.doRamansBasedSKStrings(automaton);
-        } 
-        
-        
-        
-        else {
+        } else {
             boolean search = true;
             boolean found = false;
             List<List<List<State<T>>>> result = Collections.emptyList();

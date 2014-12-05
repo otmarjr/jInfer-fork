@@ -28,69 +28,81 @@ import java.util.LinkedList;
  */
 class SKString<T> {
 
-  private Deque<Step<T>> str;
-  private double probability = 1.0;
+    private Deque<Step<T>> str;
+    private double probability = 1.0;
 
-  public SKString() {
-    this.str = new LinkedList<Step<T>>();
-    this.probability = 1.0;
-  }
-
-  public SKString(Step<T> firstStep, double probability) {
-    this();
-    this.preceede(firstStep, probability);
-  }
-
-  public final void preceede(Step<T> step, double probability) {
-    this.str.addFirst(step);
-    this.probability *= probability;
-  }
-
-  public double getProbability() {
-    return probability;
-  }
-
-  public Deque<Step<T>> getStr() {
-    return str;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == null) {
-      return false;
+    public SKString() {
+        this.str = new LinkedList<Step<T>>();
+        this.probability = 1.0;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    @SuppressWarnings("unchecked")
-    final SKString<T> other = (SKString<T>) obj;
-    Deque<Step<T>> otherStr = other.getStr();
-    if (this.str.size() != otherStr.size()) {
-      return false;
-    }
-    Iterator<Step<T>> myIt = this.str.iterator();
-    Iterator<Step<T>> otherIt = other.getStr().iterator();
-    while (myIt.hasNext() && otherIt.hasNext()) {
-      if (!myIt.next().getAcceptSymbol().equals(otherIt.next().getAcceptSymbol())) {
-        return false;
-      }
-    }
-    return true;
-  }
 
-  @Override
-  public int hashCode() {
-    int hash = 5;
-    if (this.str != null) {
-      for (Step<T> t : this.str) {
-        hash = 41 * hash + t.getAcceptSymbol().hashCode();
-      }
+    public SKString(Step<T> firstStep, double probability) {
+        this();
+        this.preceede(firstStep, probability);
     }
-    return hash;
-  }
 
-  @Override
-  public String toString() {
-    return "SKString{" + "str=" + str + ", probability=" + probability + '}';
-  }
+    public final void preceede(Step<T> step, double probability) {
+        this.str.addFirst(step);
+        this.probability *= probability;
+    }
+
+    public double getProbability() {
+        return probability;
+    }
+
+    public Deque<Step<T>> getStr() {
+        return str;
+    }
+
+    public boolean distinguishableFrom(SKString<T> other) {
+        if (other == null) {
+            return true;
+        }
+
+        if (this.probability == other.probability) {
+            return !this.equals(other);
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        final SKString<T> other = (SKString<T>) obj;
+        Deque<Step<T>> otherStr = other.getStr();
+        if (this.str.size() != otherStr.size()) {
+            return false;
+        }
+        Iterator<Step<T>> myIt = this.str.iterator();
+        Iterator<Step<T>> otherIt = other.getStr().iterator();
+        while (myIt.hasNext() && otherIt.hasNext()) {
+            if (!myIt.next().getAcceptSymbol().equals(otherIt.next().getAcceptSymbol())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        if (this.str != null) {
+            for (Step<T> t : this.str) {
+                hash = 41 * hash + t.getAcceptSymbol().hashCode();
+            }
+        }
+        return hash;
+    }
+
+    @Override
+    public String toString() {
+        return "SKString{" + "str=" + str + ", probability=" + probability + '}';
+    }
 }

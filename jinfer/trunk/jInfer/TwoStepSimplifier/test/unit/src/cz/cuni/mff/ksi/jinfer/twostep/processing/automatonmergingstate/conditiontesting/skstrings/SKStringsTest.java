@@ -508,7 +508,7 @@ public class SKStringsTest {
         
         assertEquals(54, automaton.getDelta().size());
         
-        SKStrings<String> algorithm = new SKStrings<>(2, 1, "AND");
+        SKStrings<String> algorithm = new SKStrings<>(2, 1, "AND", false);
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.OFF);
         algorithm.mergeStates(automaton);

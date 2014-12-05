@@ -46,6 +46,16 @@ public class SKStrings<T> implements MergeConditionTester<T> {
     private int k;
     private double s;
     private String strategy;
+    // Despite the definition in Ramans work, his example program implementation
+    // does not consider k-strings having length smaller than k but ending
+    // in an accepting state. This flag is used to indicate if this class
+    // should behave accordingly to the definition (true) or skstr program (false)
+    private boolean considerKStringsShorterThanKEndingInAcceptingState;
+
+    public SKStrings(final int k, final double s, final String strategy, final boolean considerShorterKStrings) {
+        this(k, s, strategy);
+        this.considerKStringsShorterThanKEndingInAcceptingState = considerShorterKStrings;
+    }
 
     /**
      * Setting k,h. It has to be k >= h, or exception thrown (cannot merge more
@@ -70,15 +80,14 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         final SKBucket<T> result = new SKBucket<T>();
         int sum = 0;
         Map<T, Integer> symbolsCounts = new HashMap<>();
-        
+
         for (Step<T> step : delta.get(state)) {
             sum += step.getUseCount();
             Integer currentSymbolCount = symbolsCounts.get(step.getAcceptSymbol());
-            
-            if (currentSymbolCount != null){
-                symbolsCounts.put(step.getAcceptSymbol(), currentSymbolCount+step.getUseCount());
-            }
-            else{
+
+            if (currentSymbolCount != null) {
+                symbolsCounts.put(step.getAcceptSymbol(), currentSymbolCount + step.getUseCount());
+            } else {
                 symbolsCounts.put(step.getAcceptSymbol(), step.getUseCount());
             }
         }
@@ -87,19 +96,25 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             for (Step<T> step : delta.get(state)) {
                 if (step.getDestination().getFinalCount() == 0) {
                     SKBucket<T> fromHim = findSKStrings(_k - 1, step.getDestination(), delta);
-                    fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                    //fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                    fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
                     result.addAll(fromHim);
                 } else {
-                    SKBucket<T> fromHim = new SKBucket<T>();
-                    result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
-                    fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
-                    result.addAll(fromHim);
+                    if (considerKStringsShorterThanKEndingInAcceptingState) {
+                        SKBucket<T> fromHim = new SKBucket<T>();
+                        //result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                        result.add(step, (double) step.getUseCount() / (double) sum);
+                        //fromHim.preceede(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                        fromHim.preceede(step, (double) step.getUseCount() / (double) sum);
+                        result.addAll(fromHim);
+                    }
                 }
             }
             return result;
         } else if (_k == 1) {
             for (Step<T> step : delta.get(state)) {
-                result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                //result.add(step, (double) symbolsCounts.get(step.getAcceptSymbol()) / (double) sum);
+                result.add(step, (double) step.getUseCount() / (double) sum);
             }
             return result;
         }
@@ -206,6 +221,8 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         State<T> state1Merge = null;
         State<T> state2Merge = null;
 
+        boolean restart = false;
+
         while (merging) {
             merging = false;
             final Map<State<T>, Set<Step<T>>> delta = automaton.getDelta();
@@ -218,7 +235,13 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                 stateStrings.put(st, this.findSKStrings(k, st, delta));
             }
 
+            if (restart) {
+                state1Merge = sortedStates.get(0);
+                state2Merge = null;
+                skStringsDisplayedStates.clear();;
+            }
             for (State<T> state1 : sortedStates) {
+                restart = false;
                 if (state1Merge != null) {
                     if (state1.getName() < state1Merge.getName()) {
                         continue;
@@ -243,10 +266,6 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
 
-                    if (state1.getName() == 17){
-                        this.findSKStrings(k, state1, delta);
-                    }
-                    
                     System.out.println(String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
 
                     if (!skStringsDisplayedStates.contains(state1)) {
@@ -290,15 +309,44 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             }
             if (merging) {
                 System.out.println(String.format("\nMerging %d & %d\n", state1Merge.getName(), state2Merge.getName()));
-                automaton.mergeStates(state1Merge, state2Merge);
+                if (areSkDistinguishable(state1Merge, state2Merge, automaton)) {
+                    restart = true;
+                    automaton.mergeStates(state1Merge, state2Merge);
+                } else {
+                    automaton.mergeStates(state1Merge, state2Merge);
+                }
+
             }
         }
+    }
+
+    private boolean areSkDistinguishable(State<T> p, State<T> q, Automaton<T> aut) throws InterruptedException {
+        List<SKString<T>> skstringsP = this.findSKStrings(k, p, aut.getDelta()).getSKStrings();
+        List<SKString<T>> skstringsQ = this.findSKStrings(k, q, aut.getDelta()).getSKStrings();
+
+        if (skstringsP.size() != skstringsQ.size()) {
+            return true;
+        }
+
+        for (int i = 0; i < skstringsP.size(); i++) {
+            SKString<T> skStrP = skstringsP.get(i);
+            SKString<T> skStrQ = skstringsQ.get(i);
+            if (skStrP.distinguishableFrom(skStrQ)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void mergeStates(Automaton<T> automaton) throws InterruptedException {
         if (this.isANDStrategy()) {
             this.doRamansBasedSKStrings(automaton);
-        } else {
+        } 
+        
+        
+        
+        else {
             boolean search = true;
             boolean found = false;
             List<List<List<State<T>>>> result = Collections.emptyList();

@@ -83,7 +83,7 @@ public class SKStrings<T> implements MergeConditionTester<T> {
 
         for (Step<T> step : delta.get(state)) {
             sum += step.getUseCount();
-            
+
             Integer currentSymbolCount = symbolsCounts.get(step.getAcceptSymbol());
 
             if (currentSymbolCount != null) {
@@ -235,9 +235,9 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                 state2Merge = null;
                 skStringsDisplayedStates.clear();;
             }
-            
+
             final Map<State<T>, SKBucket<T>> stateStrings = new HashMap<>();
-            
+
             for (State<T> st : delta.keySet()) {
                 stateStrings.put(st, this.findSKStrings(k, st, delta));
             }
@@ -287,6 +287,8 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                         state1Merge = state1;
                         state2Merge = state2;
 
+                        merging = true; // Inefficient, but quick hack to avoid concurrent modification exceptions.
+
                         if (!skStringsDisplayedStates.contains(state2)) {
                             System.out.println(String.format("Strings from state %d", state2.getName()));
                             state2strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
@@ -299,8 +301,6 @@ public class SKStrings<T> implements MergeConditionTester<T> {
 
                             skStringsDisplayedStates.add(state2);
                         }
-
-                        merging = true; // Inefficient, but quick hack to avoid concurrent modification exceptions.
                         break;
                     }
                 }

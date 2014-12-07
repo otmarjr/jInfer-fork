@@ -222,6 +222,9 @@ public class SKStrings<T> implements MergeConditionTester<T> {
         State<T> state1Merge = null;
         State<T> state2Merge = null;
 
+        State<T> st1PostMerge = null;
+        State<T> st2PostMerge = null;
+        
         boolean restart = false;
 
         while (merging) {
@@ -241,7 +244,8 @@ public class SKStrings<T> implements MergeConditionTester<T> {
             for (State<T> st : delta.keySet()) {
                 stateStrings.put(st, this.findSKStrings(k, st, delta));
             }
-            for (State<T> state1 : sortedStates) {
+            for (Iterator<State<T>> it = sortedStates.iterator(); it.hasNext();) {
+                State<T> state1 = it.next();
                 restart = false;
                 if (state1Merge != null) {
                     if (state1.getName() < state1Merge.getName()) {
@@ -250,12 +254,11 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                         state1Merge = null;
                     }
                 }
-
-                for (State<T> state2 : sortedStates) {
+                for (Iterator<State<T>> it2 = sortedStates.iterator(); it2.hasNext();) {
+                    State<T> state2 = it2.next();
                     if (state2.getName() <= state1.getName()) {
                         continue;
                     }
-
                     if (state2Merge != null) {
                         if (state2.getName() < state2Merge.getName()) {
                             continue;
@@ -263,12 +266,9 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                             state2Merge = null;
                         }
                     }
-
                     SKBucket<T> state1strings = stateStrings.get(state1);
                     SKBucket<T> state2strings = stateStrings.get(state2);
-
                     System.out.println(String.format("%d-equiv(%04d,%04d)?", k, state1.getName(), state2.getName()));
-
                     if (!skStringsDisplayedStates.contains(state1)) {
                         System.out.println(String.format("Strings from state %d", state1.getName()));
                         state1strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
@@ -276,31 +276,41 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                                     int intPart = (int) (s.getProbability() * 100);
                                     int fracPart = (int) ((s.getProbability() * 100 % intPart) * 1000);
                                     System.out.println(String.format(Locale.US, "%3d.%-3d:  %s", intPart, fracPart,
-                                                    s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
+                                            s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
                                 });
 
                         skStringsDisplayedStates.add(state1);
                     }
+                    if (!state1strings.getMostProbable(this.s).areSubset(state2strings.getMostProbable(this.s))) {
+                        continue;
+                    }
+                    if (!skStringsDisplayedStates.contains(state2)) {
+                        System.out.println(String.format("Strings from state %d", state2.getName()));
+                        state2strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
+                                .forEach(s -> {
+                                    int intPart = (int) (s.getProbability() * 100);
+                                    int fracPart = (int) ((s.getProbability() * 100 % intPart) * 1000);
+                                    System.out.println(String.format(Locale.US, "%3d.%-3d:  %s", intPart, fracPart,
+                                            s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
+                                });
 
-                    if (state1strings.getMostProbable(this.s).areSubset(state2strings)
-                            && state2strings.getMostProbable(this.s).areSubset(state1strings)) {
+                        skStringsDisplayedStates.add(state2);
+                    }
+                    if (state2strings.getMostProbable(this.s).areSubset(state1strings.getMostProbable(this.s))) {
                         state1Merge = state1;
                         state2Merge = state2;
+                        
+                        if (it2.hasNext()){
+                            st1PostMerge = state1;
+                            st2PostMerge = it2.next();
+                        }
+                        else{
+                            st1PostMerge = it.next();
+                            st2PostMerge = sortedStates.get(0);
+                        }
 
                         merging = true; // Inefficient, but quick hack to avoid concurrent modification exceptions.
 
-                        if (!skStringsDisplayedStates.contains(state2)) {
-                            System.out.println(String.format("Strings from state %d", state2.getName()));
-                            state2strings.getSKStrings().stream().sorted((sx, sy) -> Double.compare(sy.getProbability(), sx.getProbability()))
-                                    .forEach(s -> {
-                                        int intPart = (int) (s.getProbability() * 100);
-                                        int fracPart = (int) ((s.getProbability() * 100 % intPart) * 1000);
-                                        System.out.println(String.format(Locale.US, "%3d.%-3d:  %s", intPart, fracPart,
-                                                        s.getStr().stream().map(st -> st.getAcceptSymbol().toString()).collect(Collectors.joining(":")) + ":*UNDELIMITED*"));
-                                    });
-
-                            skStringsDisplayedStates.add(state2);
-                        }
                         break;
                     }
                 }
@@ -316,7 +326,8 @@ public class SKStrings<T> implements MergeConditionTester<T> {
                 } else {
                     automaton.mergeStates(state1Merge, state2Merge);
                 }
-
+                state1Merge = st1PostMerge;
+                state2Merge = st2PostMerge;
             }
         }
     }

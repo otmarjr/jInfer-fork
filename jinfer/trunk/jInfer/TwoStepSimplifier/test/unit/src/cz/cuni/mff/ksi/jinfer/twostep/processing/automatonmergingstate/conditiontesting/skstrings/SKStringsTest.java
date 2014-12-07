@@ -516,9 +516,25 @@ public class SKStringsTest {
         
         algorithm.mergeStates(automaton);
         
+        automaton.changeStateName(5, 4);
+        automaton.changeStateName(6, 5);
+        automaton.changeStateName(7, 6);
+        automaton.changeStateName(8, 7);
+        automaton.changeStateName(12, 8);
+        automaton.changeStateName(13, 9);
+        automaton.changeStateName(14, 10);
+        automaton.changeStateName(17, 11);
+        automaton.changeStateName(19, 12);
+        automaton.changeStateName(20, 13);
+        automaton.changeStateName(22, 14);
+        automaton.changeStateName(25, 15);
+        automaton.changeStateName(29, 16);
+        automaton.changeStateName(32, 17);
+        automaton.changeStateName(35, 18);
+        
         String automaton_pos_skstrings = getAutomatonTransitionsInRamansPFSAFileFormat(automaton);
         
-        assertEquals(20, automaton.getDelta().size());
+        assertEquals(19, automaton.getDelta().size());
     }
     
     private List<List<String>> testDotStringsFileTraces() {

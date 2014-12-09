@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
 
 /**
@@ -647,5 +648,32 @@ public class Automaton<T> {
         Set<List<T>> p = this.getStateSuffixes(s, this.getInverseDelta());
         p.stream().forEach(l -> Collections.reverse(l));
         return p;
+    }
+    
+    public Step<T> getFirstStep(State<T> source, State<T> destination){
+        return getFirstStep(source.getName(), destination.getName());
+    }
+    
+    public Step<T> getFirstStep(int sourceName, int destinationName){
+        if (this.nameMap.containsKey(sourceName)){
+            State<T> source = this.nameMap.get(sourceName);
+            
+            return this.delta.get(source).stream()
+                    .filter(d -> d.getDestination().getName() == destinationName)
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+    
+    public Set<Step<T>> getAllSteps(int sourceName, int destinationName){
+         if (this.nameMap.containsKey(sourceName)){
+            State<T> source = this.nameMap.get(sourceName);
+            
+            return this.delta.get(source).stream()
+                    .filter(d -> d.getDestination().getName() == destinationName)
+                    .collect(Collectors.toSet());
+        }
+        return null;
     }
 }

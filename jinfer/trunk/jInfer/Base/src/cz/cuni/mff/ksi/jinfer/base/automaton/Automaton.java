@@ -261,8 +261,12 @@ public class Automaton<T> {
      * @return
      */
     public Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination) {
-        final Step<T> newStep = new Step<T>(onSymbol, source, destination, 1, 1);
-        final Step<T> inverseStep = new Step<T>(onSymbol, destination, source, 1, 1);
+        return createNewStep(onSymbol, source, destination,1);
+    }
+    
+    public Step<T> createNewStep(final T onSymbol, final State<T> source, final State<T> destination, final int useCount) {
+        final Step<T> newStep = new Step<T>(onSymbol, source, destination, useCount, 1);
+        final Step<T> inverseStep = new Step<T>(onSymbol, destination, source, useCount, 1);
         this.delta.get(source).add(newStep);
         this.reverseDelta.get(destination).add(newStep);
         this.inverseDelta.get(destination).add(inverseStep);
